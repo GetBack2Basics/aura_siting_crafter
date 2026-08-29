@@ -1,0 +1,32 @@
+{
+  "general-public": {
+    "name": "General Public",
+    "badgeColor": "#38bdf8",
+    "weights": { "power": 40, "sensitive": 25, "water": 20, "size": 15, "targetSize": 15 },
+    "tsfExcluded": true
+  },
+  "planner": {
+    "name": "Planner",
+    "badgeColor": "#38bdf8",
+    "weights": { "power": 40, "sensitive": 25, "water": 20, "size": 15, "targetSize": 15 },
+    "tsfExcluded": true
+  },
+  "regulator": {
+    "name": "Regulator",
+    "badgeColor": "#fbbf24",
+    "weights": { "power": 40, "sensitive": 25, "water": 25, "size": 10, "targetSize": 15 },
+    "tsfExcluded": true
+  },
+  "developer": {
+    "name": "Developer",
+    "badgeColor": "#34d399",
+    "weights": { "power": 50, "sensitive": 15, "water": 15, "size": 20, "targetSize": 20 },
+    "tsfExcluded": false
+  },
+  "community": {
+    "name": "Community",
+    "badgeColor": "#c084fc",
+    "weights": { "power": 25, "sensitive": 40, "water": 25, "size": 10, "targetSize": 10 },
+    "tsfExcluded": true
+  }
+}

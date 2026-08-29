@@ -1,0 +1,159 @@
+{
+  "thermodynamic_decay": {
+    "title": "Thermodynamic Pipe Loss in Heat Symbiosis",
+    "formula": "T_delivery = T_ambient + (T_source - T_ambient) * exp(-U * pi * D * L / (m_dot * Cp))",
+    "simplified_formula": "T_delivery = T_source - (T_source - T_ambient) * (1 - exp(-k * L))",
+    "variables": {
+      "T_delivery": "Delivery temperature at destination (°C)",
+      "T_source": "Source temperature (45°C)",
+      "T_ambient": "Ambient soil/air temperature (15°C)",
+      "L": "Distance piped (meters)",
+      "k": "Heat decay coefficient (typically 0.0008 m^-1 for insulated pipe)"
+    },
+    "description": "Calculates the thermal temperature drop of hot water piped from data center cooling loops to district heating or greenhouses over a distance L.",
+    "references": [
+      {
+        "citation": "Dalla Rosa, A., & Christensen, J. E. (2011). Low-energy district heating in future buildings. Energy and Buildings, 43(10), 2740-2750.",
+        "url": "https://doi.org/10.1016/j.enbuild.2011.06.030"
+      },
+      {
+        "citation": "ASHRAE. (2020). Handbook—HVAC Systems and Equipment. Chapter 12: District Heating and Cooling.",
+        "url": "https://www.ashrae.org"
+      }
+    ]
+  },
+  "discharge_cooling": {
+    "title": "Thermal Discharge Naturalization Distance",
+    "formula": "L_natural = -ln((T_target - T_ambient) / (T_discharge - T_ambient)) / k_discharge",
+    "variables": {
+      "L_natural": "Required minimum distance to travel (meters) before discharging to natural water systems",
+      "T_discharge": "Discharge water temperature (°C)",
+      "T_ambient": "Ambient natural water body temperature (°C)",
+      "T_target": "Target environmental threshold temperature (usually T_ambient + 1.0°C)",
+      "k_discharge": "Natural cooling decay coefficient (typically 0.005 m^-1 under atmospheric exposure)"
+    },
+    "description": "Calculates the distance needed for discharged hot water to return within environmental limits (ambient + 1°C) to prevent ecological damage to riparian ecosystems.",
+    "references": [
+      {
+        "citation": "Caissie, D. (2006). The thermal regime of rivers: a review. Freshwater Biology, 51(8), 1389-1406.",
+        "url": "https://doi.org/10.1111/j.1365-2427.2006.01597.x"
+      },
+      {
+        "citation": "NSW Department of Planning and Environment (DPE). (2022). NSW Aquifer Interference Policy & Environmental Flow Guidelines.",
+        "url": "https://www.industry.nsw.gov.au/water"
+      }
+    ]
+  },
+  "pumped_hydro": {
+    "title": "Pumped Hydro Potential Storage Capacity",
+    "formula": "E = eta * rho * V * g * delta_h / 3.6e9",
+    "variables": {
+      "E": "Potential energy storage capacity (MWh)",
+      "eta": "System round-trip efficiency (typically 80% / 0.80)",
+      "rho": "Density of water (1000 kg/m³)",
+      "V": "Reservoir water volume (m³)",
+      "g": "Acceleration due to gravity (9.81 m/s²)",
+      "delta_h": "Effective hydraulic head (vertical height drop, meters)"
+    },
+    "description": "Determines the electrical energy storage capacity in megawatt-hours (MWh) utilizing the vertical drop from the ridge to the pit void.",
+    "references": [
+      {
+        "citation": "Blakers, A., Lu, B., & Stocks, M. (2017). 100% renewable electricity in Australia using pumped hydro energy storage. ANU Report.",
+        "url": "https://re100.anu.edu.au"
+      },
+      {
+        "citation": "Dams Safety NSW. (2021). Declared Dams safety standards and guidelines.",
+        "url": "https://www.damssafety.nsw.gov.au"
+      }
+    ]
+  },
+  "network_routing": {
+    "title": "Network Winding & Path Distance Factor",
+    "formula": "D_network = D_linear * W_factor",
+    "variables": {
+      "D_network": "True routing distance along road/path network (meters)",
+      "D_linear": "Linear Euclidean distance (as the crow flies, meters)",
+      "W_factor": "Winding topology factor (usually 1.35x for roads, 1.45x for active transport along contours)"
+    },
+    "description": "Models the actual walking/cycling or transport path distance along contours and road networks compared to straight-line Euclidean distance.",
+    "references": [
+      {
+        "citation": "AASHTO. (2018). A Policy on Geometric Design of Highways and Streets, 7th Edition.",
+        "url": "https://store.transportation.org"
+      },
+      {
+        "citation": "Lake Macquarie City Council. (2021). Lake Mac Active Transport Strategy.",
+        "url": "https://www.lakemac.com.au"
+      }
+    ]
+  },
+  "sigmoidal_sensitive_receptor_decay": {
+    "title": "Continuous Sigmoidal Buffer Decay for Social & Community Receptors",
+    "formula": "S_sensitive(d) = 1 / (1 + exp(-k * (d - d0)))",
+    "variables": {
+      "S_sensitive": "Sensitive receptor suitability score [0.00, 1.00]",
+      "d": "Minimum Euclidean distance from parcel boundary to nearest sensitive receptor (meters)",
+      "d0": "Critical acoustic and safety compliance threshold distance (500 meters)",
+      "k": "Sigmoidal steepness factor (0.01 m^-1)"
+    },
+    "classification_thresholds": {
+      "exclusion": "d < 300m -> Score 0.00 (Hard Exclusion / Incompatible Land Use)",
+      "penalty": "300m <= d < 500m -> Score 0.20 - 0.50 (High Penalty / Acoustic Wall Required)",
+      "optimal_buffer": "500m <= d < 1500m -> Score 0.80 - 1.00 (Optimal Setback / Low Conflict)",
+      "workforce_optimal": "1500m <= d < 5000m -> Score 1.00 (Optimal Staff Commute Proximity)",
+      "workforce_decay": "d >= 5000m -> Linear decay down to 0.70 at 15,000m (Commute Accessibility Penalty)"
+    },
+    "description": "Prevents land-use conflicts with schools, hospitals, and residential zones using EPA acoustic setback standards while maintaining workforce accessibility within regional commuting bands.",
+    "references": [
+      {
+        "citation": "NSW Environment Protection Authority (EPA). (2017). Noise Policy for Industry (NPfI).",
+        "url": "https://www.epa.nsw.gov.au/your-environment/noise/industrial-noise"
+      },
+      {
+        "citation": "Standards Australia. (2018). AS 1055: Acoustics—Description and measurement of environmental noise.",
+        "url": "https://www.standards.org.au"
+      }
+    ]
+  },
+  "dem_slope_filtering": {
+    "title": "Digital Elevation Model (DEM) Topographic Slope Suitability",
+    "formula": "Slope_deg = arctan(sqrt((dz/dx)^2 + (dz/dy)^2)) * (180 / pi)",
+    "variables": {
+      "Slope_pct": "Topographic slope grade percentage (%)",
+      "Threshold": "Max 5.0% for heavy data center slab foundation construction"
+    },
+    "description": "Evaluates ground grade from Geoscience Australia ELVIS DEM. Slopes > 5% trigger heavy earthmoving cost penalties or build exclusions.",
+    "references": [
+      {
+        "citation": "Geoscience Australia. (2023). ELVIS Elevation Foundation Spatial Data Framework.",
+        "url": "https://elevation.fsdf.org.au/"
+      }
+    ]
+  },
+  "cadastre_lotplan_querying": {
+    "title": "National & State Cadastral Lot/Plan Identifier Framework",
+    "formula": "Standardized LotPlan = CONCAT(Lot_Number, '//', Plan_Type, Plan_Number)",
+    "variables": {
+      "Lot_Number": "Cadastral lot number (e.g. 1, 23)",
+      "Plan_Type": "Plan classification (e.g. DP, SP, RP, PS)",
+      "Plan_Number": "Registered deposited/registered/survey plan number"
+    },
+    "description": "Standardizes multi-jurisdiction cadastral attributes from Geoscape, NSW Cadastre, QLD DCDB, Vicmap, and Landgate SLIP to enable lot/plan and address querying.",
+    "references": [
+      {
+        "citation": "Intergovernmental Committee on Surveying and Mapping (ICSM). (2020). Cadastral Spatial Data Model (CSDM).",
+        "url": "https://www.icsm.gov.au"
+      }
+    ]
+  },
+  "methodology_notes": {
+    "gladstone_perfect_score": {
+      "title": "Gladstone Perfect Score Resolution",
+      "text": "Gladstone scores a perfect 1.0 because its candidate parameters fit perfectly in the ideal bands. However, national baselines represent an optimistic upper bound because detailed local micro-siting setbacks (riparian, pipeline easements, and local slope grade) are not ingested at the national scale. This highlights the critical value of the local Macquarie precinct modeling which exposes physical setbacks."
+    },
+    "data_source_provenance": {
+      "title": "Data Source Provenance and API Ingestion",
+      "text": "To prevent real-time WFS/FeatureServer REST API connection timeouts during Spark runs, all datasets (NSW Rail, Energy grid, and pathways) are ingested and hosted as optimized Cloud Spatial Iceberg tables on Wherobots. This ensures high-performance distributed Sedona queries while maintaining full data volume tracking."
+    }
+  }
+}

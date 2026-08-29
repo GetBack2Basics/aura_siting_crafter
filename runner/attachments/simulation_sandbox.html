@@ -1,0 +1,53 @@
+<h2>What-If Sandbox Mechanics</h2>
+<h3 style="color: #c084fc;">Real-Time Browser Simulation — Zero Cloud Compute Cost</h3>
+
+<p>The What-If Sandbox recalibrates composite MCDA weights and candidate rankings <strong>instantly in the browser</strong> without any server round-trips, API calls, or cloud compute spend. All recalculation logic runs in-page JavaScript against the precomputed distance and geometry attributes already embedded in this report.</p>
+
+<hr style="border-color: rgba(255,255,255,0.08); margin: 1rem 0;">
+
+<h4 style="color: #60a5fa; margin-top: 1rem;">1. Decoupled Architecture: Geometry vs. Scoring</h4>
+<p>The pipeline is split into two tiers that never need to re-run together:</p>
+<table style="width:100%; font-size:0.85rem; border-collapse:collapse; margin-top:0.5rem;">
+  <thead><tr><th>Tier</th><th>Runs on</th><th>Triggers</th><th>Cost</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Heavy Geometry Tier</strong><br><small>CRS reprojections, ST_Difference, buffers, spatial joins</small></td><td>Wherobots Cloud (Sedona)</td><td>Quarterly cadastral updates only</td><td>~$1.03 AUD/run</td></tr>
+    <tr><td><strong>Lightweight Scoring Tier</strong><br><small>S<sub>power</sub>, S<sub>sensitive</sub>, S<sub>water</sub>, S<sub>size</sub> curves, weighted sum</small></td><td>Your browser (JavaScript)</td><td>Every slider move or persona switch</td><td><strong>$0.00</strong></td></tr>
+  </tbody>
+</table>
+<p style="margin-top:0.5rem;">Changing a weight, threshold, or persona <strong>never re-triggers the heavy spatial join pipeline</strong> — only the downstream mathematical scoring matrix recalculates, in microseconds, locally.</p>
+
+<h4 style="color: #60a5fa; margin-top: 1rem;">2. Scoring Formula (Live in Browser)</h4>
+<p>The composite suitability score uses a four-factor weighted sum:</p>
+<div style="background:rgba(0,0,0,0.4);padding:0.75rem 1rem;border-radius:0.375rem;font-family:'JetBrains Mono',monospace;color:#34d399;font-size:0.88rem;margin:0.5rem 0;">
+  S<sub>composite</sub> = w<sub>power</sub>·S<sub>power</sub> + w<sub>sensitive</sub>·S<sub>sensitive</sub> + w<sub>water</sub>·S<sub>water</sub> + w<sub>size</sub>·S<sub>size</sub>
+</div>
+<p>Each sub-score is a piecewise linear or sigmoidal function of a precomputed distance attribute:</p>
+<ul style="margin: 0.5rem 0 0.5rem 1.25rem; font-size:0.88rem;">
+  <li><strong>S<sub>power</sub></strong>: 1.0 at 100–500m from substation; linear decay to 0 beyond 5km.</li>
+  <li><strong>S<sub>sensitive</sub></strong>: Hard exclusion &lt;300m; sigmoidal sigmoid from 300–1500m; plateau 1.0 at 1.5–5km; decay beyond.</li>
+  <li><strong>S<sub>water</sub></strong>: 1.0 ≤1km from WWTW; linear decay to 0 beyond 10km.</li>
+  <li><strong>S<sub>size</sub></strong>: 1.0 ≥15 ha; linear ramp from 0.1 at 3 ha; 0.1 below 3 ha.</li>
+</ul>
+<p>The weights w<sub>power</sub>, w<sub>sensitive</sub>, w<sub>water</sub>, w<sub>size</sub> (summing to 1.0) are controlled by the four sliders in the panel above — or loaded from a stakeholder persona preset.</p>
+
+<h4 style="color: #60a5fa; margin-top: 1rem;">3. Persona Engine</h4>
+<p>Selecting a persona from the <strong>Strategic Personas</strong> tab loads a predefined weight configuration and re-runs the scoring instantly:</p>
+<table style="width:100%; font-size:0.83rem; border-collapse:collapse; margin-top:0.5rem;">
+  <thead><tr><th>Persona</th><th>Power</th><th>Sensitive</th><th>Water</th><th>Size</th></tr></thead>
+  <tbody>
+    <tr><td><strong>General Public</strong> / Planner</td><td>40%</td><td>25%</td><td>20%</td><td>15%</td></tr>
+    <tr><td><strong>Regulator</strong></td><td>40%</td><td>25%</td><td>25%</td><td>10%</td></tr>
+    <tr><td><strong>Developer</strong></td><td>50%</td><td>15%</td><td>15%</td><td>20%</td></tr>
+    <tr><td><strong>Community</strong></td><td>25%</td><td>40%</td><td>25%</td><td>10%</td></tr>
+  </tbody>
+</table>
+<p style="margin-top:0.5rem;">Persona weights live in <code>runner/attachments/persona_configs.json</code> — editable without touching any Python or HTML.</p>
+
+<h4 style="color: #60a5fa; margin-top: 1rem;">4. Slope Exclusion &amp; TSF Toggle</h4>
+<ul style="margin: 0.5rem 0 0.5rem 1.25rem; font-size:0.88rem;">
+  <li><strong>Slope &gt; 5%</strong>: Any site with a DEM slope grade exceeding 5% is hard-excluded (score = 0) regardless of other weights. The ELVIS DEM slope was pre-validated at 25m resolution.</li>
+  <li><strong>TSF Toggle</strong>: The "Exclude Tailings Storage Facilities" toggle removes sites on or adjacent to TSF footprints from the ranked list. TSF proximity is a binary flag derived from the NSW SEED and EPA spatial layers at build time.</li>
+</ul>
+
+<h4 style="color: #60a5fa; margin-top: 1rem;">5. Future: DuckDB-WASM Integration</h4>
+<p>The next evolution is to expose the full <strong>GeoParquet candidate layer</strong> to a client-side <a href="https://duckdb.org/docs/api/wasm/overview.html" target="_blank">DuckDB-WASM</a> instance embedded in this page. Users will be able to run arbitrary spatial SQL directly in the browser — filtering, grouping, and ranking candidates across all 15.91M national geometries with HTTP range-request byte fetching from GCS — at <strong>$0.00 cloud compute cost</strong>.</p>

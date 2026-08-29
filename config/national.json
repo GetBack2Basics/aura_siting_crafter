@@ -1,0 +1,24 @@
+{
+  "environment": "national",
+  "storage_root": "wherobots://fgsdb/aura_siting",
+  "log_level": "INFO",
+  "target_crs": "EPSG:7856",
+  "source_crs": "EPSG:4326",
+  "buffers_m": {
+    "riparian": 30.0,
+    "pipeline": 20.0,
+    "rail_safety": 10.0,
+    "biodiversity": 0.0
+  },
+  "study_buffers_m": {
+    "study_area": 5000.0,
+    "buffer_100km": 100000.0
+  },
+  "data_sources": {
+    "lakemac_open_data": "https://data.lakemac.com.au/api/explore/v2.1/catalog/datasets",
+    "nsw_lmbc": "https://www.lmbc.nsw.gov.au/arcgis/rest/services",
+    "abs_geo": "https://geo.abs.gov.au/arcgis/rest/services/ASGS2021",
+    "nsw_spatial_services": "https://portal.spatial.nsw.gov.au/server/rest/services"
+  },
+  "region_key": "national"
+}

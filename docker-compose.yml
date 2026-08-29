@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  aura-analysis:
+    build: .
+    environment:
+      - AURA_REGION=national
+    volumes:
+      - ./runner:/app/runner
+      - ./docs:/app/docs
+    command: python -m src.Analysis.national_suitability_analysis
+
+  aura-ingest:
+    build: .
+    environment:
+      - AURA_REGION=${AURA_REGION:-hunter}
+    command: python -m src.Ingestion.spatial_ingest

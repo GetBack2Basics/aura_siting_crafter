@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[151.65, -32.929999999999986], [151.72, -32.93000000000001], [151.72, -32.87999999999999], [151.65, -32.87999999999998], [151.65, -32.929999999999986]]]}, "properties": {"precinct_key": "mcc"}}]}

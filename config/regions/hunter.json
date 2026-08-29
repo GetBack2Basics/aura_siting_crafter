@@ -1,0 +1,25 @@
+{
+  "region_key": "hunter",
+  "region_name": "Hunter / Lake Macquarie",
+  "storage_path": "wherobots://fgsdb/aura_siting/hunter",
+  "bbox_wgs84": [
+    151.0,
+    -33.2,
+    152.0,
+    -32.5
+  ],
+  "precinct": {
+    "name": "Macquarie Coal Complex Transformation Precinct",
+    "approx_area_ha": 1160,
+    "sub_precincts": [
+      "Killingworth",
+      "West Lake",
+      "Cockle Creek",
+      "Teralba"
+    ]
+  },
+  "data_sources": {
+    "lakemac_open_data": "https://data.lakemac.com.au/api/explore/v2.1/catalog/datasets",
+    "nsw_lmbc": "https://www.lmbc.nsw.gov.au/arcgis/rest/services"
+  }
+}

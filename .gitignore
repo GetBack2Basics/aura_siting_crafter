@@ -1,0 +1,24 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+
+# Secrets & Environment
+.env
+
+# Generated heavy HTML reports & cached layers (rebuilt via runner scripts)
+runner/national_suitability_report.html
+runner/data_verification_technical_report.html
+runner/attachments/layers/rail_network.json
+docs/data_verification_audit.json
+
+# OS files
+.DS_Store
+Thumbs.db

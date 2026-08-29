@@ -47,7 +47,7 @@ flowchart TD
     C --> G[4. Lightweight Vector Scoring\nMath Curves S_power, S_water, S_sens]
     F --> G
     G --> H[Standalone Interactive HTML Report]
-    H -->|5. Zero-Cost Client Offloading| I[Browser JS & DuckDB-WASM\n$0.00 Cloud Compute Cost]
+    H -->|5. Zero-Cost Client Offloading| I[Browser JavaScript\n$0.00 Cloud Compute Cost]
 ```
 
 ### 1. Decoupling Heavy Geometry Joins from Lightweight Multi-Criteria Scoring
@@ -76,7 +76,7 @@ WHERE ST_Intersects(geometry, ST_PolygonFromText('POLYGON(...)', 7856));
 ```
 
 ### 4. Zero-Cost Client Compute Offloading
-By compiling precomputed distance topologies into the standalone HTML report and offloading real-time multi-criteria exploration to in-browser JavaScript and **DuckDB-WASM**, millions of interactive public scenario evaluations occur at **$0.00 cloud compute cost**.
+By compiling precomputed distance topologies into the standalone HTML report and offloading real-time multi-criteria exploration to in-browser **JavaScript**, millions of interactive public scenario evaluations occur at **$0.00 cloud compute cost**.
 
 ---
 
@@ -86,7 +86,7 @@ By compiling precomputed distance topologies into the standalone HTML report and
 | :--- | :--- | :--- | :--- |
 | **Cadastral & Grid Ingestion** | Full scan (15.91M features) | Fingerprinted Cache Skip | **95% reduction** |
 | **Spatial Joins & Buffer Overlay** | Full continental join ($O(N \times M)$) | Delta partitions only | **88% reduction** |
-| **Multi-Criteria Re-Weighting** | Re-runs batch spatial SQL | In-browser DuckDB-WASM | **100% cloud savings ($0.00)** |
+| **Multi-Criteria Re-Weighting** | Re-runs batch spatial SQL | In-browser JavaScript | **100% cloud savings ($0.00)** |
 | **Continuous CI/CD Batch Cost** | **~$36 AUD** | **< $5 AUD** | **> 85% Cost Reduction** |
 
 ---

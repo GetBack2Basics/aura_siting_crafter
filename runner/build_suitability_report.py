@@ -801,7 +801,7 @@ HTML_PAGE = """<!DOCTYPE html>
       <span class="stat-val" style="color: #38bdf8;">~$36 AUD</span>
       <span class="stat-desc">~35 Runs • Decoupled Spatial DAG</span>
       <div class="stat-tooltip">
-        <strong>Why Compute Is So Low (~$1.03/run):</strong> Evaluated across ~35 full batch ETL runs (US$24.13 total). Achieved by decoupling heavy geometry joins from scoring, Iceberg delta partition scans, and offloading real-time What-If simulation to client-side DuckDB-WASM ($0.00 cloud compute).
+        <strong>Why Compute Is So Low (~$1.03/run):</strong> Evaluated across ~35 full batch ETL runs (US$24.13 total). Achieved by decoupling heavy geometry joins from scoring, Iceberg delta partition scans, and offloading real-time What-If simulation to client-side JavaScript ($0.00 cloud compute).
       </div>
     </div>
   </div>
@@ -1193,7 +1193,7 @@ HTML_PAGE = """<!DOCTYPE html>
           <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
             <li><strong>Net-Zero Mandate:</strong> Verifies co-location with &ge;132kV transmission substations and declared Renewable Energy Zones (REZs).</li>
             <li><strong>Potable Water Protection:</strong> Hard exclusion buffers on drinking catchments; prioritizes recycled wastewater cooling loops.</li>
-            <li><strong>Sovereign Scenario Engine:</strong> Zero-cloud-cost DuckDB-WASM browser engine allows regulators to test proposed legislation dynamically.</li>
+            <li><strong>Sovereign Scenario Engine:</strong> Zero-cloud-cost JavaScript browser engine allows regulators to test proposed legislation dynamically.</li>
           </ul>
         </div>
 
@@ -1743,7 +1743,7 @@ function renderLeaderboard() {
         marker.openPopup();
       }
 
-      if (c.state_name === "New South Wales") {
+      if (isMicroSited(c)) {
         ['precinct', 'netdev', 'pipelines'].forEach(k => {
           toggleLayer(k, true);
           const chk = document.getElementById('layer-chk-' + k);

@@ -50,7 +50,7 @@ As mandated by the engineering playbook, spatial ETL is strictly executed in two
 
 ## 2. Incremental Spatial Compute & Cost Optimization Principles
 
-Based on Wherobots platform utilization analysis and verified headless batch spend (~**US$24.13 / ~$36 AUD across ~35 full batch runs**, averaging **~US$0.69 / ~$1.03 AUD per run** across 15.91M national geometries):
+Based on Wherobots platform utilization analysis and verified headless batch spend (**$24.13 USD total across ~35 full batch runs**, averaging **$0.69 USD per full run** across 15.91M national geometries):
 
 ```mermaid
 graph TD

@@ -826,13 +826,15 @@ HTML_PAGE = """<!DOCTYPE html>
 
     <div class="stat-card">
       <div class="stat-card-header">
-        <span class="stat-title">Batch Compute Spend</span>
+        <span class="stat-title">Last Full Run Compute</span>
         <span class="stat-info-icon" title="View details">ℹ</span>
       </div>
-      <span class="stat-val" style="color: #38bdf8;">~$36 AUD</span>
-      <span class="stat-desc">~35 Runs • Decoupled Spatial DAG</span>
+      <span class="stat-val" style="color: #38bdf8;">$0.69 USD</span>
+      <span class="stat-desc">Per Full National Run (15.91M Geometries)</span>
       <div class="stat-tooltip">
-        <strong>Why Compute Is So Low (~$1.03/run):</strong> Evaluated across ~35 full batch ETL runs (US$24.13 total). Achieved by decoupling heavy geometry joins from scoring, Iceberg delta partition scans, and offloading real-time What-If simulation to client-side JavaScript ($0.00 cloud compute).
+        <strong>Last Full Pipeline Run: $0.69 USD</strong><br>
+        <strong>Total Cumulative Batch Spend: $24.13 USD</strong> across ~35 automated headless batch runs on Wherobots Cloud.<br>
+        Achieved by right-sizing Sedona medium runtimes, decoupling heavy spatial geometry joins from lightweight MCDA scoring, Iceberg delta partitions, and offloading interactive What-If re-scoring 100% to client-side DuckDB-WASM/JS ($0.00 cloud compute).
       </div>
     </div>
   </div>

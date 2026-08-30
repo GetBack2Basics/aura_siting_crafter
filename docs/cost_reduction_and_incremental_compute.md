@@ -2,36 +2,36 @@
 
 ## Executive Summary & Verified Batch Spend
 
-During the development, benchmarking, and national scale-up of the **AuraSiting Crafter** AI data center suitability model, total cloud batch compute spend across dozens of full headless batch runs was **~$36 AUD (US$24.13)**. 
+During the development, benchmarking, and national scale-up of the **AURA Siting Crafter** AI data center suitability model, total cloud batch compute spend across dozens of full headless batch runs was **$24.13 USD**. 
 
-* **Verified Wherobots Cloud Spend**: **US$24.13** *(Org `<org-id>` on `aws-us-west-2`)*.
-* **AUD Conversion**: **~$36.01 AUD** (at ~0.67 AUD/USD exchange rate).
-* **Batch Execution Efficiency**: Incurred across **~35 automated batch pipeline runs**, averaging **~US$0.69 (~$1.03 AUD) per full batch run**.
+* **Verified Wherobots Cloud Spend**: **$24.13 USD** *(Org `<org-id>` on `aws-us-west-2`)*.
+* **Last Full Pipeline Run**: **$0.69 USD** across 15.91M national geometries.
+* **Batch Execution Efficiency**: Incurred across **~35 automated batch pipeline runs**, averaging **$0.69 USD per full batch run**.
 
 ---
 
 ## Batch Run Breakdown & Compute Allocation
 
-The **~$36 AUD (US$24.13)** batch compute expenditure was distributed across 4 key development and benchmarking phases:
+The **$24.13 USD** cumulative batch compute expenditure was distributed across 4 key development and benchmarking phases:
 
 | Workflow / Pipeline Phase | Runs | Scope & Execution Profile | Cost Subtotal (USD) |
 | :--- | :---: | :--- | :---: |
-| **Regional NSW Ingestion & Repair** | ~14 runs | Raw vector ingestion, GDA2020 reprojections (`EPSG:7856`), `ST_MakeValid`, and 30m riparian / 20m pipeline buffers across 8 regional layers. | ~US$9.65 |
-| **Spatial Joins & Net Developable Overlays** | ~11 runs | Evaluating 4.92M spatial join combinations and `ST_Difference` developable overlays across 1.75M regional geometries. | ~US$7.59 |
-| **National Hilbert Spatial Benchmarks** | ~6 runs | Distributed spatial SQL queries and Hilbert space-filling curve partitioning across 15.91M national geometries. | ~US$4.14 |
-| **Automated QA & Regression Passes** | ~4 runs | Automated topology validation, data lineage checks, and multi-criteria scoring verification. | ~US$2.75 |
-| **Total Automated Batch Runs** | **~35 runs** | **15.91M National Geometries & 1.75M Regional Features** | **US$24.13 (~$36 AUD)** |
+| **Regional NSW Ingestion & Repair** | ~14 runs | Raw vector ingestion, GDA2020 reprojections (`EPSG:7856`), `ST_MakeValid`, and 30m riparian / 20m pipeline buffers across 8 regional layers. | $9.65 USD |
+| **Spatial Joins & Net Developable Overlays** | ~11 runs | Evaluating 4.92M spatial join combinations and `ST_Difference` developable overlays across 1.75M regional geometries. | $7.59 USD |
+| **National Hilbert Spatial Benchmarks** | ~6 runs | Distributed spatial SQL queries and Hilbert space-filling curve partitioning across 15.91M national geometries. | $4.14 USD |
+| **Automated QA & Regression Passes** | ~4 runs | Automated topology validation, data lineage checks, and multi-criteria scoring verification. | $2.75 USD |
+| **Total Automated Batch Runs** | **~35 runs** | **15.91M National Geometries & 1.75M Regional Features** | **$24.13 USD** |
 
 > [!NOTE]
 > ### Cloud Cost Management & Runtime Lifecycle Best Practices
-> During initial developer setup, iterative query tuning, and interactive notebook experimentation, multi-session compute runs accumulated unexpected development costs on invoice `INYXGP-DRAFT`. 
+> During initial developer setup, iterative query tuning, and interactive notebook experimentation, multi-session compute runs accumulated unexpected development costs on an early development invoice. 
 > 
 > Following a joint resource utilization investigation with Wherobots engineering:
 > 1. **Resource Utilization Breakdown (80% Active / 20% Idle):** Detailed platform analysis confirmed that **80% of incurred compute occurred while operations were actively executing** during exploratory testing, with **20% attributable to idle resource utilization** before auto-shutdown.
 > 2. **Built-In Platform Guardrails:** Wherobots enforces built-in automated guardrails by default, shutting down inactive compute and notebooks within 8 hours (and capping maximum workload duration at 24 hours unless configured shorter). Users can also customize tighter idle timeout thresholds directly in [Runtime Settings](https://docs.wherobots.com/develop/runtimes#idle-timeout-for-wherobots-notebooks).
 > 3. **Idle Timeouts as a Safety Net, Not a Strategy:** As emphasized in the [Wherobots Managing Costs Guide](https://docs.wherobots.com/get-started/organization-management/managing-costs#use-idle-timeout-as-a-safety-net-not-a-strategy), automated idle timeouts provide a crucial safety net, but proactive shutdown remains the optimal development practice.
 > 4. **Mandatory Programmatic Teardowns:** All Sedona and PySpark batch ETL scripts in this repository enforce strict `try...finally: sedona.stop()` and `spark.stop()` blocks to release compute instantly upon job completion.
-> 5. **High Headless Batch Efficiency:** In contrast to interactive exploration, production headless batch runs across 15.91M national geometries consumed only **US$24.13 (~$36 AUD)** across ~35 full pipeline runs (**~$1.03 AUD per run**), proving the remarkable cost-efficiency of right-sized headless batch execution.
+> 5. **High Headless Batch Efficiency:** In contrast to interactive exploration, production headless batch runs across 15.91M national geometries consumed only **$24.13 USD** across ~35 full pipeline runs (**$0.69 USD per full run**), proving the remarkable cost-efficiency of right-sized headless batch execution.
 
 ---
 
@@ -87,7 +87,7 @@ By compiling precomputed distance topologies into the standalone HTML report and
 | **Cadastral & Grid Ingestion** | Full scan (15.91M features) | Fingerprinted Cache Skip | **95% reduction** |
 | **Spatial Joins & Buffer Overlay** | Full continental join ($O(N \times M)$) | Delta partitions only | **88% reduction** |
 | **Multi-Criteria Re-Weighting** | Re-runs batch spatial SQL | In-browser JavaScript | **100% cloud savings ($0.00)** |
-| **Continuous CI/CD Batch Cost** | **~$36 AUD** | **< $5 AUD** | **> 85% Cost Reduction** |
+| **Continuous CI/CD Batch Cost** | $24.13 USD | < $3.50 USD | **> 85% Cost Reduction** |
 
 ---
 

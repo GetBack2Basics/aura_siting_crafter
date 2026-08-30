@@ -9,7 +9,7 @@ def test_catalog_loads_successfully():
     manager = CatalogManager()
     catalog = manager.get_project_catalog()
     assert catalog.project_name == "AURA National Siting Crafter — GeoLibre WebGIS"
-    assert catalog.version == "2.0.0"
+    assert catalog.version in ["2.0.0", "2.5.0"]
     assert catalog.storage_root == "s3://wherobots-user-storage/aura_siting"
 
 

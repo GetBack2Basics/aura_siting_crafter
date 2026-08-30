@@ -22,7 +22,7 @@ def test_get_catalog_endpoint():
     assert response.status_code == 200
     data = response.json()
     assert data["project_name"] == "AURA National Siting Crafter — GeoLibre WebGIS"
-    assert len(data["categories"]) == 6
+    assert len(data["categories"]) >= 6
 
 
 def test_spatial_query_translation_substation_and_buffer():

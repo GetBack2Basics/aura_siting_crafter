@@ -1,6 +1,6 @@
 {
   "project_name": "AURA National Siting Crafter — GeoLibre WebGIS",
-  "version": "2.0.0",
+  "version": "2.5.0",
   "storage_root": "s3://wherobots-user-storage/aura_siting",
   "default_view": {
     "center": [133.7751, -25.2744],
@@ -9,7 +9,7 @@
     "bearing": 0
   },
   "basemap": {
-    "style": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+    "style": "https://tiles.openfreemap.org/styles/liberty",
     "theme": "dark",
     "background_color": "#0a0f1d"
   },
@@ -59,16 +59,17 @@
   "categories": [
     {
       "id": "candidates",
-      "name": "🎯 Data Center Candidate Parcels",
+      "name": "🎯 Candidate Hubs & Siting Scorecards",
       "description": "National suitability assessment candidate sites with composite multi-criteria evaluation scores",
       "expanded_by_default": true,
       "layers": [
         {
           "id": "national_candidates",
-          "name": "National Candidate Parcels (Scored)",
+          "name": "National Siting Candidate Hubs",
           "type": "circle",
           "source_type": "geoparquet",
           "s3_path": "s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet",
+          "stream_url": "/runner/attachments/candidates.json",
           "visible": true,
           "paint": {
             "circle-radius": [
@@ -104,10 +105,49 @@
       ]
     },
     {
+      "id": "cadastre",
+      "name": "📐 Cadastre & Statistical Boundaries",
+      "description": "National cadastral lot fabric and ABS 2021 census statistical areas",
+      "expanded_by_default": false,
+      "layers": [
+        {
+          "id": "abs_meshblocks",
+          "name": "ABS 2021 Meshblocks & UCL",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/cadastre/abs_meshblocks_2021.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/MapServer/0/query",
+          "visible": false,
+          "paint": {
+            "fill-color": "#94a3b8",
+            "fill-opacity": 0.05,
+            "fill-outline-color": "#94a3b8"
+          },
+          "popup_properties": ["mb_code21", "meshblock_category", "state_name", "population"]
+        },
+        {
+          "id": "geoscape_cadastre",
+          "name": "Geoscape National Cadastre & G-NAF",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/cadastre/geoscape_cadastre.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/MapServer/0/query",
+          "minzoom": 12,
+          "visible": false,
+          "paint": {
+            "fill-color": "#64748b",
+            "fill-opacity": 0.04,
+            "fill-outline-color": "#64748b"
+          },
+          "popup_properties": ["lot_plan", "cadastre_id", "area_sqm", "locality_name"]
+        }
+      ]
+    },
+    {
       "id": "energy",
-      "name": "⚡ Energy & Transmission Grid",
-      "description": "National electricity transmission lines, substations, power generators, and Renewable Energy Zones",
-      "expanded_by_default": true,
+      "name": "⚡ Energy Grid & Substations",
+      "description": "National electricity transmission lines, substations, and high voltage network corridors",
+      "expanded_by_default": false,
       "layers": [
         {
           "id": "transmission_lines_interstate",
@@ -115,13 +155,15 @@
           "type": "line",
           "source_type": "geoparquet",
           "s3_path": "s3://wherobots-user-storage/aura_siting/energy/national_transmission_grid.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/6/query",
           "filter": [">=", ["get", "capacity_kv"], 275],
-          "visible": true,
+          "visible": false,
           "paint": {
             "line-color": "#38bdf8",
             "line-width": 3.0,
             "line-opacity": 0.95
-          }
+          },
+          "popup_properties": ["line_name", "voltage_kv", "operator", "circuit_type"]
         },
         {
           "id": "transmission_lines_regional",
@@ -129,236 +171,219 @@
           "type": "line",
           "source_type": "geoparquet",
           "s3_path": "s3://wherobots-user-storage/aura_siting/energy/national_transmission_grid.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/6/query",
           "filter": ["all", [">=", ["get", "capacity_kv"], 132], ["<", ["get", "capacity_kv"], 275]],
           "minzoom": 6,
-          "visible": true,
+          "visible": false,
           "paint": {
             "line-color": "#60a5fa",
             "line-width": 2.0,
             "line-opacity": 0.85
-          }
+          },
+          "popup_properties": ["line_name", "voltage_kv", "operator"]
         },
         {
-          "id": "transmission_lines_local",
-          "name": "Local Distribution Feeders (<132kV)",
-          "type": "line",
-          "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/energy/national_transmission_grid.parquet",
-          "filter": ["<", ["get", "capacity_kv"], 132],
-          "minzoom": 9,
-          "visible": false,
-          "paint": {
-            "line-color": "#94a3b8",
-            "line-width": 1.2,
-            "line-opacity": 0.70,
-            "line-dasharray": [2, 2]
-          }
-        },
-        {
-          "id": "substations",
-          "name": "High-Voltage Substations & Terminals",
+          "id": "substations_terminal",
+          "name": "Electrical Substations & Terminal Stations",
           "type": "circle",
           "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/energy/substations.parquet",
-          "visible": true,
-          "paint": {
-            "circle-radius": 5.5,
-            "circle-color": "#eab308",
-            "circle-stroke-color": "#0f172a",
-            "circle-stroke-width": 1.5
-          }
-        },
-        {
-          "id": "renewable_energy_zones",
-          "name": "Renewable Energy Zones (REZ)",
-          "type": "fill",
-          "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/energy/renewable_energy_zones.parquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/energy/national_substations.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/6/query",
           "visible": false,
           "paint": {
-            "fill-color": "#06b6d4",
-            "fill-opacity": 0.15,
-            "fill-outline-color": "#0891b2"
-          }
+            "circle-radius": 5.5,
+            "circle-color": "#f59e0b",
+            "circle-stroke-color": "#0f172a",
+            "circle-stroke-width": 1.5
+          },
+          "popup_properties": ["substation_name", "voltage_kv", "substation_type", "state_name"]
         }
       ]
     },
     {
       "id": "water",
-      "name": "💧 Water & Cooling Infrastructure",
-      "description": "Recycled water treatment plants, outfalls, water supply conduits, and statutory riparian buffers",
+      "name": "💧 Water & Cooling Loops",
+      "description": "Recycled water treatment plants, municipal outfalls, and surface water conduits",
       "expanded_by_default": false,
       "layers": [
         {
-          "id": "wwtw_recycled_water",
-          "name": "Wastewater Treatment Plants (Recycled Water)",
-          "type": "circle",
+          "id": "bom_hydro_lines",
+          "name": "BoM Surface Water HydroLine & HydroArea",
+          "type": "line",
           "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/water/wwtw_recycled_water.parquet",
-          "visible": true,
-          "paint": {
-            "circle-radius": 5.5,
-            "circle-color": "#06b6d4",
-            "circle-stroke-color": "#ffffff",
-            "circle-stroke-width": 1.2
-          }
-        },
-        {
-          "id": "rivers_riparian_buffers",
-          "name": "Statutory Riparian Buffers (30m Strahler)",
-          "type": "fill",
-          "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/water/riparian_buffers_30m.parquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/water/bom_surface_water_wwtw.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/4/query",
           "visible": false,
           "paint": {
-            "fill-color": "#0284c7",
-            "fill-opacity": 0.25,
-            "fill-outline-color": "#0369a1"
-          }
+            "line-color": "#06b6d4",
+            "line-width": 1.5,
+            "line-opacity": 0.85
+          },
+          "popup_properties": ["feature_name", "strahler_order", "water_type"]
+        },
+        {
+          "id": "recycled_wwtw_plants",
+          "name": "Recycled Wastewater Treatment Plants (WWTW)",
+          "type": "circle",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/water/recycled_wwtw_plants.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/4/query",
+          "visible": false,
+          "paint": {
+            "circle-radius": 5.5,
+            "circle-color": "#14b8a6",
+            "circle-stroke-color": "#ffffff",
+            "circle-stroke-width": 1.2
+          },
+          "popup_properties": ["plant_name", "treatment_level", "capacity_ml_day", "recycled_viable"]
         }
       ]
     },
     {
       "id": "receptors",
       "name": "🛡️ Social & Environmental Receptors",
-      "description": "Schools, childcare, hospitals, residential meshblocks, and biodiversity exclusion zones",
+      "description": "Educational facilities, healthcare hospitals, and heavy transport rail alignments",
       "expanded_by_default": false,
       "layers": [
         {
-          "id": "sensitive_receptors_points",
-          "name": "Schools, Hospitals & Childcare Centers",
+          "id": "acara_schools",
+          "name": "ACARA National Schools (500m Buffer)",
           "type": "circle",
           "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/constraints/sensitive_receptors.parquet",
-          "visible": true,
-          "paint": {
-            "circle-radius": 4.5,
-            "circle-color": "#ec4899",
-            "circle-stroke-color": "#831843",
-            "circle-stroke-width": 1.0
-          }
-        },
-        {
-          "id": "sensitive_receptors_buffer_500m",
-          "name": "EPA Acoustic Setback Buffer (500m)",
-          "type": "fill",
-          "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/constraints/sensitive_buffers_500m.parquet",
-          "visible": true,
-          "paint": {
-            "fill-color": "#ec4899",
-            "fill-opacity": 0.18,
-            "fill-outline-color": "#be185d"
-          }
-        },
-        {
-          "id": "biodiversity_exclusion_zones",
-          "name": "Biodiversity & High Environmental Value",
-          "type": "fill",
-          "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/constraints/biodiversity_hev.parquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/receptors/acara_national_schools.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/3/query",
           "visible": false,
           "paint": {
-            "fill-color": "#881337",
-            "fill-opacity": 0.22,
-            "fill-outline-color": "#4c0519"
-          }
+            "circle-radius": 4.5,
+            "circle-color": "#a855f7",
+            "circle-stroke-color": "#581c87",
+            "circle-stroke-width": 1.0
+          },
+          "popup_properties": ["school_name", "school_type", "sector", "suburb", "state"]
+        },
+        {
+          "id": "nhsd_healthcare",
+          "name": "NHSD National Healthcare & Hospitals",
+          "type": "circle",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/receptors/nhsd_national_healthcare.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/2/query",
+          "visible": false,
+          "paint": {
+            "circle-radius": 5.0,
+            "circle-color": "#ec4899",
+            "circle-stroke-color": "#831843",
+            "circle-stroke-width": 1.2
+          },
+          "popup_properties": ["facility_name", "facility_type", "emergency_dept", "state"]
+        },
+        {
+          "id": "transport_rail",
+          "name": "Heavy Freight & Transport Rail Corridors",
+          "type": "line",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/transport/nsw_railway_corridors.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Transport_Theme/MapServer/7/query",
+          "visible": false,
+          "paint": {
+            "line-color": "#94a3b8",
+            "line-width": 2.0,
+            "line-dasharray": [5, 2]
+          },
+          "popup_properties": ["line_name", "gauge", "freight_access", "track_type"]
         }
       ]
     },
     {
-      "id": "cadastre",
-      "name": "📐 Cadastre, Land Use & Topography",
-      "description": "Registered lot/plan cadastral boundaries, standard instrument zoning, and topographic slope grade",
+      "id": "environment",
+      "name": "🌿 Biodiversity & Bushfire Constraints",
+      "description": "High Environmental Value biodiversity zones and statutory Bush Fire Prone Land buffers",
       "expanded_by_default": false,
       "layers": [
         {
-          "id": "cadastral_lots",
-          "name": "Cadastral Property Lots (Lot/Plan)",
-          "type": "line",
-          "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/cadastre/cadastral_lots.parquet",
-          "minzoom": 12,
-          "visible": false,
-          "paint": {
-            "line-color": "#3b82f6",
-            "line-width": 1.0,
-            "line-opacity": 0.6
-          }
-        },
-        {
-          "id": "slope_constraints_gt5pct",
-          "name": "DEM Slope Constraints (>5% Grade)",
+          "id": "bionet_biodiversity",
+          "name": "NSW SEED & BioNet BV Map / KHIB",
           "type": "fill",
           "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/cadastre/slope_constraints_gt5.parquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/environment/bionet_biodiversity_khib.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/5/query",
           "visible": false,
           "paint": {
-            "fill-color": "#f97316",
-            "fill-opacity": 0.25,
-            "fill-outline-color": "#c2410c"
-          }
+            "fill-color": "#84cc16",
+            "fill-opacity": 0.20,
+            "fill-outline-color": "#65a30d"
+          },
+          "popup_properties": ["habitat_id", "veg_community", "threatened_species", "statutory_status"]
+        },
+        {
+          "id": "rfs_bushfire_bfpl",
+          "name": "NSW RFS Bush Fire Prone Land (BFPL)",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/environment/rfs_bushfire_prone_land.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/5/query",
+          "visible": false,
+          "paint": {
+            "fill-color": "#ef4444",
+            "fill-opacity": 0.20,
+            "fill-outline-color": "#dc2626"
+          },
+          "popup_properties": ["category", "buffer_m", "vegetation_type", "lga_name"]
         }
       ]
     },
     {
       "id": "micro_siting",
-      "name": "🏗️ High-Precision Precinct Micro-Siting",
-      "description": "Precinct boundaries, net developable pad areas, pipeline easements, and rail transport topology",
-      "expanded_by_default": true,
+      "name": "🏗️ Precinct Micro-Siting Masterplans",
+      "description": "High-precision transformation precinct envelopes, net developable pads, and pipeline easements",
+      "expanded_by_default": false,
       "layers": [
         {
-          "id": "precinct_boundary",
-          "name": "Precinct Study Area Boundary",
+          "id": "transformation_boundary",
+          "name": "Macquarie Transformation Envelope",
           "type": "line",
           "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/micro_siting/precinct_boundary.parquet",
-          "visible": true,
+          "s3_path": "s3://wherobots-user-storage/aura_siting/precincts/transformation_boundary.parquet",
+          "stream_url": "/runner/attachments/layers/precinct_boundary.json",
+          "visible": false,
           "paint": {
-            "line-color": "#1d4ed8",
+            "line-color": "#3b82f6",
             "line-width": 3.0,
-            "line-dasharray": [4, 4],
+            "line-dasharray": [6, 3],
             "line-opacity": 0.95
-          }
+          },
+          "popup_properties": ["precinct_id", "precinct_name", "gross_area_ha", "state", "status"]
         },
         {
-          "id": "net_developable_area",
-          "name": "Net Developable Pad Area (NDA)",
+          "id": "net_developable_pad",
+          "name": "Net Developable Pad Area (59.7 ha)",
           "type": "fill",
           "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/micro_siting/net_developable_zones.parquet",
-          "visible": true,
+          "s3_path": "s3://wherobots-user-storage/aura_siting/precincts/net_developable_pad_59ha.parquet",
+          "stream_url": "/runner/attachments/layers/net_developable.json",
+          "visible": false,
           "paint": {
             "fill-color": "#14b8a6",
-            "fill-opacity": 0.35,
+            "fill-opacity": 0.40,
             "fill-outline-color": "#0d9488"
-          }
+          },
+          "popup_properties": ["pad_zone", "pad_name", "net_developable_area_ha", "slope_grade_pct", "geotechnical_status"]
         },
         {
-          "id": "pipeline_corridors",
-          "name": "Infrastructure Pipeline Corridors (20m)",
+          "id": "gas_pipeline_corridor",
+          "name": "High Pressure Gas Pipeline Corridor (20m APZ)",
           "type": "line",
           "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/micro_siting/pipeline_corridors.parquet",
-          "visible": true,
+          "s3_path": "s3://wherobots-user-storage/aura_siting/precincts/gas_pipeline_corridor_20m.parquet",
+          "stream_url": "/runner/attachments/layers/pipeline_corridors.json",
+          "visible": false,
           "paint": {
             "line-color": "#f97316",
             "line-width": 3.0,
+            "line-dasharray": [4, 2],
             "line-opacity": 0.90
-          }
-        },
-        {
-          "id": "rail_network",
-          "name": "Freight Rail Corridor Network",
-          "type": "line",
-          "source_type": "geoparquet",
-          "s3_path": "s3://wherobots-user-storage/aura_siting/micro_siting/rail_network.parquet",
-          "visible": true,
-          "paint": {
-            "line-color": "#0f172a",
-            "line-width": 3.5,
-            "line-opacity": 0.95
-          }
+          },
+          "popup_properties": ["corridor_id", "infrastructure_type", "buffer_setback_m", "operator"]
         }
       ]
     }

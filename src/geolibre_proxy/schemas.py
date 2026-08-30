@@ -28,6 +28,8 @@ class LayerCatalogItem(BaseModel):
     type: str
     source_type: str
     s3_path: str
+    stream_url: Optional[str] = None
+    minzoom: Optional[int] = None
     visible: bool = True
     paint: Optional[Dict[str, Any]] = None
     filter: Optional[List[Any]] = None

@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_heritage_state_ahims",
+  "dataset_name": "State Heritage Register Curtilages & Aboriginal Cultural Heritage",
+  "source_agency": "Heritage NSW / Aboriginal Affairs NSW",
+  "portal": "NSW SEED Portal / Heritage NSW",
+  "portal_url": "https://datasets.seed.nsw.gov.au/dataset/state-heritage-register",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/Heritage/StateHeritage/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 50.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["ITEM_NAME", "HERITAGE_ID", "SIGNIFICANCE", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_heritage_state_ahims",
+    "format": "havasu.iceberg",
+    "partition_by": "significance"
+  },
+  "audit": {
+    "cadence": "Monthly Official Gazette Sync",
+    "statutory_act": "Heritage Act 1977 / NPW Act 1974",
+    "is_raw_unchanged": false
+  }
+}

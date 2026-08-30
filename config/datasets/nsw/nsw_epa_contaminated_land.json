@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_epa_contaminated_land",
+  "dataset_name": "NSW EPA Contaminated Land Register & CLM Act Notices",
+  "source_agency": "NSW Environment Protection Authority (EPA)",
+  "portal": "NSW SEED Portal",
+  "portal_url": "https://datasets.seed.nsw.gov.au/dataset/epa-contaminated-land-register",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/EPA/ContaminatedLand/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Point",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 100.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["SITE_NAME", "NOTICE_TYPE", "STATUS", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_epa_contaminated_land",
+    "format": "havasu.iceberg",
+    "partition_by": "status"
+  },
+  "audit": {
+    "cadence": "Weekly Live Sync",
+    "statutory_act": "Contaminated Land Management Act 1997",
+    "is_raw_unchanged": false
+  }
+}

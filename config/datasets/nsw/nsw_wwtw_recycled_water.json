@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_wwtw_recycled_water",
+  "dataset_name": "Wastewater Treatment Plants (WWTW) & Recycled Effluent Distribution",
+  "source_agency": "Sydney Water, Hunter Water & Regional Local Water Utilities",
+  "portal": "NSW Spatial Services / Water Utility APIs",
+  "portal_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer",
+  "layer_id": 11,
+  "geometry_type": "Point",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["FACILITY_NAME", "OPERATOR", "CAPACITY_MLD", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_wwtw_recycled_water",
+    "format": "havasu.iceberg",
+    "partition_by": "operator"
+  },
+  "audit": {
+    "cadence": "Quarterly Update",
+    "statutory_act": "Water Industry Competition Act 2006",
+    "is_raw_unchanged": false
+  }
+}

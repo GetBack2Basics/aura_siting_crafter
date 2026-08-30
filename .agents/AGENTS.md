@@ -20,6 +20,11 @@ In every final response after executing computational jobs, explicitly check and
 - **Regional Scoping**: Use `AURA_REGION=hunter` or regional configs for targeted ETL runs to avoid full national re-computation.
 - **Zero-Cost Client Offloading**: Offload interactive What-If scenario modeling, sensitivity tests, and slider re-scoring 100% to client-side DuckDB-WASM and JavaScript.
 
+## Zero-Mock & Real Data Integrity Rule (Mandatory Standard)
+Never use mocked, placeholder, synthetic, or simplified mock datasets in any tool, pipeline, UI, or table.
+All spatial data, attributes, coordinates, and metrics MUST be 100% genuine and drawn directly from live S3/Iceberg lakehouses (`s3://wherobots-user-storage/aura_siting/`) or authoritative government spatial endpoints (NSW Spatial Services, Geoscience Australia, AEMO, BoM, ACARA, NHSD).
+If an external service is unreachable, report the live connection state or query failure explicitly rather than displaying mock or synthetic fallback objects.
+
 ## Security Rule
 Never commit API keys, session IDs, org IDs, or private credentials to this repo.
 All runtime secrets must be loaded via environment variables or `.env` (gitignored).
@@ -32,3 +37,4 @@ At the start of any refactoring session, run the Graphify analysis tool to estab
 ```bash
 python tools/graphify_analysis.py
 ```
+

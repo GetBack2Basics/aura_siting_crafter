@@ -1,0 +1,6 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/geolibre-spatial-ai-proxy:latest', '-f', 'src/geolibre_proxy/Dockerfile', '.']
+images:
+- 'gcr.io/$PROJECT_ID/geolibre-spatial-ai-proxy:latest'
+timeout: '1200s'

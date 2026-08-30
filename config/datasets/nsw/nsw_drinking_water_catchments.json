@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_drinking_water_catchments",
+  "dataset_name": "WaterNSW Special Drinking Water Catchment Areas",
+  "source_agency": "WaterNSW",
+  "portal": "NSW SEED Portal / WaterNSW",
+  "portal_url": "https://datasets.seed.nsw.gov.au/dataset/drinking-water-catchments",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/WaterNSW/SpecialCatchments/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["CATCHMENT_NAME", "MANAGEMENT_ZONE", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_drinking_water_catchments",
+    "format": "havasu.iceberg",
+    "partition_by": "management_zone"
+  },
+  "audit": {
+    "cadence": "Annual Update",
+    "statutory_act": "Water NSW Act 2014 / SEPP (Biodiversity and Conservation) 2021",
+    "is_raw_unchanged": false
+  }
+}

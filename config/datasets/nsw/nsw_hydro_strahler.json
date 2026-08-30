@@ -1,0 +1,47 @@
+{
+  "dataset_key": "nsw_hydro_strahler",
+  "dataset_name": "NSW Hydrography Theme - Strahler Stream Orders",
+  "source_agency": "NSW Spatial Services",
+  "portal": "NSW Spatial Services / SEED Portal",
+  "portal_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Water_Theme/FeatureServer",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Water_Theme/FeatureServer",
+  "layer_id": 5,
+  "geometry_type": "LineString",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "attribute_based",
+    "attribute_column": "strahler_order",
+    "default_distance_m": 30.0,
+    "mapping": {
+      "1": 10.0,
+      "2": 20.0,
+      "3": 30.0,
+      "4": 50.0,
+      "5": 50.0,
+      "6": 50.0,
+      "7": 50.0
+    }
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["OBJECTID", "NAME", "HYDROLINE_TYPE", "STRAHLER_ORDER"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_hydro_strahler",
+    "format": "havasu.iceberg",
+    "partition_by": "strahler_order"
+  },
+  "audit": {
+    "cadence": "Quarterly Live Sync",
+    "statutory_act": "Water Management Act 2000",
+    "is_raw_unchanged": false
+  }
+}

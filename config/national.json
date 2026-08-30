@@ -2,23 +2,29 @@
   "environment": "national",
   "storage_root": "wherobots://fgsdb/aura_siting",
   "log_level": "INFO",
-  "target_crs": "EPSG:7856",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
   "source_crs": "EPSG:4326",
   "buffers_m": {
     "riparian": 30.0,
     "pipeline": 20.0,
     "rail_safety": 10.0,
-    "biodiversity": 0.0
+    "biodiversity": 0.0,
+    "acoustic_500m": 500.0,
+    "bushfire_apz_cat1": 100.0,
+    "bushfire_apz_cat2": 30.0
   },
   "study_buffers_m": {
     "study_area": 5000.0,
     "buffer_100km": 100000.0
   },
   "data_sources": {
+    "geoscape_national_cadastre": "https://data.gov.au/data/dataset/geocoded-national-address-file-g-naf",
     "lakemac_open_data": "https://data.lakemac.com.au/api/explore/v2.1/catalog/datasets",
     "nsw_lmbc": "https://www.lmbc.nsw.gov.au/arcgis/rest/services",
     "abs_geo": "https://geo.abs.gov.au/arcgis/rest/services/ASGS2021",
-    "nsw_spatial_services": "https://portal.spatial.nsw.gov.au/server/rest/services"
+    "nsw_spatial_services": "https://portal.spatial.nsw.gov.au/server/rest/services",
+    "nsw_seed_portal": "https://datasets.seed.nsw.gov.au"
   },
   "region_key": "national"
 }

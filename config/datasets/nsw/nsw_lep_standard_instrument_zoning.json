@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_lep_standard_instrument_zoning",
+  "dataset_name": "NSW Principal Planning Layers - Standard Instrument LEP Land Zoning",
+  "source_agency": "NSW Department of Planning, Housing and Infrastructure (DPHI)",
+  "portal": "NSW Planning Portal / SEED Portal",
+  "portal_url": "https://www.planningportal.nsw.gov.au/opendata/dataset/land-zoning-map",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/Planning/LandZoning/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["SYM_CODE", "LAY_CLASS", "LGA_NAME", "EPI_NAME", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_lep_standard_instrument_zoning",
+    "format": "havasu.iceberg",
+    "partition_by": "lay_class"
+  },
+  "audit": {
+    "cadence": "Weekly Official Gazette Sync",
+    "statutory_act": "Environmental Planning and Assessment Act 1979",
+    "is_raw_unchanged": false
+  }
+}

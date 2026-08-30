@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_gde_aquifers",
+  "dataset_name": "Groundwater Dependent Ecosystems (GDE) Atlas & High-Yielding Aquifers",
+  "source_agency": "NSW DPHI Water / DCCEEW",
+  "portal": "NSW SEED Portal",
+  "portal_url": "https://datasets.seed.nsw.gov.au/dataset/gde-atlas",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/Water/GDEAtlas/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["GDE_NAME", "ECOSYSTEM_TYPE", "RELIANCE_LEVEL", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_gde_aquifers",
+    "format": "havasu.iceberg",
+    "partition_by": "ecosystem_type"
+  },
+  "audit": {
+    "cadence": "Annual Update",
+    "statutory_act": "Water Management Act 2000",
+    "is_raw_unchanged": false
+  }
+}

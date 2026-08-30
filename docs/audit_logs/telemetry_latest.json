@@ -1,0 +1,388 @@
+{
+  "run_id": "etl_run_20260829_050219",
+  "timestamp_utc": "2026-08-29T05:02:19.517288+00:00",
+  "total_datasets_tracked": 18,
+  "total_features_processed": 0,
+  "total_pipeline_duration_s": 0.0157,
+  "avg_throughput_features_per_sec": 0.0,
+  "datasets": {
+    "nsw_bionet_bv_map": {
+      "dataset_key": "nsw_bionet_bv_map",
+      "dataset_name": "NSW BioNet Biodiversity Values Map",
+      "portal": "NSW SEED Portal",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_bionet_bv_map",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.841913,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_bionet_threatened_species": {
+      "dataset_key": "nsw_bionet_threatened_species",
+      "dataset_name": "BioNet Threatened Biodiversity Sightings & Endangered Ecological Communities",
+      "portal": "NSW SEED Portal",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_bionet_threatened_species",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8427493,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_dams_safety_tsf": {
+      "dataset_key": "nsw_dams_safety_tsf",
+      "dataset_name": "Dams Safety NSW Declared Dams & TSF Tailings Storage Facilities",
+      "portal": "NSW SEED Portal / Dams Safety",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_dams_safety_tsf",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8436058,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_drinking_water_catchments": {
+      "dataset_key": "nsw_drinking_water_catchments",
+      "dataset_name": "WaterNSW Special Drinking Water Catchment Areas",
+      "portal": "NSW SEED Portal / WaterNSW",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_drinking_water_catchments",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8442287,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_epa_contaminated_land": {
+      "dataset_key": "nsw_epa_contaminated_land",
+      "dataset_name": "NSW EPA Contaminated Land Register & CLM Act Notices",
+      "portal": "NSW SEED Portal",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_epa_contaminated_land",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8448441,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_flood_hazard": {
+      "dataset_key": "nsw_flood_hazard",
+      "dataset_name": "State-Wide Flood Hazard Inundation Overlay (1% AEP & PMF)",
+      "portal": "NSW SEED Portal / Flood Data Portal",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_flood_hazard",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8456198,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_gde_aquifers": {
+      "dataset_key": "nsw_gde_aquifers",
+      "dataset_name": "Groundwater Dependent Ecosystems (GDE) Atlas & High-Yielding Aquifers",
+      "portal": "NSW SEED Portal",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_gde_aquifers",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8462707,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_heritage_state_ahims": {
+      "dataset_key": "nsw_heritage_state_ahims",
+      "dataset_name": "State Heritage Register Curtilages & Aboriginal Cultural Heritage",
+      "portal": "NSW SEED Portal / Heritage NSW",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_heritage_state_ahims",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8470056,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_high_pressure_gas_pipelines": {
+      "dataset_key": "nsw_high_pressure_gas_pipelines",
+      "dataset_name": "High-Pressure Gas Pipelines & Liquid Fuel Infrastructure",
+      "portal": "NSW Spatial Services / Energy Infrastructure",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_high_pressure_gas_pipelines",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8478454,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_hydro_strahler": {
+      "dataset_key": "nsw_hydro_strahler",
+      "dataset_name": "NSW Hydrography Theme - Strahler Stream Orders",
+      "portal": "NSW Spatial Services / SEED Portal",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_hydro_strahler",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8484978,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_koala_habitat_khib": {
+      "dataset_key": "nsw_koala_habitat_khib",
+      "dataset_name": "Koala Habitat Information Base (KHIB) - Core Habitat",
+      "portal": "NSW SEED Portal",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_koala_habitat_khib",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8492143,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_lep_standard_instrument_zoning": {
+      "dataset_key": "nsw_lep_standard_instrument_zoning",
+      "dataset_name": "NSW Principal Planning Layers - Standard Instrument LEP Land Zoning",
+      "portal": "NSW Planning Portal / SEED Portal",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_lep_standard_instrument_zoning",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8501226,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_mine_subsidence_districts": {
+      "dataset_key": "nsw_mine_subsidence_districts",
+      "dataset_name": "Declared Mine Subsidence Districts",
+      "portal": "NSW Spatial Services / Subsidence Advisory",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_mine_subsidence_districts",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8510726,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_native_veg_regulatory_nvr": {
+      "dataset_key": "nsw_native_veg_regulatory_nvr",
+      "dataset_name": "Native Vegetation Regulatory (NVR) Map - Category 2 Sensitive",
+      "portal": "NSW SEED Portal",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_native_veg_regulatory_nvr",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8516206,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_renewable_energy_zones_rez": {
+      "dataset_key": "nsw_renewable_energy_zones_rez",
+      "dataset_name": "NSW Declared Renewable Energy Zones (REZ)",
+      "portal": "NSW SEED Portal",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_renewable_energy_zones_rez",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8521654,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_rfs_bushfire_prone": {
+      "dataset_key": "nsw_rfs_bushfire_prone",
+      "dataset_name": "NSW Bush Fire Prone Land (BFPL)",
+      "portal": "NSW SEED Portal / Spatial Services",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_rfs_bushfire_prone",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8528433,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_transmission_grid": {
+      "dataset_key": "nsw_transmission_grid",
+      "dataset_name": "High-Voltage Transmission Network and Terminal Substations (>=132kV)",
+      "portal": "NSW Spatial Services / NationalMap",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_transmission_grid",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8541053,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    },
+    "nsw_wwtw_recycled_water": {
+      "dataset_key": "nsw_wwtw_recycled_water",
+      "dataset_name": "Wastewater Treatment Plants (WWTW) & Recycled Effluent Distribution",
+      "portal": "NSW Spatial Services / Water Utility APIs",
+      "target_crs": "EPSG:7844",
+      "stages": {},
+      "metrics": {
+        "feature_count_raw": 0,
+        "feature_count_valid": 0,
+        "throughput_features_per_sec": 0.0,
+        "cache_hit_skipped": false,
+        "etag_or_hash": null,
+        "http_status_code": 200,
+        "table_name": "nsw_wwtw_recycled_water",
+        "storage_format": "havasu.iceberg"
+      },
+      "start_time": 1080803.8551677,
+      "total_duration_s": 0.0,
+      "status": "CONFIG_VALIDATED",
+      "notes": "Dry-run / schema validation passed"
+    }
+  }
+}

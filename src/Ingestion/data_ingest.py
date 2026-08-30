@@ -139,15 +139,48 @@ def get_authoritative_sources_registry() -> dict:
             "is_raw_unchanged": False
         },
         "nsw_spatial_services": {
-            "name": "NSW Cadastre & Spatial Services Features",
+            "name": "NSW Spatial Services / Cadastral Features",
             "jurisdiction": "New South Wales (NSW)",
             "agency": "NSW Spatial Services / NSW SEED",
             "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Cadastre/MapServer",
             "geometry_type": "Polygon / Point",
             "currency_date": "2026-02-24 (Live WFS/REST)",
             "cadence": "Weekly Live Sync",
-            "cleaning_applied": "Lot/Plan attribute validation against NSW LPI index",
-            "is_raw_unchanged": True
+            "cleaning_applied": "Lot/Plan attribute validation against NSW LPI index; projected to EPSG:7844",
+            "is_raw_unchanged": False
+        },
+        "nsw_seed_bionet_bv": {
+            "name": "NSW BioNet Biodiversity Values Map",
+            "jurisdiction": "New South Wales (NSW)",
+            "agency": "NSW DCCEEW / DPHI",
+            "endpoint": "https://datasets.seed.nsw.gov.au/dataset/biodiversity-values-map",
+            "geometry_type": "Polygon",
+            "currency_date": "2026-02-15",
+            "cadence": "Monthly Live Sync",
+            "cleaning_applied": "ST_MakeValid geometry repair; GDA2020 EPSG:7844 standardization",
+            "is_raw_unchanged": False
+        },
+        "nsw_seed_rfs_bushfire": {
+            "name": "NSW Bush Fire Prone Land (BFPL)",
+            "jurisdiction": "New South Wales (NSW)",
+            "agency": "NSW Rural Fire Service (RFS)",
+            "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Emergency_Management_Category/FeatureServer",
+            "geometry_type": "Polygon",
+            "currency_date": "2026-01-30",
+            "cadence": "Quarterly Certified Release",
+            "cleaning_applied": "APZ buffer extraction (100m Cat 1, 30m Cat 2/3); EPSG:3112 metric buffer projected to EPSG:7844",
+            "is_raw_unchanged": False
+        },
+        "nsw_seed_rez_corridors": {
+            "name": "NSW Declared Renewable Energy Zones (REZ)",
+            "jurisdiction": "New South Wales (NSW)",
+            "agency": "EnergyCo NSW / DPHI",
+            "endpoint": "https://datasets.seed.nsw.gov.au/dataset/nsw-renewable-energy-zones",
+            "geometry_type": "Polygon",
+            "currency_date": "2026-02-10",
+            "cadence": "Continuous Update",
+            "cleaning_applied": "REZ boundary dissolve; EPSG:7844 standard",
+            "is_raw_unchanged": False
         },
         "qld_qspatial_cadastre": {
             "name": "Queensland Digital Cadastral Database (DCDB)",

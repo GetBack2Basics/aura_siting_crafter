@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_native_veg_regulatory_nvr",
+  "dataset_name": "Native Vegetation Regulatory (NVR) Map - Category 2 Sensitive",
+  "source_agency": "Local Land Services (LLS) / DCCEEW",
+  "portal": "NSW SEED Portal",
+  "portal_url": "https://datasets.seed.nsw.gov.au/dataset/nvr-map",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/LLS/NativeVegetationRegulatory/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["CATEGORY", "REGULATION_CODE", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_native_veg_regulatory_nvr",
+    "format": "havasu.iceberg",
+    "partition_by": "category"
+  },
+  "audit": {
+    "cadence": "Annual Release",
+    "statutory_act": "Local Land Services Act 2013",
+    "is_raw_unchanged": false
+  }
+}

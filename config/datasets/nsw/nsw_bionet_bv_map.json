@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_bionet_bv_map",
+  "dataset_name": "NSW BioNet Biodiversity Values Map",
+  "source_agency": "NSW Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+  "portal": "NSW SEED Portal",
+  "portal_url": "https://datasets.seed.nsw.gov.au/dataset/biodiversity-values-map",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/BioNet/BiodiversityValuesMap/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "MultiPolygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["BV_CODE", "BV_CATEGORY", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_bionet_bv_map",
+    "format": "havasu.iceberg",
+    "partition_by": "bv_category"
+  },
+  "audit": {
+    "cadence": "Monthly Live Sync",
+    "statutory_act": "Biodiversity Conservation Act 2016",
+    "is_raw_unchanged": false
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_high_pressure_gas_pipelines",
+  "dataset_name": "High-Pressure Gas Pipelines & Liquid Fuel Infrastructure",
+  "source_agency": "NSW Pipeliner Registry / APA Group / Jemena",
+  "portal": "NSW Spatial Services / Energy Infrastructure",
+  "portal_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer",
+  "layer_id": 9,
+  "geometry_type": "LineString",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 20.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["PIPELINE_NAME", "LICENSE_NO", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_high_pressure_gas_pipelines",
+    "format": "havasu.iceberg",
+    "partition_by": "pipeline_name"
+  },
+  "audit": {
+    "cadence": "Semi-Annual Sync",
+    "statutory_act": "Pipelines Act 1967 / AS 2885",
+    "is_raw_unchanged": false
+  }
+}

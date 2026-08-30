@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_bionet_threatened_species",
+  "dataset_name": "BioNet Threatened Biodiversity Sightings & Endangered Ecological Communities",
+  "source_agency": "NSW BioNet / DCCEEW",
+  "portal": "NSW SEED Portal",
+  "portal_url": "https://datasets.seed.nsw.gov.au/dataset/threatened-species",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/BioNet/ThreatenedSpecies/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Point",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 100.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["SCIENTIFIC_NAME", "LEGAL_STATUS", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_bionet_threatened_species",
+    "format": "havasu.iceberg",
+    "partition_by": "legal_status"
+  },
+  "audit": {
+    "cadence": "Quarterly Certified Sync",
+    "statutory_act": "Biodiversity Conservation Act 2016",
+    "is_raw_unchanged": false
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_dams_safety_tsf",
+  "dataset_name": "Dams Safety NSW Declared Dams & TSF Tailings Storage Facilities",
+  "source_agency": "Dams Safety NSW",
+  "portal": "NSW SEED Portal / Dams Safety",
+  "portal_url": "https://datasets.seed.nsw.gov.au/dataset/declared-dams",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/DamsSafety/DeclaredDams/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 50.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["DAM_NAME", "DAM_TYPE", "CONSEQUENCE_CATEGORY", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_dams_safety_tsf",
+    "format": "havasu.iceberg",
+    "partition_by": "consequence_category"
+  },
+  "audit": {
+    "cadence": "Quarterly Update",
+    "statutory_act": "Dams Safety Act 2015",
+    "is_raw_unchanged": false
+  }
+}

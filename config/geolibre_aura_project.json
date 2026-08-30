@@ -1,0 +1,366 @@
+{
+  "project_name": "AURA National Siting Crafter — GeoLibre WebGIS",
+  "version": "2.0.0",
+  "storage_root": "s3://wherobots-user-storage/aura_siting",
+  "default_view": {
+    "center": [133.7751, -25.2744],
+    "zoom": 4.5,
+    "pitch": 0,
+    "bearing": 0
+  },
+  "basemap": {
+    "style": "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+    "theme": "dark",
+    "background_color": "#0a0f1d"
+  },
+  "theme_tokens": {
+    "bg_primary": "#0a0f1d",
+    "bg_secondary": "#131a2c",
+    "card_bg": "rgba(19, 26, 44, 0.75)",
+    "border_color": "rgba(59, 130, 246, 0.2)",
+    "accent_blue": "#3b82f6",
+    "accent_cyan": "#06b6d4",
+    "accent_green": "#10b981",
+    "accent_amber": "#f59e0b",
+    "accent_rose": "#f43f5e"
+  },
+  "persona_presets": {
+    "general_public": {
+      "name": "General Public",
+      "badge_color": "#38bdf8",
+      "weights": { "power": 40, "sensitive": 25, "water": 20, "size": 15, "target_size_ha": 15 },
+      "tsf_excluded": true
+    },
+    "planner": {
+      "name": "Planner",
+      "badge_color": "#38bdf8",
+      "weights": { "power": 40, "sensitive": 25, "water": 20, "size": 15, "target_size_ha": 15 },
+      "tsf_excluded": true
+    },
+    "regulator": {
+      "name": "Regulator",
+      "badge_color": "#fbbf24",
+      "weights": { "power": 40, "sensitive": 25, "water": 25, "size": 10, "target_size_ha": 15 },
+      "tsf_excluded": true
+    },
+    "developer": {
+      "name": "Developer",
+      "badge_color": "#34d399",
+      "weights": { "power": 50, "sensitive": 15, "water": 15, "size": 20, "target_size_ha": 20 },
+      "tsf_excluded": false
+    },
+    "community": {
+      "name": "Community",
+      "badge_color": "#c084fc",
+      "weights": { "power": 25, "sensitive": 40, "water": 25, "size": 10, "target_size_ha": 10 },
+      "tsf_excluded": true
+    }
+  },
+  "categories": [
+    {
+      "id": "candidates",
+      "name": "🎯 Data Center Candidate Parcels",
+      "description": "National suitability assessment candidate sites with composite multi-criteria evaluation scores",
+      "expanded_by_default": true,
+      "layers": [
+        {
+          "id": "national_candidates",
+          "name": "National Candidate Parcels (Scored)",
+          "type": "circle",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet",
+          "visible": true,
+          "paint": {
+            "circle-radius": [
+              "interpolate",
+              ["linear"],
+              ["get", "suitability_score"],
+              0.5, 10,
+              1.0, 16
+            ],
+            "circle-color": [
+              "step",
+              ["get", "suitability_score"],
+              "#ef4444",
+              0.70, "#f59e0b",
+              0.85, "#10b981"
+            ],
+            "circle-stroke-color": "#ffffff",
+            "circle-stroke-width": 1.5,
+            "circle-opacity": 0.88
+          },
+          "popup_properties": [
+            "town_name",
+            "state_name",
+            "suitability_score",
+            "area_ha",
+            "dist_to_substation_km",
+            "dist_to_wwtw_km",
+            "dist_to_sensitive_km",
+            "slope_pct",
+            "pumped_hydro_capacity_mwh"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "energy",
+      "name": "⚡ Energy & Transmission Grid",
+      "description": "National electricity transmission lines, substations, power generators, and Renewable Energy Zones",
+      "expanded_by_default": true,
+      "layers": [
+        {
+          "id": "transmission_lines_interstate",
+          "name": "Interstate Transmission Grid (≥275kV)",
+          "type": "line",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/energy/national_transmission_grid.parquet",
+          "filter": [">=", ["get", "capacity_kv"], 275],
+          "visible": true,
+          "paint": {
+            "line-color": "#38bdf8",
+            "line-width": 3.0,
+            "line-opacity": 0.95
+          }
+        },
+        {
+          "id": "transmission_lines_regional",
+          "name": "Regional Transmission Grid (132kV-275kV)",
+          "type": "line",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/energy/national_transmission_grid.parquet",
+          "filter": ["all", [">=", ["get", "capacity_kv"], 132], ["<", ["get", "capacity_kv"], 275]],
+          "minzoom": 6,
+          "visible": true,
+          "paint": {
+            "line-color": "#60a5fa",
+            "line-width": 2.0,
+            "line-opacity": 0.85
+          }
+        },
+        {
+          "id": "transmission_lines_local",
+          "name": "Local Distribution Feeders (<132kV)",
+          "type": "line",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/energy/national_transmission_grid.parquet",
+          "filter": ["<", ["get", "capacity_kv"], 132],
+          "minzoom": 9,
+          "visible": false,
+          "paint": {
+            "line-color": "#94a3b8",
+            "line-width": 1.2,
+            "line-opacity": 0.70,
+            "line-dasharray": [2, 2]
+          }
+        },
+        {
+          "id": "substations",
+          "name": "High-Voltage Substations & Terminals",
+          "type": "circle",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/energy/substations.parquet",
+          "visible": true,
+          "paint": {
+            "circle-radius": 5.5,
+            "circle-color": "#eab308",
+            "circle-stroke-color": "#0f172a",
+            "circle-stroke-width": 1.5
+          }
+        },
+        {
+          "id": "renewable_energy_zones",
+          "name": "Renewable Energy Zones (REZ)",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/energy/renewable_energy_zones.parquet",
+          "visible": false,
+          "paint": {
+            "fill-color": "#06b6d4",
+            "fill-opacity": 0.15,
+            "fill-outline-color": "#0891b2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "water",
+      "name": "💧 Water & Cooling Infrastructure",
+      "description": "Recycled water treatment plants, outfalls, water supply conduits, and statutory riparian buffers",
+      "expanded_by_default": false,
+      "layers": [
+        {
+          "id": "wwtw_recycled_water",
+          "name": "Wastewater Treatment Plants (Recycled Water)",
+          "type": "circle",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/water/wwtw_recycled_water.parquet",
+          "visible": true,
+          "paint": {
+            "circle-radius": 5.5,
+            "circle-color": "#06b6d4",
+            "circle-stroke-color": "#ffffff",
+            "circle-stroke-width": 1.2
+          }
+        },
+        {
+          "id": "rivers_riparian_buffers",
+          "name": "Statutory Riparian Buffers (30m Strahler)",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/water/riparian_buffers_30m.parquet",
+          "visible": false,
+          "paint": {
+            "fill-color": "#0284c7",
+            "fill-opacity": 0.25,
+            "fill-outline-color": "#0369a1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "receptors",
+      "name": "🛡️ Social & Environmental Receptors",
+      "description": "Schools, childcare, hospitals, residential meshblocks, and biodiversity exclusion zones",
+      "expanded_by_default": false,
+      "layers": [
+        {
+          "id": "sensitive_receptors_points",
+          "name": "Schools, Hospitals & Childcare Centers",
+          "type": "circle",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/constraints/sensitive_receptors.parquet",
+          "visible": true,
+          "paint": {
+            "circle-radius": 4.5,
+            "circle-color": "#ec4899",
+            "circle-stroke-color": "#831843",
+            "circle-stroke-width": 1.0
+          }
+        },
+        {
+          "id": "sensitive_receptors_buffer_500m",
+          "name": "EPA Acoustic Setback Buffer (500m)",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/constraints/sensitive_buffers_500m.parquet",
+          "visible": true,
+          "paint": {
+            "fill-color": "#ec4899",
+            "fill-opacity": 0.18,
+            "fill-outline-color": "#be185d"
+          }
+        },
+        {
+          "id": "biodiversity_exclusion_zones",
+          "name": "Biodiversity & High Environmental Value",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/constraints/biodiversity_hev.parquet",
+          "visible": false,
+          "paint": {
+            "fill-color": "#881337",
+            "fill-opacity": 0.22,
+            "fill-outline-color": "#4c0519"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cadastre",
+      "name": "📐 Cadastre, Land Use & Topography",
+      "description": "Registered lot/plan cadastral boundaries, standard instrument zoning, and topographic slope grade",
+      "expanded_by_default": false,
+      "layers": [
+        {
+          "id": "cadastral_lots",
+          "name": "Cadastral Property Lots (Lot/Plan)",
+          "type": "line",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/cadastre/cadastral_lots.parquet",
+          "minzoom": 12,
+          "visible": false,
+          "paint": {
+            "line-color": "#3b82f6",
+            "line-width": 1.0,
+            "line-opacity": 0.6
+          }
+        },
+        {
+          "id": "slope_constraints_gt5pct",
+          "name": "DEM Slope Constraints (>5% Grade)",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/cadastre/slope_constraints_gt5.parquet",
+          "visible": false,
+          "paint": {
+            "fill-color": "#f97316",
+            "fill-opacity": 0.25,
+            "fill-outline-color": "#c2410c"
+          }
+        }
+      ]
+    },
+    {
+      "id": "micro_siting",
+      "name": "🏗️ High-Precision Precinct Micro-Siting",
+      "description": "Precinct boundaries, net developable pad areas, pipeline easements, and rail transport topology",
+      "expanded_by_default": true,
+      "layers": [
+        {
+          "id": "precinct_boundary",
+          "name": "Precinct Study Area Boundary",
+          "type": "line",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/micro_siting/precinct_boundary.parquet",
+          "visible": true,
+          "paint": {
+            "line-color": "#1d4ed8",
+            "line-width": 3.0,
+            "line-dasharray": [4, 4],
+            "line-opacity": 0.95
+          }
+        },
+        {
+          "id": "net_developable_area",
+          "name": "Net Developable Pad Area (NDA)",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/micro_siting/net_developable_zones.parquet",
+          "visible": true,
+          "paint": {
+            "fill-color": "#14b8a6",
+            "fill-opacity": 0.35,
+            "fill-outline-color": "#0d9488"
+          }
+        },
+        {
+          "id": "pipeline_corridors",
+          "name": "Infrastructure Pipeline Corridors (20m)",
+          "type": "line",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/micro_siting/pipeline_corridors.parquet",
+          "visible": true,
+          "paint": {
+            "line-color": "#f97316",
+            "line-width": 3.0,
+            "line-opacity": 0.90
+          }
+        },
+        {
+          "id": "rail_network",
+          "name": "Freight Rail Corridor Network",
+          "type": "line",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/micro_siting/rail_network.parquet",
+          "visible": true,
+          "paint": {
+            "line-color": "#0f172a",
+            "line-width": 3.5,
+            "line-opacity": 0.95
+          }
+        }
+      ]
+    }
+  ]
+}

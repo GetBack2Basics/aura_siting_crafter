@@ -194,7 +194,7 @@ HTML_PAGE = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>National Siting Suitability Report | Wherobots Cloud Spatial Engine</title>
+  <title>AURA Siting Crafter | Australian Urban and Regional AI Datacenter Siting</title>
   
   <!-- Fonts & Leaflet & Esri-Leaflet & MarkerCluster -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -303,9 +303,15 @@ HTML_PAGE = """<!DOCTYPE html>
 
     .grid-dashboard {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
+      grid-template-columns: minmax(0, 60fr) minmax(0, 40fr);
       gap: 1.5rem;
       margin-bottom: 1.5rem;
+      width: 100%;
+    }
+
+    .grid-dashboard > .card {
+      min-width: 0;
+      width: 100%;
     }
 
     @media (max-width: 1024px) {
@@ -732,13 +738,13 @@ HTML_PAGE = """<!DOCTYPE html>
 <div class="container">
   <header>
     <div>
-      <h1>National Siting Suitability Report</h1>
-      <p class="subtitle">Multi-Criteria Decision Analysis (MCDA) Engine with Social & Sensitive Receptor Spatial Scoring</p>
+      <h1>AURA Siting Crafter</h1>
+      <p class="subtitle"><span style="color: #38bdf8; font-weight: 800;">A</span>ustralian <span style="color: #38bdf8; font-weight: 800;">U</span>rban and <span style="color: #38bdf8; font-weight: 800;">R</span>egional <span style="color: #38bdf8; font-weight: 800;">A</span>I Datacenter Siting &bull; Multi-Criteria Decision Analysis (MCDA) Siting Report</p>
     </div>
     <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-      <a href="https://www.lakemac.com.au/Projects/Precinct-Coal-Complex-Transformation-Precinct" class="metadata-pill" target="_blank" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); color: #fbbf24; text-decoration: none;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        Proponent Transformation Precinct ↗
+      <a href="https://geolibre-spatial-ai-proxy-390270537834.australia-southeast1.run.app/" class="metadata-pill" target="_blank" style="background: rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.5); color: #38bdf8; text-decoration: none; font-weight: 700;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+        GeoLibre App ↗
       </a>
       <a href="data_verification_technical_report.html" class="metadata-pill" target="_blank" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #34d399; text-decoration: none;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -746,7 +752,7 @@ HTML_PAGE = """<!DOCTYPE html>
       </a>
       <a href="https://wherobots.com/" class="metadata-pill" target="_blank" style="color: #60a5fa; text-decoration: none;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-        Wherobots Cloud (Apache Sedona)
+        Wherobots Cloud
       </a>
       <a href="https://github.com/GetBack2Basics/CheatSheets/blob/main/wherobots_antigravity_playbook.md" class="metadata-pill" target="_blank" style="background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3); color: #c084fc; text-decoration: none;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
@@ -1039,8 +1045,8 @@ HTML_PAGE = """<!DOCTYPE html>
       <div style="margin-bottom: 0.75rem;">
         <input type="text" id="cadastre-search-input" placeholder="🔍 Search candidate sites by Lot/Plan (e.g. 101//DP755262), Address, or Locality..." style="width: 100%; padding: 0.65rem 1rem; border-radius: 8px; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(59, 130, 246, 0.3); color: #f1f5f9; font-size: 0.85rem; outline: none;" oninput="renderLeaderboard()">
       </div>
-      <div style="max-height: 490px; overflow-y: auto;">
-        <table id="candidates-table">
+      <div style="max-height: 490px; overflow-y: auto; overflow-x: auto; width: 100%;">
+        <table id="candidates-table" style="width: 100%; min-width: 580px;">
           <thead>
             <tr>
               <th>Locality / State</th>
@@ -1321,7 +1327,7 @@ HTML_PAGE = """<!DOCTYPE html>
   </div>
 
   <footer style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.8rem; color: var(--text-secondary); text-align: center;">
-    &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics/aura_siting_crafter" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for information only and is the authors private opinion | __FOOTER_TIMESTAMP__
+    &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for information only and is the authors private opinion | <span id="build-timestamp">__FOOTER_TIMESTAMP__</span>
   </footer>
 </div>
 
@@ -2030,8 +2036,12 @@ html_final = html_final.replace("__SPEED_MECHANICS_HTML__", load_attachment("spe
 html_final = html_final.replace("__SIMULATION_SANDBOX_HTML__", load_attachment("simulation_sandbox.html"))
 html_final = html_final.replace("__WHITEPAPERS_HTML__", load_attachment("whitepapers.html"))
 
+# Dynamic build timestamp
+build_ts = datetime.datetime.now().strftime("%Y%m%d%H%M")
+html_final = html_final.replace("__FOOTER_TIMESTAMP__", build_ts)
+
 output_path = "runner/national_suitability_report.html"
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(html_final)
 
-print(f"Generated {output_path} successfully. Written size: {os.path.getsize(output_path):,} bytes.")
+print(f"Generated {output_path} successfully (Build timestamp: {build_ts}). Written size: {os.path.getsize(output_path):,} bytes.")

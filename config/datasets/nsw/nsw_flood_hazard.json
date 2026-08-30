@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_flood_hazard",
+  "dataset_name": "State-Wide Flood Hazard Inundation Overlay (1% AEP & PMF)",
+  "source_agency": "NSW State Emergency Service (SES) / DPHI Flood Data Portal",
+  "portal": "NSW SEED Portal / Flood Data Portal",
+  "portal_url": "https://flooddata.ses.nsw.gov.au",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/Emergency/FloodHazard/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["FLOOD_EVENT", "HAZARD_CATEGORY", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_flood_hazard",
+    "format": "havasu.iceberg",
+    "partition_by": "hazard_category"
+  },
+  "audit": {
+    "cadence": "Quarterly Update",
+    "statutory_act": "NSW Flood Prone Land Policy / EP&A Act 1979",
+    "is_raw_unchanged": false
+  }
+}

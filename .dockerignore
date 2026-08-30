@@ -4,7 +4,6 @@ __pycache__
 *.pyc
 *.pyo
 .env
-runner/national_suitability_report.html
 runner/data_verification_technical_report.html
 runner/attachments/layers/rail_network.json
 docs/data_verification_audit.json

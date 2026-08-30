@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_renewable_energy_zones_rez",
+  "dataset_name": "NSW Declared Renewable Energy Zones (REZ)",
+  "source_agency": "EnergyCo NSW / Department of Climate Change, Energy, the Environment and Water",
+  "portal": "NSW SEED Portal",
+  "portal_url": "https://datasets.seed.nsw.gov.au/dataset/nsw-renewable-energy-zones",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/Energy/RenewableEnergyZones/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["REZ_NAME", "STATUS", "DECLARATION_DATE", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_renewable_energy_zones_rez",
+    "format": "havasu.iceberg",
+    "partition_by": "rez_name"
+  },
+  "audit": {
+    "cadence": "Continuous Update",
+    "statutory_act": "Electricity Infrastructure Investment Act 2020",
+    "is_raw_unchanged": false
+  }
+}

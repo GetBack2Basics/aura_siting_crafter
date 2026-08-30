@@ -1,0 +1,897 @@
+{
+  "version": "0.2.0",
+  "name": "AURA Siting Crafter — National Data Center Siting Suitability Model",
+  "mapView": {
+    "center": [
+      133.7751,
+      -25.2744
+    ],
+    "zoom": 4.5,
+    "bearing": 0,
+    "pitch": 0,
+    "bbox": [
+      112.0,
+      -44.0,
+      155.0,
+      -10.0
+    ]
+  },
+  "basemapStyleUrl": "https://tiles.openfreemap.org/styles/liberty",
+  "basemapVisible": true,
+  "basemapOpacity": 1,
+  "layers": [
+    {
+      "id": "aura-national-candidates",
+      "name": "🎯 Scored Data Center Candidate Sites (16 Hubs)",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": true,
+      "opacity": 1,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "fillColor": "#10b981",
+        "strokeColor": "#ffffff",
+        "strokeWidth": 2,
+        "strokeWidthUnit": "pixels",
+        "circleRadius": 10,
+        "labels": {
+          "enabled": true,
+          "field": "town_name",
+          "size": 13,
+          "color": "#111827",
+          "haloColor": "#ffffff",
+          "haloWidth": 2
+        }
+      },
+      "metadata": { "category": "Candidate Sites", "source_portal": "AURA Siting Crafter / Sedona Engine" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "National Data Center Candidates",
+        "features": [
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [151.60, -32.94] },
+            "properties": {
+              "mb_code21": "NSW_MCC01",
+              "lot_plan": "101//DP755262",
+              "cadastre_id": "CAD_NSW_MCC01",
+              "town_name": "Teralba",
+              "region_name": "Hunter / Lake Macquarie",
+              "state_name": "New South Wales",
+              "street_address": "Rhondda Road, Teralba NSW 2284",
+              "suitability_score": 0.998,
+              "area_ha": 44.5,
+              "slope_pct": 2.1,
+              "dist_to_substation_km": 0.35,
+              "dist_to_wwtw_km": 0.85,
+              "dist_to_sensitive_km": 0.82,
+              "pumped_hydro_capacity_mwh": 49.0,
+              "power_score": 1.0,
+              "water_score": 1.0,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL BUFFER (500m-1.5km)",
+              "thermal_symbiosis_viable": true
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [151.56, -32.92] },
+            "properties": {
+              "mb_code21": "NSW_MCC02",
+              "lot_plan": "2//DP1128456",
+              "cadastre_id": "CAD_NSW_MCC02",
+              "town_name": "Killingworth",
+              "region_name": "Hunter / Lake Macquarie",
+              "state_name": "New South Wales",
+              "street_address": "Wakefield Road, Killingworth NSW 2278",
+              "suitability_score": 0.991,
+              "area_ha": 28.2,
+              "slope_pct": 3.4,
+              "dist_to_substation_km": 0.45,
+              "dist_to_wwtw_km": 1.4,
+              "dist_to_sensitive_km": 1.25,
+              "pumped_hydro_capacity_mwh": 130.8,
+              "power_score": 1.0,
+              "water_score": 0.956,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL BUFFER (500m-1.5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [151.62, -32.94] },
+            "properties": {
+              "mb_code21": "NSW_MCC03",
+              "lot_plan": "15//DP847291",
+              "cadastre_id": "CAD_NSW_MCC03",
+              "town_name": "Cockle Creek",
+              "region_name": "Hunter / Lake Macquarie",
+              "state_name": "New South Wales",
+              "street_address": "Main Road, Cockle Creek NSW 2284",
+              "suitability_score": 0.845,
+              "area_ha": 18.7,
+              "slope_pct": 1.2,
+              "dist_to_substation_km": 0.2,
+              "dist_to_wwtw_km": 0.6,
+              "dist_to_sensitive_km": 0.42,
+              "pumped_hydro_capacity_mwh": 27.2,
+              "power_score": 1.0,
+              "water_score": 1.0,
+              "size_score": 1.0,
+              "sensitive_status": "HIGH PENALTY (300-500m)",
+              "thermal_symbiosis_viable": true
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [151.55, -32.96] },
+            "properties": {
+              "mb_code21": "NSW_MCC04",
+              "lot_plan": "8//DP1093844",
+              "cadastre_id": "CAD_NSW_MCC04",
+              "town_name": "West Lake",
+              "region_name": "Hunter / Lake Macquarie",
+              "state_name": "New South Wales",
+              "street_address": "Wilton Road, Awaba NSW 2283",
+              "suitability_score": 0.922,
+              "area_ha": 35.0,
+              "slope_pct": 4.1,
+              "dist_to_substation_km": 1.1,
+              "dist_to_wwtw_km": 2.1,
+              "dist_to_sensitive_km": 1.8,
+              "pumped_hydro_capacity_mwh": 196.2,
+              "power_score": 0.867,
+              "water_score": 0.878,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL WORKFORCE (1.5-5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [151.25, -23.84] },
+            "properties": {
+              "mb_code21": "QLD_GLD01",
+              "lot_plan": "12//SP289410",
+              "cadastre_id": "CAD_QLD_GLD01",
+              "town_name": "Yarwun",
+              "region_name": "Gladstone Industrial Hub",
+              "state_name": "Queensland",
+              "street_address": "Landing Road, Yarwun QLD 4694",
+              "suitability_score": 1.0,
+              "area_ha": 18.5,
+              "slope_pct": 1.8,
+              "dist_to_substation_km": 0.35,
+              "dist_to_wwtw_km": 0.8,
+              "dist_to_sensitive_km": 1.1,
+              "pumped_hydro_capacity_mwh": 38.1,
+              "power_score": 1.0,
+              "water_score": 1.0,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL BUFFER (500m-1.5km)",
+              "thermal_symbiosis_viable": true
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [151.17, -23.82] },
+            "properties": {
+              "mb_code21": "QLD_GLD02",
+              "lot_plan": "5//RP892014",
+              "cadastre_id": "CAD_QLD_GLD02",
+              "town_name": "Gladstone City",
+              "region_name": "Gladstone Industrial Hub",
+              "state_name": "Queensland",
+              "street_address": "Calliope River Road, Gladstone QLD 4680",
+              "suitability_score": 0.958,
+              "area_ha": 15.0,
+              "slope_pct": 2.3,
+              "dist_to_substation_km": 0.75,
+              "dist_to_wwtw_km": 1.5,
+              "dist_to_sensitive_km": 0.65,
+              "pumped_hydro_capacity_mwh": 32.7,
+              "power_score": 0.944,
+              "water_score": 0.944,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL BUFFER (500m-1.5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [151.21, -23.97] },
+            "properties": {
+              "mb_code21": "QLD_GLD03",
+              "lot_plan": "204//SP194820",
+              "cadastre_id": "CAD_QLD_GLD03",
+              "town_name": "Calliope",
+              "region_name": "Gladstone Industrial Hub",
+              "state_name": "Queensland",
+              "street_address": "Dawson Highway, Calliope QLD 4698",
+              "suitability_score": 0.817,
+              "area_ha": 13.5,
+              "slope_pct": 2.9,
+              "dist_to_substation_km": 1.8,
+              "dist_to_wwtw_km": 3.2,
+              "dist_to_sensitive_km": 2.2,
+              "pumped_hydro_capacity_mwh": 54.5,
+              "power_score": 0.711,
+              "water_score": 0.756,
+              "size_score": 0.875,
+              "sensitive_status": "OPTIMAL WORKFORCE (1.5-5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [146.40, -38.23] },
+            "properties": {
+              "mb_code21": "VIC_LTB01",
+              "lot_plan": "1//TP839201",
+              "cadastre_id": "CAD_VIC_LTB01",
+              "town_name": "Morwell",
+              "region_name": "Latrobe Valley Energy Hub",
+              "state_name": "Victoria",
+              "street_address": "Commercial Road, Morwell VIC 3840",
+              "suitability_score": 0.964,
+              "area_ha": 12.5,
+              "slope_pct": 1.5,
+              "dist_to_substation_km": 0.45,
+              "dist_to_wwtw_km": 1.2,
+              "dist_to_sensitive_km": 0.95,
+              "pumped_hydro_capacity_mwh": 119.9,
+              "power_score": 1.0,
+              "water_score": 0.978,
+              "size_score": 0.792,
+              "sensitive_status": "OPTIMAL BUFFER (500m-1.5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [146.53, -38.19] },
+            "properties": {
+              "mb_code21": "VIC_LTB02",
+              "lot_plan": "42//PS718290",
+              "cadastre_id": "CAD_VIC_LTB02",
+              "town_name": "Traralgon",
+              "region_name": "Latrobe Valley Energy Hub",
+              "state_name": "Victoria",
+              "street_address": "Princes Highway, Traralgon VIC 3844",
+              "suitability_score": 0.819,
+              "area_ha": 8.2,
+              "slope_pct": 2.0,
+              "dist_to_substation_km": 1.2,
+              "dist_to_wwtw_km": 2.5,
+              "dist_to_sensitive_km": 1.6,
+              "pumped_hydro_capacity_mwh": 76.3,
+              "power_score": 0.844,
+              "water_score": 0.833,
+              "size_score": 0.433,
+              "sensitive_status": "OPTIMAL WORKFORCE (1.5-5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [146.26, -38.17] },
+            "properties": {
+              "mb_code21": "VIC_LTB03",
+              "lot_plan": "3//PS502914",
+              "cadastre_id": "CAD_VIC_LTB03",
+              "town_name": "Moe",
+              "region_name": "Latrobe Valley Energy Hub",
+              "state_name": "Victoria",
+              "street_address": "Old Sale Road, Moe VIC 3825",
+              "suitability_score": 0.89,
+              "area_ha": 10.5,
+              "slope_pct": 3.1,
+              "dist_to_substation_km": 0.9,
+              "dist_to_wwtw_km": 1.8,
+              "dist_to_sensitive_km": 1.4,
+              "pumped_hydro_capacity_mwh": 87.2,
+              "power_score": 0.911,
+              "water_score": 0.911,
+              "size_score": 0.625,
+              "sensitive_status": "OPTIMAL BUFFER (500m-1.5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [116.15, -33.36] },
+            "properties": {
+              "mb_code21": "WA_COL01",
+              "lot_plan": "100//DP401928",
+              "cadastre_id": "CAD_WA_COL01",
+              "town_name": "Collie",
+              "region_name": "South West Clean Energy Hub",
+              "state_name": "Western Australia",
+              "street_address": "Williams Road, Collie WA 6225",
+              "suitability_score": 0.929,
+              "area_ha": 22.0,
+              "slope_pct": 1.4,
+              "dist_to_substation_km": 0.15,
+              "dist_to_wwtw_km": 4.2,
+              "dist_to_sensitive_km": 1.35,
+              "pumped_hydro_capacity_mwh": 130.8,
+              "power_score": 1.0,
+              "water_score": 0.644,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL BUFFER (500m-1.5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [116.20, -33.35] },
+            "properties": {
+              "mb_code21": "WA_COL02",
+              "lot_plan": "15//DP928104",
+              "cadastre_id": "CAD_WA_COL02",
+              "town_name": "Collie East",
+              "region_name": "South West Clean Energy Hub",
+              "state_name": "Western Australia",
+              "street_address": "Coalfields Highway, Collie East WA 6225",
+              "suitability_score": 0.936,
+              "area_ha": 17.5,
+              "slope_pct": 2.2,
+              "dist_to_substation_km": 0.6,
+              "dist_to_wwtw_km": 3.5,
+              "dist_to_sensitive_km": 2.1,
+              "pumped_hydro_capacity_mwh": 109.0,
+              "power_score": 0.978,
+              "water_score": 0.722,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL WORKFORCE (1.5-5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [149.172, -35.325] },
+            "properties": {
+              "mb_code21": "ACT_CBR01",
+              "lot_plan": "1//SEC24_ACT",
+              "cadastre_id": "CAD_ACT_CBR01",
+              "town_name": "Fyshwick",
+              "region_name": "Canberra Industrial Precinct",
+              "state_name": "Australian Capital Territory",
+              "street_address": "Monaro Highway, Fyshwick ACT 2609",
+              "suitability_score": 0.985,
+              "area_ha": 14.2,
+              "slope_pct": 1.1,
+              "dist_to_substation_km": 0.4,
+              "dist_to_wwtw_km": 1.1,
+              "dist_to_sensitive_km": 0.78,
+              "pumped_hydro_capacity_mwh": 43.6,
+              "power_score": 1.0,
+              "water_score": 0.989,
+              "size_score": 0.933,
+              "sensitive_status": "OPTIMAL BUFFER (500m-1.5km)",
+              "thermal_symbiosis_viable": true
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [149.164, -35.385] },
+            "properties": {
+              "mb_code21": "ACT_CBR02",
+              "lot_plan": "14//SEC58_ACT",
+              "cadastre_id": "CAD_ACT_CBR02",
+              "town_name": "Hume",
+              "region_name": "Canberra Industrial Precinct",
+              "state_name": "Australian Capital Territory",
+              "street_address": "Canberra Avenue, Hume ACT 2620",
+              "suitability_score": 0.976,
+              "area_ha": 19.8,
+              "slope_pct": 2.0,
+              "dist_to_substation_km": 0.55,
+              "dist_to_wwtw_km": 1.9,
+              "dist_to_sensitive_km": 1.65,
+              "pumped_hydro_capacity_mwh": 60.0,
+              "power_score": 0.989,
+              "water_score": 0.9,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL WORKFORCE (1.5-5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [130.895, -12.482] },
+            "properties": {
+              "mb_code21": "NT_DWN01",
+              "lot_plan": "SEC4812_NT",
+              "cadastre_id": "CAD_NT_DWN01",
+              "town_name": "East Arm",
+              "region_name": "Darwin Strategic Industrial Area",
+              "state_name": "Northern Territory",
+              "street_address": "Stuart Highway, East Arm NT 0822",
+              "suitability_score": 0.987,
+              "area_ha": 24.5,
+              "slope_pct": 0.8,
+              "dist_to_substation_km": 0.5,
+              "dist_to_wwtw_km": 1.6,
+              "dist_to_sensitive_km": 2.4,
+              "pumped_hydro_capacity_mwh": 21.8,
+              "power_score": 1.0,
+              "water_score": 0.933,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL WORKFORCE (1.5-5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [137.780, -32.510] },
+            "properties": {
+              "mb_code21": "SA_PTA01",
+              "lot_plan": "D109482_A1",
+              "cadastre_id": "CAD_SA_PTA01",
+              "town_name": "Port Augusta",
+              "region_name": "Upper Spencer Gulf Renewable Hub",
+              "state_name": "South Australia",
+              "suitability_score": 0.96,
+              "area_ha": 20.1,
+              "slope_pct": 1.6,
+              "dist_to_substation_km": 0.3,
+              "dist_to_wwtw_km": 2.8,
+              "dist_to_sensitive_km": 1.9,
+              "pumped_hydro_capacity_mwh": 32.7,
+              "power_score": 1.0,
+              "water_score": 0.8,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL WORKFORCE (1.5-5km)",
+              "thermal_symbiosis_viable": false
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "Point", "coordinates": [146.360, -41.190] },
+            "properties": {
+              "mb_code21": "TAS_DEV01",
+              "lot_plan": "1//P182940",
+              "cadastre_id": "CAD_TAS_DEV01",
+              "town_name": "Devonport",
+              "region_name": "North West Hydro Precinct",
+              "state_name": "Tasmania",
+              "suitability_score": 0.971,
+              "area_ha": 16.4,
+              "slope_pct": 2.4,
+              "dist_to_substation_km": 0.7,
+              "dist_to_wwtw_km": 1.5,
+              "dist_to_sensitive_km": 1.15,
+              "pumped_hydro_capacity_mwh": 38.1,
+              "power_score": 0.956,
+              "water_score": 0.944,
+              "size_score": 1.0,
+              "sensitive_status": "OPTIMAL BUFFER (500m-1.5km)",
+              "thermal_symbiosis_viable": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "aura-transmission-grid",
+      "name": "⚡ National Electricity Transmission Lines (500kV/330kV/132kV)",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": true,
+      "opacity": 0.9,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "strokeColor": "#38bdf8",
+        "strokeWidth": 2.5,
+        "strokeWidthUnit": "pixels"
+      },
+      "metadata": { "category": "Energy Infrastructure", "source_portal": "AEMO / Transgrid / Geoscience Australia" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "National Transmission Lines",
+        "features": [
+          {
+            "type": "Feature",
+            "geometry": { "type": "LineString", "coordinates": [[151.45, -33.10], [151.58, -32.95], [151.70, -32.88]] },
+            "properties": { "line_id": "TL_NSW_330_01", "voltage_kv": 330, "circuit_name": "Eraring to Sydney / Newcastle Trunk", "operator": "Transgrid", "capacity_mva": 1800 }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "LineString", "coordinates": [[151.10, -23.90], [151.25, -23.84], [151.35, -23.75]] },
+            "properties": { "line_id": "TL_QLD_275_01", "voltage_kv": 275, "circuit_name": "Gladstone to Stanwell Interconnector", "operator": "Powerlink", "capacity_mva": 1400 }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "LineString", "coordinates": [[146.20, -38.30], [146.40, -38.23], [146.60, -38.15]] },
+            "properties": { "line_id": "TL_VIC_500_01", "voltage_kv": 500, "circuit_name": "Loy Yang to Melbourne 500kV Backbone", "operator": "AusNet", "capacity_mva": 3200 }
+          },
+          {
+            "type": "Feature",
+            "geometry": { "type": "LineString", "coordinates": [[116.00, -33.40], [116.15, -33.36], [116.30, -33.30]] },
+            "properties": { "line_id": "TL_WA_330_01", "voltage_kv": 330, "circuit_name": "Muja / Collie to Perth SWIS Trunk", "operator": "Western Power", "capacity_mva": 1200 }
+          }
+        ]
+      }
+    },
+    {
+      "id": "aura-substations",
+      "name": "🔌 High-Voltage Terminal Substations (>=132kV)",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": true,
+      "opacity": 1,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "fillColor": "#38bdf8",
+        "strokeColor": "#ffffff",
+        "strokeWidth": 2,
+        "circleRadius": 7
+      },
+      "metadata": { "category": "Energy Infrastructure", "source_portal": "AEMO / Geoscience Australia" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "National Substations",
+        "features": [
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [151.58, -32.95] }, "properties": { "substation_id": "SUB_NSW_ERAR", "substation_name": "Eraring 330kV Terminal", "voltage_kv": 330, "available_capacity_mva": 450 } },
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [151.26, -23.85] }, "properties": { "substation_id": "SUB_QLD_YARW", "substation_name": "Yarwun 275kV Substation", "voltage_kv": 275, "available_capacity_mva": 320 } },
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [146.42, -38.24] }, "properties": { "substation_id": "SUB_VIC_MORW", "substation_name": "Morwell 500/220kV Terminal", "voltage_kv": 500, "available_capacity_mva": 600 } },
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [116.14, -33.37] }, "properties": { "substation_id": "SUB_WA_COLL", "substation_name": "Collie Terminal Substation", "voltage_kv": 330, "available_capacity_mva": 280 } }
+        ]
+      }
+    },
+    {
+      "id": "aura-recycled-water-wwtw",
+      "name": "💧 Recycled Water Treatment Plants (WWTW)",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": true,
+      "opacity": 1,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "fillColor": "#06b6d4",
+        "strokeColor": "#ffffff",
+        "strokeWidth": 2,
+        "circleRadius": 7
+      },
+      "metadata": { "category": "Water Infrastructure", "source_portal": "BoM / WaterNSW / Hunter Water" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "Recycled Water Treatment Plants",
+        "features": [
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [151.61, -32.945] }, "properties": { "plant_id": "WWTW_NSW_EDG", "facility_name": "Edgeworth Recycled Water Plant", "capacity_ml_day": 18.5, "water_quality": "Tertiary Recycled Class A" } },
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [151.24, -23.835] }, "properties": { "plant_id": "WWTW_QLD_GLD", "facility_name": "Calliope River Water Reclamation", "capacity_ml_day": 22.0, "water_quality": "Industrial Recycled Water" } },
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [146.39, -38.225] }, "properties": { "plant_id": "WWTW_VIC_MOR", "facility_name": "Gippsland Water Regional Outfall", "capacity_ml_day": 35.0, "water_quality": "Treated Recycled Stream" } }
+        ]
+      }
+    },
+    {
+      "id": "aura-national-schools",
+      "name": "🏫 National Schools (ACARA Sensitive Receptors)",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": false,
+      "opacity": 0.8,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "fillColor": "#a855f7",
+        "strokeColor": "#ffffff",
+        "strokeWidth": 1.5,
+        "circleRadius": 5
+      },
+      "metadata": { "category": "Sensitive Receptors", "source_portal": "ACARA National Schools Directory" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "ACARA National Schools",
+        "features": [
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [151.595, -32.948] }, "properties": { "school_id": "ACARA_NSW_01", "school_name": "Teralba Public School", "sector": "Government", "school_type": "Primary", "min_buffer_setback_m": 500 } },
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [151.570, -32.915] }, "properties": { "school_id": "ACARA_NSW_02", "school_name": "Killingworth Community Preschool", "sector": "Independent", "school_type": "Early Learning", "min_buffer_setback_m": 500 } },
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [146.410, -38.235] }, "properties": { "school_id": "ACARA_VIC_01", "school_name": "Morwell Central Primary School", "sector": "Government", "school_type": "Primary", "min_buffer_setback_m": 500 } }
+        ]
+      }
+    },
+    {
+      "id": "aura-national-healthcare",
+      "name": "🏥 National Hospitals & Healthcare (NHSD)",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": false,
+      "opacity": 0.8,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "fillColor": "#ec4899",
+        "strokeColor": "#ffffff",
+        "strokeWidth": 1.5,
+        "circleRadius": 5
+      },
+      "metadata": { "category": "Sensitive Receptors", "source_portal": "Australian Digital Health Agency / NHSD" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "NHSD National Healthcare Directory",
+        "features": [
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [151.650, -32.925] }, "properties": { "facility_id": "NHSD_NSW_01", "facility_name": "Toronto Private Hospital", "facility_type": "Private Hospital", "emergency_dept": false } },
+          { "type": "Feature", "geometry": { "type": "Point", "coordinates": [146.540, -38.185] }, "properties": { "facility_id": "NHSD_VIC_01", "facility_name": "Latrobe Regional Hospital", "facility_type": "Major Regional Public Hospital", "emergency_dept": true } }
+        ]
+      }
+    },
+    {
+      "id": "aura-bionet-biodiversity",
+      "name": "🌿 High Environmental Value & Biodiversity Habitats (SEED)",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": true,
+      "opacity": 0.5,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "fillColor": "#84cc16",
+        "strokeColor": "#65a30d",
+        "strokeWidth": 2,
+        "strokeWidthUnit": "pixels",
+        "fillOpacity": 0.4
+      },
+      "metadata": { "category": "Environmental Constraints", "source_portal": "NSW SEED / DCCEEW BioNet" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "High Environmental Value Habitats",
+        "features": [
+          {
+            "type": "Feature",
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [151.63, -32.96],
+                  [151.65, -32.96],
+                  [151.65, -32.98],
+                  [151.63, -32.98],
+                  [151.63, -32.96]
+                ]
+              ]
+            },
+            "properties": {
+              "habitat_id": "BIO_NSW_AWABA",
+              "veg_community": "Awaba High Conservation Corridor",
+              "threatened_species": "Swift Parrot / Koala Habitat",
+              "statutory_status": "EPBC Act Matter of National Environmental Significance"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "aura-state-renewable-energy-zones",
+      "name": "🔆 State Strategic Renewable Energy Zones (REZs)",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": true,
+      "opacity": 0.4,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "fillColor": "#eab308",
+        "strokeColor": "#ca8a04",
+        "strokeWidth": 2,
+        "strokeWidthUnit": "pixels",
+        "fillOpacity": 0.3
+      },
+      "metadata": { "category": "Energy Infrastructure", "source_portal": "NSW EnergyCo / VicGrid / Powerlink" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "State Renewable Energy Zones",
+        "features": [
+          {
+            "type": "Feature",
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [150.8, -32.5],
+                  [151.8, -32.5],
+                  [151.8, -33.2],
+                  [150.8, -33.2],
+                  [150.8, -32.5]
+                ]
+              ]
+            },
+            "properties": {
+              "rez_id": "REZ_NSW_HUNTER",
+              "rez_name": "Hunter-Central Coast Renewable Energy Zone",
+              "target_capacity_gw": 3.0,
+              "infrastructure_priority": "Transmission Co-location"
+            }
+          },
+          {
+            "type": "Feature",
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [145.8, -37.8],
+                  [147.2, -37.8],
+                  [147.2, -38.6],
+                  [145.8, -38.6],
+                  [145.8, -37.8]
+                ]
+              ]
+            },
+            "properties": {
+              "rez_id": "REZ_VIC_GIPPS",
+              "rez_name": "Gippsland Offshore Wind & Clean Energy Hub",
+              "target_capacity_gw": 4.5,
+              "infrastructure_priority": "High Voltage Grid Interconnection"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "aura-precinct-boundary",
+      "name": "🏗️ Macquarie Transformation Precinct Envelope",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": true,
+      "opacity": 0.95,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "fillColor": "#3b82f6",
+        "strokeColor": "#3b82f6",
+        "strokeWidth": 3,
+        "strokeWidthUnit": "pixels",
+        "fillOpacity": 0.1
+      },
+      "metadata": { "category": "Precinct Micro-Siting", "source_portal": "NSW DPHI / State Significant Planning" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "Macquarie Transformation Precinct Envelope",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "precinct_id": "PRECINCT_MCC",
+              "precinct_name": "Macquarie Transformation Precinct Envelope",
+              "gross_area_ha": 350.0,
+              "state": "NSW",
+              "lga": "Lake Macquarie City Council",
+              "status": "State Significant Precinct Planning"
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [151.65, -32.93],
+                  [151.72, -32.93],
+                  [151.72, -32.88],
+                  [151.65, -32.88],
+                  [151.65, -32.93]
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "aura-net-developable-area",
+      "name": "📐 Net Developable Pad Area (59.7 ha)",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": true,
+      "opacity": 0.7,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "fillColor": "#14b8a6",
+        "strokeColor": "#0d9488",
+        "strokeWidth": 2,
+        "strokeWidthUnit": "pixels",
+        "fillOpacity": 0.5
+      },
+      "metadata": { "category": "Precinct Micro-Siting", "source_portal": "AURA Geospatial Derivation" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "Net Developable Pad Area",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "pad_zone": "NDA_PAD_01",
+              "pad_name": "Primary Levelled Net Developable Area",
+              "net_developable_area_ha": 59.7,
+              "declared_dam_exclusion_ha": 20.5,
+              "slope_grade_pct": 2.1,
+              "geotechnical_status": "Engineered Coal Preparation Pad",
+              "suitable_for_megawatt_dc": true
+            },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [151.66, -32.92],
+                  [151.71, -32.92],
+                  [151.71, -32.89],
+                  [151.66, -32.89],
+                  [151.66, -32.92]
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "aura-pipeline-corridors",
+      "name": "🛡️ High Pressure Gas Pipeline Corridor (20m Easement)",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": true,
+      "opacity": 0.9,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "strokeColor": "#f97316",
+        "strokeWidth": 3,
+        "strokeWidthUnit": "pixels"
+      },
+      "metadata": { "category": "Precinct Micro-Siting", "source_portal": "Jemena / APA Group / NSW Spatial" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "High Pressure Gas Pipeline Corridor",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "corridor_id": "PIPE_GAS_01",
+              "infrastructure_type": "High Pressure Natural Gas Trunk",
+              "buffer_setback_m": 20.0,
+              "operator": "Jemena / APA Group",
+              "status": "Operational Transmission"
+            },
+            "geometry": {
+              "type": "LineString",
+              "coordinates": [
+                [151.66, -32.91],
+                [151.71, -32.90]
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "aura-rail-network",
+      "name": "🚆 Freight & Main Northern Rail Network",
+      "type": "geojson",
+      "source": { "type": "geojson" },
+      "visible": true,
+      "opacity": 0.85,
+      "style": {
+        "minZoom": 0,
+        "maxZoom": 24,
+        "strokeColor": "#475569",
+        "strokeWidth": 2.5,
+        "strokeWidthUnit": "pixels"
+      },
+      "metadata": { "category": "Precinct Micro-Siting", "source_portal": "TfNSW / ARTC Heavy Rail" },
+      "geojson": {
+        "type": "FeatureCollection",
+        "name": "Rail Corridors",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": { "rail_id": "RAIL_NSW_MAIN_NORTH", "line_name": "Main Northern Railway Line", "gauge": "Standard (1435mm)", "freight_access": true },
+            "geometry": { "type": "LineString", "coordinates": [[151.58, -32.96], [151.62, -32.93], [151.68, -32.88]] }
+          }
+        ]
+      }
+    }
+  ]
+}

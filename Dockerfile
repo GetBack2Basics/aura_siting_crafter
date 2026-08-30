@@ -14,5 +14,6 @@ COPY . .
 
 ENV AURA_REGION=national
 ENV PYTHONUNBUFFERED=1
+ENV PORT=8080
 
-CMD ["python", "-m", "src.Analysis.national_suitability_analysis"]
+CMD exec uvicorn src.geolibre_proxy.main:app --host 0.0.0.0 --port ${PORT}

@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_mine_subsidence_districts",
+  "dataset_name": "Declared Mine Subsidence Districts",
+  "source_agency": "Subsidence Advisory NSW",
+  "portal": "NSW Spatial Services / Subsidence Advisory",
+  "portal_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer",
+  "layer_id": 8,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["DISTRICT_NAME", "GAZETTED_DATE", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_mine_subsidence_districts",
+    "format": "havasu.iceberg",
+    "partition_by": "district_name"
+  },
+  "audit": {
+    "cadence": "Quarterly Update",
+    "statutory_act": "Coal Mine Subsidence Compensation Act 2017",
+    "is_raw_unchanged": false
+  }
+}

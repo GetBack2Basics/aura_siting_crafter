@@ -1,0 +1,43 @@
+{
+  "dataset_key": "nsw_rfs_bushfire_prone",
+  "dataset_name": "NSW Bush Fire Prone Land (BFPL)",
+  "source_agency": "NSW Rural Fire Service (RFS)",
+  "portal": "NSW SEED Portal / Spatial Services",
+  "portal_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Emergency_Management_Category/FeatureServer",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Emergency_Management_Category/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "attribute_based",
+    "attribute_column": "vegetation_category",
+    "default_distance_m": 30.0,
+    "mapping": {
+      "Category 1": 100.0,
+      "Category 2": 30.0,
+      "Category 3": 30.0
+    }
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["OBJECTID", "VEGETATION_CATEGORY", "CERTIFIED_DATE"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_rfs_bushfire_prone",
+    "format": "havasu.iceberg",
+    "partition_by": "vegetation_category"
+  },
+  "audit": {
+    "cadence": "Quarterly Certified Release",
+    "statutory_act": "Rural Fires Act 1997 / EP&A Act 1979",
+    "is_raw_unchanged": false
+  }
+}

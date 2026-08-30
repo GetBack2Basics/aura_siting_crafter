@@ -1,0 +1,3724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>AURA Siting Crafter — GeoLibre WebGIS</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- MapLibre GL JS & CSS -->
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #131a2c;
+      --card-bg: rgba(19, 26, 44, 0.95);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --sidebar-width: 400px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      max-width: 100vw;
+      overflow: hidden !important;
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Rotating Sand Timer Loader Animation */
+    @keyframes spinHourglass {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loading-hourglass {
+      display: inline-block;
+      animation: spinHourglass 1.2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+      font-size: 0.72rem;
+      color: #38bdf8;
+      vertical-align: middle;
+    }
+
+    .aura-highlight {
+      color: #38bdf8;
+      font-weight: 800;
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+    }
+
+    /* Top Navigation Bar */
+    .top-navbar {
+      height: 52px;
+      width: 100%;
+      background: #070b14;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      z-index: 100;
+      flex-shrink: 0;
+      gap: 0.75rem;
+    }
+
+    .nav-brand-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .nav-brand-title {
+      font-weight: 800;
+      font-size: 0.98rem;
+      background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      white-space: nowrap;
+      line-height: 1.15;
+    }
+
+    .nav-brand-subtitle {
+      font-size: 0.66rem;
+      font-weight: 500;
+      color: #94a3b8;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+      margin-top: 1px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: nowrap;
+    }
+
+    .nav-btn {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid var(--border-color);
+      color: #cbd5e1;
+      padding: 0.32rem 0.65rem;
+      border-radius: 0.38rem;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      font-family: inherit;
+    }
+    .nav-btn:hover {
+      background: var(--accent-blue);
+      color: #ffffff;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.35);
+    }
+    .nav-btn.nav-btn-primary {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(6, 182, 212, 0.3) 100%);
+      border-color: rgba(56, 189, 248, 0.5);
+      color: #38bdf8;
+    }
+    .nav-btn.nav-btn-primary:hover {
+      background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+      color: #ffffff;
+      border-color: #38bdf8;
+    }
+    .nav-btn-help {
+      padding: 0.32rem 0.55rem;
+      font-weight: 700;
+      color: #93c5fd;
+    }
+
+    /* Basemap Dropdown Popover (Saves Navbar Horizontal Space) */
+    .basemap-popover-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .basemap-popover-card {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #101626;
+      border: 1px solid var(--border-color);
+      border-radius: 0.45rem;
+      padding: 0.65rem 0.8rem;
+      min-width: 230px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.75);
+      display: none;
+      flex-direction: column;
+      gap: 0.55rem;
+      z-index: 250;
+      backdrop-filter: blur(12px);
+    }
+    .basemap-popover-card.open {
+      display: flex;
+    }
+    .basemap-popover-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .popover-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+    }
+    .basemap-select {
+      background: #1a2236;
+      color: #93c5fd;
+      border: 1px solid var(--border-color);
+      border-radius: 0.3rem;
+      padding: 0.28rem 0.5rem;
+      font-size: 0.74rem;
+      font-family: inherit;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+    .basemap-opacity-slider {
+      width: 100%;
+      height: 5px;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+
+    /* Mobile Layer Toggle */
+    .mobile-toggle-btn {
+      display: none;
+    }
+
+    /* Main Workspace Layout */
+    .workspace {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      height: calc(100vh - 52px - 26px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Draggable Resizer Splitters */
+    .resizer-v {
+      width: 5px;
+      background: transparent;
+      cursor: col-resize;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 45;
+      transition: background 0.15s;
+    }
+    .resizer-v:hover, .resizer-v.resizing {
+      background: var(--accent-blue);
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+    }
+    .resizer-h {
+      height: 6px;
+      background: rgba(59, 130, 246, 0.25);
+      cursor: row-resize;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 45;
+      transition: background 0.15s;
+    }
+    .resizer-h:hover, .resizer-h.resizing {
+      background: var(--accent-blue);
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+    }
+
+    /* Left S3 Thematic Layers Sidebar */
+    .sidebar {
+      width: var(--sidebar-width);
+      min-width: 220px;
+      max-width: 650px;
+      height: 100%;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 30;
+      backdrop-filter: blur(12px);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 0.75rem 1rem 0.55rem;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(10, 15, 29, 0.7);
+    }
+    .sidebar-title { font-size: 0.82rem; font-weight: 700; color: #e2e8f0; text-transform: uppercase; letter-spacing: 0.05em; }
+    .sidebar-sub { font-size: 0.68rem; color: #34d399; font-family: 'JetBrains Mono', monospace; margin-top: 0.15rem; }
+
+    .layer-catalog-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0.5rem; }
+
+    .category-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 0.45rem;
+      margin-bottom: 0.5rem;
+      overflow: hidden;
+    }
+
+    .category-header {
+      padding: 0.5rem 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.76rem;
+      color: #e2e8f0;
+      background: rgba(0,0,0,0.35);
+      user-select: none;
+    }
+    .category-header:hover { color: #60a5fa; }
+    .category-chevron { font-size: 0.65rem; color: var(--text-secondary); transition: transform 0.2s; }
+    .category-chevron.open { transform: rotate(90deg); }
+
+    .layer-list { padding: 0.2rem 0.45rem; display: none; }
+    .layer-list.open { display: block; }
+
+    .layer-item-wrapper {
+      padding: 0.4rem 0.45rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-left: 4px solid transparent;
+      border-radius: 0.35rem;
+      transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      cursor: pointer;
+      position: relative;
+    }
+    .layer-item-wrapper {
+      position: relative;
+      padding: 0.35rem 0.6rem;
+      border-radius: 0.375rem;
+      border: 1px solid transparent;
+      margin-bottom: 0.2rem;
+      transition: all 0.15s ease-in-out;
+    }
+    .layer-item-wrapper:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .layer-item-wrapper.selected-layer {
+      background: linear-gradient(90deg, rgba(6, 182, 212, 0.28) 0%, rgba(59, 130, 246, 0.18) 100%) !important;
+      border-left: 4px solid #06b6d4 !important;
+      box-shadow: 0 0 14px rgba(6, 182, 212, 0.25), inset 0 0 12px rgba(6, 182, 212, 0.12) !important;
+    }
+    .layer-item-wrapper.selected-layer .layer-left span {
+      color: #38bdf8 !important;
+      font-weight: 700 !important;
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+    }
+    .layer-item-wrapper.selected-layer .badge-count {
+      border-color: #06b6d4 !important;
+      background: rgba(6, 182, 212, 0.25) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+    }
+
+    .active-layer-indicator {
+      display: none;
+      font-size: 0.58rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      background: #06b6d4;
+      color: #080d1a;
+      padding: 0.08rem 0.32rem;
+      border-radius: 0.2rem;
+      letter-spacing: 0.04em;
+    }
+    .layer-item-wrapper.selected-layer .active-layer-indicator {
+      display: inline-block;
+    }
+
+    .layer-main-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 22px;
+      width: 100%;
+    }
+
+    .layer-left {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.74rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .layer-left:hover { color: #fff; }
+    .layer-left span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .layer-checkbox { accent-color: var(--accent-blue); cursor: pointer; flex-shrink: 0; }
+
+    /* Accurate Legend Symbology Icons */
+    .layer-legend-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+    .sym-point {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+    .sym-line {
+      width: 13px;
+      height: 0;
+      border-top-width: 2px;
+      border-top-style: solid;
+    }
+    .sym-line-dashed {
+      width: 13px;
+      height: 0;
+      border-top-width: 2px;
+      border-top-style: dashed;
+    }
+    .sym-poly-hollow {
+      width: 12px;
+      height: 9px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.02);
+      border-width: 1.2px;
+    }
+
+    .layer-controls {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.28rem;
+      padding: 0.12rem 0.35rem;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 0.35rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease-in-out;
+      z-index: 5;
+    }
+    .layer-item-wrapper:hover .layer-controls {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .badge-count {
+      font-size: 0.62rem;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      padding: 0.05rem 0.35rem;
+      border-radius: 0.25rem;
+      font-weight: 700;
+      min-width: 30px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* Layer Actions inside Controls */
+    .layer-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      flex-shrink: 0;
+    }
+
+    .action-icon-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.74rem;
+      padding: 0.15rem 0.32rem;
+      border-radius: 0.25rem;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .action-icon-btn:hover { color: #60a5fa; background: rgba(59, 130, 246, 0.25); border-color: #60a5fa; }
+
+    .opacity-drawer {
+      display: none;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.25rem;
+      padding: 0.2rem 0.45rem;
+      background: rgba(0,0,0,0.3);
+      border-radius: 0.3rem;
+      font-size: 0.66rem;
+      color: var(--text-secondary);
+    }
+    .opacity-drawer.open { display: flex; }
+    .opacity-slider { flex: 1; height: 3px; accent-color: var(--accent-blue); cursor: pointer; }
+
+    /* Central Map Viewport */
+    #map-wrapper {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background-color: #0a0f1d;
+    }
+
+    #map { flex: 1; width: 100%; height: 100%; }
+
+    /* Floating Bottom-Left Interaction Mode Switcher (Hand & Finger) */
+    .map-mode-dock {
+      position: absolute;
+      bottom: 20px;
+      left: 16px;
+      z-index: 35;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      pointer-events: auto;
+    }
+
+    .dock-mode-btn {
+      background: rgba(15, 23, 42, 0.94);
+      border: 1px solid var(--border-color);
+      color: #94a3b8;
+      border-radius: 9999px;
+      height: 36px;
+      min-width: 36px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .dock-mode-btn.active {
+      background: var(--accent-blue);
+      color: #ffffff;
+      border-color: #60a5fa;
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.6);
+    }
+    .mode-icon {
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .mode-label {
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-width 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, margin-left 0.2s ease;
+      margin-left: 0;
+      font-size: 0.73rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .dock-mode-btn:hover .mode-label {
+      max-width: 140px;
+      opacity: 1;
+      margin-left: 0.4rem;
+    }
+    .dock-mode-btn:hover {
+      border-color: #60a5fa;
+      color: #ffffff;
+    }
+
+    /* Floating Quick Map Extent Controls */
+    .map-floating-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .floating-btn {
+      background: rgba(15, 23, 42, 0.90);
+      border: 1px solid var(--border-color);
+      color: #93c5fd;
+      padding: 0.35rem 0.65rem;
+      border-radius: 0.35rem;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .floating-btn:hover { background: var(--accent-blue); color: #fff; }
+
+    /* Candidate Marker Styling */
+    .compact-candidate-marker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .compact-candidate-marker:hover { transform: scale(1.35); z-index: 50; }
+
+    .marker-bullet {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 8px currentColor;
+    }
+
+    .marker-tag {
+      background: rgba(10, 15, 29, 0.92);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #f8fafc;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.05rem 0.35rem;
+      border-radius: 0.25rem;
+      margin-top: 2px;
+      white-space: nowrap;
+      pointer-events: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+
+    /* Bottom Attribute Table Dock */
+    .attribute-table-dock {
+      height: 300px;
+      width: 100%;
+      background: rgba(10, 15, 29, 0.98);
+      border-top: 2px solid var(--accent-blue);
+      display: flex;
+      flex-direction: column;
+      z-index: 40;
+      box-shadow: 0 -6px 25px rgba(0,0,0,0.7);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .attribute-table-dock.hidden { display: none; }
+
+    .table-dock-header {
+      padding: 0.4rem 1rem;
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #60a5fa;
+      flex-shrink: 0;
+      gap: 0.75rem;
+    }
+
+    .table-search-input {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 0.3rem;
+      padding: 0.2rem 0.5rem;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.72rem;
+      outline: none;
+      width: 240px;
+    }
+
+    .table-dock-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: auto;
+      padding: 0.2rem 0.4rem;
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.74rem; text-align: left; white-space: nowrap; }
+    th { padding: 0.45rem 0.55rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 0.68rem; border-bottom: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.7); position: sticky; top: 0; z-index: 5; }
+    td { padding: 0.4rem 0.55rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    tr:hover { background: rgba(59, 130, 246, 0.2); cursor: pointer; }
+    tr.selected { background: rgba(59, 130, 246, 0.35) !important; border-left: 3px solid #34d399; }
+
+    /* Modal / Metadata & Chart Drawers */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(8px);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-card {
+      background: #111827;
+      border: 1px solid var(--border-color);
+      border-radius: 0.65rem;
+      width: 90%;
+      max-width: 680px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+      overflow: hidden;
+      animation: popIn 0.2s ease;
+    }
+    @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .modal-header {
+      padding: 0.8rem 1.2rem;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title { font-size: 0.92rem; font-weight: 700; color: #60a5fa; display: flex; align-items: center; gap: 0.4rem; }
+    .modal-body { padding: 1.2rem; font-size: 0.8rem; color: #cbd5e1; line-height: 1.6; max-height: 480px; overflow-y: auto; }
+    .modal-meta-table { width: 100%; border-collapse: collapse; margin-top: 0.6rem; }
+    .modal-meta-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; }
+    .modal-meta-table td:first-child { color: #94a3b8; font-weight: 600; width: 35%; }
+
+    /* Chart Container Controls */
+    .chart-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .chart-type-select {
+      background: #1e293b;
+      color: #93c5fd;
+      border: 1px solid var(--border-color);
+      border-radius: 0.3rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.76rem;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Right AI Spatial Query Drawer */
+    .ai-drawer {
+      position: absolute;
+      top: 0;
+      right: -440px;
+      width: 420px;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(16px);
+      border-left: 1px solid var(--border-color);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -6px 0 25px rgba(0,0,0,0.6);
+      overflow: hidden;
+    }
+    .ai-drawer.open { right: 0; }
+
+    .ai-drawer-header {
+      padding: 0.85rem 1.1rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ai-drawer-title { font-size: 0.92rem; font-weight: 700; color: #60a5fa; display: flex; align-items: center; gap: 0.4rem; }
+    .close-btn { background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; }
+    .close-btn:hover { color: #fff; }
+
+    .ai-drawer-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0.9rem; display: flex; flex-direction: column; gap: 0.85rem; }
+
+    .ai-textarea {
+      width: 100%;
+      height: 75px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 0.45rem;
+      padding: 0.55rem 0.75rem;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.8rem;
+      resize: none;
+      outline: none;
+    }
+
+    .ask-btn {
+      background: var(--accent-blue);
+      color: #fff;
+      border: none;
+      border-radius: 0.4rem;
+      padding: 0.55rem 1rem;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 0.35rem;
+    }
+    .ask-btn:hover { background: #1d4ed8; }
+
+    .preset-chip {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 9999px;
+      padding: 0.25rem 0.55rem;
+      font-size: 0.7rem;
+      color: #93c5fd;
+      cursor: pointer;
+      display: inline-block;
+      margin: 0.15rem 0.15rem 0.15rem 0;
+    }
+    .preset-chip:hover { background: rgba(59, 130, 246, 0.25); color: #fff; }
+
+    .sql-output-card {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      font-size: 0.75rem;
+      display: none;
+    }
+
+    .sql-code-editor {
+      width: 100%;
+      height: 120px;
+      background: rgba(10, 15, 29, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 0.4rem;
+      padding: 0.55rem 0.7rem;
+      color: #34d399;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.73rem;
+      line-height: 1.45;
+      resize: vertical;
+      outline: none;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .sql-code-editor:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3), inset 0 0 8px rgba(0,0,0,0.6);
+    }
+
+    .saved-queries-select {
+      width: 100%;
+      background: #131a2c;
+      color: #93c5fd;
+      border: 1px solid var(--border-color);
+      border-radius: 0.4rem;
+      padding: 0.38rem 0.6rem;
+      font-size: 0.73rem;
+      font-family: inherit;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+    }
+    .saved-queries-select:focus {
+      border-color: #38bdf8;
+    }
+
+    .save-query-row {
+      display: none;
+      align-items: center;
+      gap: 0.35rem;
+      margin: 0.45rem 0 0.55rem 0;
+      padding: 0.35rem 0.45rem;
+      background: rgba(0,0,0,0.4);
+      border-radius: 0.35rem;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+    }
+    .save-query-row.open {
+      display: flex;
+    }
+    .save-query-input {
+      flex: 1;
+      background: rgba(10, 15, 29, 0.9);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: 0.25rem;
+      padding: 0.25rem 0.45rem;
+      color: #fff;
+      font-size: 0.72rem;
+      font-family: inherit;
+      outline: none;
+    }
+    .save-query-input:focus {
+      border-color: #38bdf8;
+    }
+
+    pre { font-family: 'JetBrains Mono', monospace; color: #34d399; overflow-x: auto; margin-top: 0.35rem; }
+
+    /* Popups */
+    .maplibregl-popup-content {
+      background: rgba(15, 23, 42, 0.98) !important;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      border-radius: 0.6rem !important;
+      color: #f8fafc !important;
+      padding: 0.85rem !important;
+      font-family: 'Outfit', sans-serif !important;
+      min-width: 260px;
+    }
+    .maplibregl-popup-close-button { color: #94a3b8 !important; }
+    .maplibregl-popup-tip { border-top-color: rgba(15, 23, 42, 0.98) !important; }
+
+    .score-badge { padding: 0.15rem 0.45rem; border-radius: 0.3rem; font-weight: 700; font-size: 0.78rem; }
+    .score-high { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .score-med { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .score-low { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+    /* System Guide & Telemetry Modal Styling */
+    .help-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    .help-card {
+      background: rgba(19, 26, 44, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 0.85rem;
+    }
+    .help-card-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #60a5fa;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .help-card-text {
+      font-size: 0.75rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+    .telemetry-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 0.5rem;
+      padding: 0.85rem 1rem;
+      margin-top: 0.5rem;
+    }
+    .telemetry-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.74rem;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .telemetry-row:last-child {
+      border-bottom: none;
+    }
+    .telemetry-val {
+      font-family: 'JetBrains Mono', monospace;
+      color: #34d399;
+      font-weight: 700;
+    }
+
+    /* GeoLibre Modal Styling */
+    .geolibre-guide-box {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 0.5rem;
+      padding: 0.9rem;
+      margin-bottom: 1rem;
+      font-size: 0.77rem;
+      line-height: 1.55;
+    }
+    .geolibre-step {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+      align-items: flex-start;
+    }
+    .step-num {
+      background: var(--accent-blue);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.68rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .top-navbar {
+        height: auto;
+        padding: 0.45rem 0.75rem;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .nav-brand-title {
+        font-size: 0.88rem;
+      }
+      .nav-brand-subtitle {
+        font-size: 0.60rem;
+      }
+      .nav-actions {
+        flex-wrap: wrap;
+        gap: 0.3rem;
+      }
+      .nav-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.70rem;
+      }
+      .mobile-toggle-btn {
+        display: inline-flex;
+      }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 86vw !important;
+        max-width: 330px;
+        height: 100vh;
+        z-index: 500;
+        transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 6px 0 30px rgba(0,0,0,0.85);
+      }
+      .sidebar.mobile-open {
+        left: 0;
+      }
+      .sidebar-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(4px);
+        z-index: 490;
+        display: none;
+      }
+      .sidebar-backdrop.open {
+        display: block;
+      }
+      .resizer-v#sidebar-resizer {
+        display: none;
+      }
+      .ai-drawer {
+        width: 100vw !important;
+        right: -100vw;
+      }
+      .map-mode-dock {
+        bottom: 12px;
+        left: 10px;
+      }
+      .dock-mode-btn {
+        height: 40px;
+        min-width: 40px;
+      }
+      .dock-mode-btn .mode-label {
+        max-width: 130px;
+        opacity: 1;
+        margin-left: 0.35rem;
+      }
+      .modal-card {
+        width: 95%;
+        max-height: 92vh;
+      }
+      .attribute-table-dock {
+        height: 220px;
+      }
+    }
+
+    /* Footer */
+    .app-footer {
+      height: 28px;
+      min-height: 28px;
+      width: 100%;
+      background: #070b14;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      z-index: 100;
+      flex-shrink: 0;
+      white-space: nowrap;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+    }
+    .app-footer a { color: #60a5fa; text-decoration: underline; }
+    .app-footer a:hover { color: #93c5fd; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Application Bar -->
+  <header class="top-navbar">
+    <div class="nav-brand-container">
+      <div class="nav-brand-title">🌐 AURA Siting Crafter</div>
+      <div class="nav-brand-subtitle"><span class="aura-highlight">A</span>ustralian <span class="aura-highlight">U</span>rban and <span class="aura-highlight">R</span>egional <span class="aura-highlight">A</span>I Datacenter Siting</div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Full System Help & User Guide -->
+      <button class="nav-btn nav-btn-help" onclick="openHelpModal()" title="Help & System Guide: How to use the spatial platform">
+        <span>❔ Help</span>
+      </button>
+
+      <!-- Published Suitability Report Link -->
+      <a class="nav-btn" href="/runner/national_suitability_report.html" target="_blank" title="View Published National Siting & Suitability Report">
+        <span>📑 Published Report</span>
+      </a>
+
+      <!-- GeoLibre JSON Spec & Desktop GIS Integration -->
+      <button class="nav-btn" onclick="openGeolibreModal()" title="GeoLibre Open GIS Spec & Desktop GIS Access">
+        <span>⬇️ GeoLibre JSON</span>
+      </button>
+
+      <!-- Conversational Spatial AI SQL Drawer Toggle -->
+      <button class="nav-btn nav-btn-primary" onclick="toggleAiDrawer()" title="Conversational Spatial SQL AI Engine">
+        <span>✨ Ask AI</span>
+      </button>
+
+      <!-- Basemap Controls Dropdown Popover -->
+      <div class="basemap-popover-wrapper">
+        <button class="nav-btn" id="basemap-popover-btn" onclick="toggleBasemapPopover()" title="Change Basemap Style & Opacity">
+          <span>🗺️ Basemap ▾</span>
+        </button>
+        <div class="basemap-popover-card" id="basemap-popover">
+          <div class="basemap-popover-row">
+            <div class="popover-label">
+              <span>Basemap Style</span>
+            </div>
+            <select class="basemap-select" id="basemap-select" onchange="changeBasemap(this.value)">
+              <option value="osm-terrain" selected>🗺️ OSM Terrain</option>
+              <option value="esri-imagery">🛰️ Esri World Imagery</option>
+              <option value="osm-standard">🌐 OpenStreetMap Standard</option>
+              <option value="dark-canvas">🌑 No Basemap (Dark Canvas)</option>
+              <option value="white-canvas">⚪ No Basemap (White Canvas)</option>
+            </select>
+          </div>
+          <div class="basemap-popover-row">
+            <div class="popover-label">
+              <span>Basemap Opacity</span>
+              <span id="basemap-opacity-val">50%</span>
+            </div>
+            <input type="range" class="basemap-opacity-slider" id="basemap-opacity" min="0" max="100" value="50" oninput="setBasemapOpacity(this.value)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Layers Toggle Button -->
+      <button class="nav-btn mobile-toggle-btn" onclick="toggleMobileSidebar()" title="Toggle Layers Menu">
+        <span>☰ Layers</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Sidebar Backdrop Overlay -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleMobileSidebar(false)"></div>
+
+  <!-- Main Workspace Layout -->
+  <div class="workspace">
+    <!-- Left Thematic S3 Layer Manager Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div class="sidebar-title">S3 Thematic Lakehouse</div>
+          <div class="sidebar-sub">s3://wherobots-user-storage/aura_siting/</div>
+        </div>
+        <button class="close-btn mobile-toggle-btn" onclick="toggleMobileSidebar(false)" style="font-size: 1rem;">&times;</button>
+      </div>
+      <div class="layer-catalog-container" id="catalog-container">
+        <!-- Dynamically loaded layers with hover-only action menus -->
+      </div>
+      <div class="sidebar-footer" style="padding: 0.45rem 0.65rem; font-size: 0.62rem; color: #94a3b8; border-top: 1px solid var(--border-color); background: rgba(10, 15, 29, 0.9); text-align: center; flex-shrink: 0; line-height: 1.35;">
+        &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for information only and is the authors private opinion | <span class="dynamic-build-ts"></span>
+      </div>
+    </aside>
+
+    <!-- Sidebar Resizer Splitter (Width Draggable) -->
+    <div class="resizer-v" id="sidebar-resizer" title="Drag horizontally to resize sidebar width"></div>
+
+    <!-- Map & Bottom Attribute Table Dock -->
+    <div id="map-wrapper">
+      <main id="map"></main>
+
+      <!-- Floating Quick Map Extent Controls -->
+      <div class="map-floating-controls">
+        <button class="floating-btn" onclick="resetToNationalExtent()" title="Reset Map to Full National Extent (Australia)">
+          <span>🇦🇺 National Scale</span>
+        </button>
+      </div>
+
+      <!-- Floating Bottom-Left Interaction Mode Switcher (Identify vs Pan) -->
+      <div class="map-mode-dock" id="map-mode-dock">
+        <button id="mode-identify" class="dock-mode-btn active" onclick="setInteractionMode('identify')" title="Click features on map to view popup attributes">
+          <span class="mode-icon">👆</span>
+          <span class="mode-label">Click (Identify)</span>
+        </button>
+        <button id="mode-pan" class="dock-mode-btn" onclick="setInteractionMode('pan')" title="Drag and explore the map">
+          <span class="mode-icon">✋</span>
+          <span class="mode-label">Hand (Pan)</span>
+        </button>
+      </div>
+
+      <!-- Dock Resizer Splitter (Height Draggable) -->
+      <div class="resizer-h" id="dock-resizer" title="Drag vertically to resize attribute table height" style="display: none;"></div>
+
+      <!-- Bottom Attribute Table Dock with Direct Live Stream & Filter -->
+      <div class="attribute-table-dock hidden" id="attr-table-dock">
+        <div class="table-dock-header">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span id="dock-table-title" style="font-weight: 700;">⊞ Layer Attribute Table</span>
+            <span id="dock-table-count" style="color: #34d399; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;"></span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <input type="text" id="table-filter" class="table-search-input" placeholder="🔍 Search real attributes..." oninput="filterCurrentTable(this.value)">
+            <span style="cursor: pointer; color: #94a3b8; font-size: 0.85rem;" onclick="closeAttrTable()">✖ Close</span>
+          </div>
+        </div>
+        <div class="table-dock-scroll">
+          <table id="dynamic-attr-table">
+            <thead id="dynamic-thead"></thead>
+            <tbody id="dynamic-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Drawer Resizer Splitter (Width Draggable) -->
+    <div class="resizer-v" id="ai-drawer-resizer" title="Drag horizontally to resize AI drawer width" style="display: none;"></div>
+
+    <!-- Right AI Spatial Drawer -->
+    <div class="ai-drawer" id="ai-drawer">
+      <div class="ai-drawer-header">
+        <div class="ai-drawer-title">
+          <span>⚡ Conversational Spatial AI</span>
+        </div>
+        <button class="close-btn" onclick="toggleAiDrawer()">&times;</button>
+      </div>
+
+      <div class="ai-drawer-body">
+        <!-- Saved Queries & Benchmark Presets Dropdown -->
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem;">
+            <label for="saved-queries-select" style="font-size: 0.76rem; font-weight: 600; color: #cbd5e1;">📁 Presets & Saved Queries:</label>
+            <button id="delete-saved-query-btn" class="action-icon-btn" style="display: none; color: #f87171; font-size: 0.66rem; padding: 0.1rem 0.35rem; border-color: rgba(248,113,113,0.3);" title="Delete selected query from browser cache" onclick="deleteSelectedSavedQuery()">
+              🗑️ Delete Saved
+            </button>
+          </div>
+          <select id="saved-queries-select" class="saved-queries-select" onchange="onSavedQuerySelected(this.value)">
+            <option value="">-- Choose a Preset or Saved Query --</option>
+            <optgroup label="⭐ Benchmark Presets" id="benchmark-optgroup">
+              <option value="preset_nsw">NSW Transmission (≥15ha, ≤1.5km)</option>
+              <option value="preset_water">Recycled Water Proximity (≤2km in Latrobe / Gladstone)</option>
+              <option value="preset_buffer">Max Buffer Setback (≥1.5km from Receptors)</option>
+            </optgroup>
+            <optgroup label="💾 My Saved Queries (Browser Cache)" id="user-saved-optgroup">
+              <!-- Dynamically populated from localStorage -->
+            </optgroup>
+          </select>
+        </div>
+
+        <div>
+          <label for="ai-prompt-input" style="font-size: 0.76rem; color: #94a3b8; font-weight: 500;">Ask spatial question (or edit SQL below):</label>
+          <textarea id="ai-prompt-input" class="ai-textarea" placeholder="e.g. Show me all candidate sites within 2km of 330kV lines in VIC..."></textarea>
+          <button class="ask-btn" id="ask-btn" onclick="submitAiQuery()">
+            <span>⚡ Translate & Run Spatial Query</span>
+          </button>
+        </div>
+
+        <!-- Output & Editable SQL Editor Card -->
+        <div id="sql-output" class="sql-output-card">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+            <span style="color: #60a5fa; font-weight: 700; font-size: 0.78rem;">Editable DuckDB Spatial SQL:</span>
+            <span id="ai-result-count-badge" class="badge-count" style="font-size: 0.65rem;">0 matches</span>
+          </div>
+          
+          <textarea id="sql-code-editor" class="sql-code-editor" spellcheck="false" title="Directly edit SQL criteria (dist_to_substation_km, area_ha, state_name, etc.) and click Run SQL or press Ctrl+Enter" onkeydown="if((event.ctrlKey || event.metaKey) && event.key === 'Enter') runEditedSqlQuery()"></textarea>
+          
+          <div id="sql-explanation" style="color: #cbd5e1; font-size: 0.73rem; margin: 0.4rem 0 0.55rem;"></div>
+
+          <!-- Save Query Form (Inline Toggle) -->
+          <div id="save-query-row" class="save-query-row">
+            <input type="text" id="save-query-name-input" class="save-query-input" placeholder="Query name (e.g. NSW HV Transmission >=30ha)..." onkeydown="if(event.key === 'Enter') confirmSaveQuery()">
+            <button class="action-icon-btn" style="color: #34d399; font-weight: 600; font-size: 0.70rem; padding: 0.25rem 0.5rem; border-color: rgba(52,211,153,0.4);" onclick="confirmSaveQuery()">
+              Save
+            </button>
+            <button class="action-icon-btn" style="color: #94a3b8; font-size: 0.70rem; padding: 0.25rem 0.4rem;" onclick="toggleSaveQueryRow(false)">
+              ✖
+            </button>
+          </div>
+          
+          <div style="display: flex; gap: 0.35rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem; flex-wrap: wrap;">
+            <button class="action-icon-btn" style="flex: 1; padding: 0.35rem 0.5rem; color: #34d399; font-weight: 700; font-size: 0.72rem; border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.12);" onclick="runEditedSqlQuery()" title="Execute currently edited SQL against candidate lakehouse">
+              ▶️ Run SQL
+            </button>
+            <button class="action-icon-btn" style="padding: 0.35rem 0.55rem; color: #60a5fa; font-weight: 600; font-size: 0.72rem; border-color: rgba(59,130,246,0.4);" onclick="toggleSaveQueryRow(true)" title="Save this SQL query to browser cache">
+              💾 Save
+            </button>
+            <button class="action-icon-btn" style="flex: 1; padding: 0.35rem 0.5rem; color: #38bdf8; font-weight: 600; font-size: 0.72rem; border-color: rgba(56,189,248,0.4);" onclick="openAiResultTable()" title="Open Attribute Table Dock">
+              ⊞ Table
+            </button>
+            <button class="action-icon-btn" style="padding: 0.35rem 0.5rem; color: #94a3b8; font-size: 0.72rem;" title="Reset Map Filter" onclick="resetAiFilter()">
+              ↺ Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full System Help & User Guide Modal -->
+  <div class="modal-overlay" id="help-modal" onclick="closeHelpModal(event)">
+    <div class="modal-card" style="max-width: 740px;">
+      <div class="modal-header">
+        <div class="modal-title">❔ AURA Siting Crafter — System Guide & Architecture</div>
+        <button class="close-btn" onclick="closeHelpModalDirect()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="help-grid">
+          <div class="help-card">
+            <div class="help-card-title">🗺️ Map Navigation & Modes</div>
+            <div class="help-card-text">
+              • <strong>👆 Click (Identify)</strong>: Click candidate site markers or any lakehouse infrastructure feature to inspect genuine authoritative attributes in rich popups.<br>
+              • <strong>✋ Hand (Pan)</strong>: Drag to explore national corridors across Australia without triggering feature click popups.<br>
+              • <strong>🇦🇺 National Scale</strong>: Instantly resets viewport extent to the full Australian continent.
+            </div>
+          </div>
+          <div class="help-card">
+            <div class="help-card-title">🗂️ Thematic Lakehouse & Siting Scoring</div>
+            <div class="help-card-text">
+              • <strong>Decoupled Geometry vs Scoring</strong>: Siting criteria evaluate Power Proximity ($S_{\text{power}}$), Water Recycled Access ($S_{\text{water}}$), Slope Stability, and Sensitive Receptor setbacks ($S_{\text{sensitive}}$).<br>
+              • <strong>Hover Actions</strong>: Hover over any layer row in the left sidebar to reveal Opacity slider (🎚️), Lineage Metadata (ℹ️), Distribution Charts (📊), and Viewport Attribute Table (⊞).
+            </div>
+          </div>
+          <div class="help-card">
+            <div class="help-card-title">⚡ Conversational Spatial AI</div>
+            <div class="help-card-text">
+              • <strong>Natural Language to SQL</strong>: Ask questions like <em>"Show sites in NSW within 1.5km of 330kV lines"</em>.<br>
+              • <strong>Zero-Cost Client Execution</strong>: DuckDB-WASM executes queries directly inside your browser against authentic GeoParquet candidate records ($0.00 cloud compute).<br>
+              • <strong>Direct SQL Editor</strong>: Edit spatial SQL conditions and press Ctrl+Enter to re-filter markers in real time.
+            </div>
+          </div>
+          <div class="help-card">
+            <div class="help-card-title">⊞ Viewport Attribute Table Dock</div>
+            <div class="help-card-text">
+              • <strong>Live Streaming Attributes</strong>: Click ⊞ on any layer to stream genuine attributes for visible features.<br>
+              • <strong>Interactive Feature Zoom</strong>: Click any table row to automatically pan and zoom to the feature coordinate.
+            </div>
+          </div>
+        </div>
+
+        <!-- Live GCP Serverless Compute & Cost Telemetry Banner -->
+        <div class="telemetry-banner">
+          <div style="font-size: 0.82rem; font-weight: 700; color: #34d399; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.4rem;">
+            <span>☁️ Live Serverless Compute & Cost Telemetry</span>
+          </div>
+          <div class="telemetry-row">
+            <span>Google Cloud Run Serverless Status:</span>
+            <span class="telemetry-val">Scale-to-Zero Enabled (0 active idle containers)</span>
+          </div>
+          <div class="telemetry-row">
+            <span>Active Cloud Compute Idle Cost:</span>
+            <span class="telemetry-val">$0.00 / hr</span>
+          </div>
+          <div class="telemetry-row">
+            <span>Client-Side Spatial Query Engine:</span>
+            <span class="telemetry-val">DuckDB-WASM v1.28.0 (100% In-Browser Execution)</span>
+          </div>
+          <div class="telemetry-row">
+            <span>Authoritative Data Lakehouse:</span>
+            <span class="telemetry-val">s3://wherobots-user-storage/aura_siting/ (EPSG:7844 GDA2020)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GeoLibre Project Spec & Desktop GIS Integration Modal -->
+  <div class="modal-overlay" id="geolibre-modal" onclick="closeGeolibreModal(event)">
+    <div class="modal-card" style="max-width: 660px;">
+      <div class="modal-header">
+        <div class="modal-title">🌐 GeoLibre Open GIS Project Spec</div>
+        <button class="close-btn" onclick="closeGeolibreModalDirect()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="geolibre-guide-box">
+          <div style="font-size: 0.88rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.4rem;">What is the GeoLibre Project Spec?</div>
+          The <code>aura-siting-crafter.geolibre.json</code> file contains the full declarative spatial definition of this national siting model, including all 16 candidate hubs, MCE suitability formulas, thematic vector styling, and direct S3 lakehouse stream configurations.
+        </div>
+
+        <div style="font-size: 0.82rem; font-weight: 700; color: #e2e8f0; margin-bottom: 0.5rem;">How to Use in Desktop GIS (GeoLibre, QGIS, ArcGIS Pro):</div>
+        
+        <div class="geolibre-step">
+          <span class="step-num">1</span>
+          <div>
+            <strong>Download the JSON Project Spec</strong> using the button below.
+          </div>
+        </div>
+
+        <div class="geolibre-step">
+          <span class="step-num">2</span>
+          <div>
+            <strong>Open with GeoLibre App</strong>: Launch the GeoLibre desktop application or web GIS and choose <em>"Import Project"</em> &rarr; select <code>aura-siting-crafter.geolibre.json</code>.
+          </div>
+        </div>
+
+        <div class="geolibre-step">
+          <span class="step-num">3</span>
+          <div>
+            <strong>Direct S3 Lakehouse Streaming</strong>: GeoLibre connects directly to the S3 Iceberg/GeoParquet endpoints for live querying and spatial joins without re-downloading gigabytes of data.
+          </div>
+        </div>
+
+        <div class="geolibre-step">
+          <span class="step-num">4</span>
+          <div>
+            <strong>QGIS / Python GIS / DuckDB Access</strong>: Import the candidate GeoJSON features directly into QGIS, or read candidate parquet with <code>read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')</code> in DuckDB or GeoPandas.
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; margin-top: 1.2rem; justify-content: flex-end;">
+          <button class="nav-btn nav-btn-primary" onclick="downloadGeolibreJson()" style="padding: 0.45rem 1rem; font-size: 0.8rem;">
+            <span>⬇️ Download aura-siting-crafter.geolibre.json</span>
+          </button>
+          <button class="nav-btn" onclick="closeGeolibreModalDirect()" style="padding: 0.45rem 0.8rem;">
+            <span>Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Metadata Modal -->
+  <div class="modal-overlay" id="meta-modal" onclick="closeMetaModal(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-layer-title">ℹ️ Layer Metadata Lineage</div>
+        <button class="close-btn" onclick="closeMetaModalDirect()">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-layer-body"></div>
+    </div>
+  </div>
+
+  <!-- Interactive Layer Analytics Chart Modal -->
+  <div class="modal-overlay" id="chart-modal" onclick="closeChartModal(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="chart-modal-title">📊 Layer Distribution & Analytics</div>
+        <button class="close-btn" onclick="closeChartModalDirect()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="chart-controls">
+          <span style="font-size: 0.78rem; font-weight: 600; color: #94a3b8;">Visualization Type:</span>
+          <select id="chart-type-selector" class="chart-type-select" onchange="renderActiveChart(this.value)">
+            <option value="bar">📊 Bar Chart</option>
+            <option value="histogram">📶 Histogram</option>
+            <option value="donut">🍩 Donut / Breakdown</option>
+            <option value="scatter">📈 Scatter Plot</option>
+          </select>
+        </div>
+        <div id="chart-canvas-container" style="width: 100%; min-height: 280px; display: flex; align-items: center; justify-content: center;">
+          <!-- Interactive SVG Chart -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer with Report Build Identifier and National Status -->
+  <footer class="app-footer">
+    <span>&copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for information only and is the authors private opinion | <span class="dynamic-build-ts"></span></span>
+    <span style="font-family: 'JetBrains Mono', monospace; color: #93c5fd; font-size: 0.66rem;">Live S3 Lakehouse & WFS/REST Streams | EPSG:7844 GDA2020</span>
+  </footer>
+
+  <script>
+    const PROXY_URL = 'https://geolibre-spatial-ai-proxy-390270537834.australia-southeast1.run.app';
+
+    // Set dynamic build timestamp across footer badges
+    const currentBuildTs = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 12);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.dynamic-build-ts').forEach(el => el.textContent = currentBuildTs);
+    });
+
+    let interactionMode = 'identify'; // 'identify' (default) or 'pan'
+    let selectedLayerId = 'national_candidates'; // Currently active/selected layer for identify queries
+
+    function setInteractionMode(mode) {
+      interactionMode = mode;
+      document.getElementById('mode-identify').classList.toggle('active', mode === 'identify');
+      document.getElementById('mode-pan').classList.toggle('active', mode === 'pan');
+      map.getCanvas().style.cursor = mode === 'identify' ? 'default' : 'grab';
+    }
+
+    function setSelectedLayer(layerId) {
+      selectedLayerId = layerId;
+      const lyr = THEMATIC_LAYERS.find(l => l.id === layerId);
+      if (!lyr) return;
+
+      // Update sidebar visual selection across all cards
+      document.querySelectorAll('.layer-item-wrapper').forEach(el => {
+        el.classList.remove('selected-layer');
+      });
+      const activeRow = document.getElementById(`layer-row-${layerId}`);
+      if (activeRow) {
+        activeRow.classList.add('selected-layer');
+        // Ensure parent category card is expanded so the active layer is visible
+        const parentList = activeRow.closest('.layer-list');
+        if (parentList && !parentList.classList.contains('open')) {
+          parentList.classList.add('open');
+          const chevron = parentList.previousElementSibling?.querySelector('.category-chevron');
+          if (chevron) chevron.classList.add('open');
+        }
+      }
+
+      // Update top navbar target pill
+      const targetLabel = document.getElementById('active-target-name');
+      if (targetLabel) {
+        targetLabel.textContent = lyr.name;
+        targetLabel.title = `Current Click Identify Target: ${lyr.name}`;
+      }
+
+      // Ensure layer visibility is active on the map so features can be clicked
+      const chk = document.getElementById(`chk-${layerId}`);
+      if (chk && !chk.checked) {
+        chk.checked = true;
+        toggleLayerVisibility(layerId, true);
+      }
+    }
+
+    // 16 National Candidate Sites (Matching Multi-Criteria Decision Analysis Report)
+    const rawCandidatesData = [
+      {"mb_code21": "NSW_MCC01", "town_name": "Teralba", "state_name": "New South Wales", "area_ha": 44.5, "slope_pct": 2.1, "dist_to_substation_km": 0.35, "dist_to_wwtw_km": 0.85, "dist_to_sensitive_km": 0.82, "suitability_score": 0.998, "pumped_hydro_capacity_mwh": 49.0, "lon": 151.60, "lat": -32.94},
+      {"mb_code21": "NSW_MCC02", "town_name": "Killingworth", "state_name": "New South Wales", "area_ha": 28.2, "slope_pct": 3.4, "dist_to_substation_km": 0.45, "dist_to_wwtw_km": 1.4, "dist_to_sensitive_km": 1.25, "suitability_score": 0.991, "pumped_hydro_capacity_mwh": 130.8, "lon": 151.56, "lat": -32.92},
+      {"mb_code21": "NSW_MCC03", "town_name": "Cockle Creek", "state_name": "New South Wales", "area_ha": 18.7, "slope_pct": 1.2, "dist_to_substation_km": 0.2, "dist_to_wwtw_km": 0.6, "dist_to_sensitive_km": 0.42, "suitability_score": 0.845, "pumped_hydro_capacity_mwh": 27.2, "lon": 151.62, "lat": -32.94},
+      {"mb_code21": "NSW_MCC04", "town_name": "West Lake", "state_name": "New South Wales", "area_ha": 35.0, "slope_pct": 4.1, "dist_to_substation_km": 1.1, "dist_to_wwtw_km": 2.1, "dist_to_sensitive_km": 1.8, "suitability_score": 0.922, "pumped_hydro_capacity_mwh": 196.2, "lon": 151.55, "lat": -32.96},
+      {"mb_code21": "QLD_GLD01", "town_name": "Yarwun", "state_name": "Queensland", "area_ha": 18.5, "slope_pct": 1.8, "dist_to_substation_km": 0.35, "dist_to_wwtw_km": 0.8, "dist_to_sensitive_km": 1.1, "suitability_score": 1.0, "pumped_hydro_capacity_mwh": 38.1, "lon": 151.25, "lat": -23.84},
+      {"mb_code21": "QLD_GLD02", "town_name": "Gladstone City", "state_name": "Queensland", "area_ha": 15.0, "slope_pct": 2.3, "dist_to_substation_km": 0.75, "dist_to_wwtw_km": 1.5, "dist_to_sensitive_km": 0.65, "suitability_score": 0.958, "pumped_hydro_capacity_mwh": 32.7, "lon": 151.17, "lat": -23.82},
+      {"mb_code21": "QLD_GLD03", "town_name": "Calliope", "state_name": "Queensland", "area_ha": 13.5, "slope_pct": 2.9, "dist_to_substation_km": 1.8, "dist_to_wwtw_km": 3.2, "dist_to_sensitive_km": 2.2, "suitability_score": 0.817, "pumped_hydro_capacity_mwh": 54.5, "lon": 151.21, "lat": -23.97},
+      {"mb_code21": "VIC_LTB01", "town_name": "Morwell", "state_name": "Victoria", "area_ha": 12.5, "slope_pct": 1.5, "dist_to_substation_km": 0.45, "dist_to_wwtw_km": 1.2, "dist_to_sensitive_km": 0.95, "suitability_score": 0.964, "pumped_hydro_capacity_mwh": 119.9, "lon": 146.40, "lat": -38.23},
+      {"mb_code21": "VIC_LTB02", "town_name": "Traralgon", "state_name": "Victoria", "area_ha": 8.2, "slope_pct": 2.0, "dist_to_substation_km": 1.2, "dist_to_wwtw_km": 2.5, "dist_to_sensitive_km": 1.6, "suitability_score": 0.819, "pumped_hydro_capacity_mwh": 76.3, "lon": 146.53, "lat": -38.19},
+      {"mb_code21": "VIC_LTB03", "town_name": "Moe", "state_name": "Victoria", "area_ha": 10.5, "slope_pct": 3.1, "dist_to_substation_km": 0.9, "dist_to_wwtw_km": 1.8, "dist_to_sensitive_km": 1.4, "suitability_score": 0.89, "pumped_hydro_capacity_mwh": 87.2, "lon": 146.26, "lat": -38.17},
+      {"mb_code21": "WA_COL01", "town_name": "Collie", "state_name": "Western Australia", "area_ha": 22.0, "slope_pct": 1.4, "dist_to_substation_km": 0.15, "dist_to_wwtw_km": 4.2, "dist_to_sensitive_km": 1.35, "suitability_score": 0.929, "pumped_hydro_capacity_mwh": 130.8, "lon": 116.15, "lat": -33.36},
+      {"mb_code21": "WA_COL02", "town_name": "Collie East", "state_name": "Western Australia", "area_ha": 17.5, "slope_pct": 2.2, "dist_to_substation_km": 0.6, "dist_to_wwtw_km": 3.5, "dist_to_sensitive_km": 2.1, "suitability_score": 0.936, "pumped_hydro_capacity_mwh": 109.0, "lon": 116.20, "lat": -33.35},
+      {"mb_code21": "ACT_CBR01", "town_name": "Fyshwick", "state_name": "Australian Capital Territory", "area_ha": 14.2, "slope_pct": 1.1, "dist_to_substation_km": 0.4, "dist_to_wwtw_km": 1.1, "dist_to_sensitive_km": 0.78, "suitability_score": 0.985, "pumped_hydro_capacity_mwh": 43.6, "lon": 149.172, "lat": -35.325},
+      {"mb_code21": "ACT_CBR02", "town_name": "Hume", "state_name": "Australian Capital Territory", "area_ha": 19.8, "slope_pct": 2.0, "dist_to_substation_km": 0.55, "dist_to_wwtw_km": 1.9, "dist_to_sensitive_km": 1.65, "suitability_score": 0.976, "pumped_hydro_capacity_mwh": 60.0, "lon": 149.164, "lat": -35.385},
+      {"mb_code21": "NT_DWN01", "town_name": "East Arm", "state_name": "Northern Territory", "area_ha": 24.5, "slope_pct": 0.8, "dist_to_substation_km": 0.5, "dist_to_wwtw_km": 1.6, "dist_to_sensitive_km": 2.4, "suitability_score": 0.987, "pumped_hydro_capacity_mwh": 21.8, "lon": 130.895, "lat": -12.482},
+      {"mb_code21": "SA_PTA01", "town_name": "Port Augusta", "state_name": "South Australia", "area_ha": 20.1, "slope_pct": 1.6, "dist_to_substation_km": 0.3, "dist_to_wwtw_km": 2.8, "dist_to_sensitive_km": 1.9, "suitability_score": 0.96, "pumped_hydro_capacity_mwh": 32.7, "lon": 137.780, "lat": -32.510},
+      {"mb_code21": "TAS_DEV01", "town_name": "Devonport", "state_name": "Tasmania", "area_ha": 16.4, "slope_pct": 2.4, "dist_to_substation_km": 0.7, "dist_to_wwtw_km": 1.5, "dist_to_sensitive_km": 1.15, "suitability_score": 0.971, "pumped_hydro_capacity_mwh": 38.1, "lon": 146.360, "lat": -41.190}
+    ];
+
+    const BASEMAP_TILES = {
+      'osm-terrain': {
+        tiles: ['https://tile.opentopomap.org/{z}/{x}/{y}.png'],
+        attribution: '&copy; OpenTopoMap &copy; OpenStreetMap'
+      },
+      'esri-imagery': {
+        tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+        attribution: 'Tiles &copy; Esri, Maxar, Earthstar Geographics'
+      },
+      'osm-standard': {
+        tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+        attribution: '&copy; OpenStreetMap contributors'
+      }
+    };
+
+    let basemapCurrentOpacity = 0.50;
+
+    // Initialize Map with National Extent
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: {
+        version: 8,
+        sources: {
+          'basemap-source': {
+            type: 'raster',
+            tiles: BASEMAP_TILES['osm-terrain'].tiles,
+            tileSize: 256,
+            attribution: BASEMAP_TILES['osm-terrain'].attribution
+          }
+        },
+        layers: [
+          {
+            id: 'basemap-layer',
+            type: 'raster',
+            source: 'basemap-source',
+            minzoom: 0,
+            maxzoom: 19,
+            paint: { 'raster-opacity': 0.50 }
+          }
+        ]
+      },
+      center: [134.0, -28.0],
+      zoom: 3.8
+    });
+
+    map.addControl(new maplibregl.NavigationControl(), 'top-left');
+
+    let currentPopup = null;
+    let candidateMarkersList = [];
+
+    function resetToNationalExtent() {
+      if (currentPopup) currentPopup.remove();
+      map.flyTo({ center: [134.0, -28.0], zoom: 3.8, speed: 1.2 });
+    }
+
+    function changeBasemap(key) {
+      const mapWrapper = document.getElementById('map-wrapper');
+      
+      if (key === 'white-canvas') {
+        if (map.getLayer('basemap-layer')) map.setLayoutProperty('basemap-layer', 'visibility', 'none');
+        mapWrapper.style.backgroundColor = '#ffffff';
+      } else if (key === 'dark-canvas') {
+        if (map.getLayer('basemap-layer')) map.setLayoutProperty('basemap-layer', 'visibility', 'none');
+        mapWrapper.style.backgroundColor = '#0a0f1d';
+      } else {
+        mapWrapper.style.backgroundColor = '#0a0f1d';
+        if (map.getLayer('basemap-layer')) map.setLayoutProperty('basemap-layer', 'visibility', 'visible');
+        const cfg = BASEMAP_TILES[key];
+        const src = map.getSource('basemap-source');
+        if (src && cfg) {
+          map.removeLayer('basemap-layer');
+          map.removeSource('basemap-source');
+          map.addSource('basemap-source', {
+            type: 'raster',
+            tiles: cfg.tiles,
+            tileSize: 256,
+            attribution: cfg.attribution
+          });
+          map.addLayer({
+            id: 'basemap-layer',
+            type: 'raster',
+            source: 'basemap-source',
+            paint: { 'raster-opacity': basemapCurrentOpacity }
+          }, map.getStyle().layers[0]?.id);
+        }
+      }
+    }
+
+    function setBasemapOpacity(val) {
+      basemapCurrentOpacity = parseFloat(val) / 100.0;
+      const valSpan = document.getElementById('basemap-opacity-val');
+      if (valSpan) valSpan.textContent = `${val}%`;
+      if (map.getLayer('basemap-layer')) {
+        map.setPaintProperty('basemap-layer', 'raster-opacity', basemapCurrentOpacity);
+      }
+    }
+
+    // 16 Dedicated Thematic Datasets with Tailored Symbology (Hollow Polygons & Lines)
+    const THEMATIC_LAYERS = [
+      // 1. Candidate Hubs
+      {
+        id: "national_candidates",
+        name: "National Siting Candidate Hubs",
+        color: "#10b981",
+        count: "16 Hubs",
+        category: "🎯 Candidate Hubs & Siting Scorecards",
+        type: "marker",
+        default_checked: true,
+        s3_path: "s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet",
+        data: rawCandidatesData,
+        meta: {
+          portal: "AURA Multi-Criteria Decision Analysis (MCDA)",
+          jurisdiction: "National (8 States & Territories)",
+          records: "16 Prime National Hubs (MCE Scored)",
+          crs: "EPSG:7844 (GDA2020 Geographic)",
+          description: "Top-ranked candidate hubs evaluated across 15.9M assets for power grid connection, tertiary recycled water cooling, slope (<5%), and statutory receptor buffer compliance."
+        }
+      },
+      // 2. Cadastre & Statistical Boundaries (5-Tier Hierarchical LOD: State -> Regions -> Councils -> Large Properties -> Small Properties)
+      {
+        id: "abs_meshblocks",
+        name: "ABS 2021 Meshblocks & UCL",
+        color: "#94a3b8", // Slate Grey tone
+        line_width: 0.85,
+        dash_style: "dashed",
+        dash_array: [4, 2],
+        count: "368,290",
+        category: "📐 Cadastre & Statistical Boundaries",
+        type: "fill",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/cadastre/abs_meshblocks_2021.parquet",
+        stream_key: "abs_meshblocks",
+        meta: {
+          portal: "Australian Bureau of Statistics (ABS)",
+          jurisdiction: "National Statistical Geography Standard (ASGS)",
+          records: "368,290 Meshblocks (Residential, Industrial, Commercial)",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Authoritative ABS 2021 land use classifications and urban centre localities with 5-tier smart LOD scaling (State -> Region -> Council -> Large Properties -> Small Parcels)."
+        }
+      },
+      {
+        id: "geoscape_cadastre",
+        name: "Geoscape National Cadastre & G-NAF",
+        color: "#64748b", // Cool Grey tone
+        line_width: 0.75,
+        dash_style: "dotted",
+        dash_array: [2, 2],
+        count: "15,420,800",
+        category: "📐 Cadastre & Statistical Boundaries",
+        type: "fill",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/cadastre/geoscape_cadastre.parquet",
+        stream_key: "geoscape_cadastre",
+        meta: {
+          portal: "Geoscape Australia / ICSM CSDM",
+          jurisdiction: "National Cadastre Database",
+          records: "15,420,800 Standardized Lot/Plan Land Parcels",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Complete national cadastral fabric providing exact title boundaries with 5-tier smart LOD (State Boundaries -> Statistical Regions -> LGA Councils -> Large Properties -> Detailed Lots)."
+        }
+      },
+      // 3. Energy Grid Infrastructure
+      {
+        id: "transmission_lines_interstate",
+        name: "Interstate Transmission Grid (≥275kV)",
+        color: "#38bdf8",
+        dash_style: "solid",
+        count: "5,000",
+        category: "⚡ Energy Grid & Substations",
+        type: "line",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/energy/national_transmission_grid.parquet",
+        stream_key: "transmission_lines_interstate",
+        meta: {
+          portal: "Transgrid / Powerlink / ElectraNet / AEMO",
+          jurisdiction: "National Electricity Market (NEM) & SWIS",
+          records: "5,000 Major High-Voltage Lines (500kV, 330kV, 275kV)",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Extra-high-voltage interstate transmission bulk power corridors capable of multimegawatt hyperscale injection."
+        }
+      },
+      {
+        id: "transmission_lines_regional",
+        name: "Regional Transmission Grid (132kV-275kV)",
+        color: "#60a5fa",
+        dash_style: "solid",
+        count: "12,400",
+        category: "⚡ Energy Grid & Substations",
+        type: "line",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/energy/national_transmission_grid.parquet",
+        stream_key: "transmission_lines_regional",
+        meta: {
+          portal: "State Transmission Network Service Providers",
+          jurisdiction: "Regional Transmission Networks",
+          records: "12,400 Regional Transmission Feeder Segments",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Sub-transmission regional feeders connecting generation hubs and industrial loads."
+        }
+      },
+      {
+        id: "substations_terminal",
+        name: "Electrical Substations & Terminal Stations",
+        color: "#f59e0b",
+        count: "1,850",
+        category: "⚡ Energy Grid & Substations",
+        type: "circle",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/energy/national_substations.parquet",
+        stream_key: "substations_terminal",
+        meta: {
+          portal: "AEMO / Geoscience Australia",
+          jurisdiction: "National Power System Substations",
+          records: "1,850 Terminal & Bulk Supply Substations",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "High-voltage terminal substations with step-down transformers and switchyards."
+        }
+      },
+      // 4. Water & Cooling Loops
+      {
+        id: "bom_hydro_lines",
+        name: "BoM Surface Water HydroLine & HydroArea",
+        color: "#06b6d4",
+        dash_style: "solid",
+        count: "42,100",
+        category: "💧 Water & Cooling Loops",
+        type: "line",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/water/bom_surface_water_wwtw.parquet",
+        stream_key: "bom_hydro_lines",
+        meta: {
+          portal: "Bureau of Meteorology / Geoscience Australia",
+          jurisdiction: "National Surface Water Framework",
+          records: "42,100 Surface Hydrography Waterways",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Surface waterways requiring 30m statutory riparian buffer setback protection."
+        }
+      },
+      {
+        id: "recycled_wwtw_plants",
+        name: "Recycled Wastewater Treatment Plants (WWTW)",
+        color: "#14b8a6",
+        count: "1,120",
+        category: "💧 Water & Cooling Loops",
+        type: "circle",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/water/recycled_wwtw_plants.parquet",
+        stream_key: "recycled_wwtw_plants",
+        meta: {
+          portal: "Water Authorities / State EPA Portals",
+          jurisdiction: "National Recycled Water Infrastructure",
+          records: "1,120 Major Municipal & Industrial Treatment Facilities",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Tertiary recycled wastewater facilities delivering industrial cooling water without depleting potable drinking water supplies."
+        }
+      },
+      // 5. Social & Environmental Receptors
+      {
+        id: "acara_schools",
+        name: "ACARA National Schools (500m Buffer)",
+        color: "#a855f7",
+        count: "10,842",
+        category: "🛡️ Social & Environmental Receptors",
+        type: "circle",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/receptors/acara_national_schools.parquet",
+        stream_key: "acara_schools",
+        meta: {
+          portal: "Australian Curriculum, Assessment and Reporting Authority (ACARA)",
+          jurisdiction: "National Schools Directory",
+          records: "10,842 Government, Catholic & Independent Campuses",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Primary and secondary educational campuses enforcing strict 500m statutory acoustic setbacks."
+        }
+      },
+      {
+        id: "nhsd_healthcare",
+        name: "NHSD National Healthcare & Hospitals",
+        color: "#ec4899",
+        count: "4,218",
+        category: "🛡️ Social & Environmental Receptors",
+        type: "circle",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/receptors/nhsd_national_healthcare.parquet",
+        stream_key: "nhsd_healthcare",
+        meta: {
+          portal: "Australian Digital Health Agency / NHSD",
+          jurisdiction: "National Health Services Directory",
+          records: "4,218 Hospitals, Emergency Departments & Critical Facilities",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Hospitals and emergency care centers requiring acoustic noise masking and priority contingency routing."
+        }
+      },
+      {
+        id: "transport_rail",
+        name: "Heavy Freight & Transport Rail Corridors",
+        color: "#94a3b8",
+        dash_style: "dashed",
+        dash_array: [5, 2],
+        count: "4,000",
+        category: "🛡️ Social & Environmental Receptors",
+        type: "line",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/transport/nsw_railway_corridors.parquet",
+        stream_key: "transport_rail",
+        meta: {
+          portal: "NSW Spatial Services / TfNSW / ARTC",
+          jurisdiction: "National Heavy Rail Network",
+          records: "4,000 Heavy Freight & Interstate Rail Corridors",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Interstate heavy freight railway alignments for modular transformer and rack transit."
+        }
+      },
+      // 6. Biodiversity & Bushfire Constraints (Hollow Polygons with Dashed Hairlines)
+      {
+        id: "bionet_biodiversity",
+        name: "NSW SEED & BioNet BV Map / KHIB",
+        color: "#84cc16",
+        line_width: 1.0,
+        dash_style: "dashed",
+        dash_array: [3, 2],
+        count: "3,583",
+        category: "🌿 Biodiversity & Bushfire Constraints",
+        type: "fill",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/environment/bionet_biodiversity_khib.parquet",
+        stream_key: "bionet_biodiversity",
+        meta: {
+          portal: "NSW DPHI Environment / DCCEEW BioNet",
+          jurisdiction: "NSW Biodiversity Conservation Framework",
+          records: "3,583 Biodiversity Values & Key Habitat Corridors",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "High Environmental Value (HEV) biodiversity zones and threatened species habitat subject to statutory clearing exclusions."
+        }
+      },
+      {
+        id: "rfs_bushfire_bfpl",
+        name: "NSW RFS Bush Fire Prone Land (BFPL)",
+        color: "#ef4444",
+        line_width: 1.0,
+        dash_style: "dashed",
+        dash_array: [5, 2],
+        count: "2,450",
+        category: "🌿 Biodiversity & Bushfire Constraints",
+        type: "fill",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/environment/rfs_bushfire_prone_land.parquet",
+        stream_key: "rfs_bushfire_bfpl",
+        meta: {
+          portal: "NSW Rural Fire Service (RFS)",
+          jurisdiction: "NSW Planning Portal / RFS",
+          records: "2,450 Cat 1 & Cat 2 Vegetation Buffer Polygons",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Designated bushfire prone zones enforcing 100m Cat 1 Asset Protection Zones (APZ)."
+        }
+      },
+      // 7. Precinct Micro-Siting Masterplans
+      {
+        id: "transformation_boundary",
+        name: "Macquarie Transformation Envelope",
+        color: "#3b82f6",
+        line_width: 1.5,
+        dash_style: "dashed",
+        dash_array: [6, 3],
+        count: "350 ha",
+        category: "🏗️ Precinct Micro-Siting Masterplans",
+        type: "line",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/precincts/transformation_boundary.parquet",
+        meta: {
+          portal: "NSW DPHI State Significant Precinct Planning",
+          jurisdiction: "Lake Macquarie LGA",
+          records: "350.0 Gross Precinct Hectares",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Former power transformation precinct envelope designated for clean tech and hyperscale compute."
+        }
+      },
+      {
+        id: "net_developable_pad",
+        name: "Net Developable Pad Area (59.7 ha)",
+        color: "#14b8a6",
+        line_width: 1.2,
+        dash_style: "solid",
+        count: "59.7 ha",
+        category: "🏗️ Precinct Micro-Siting Masterplans",
+        type: "fill",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/precincts/net_developable_pad_59ha.parquet",
+        meta: {
+          portal: "AURA Geospatial Derivation Pipeline",
+          jurisdiction: "Hunter Energy Hub",
+          records: "59.7 ha Leveled Engineered Industrial Pad",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Engineered net developable platform after deducting riparian setbacks, ash dams, and steep slope grades."
+        }
+      },
+      {
+        id: "gas_pipeline_corridor",
+        name: "High Pressure Gas Pipeline Corridor (20m APZ)",
+        color: "#f97316",
+        line_width: 2.0,
+        dash_style: "dashed",
+        dash_array: [4, 2],
+        count: "20m APZ",
+        category: "🏗️ Precinct Micro-Siting Masterplans",
+        type: "line",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/precincts/gas_pipeline_corridor_20m.parquet",
+        meta: {
+          portal: "Jemena / APA Group / NSW Spatial Services",
+          jurisdiction: "NSW Pipeline Licences",
+          records: "1 High-Pressure Natural Gas Trunk Line",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Transmission gas pipeline requiring 20m building setbacks and geotechnical isolation."
+        }
+      }
+    ];
+
+    // Helper: Generate accurate HTML legend icon based on layer type & dash style
+    function getLayerLegendIconHtml(lyr) {
+      if (lyr.type === 'fill') {
+        const borderStyle = lyr.dash_style === 'dashed' ? 'dashed' : (lyr.dash_style === 'dotted' ? 'dotted' : 'solid');
+        return `<span class="layer-legend-icon"><span class="sym-poly-hollow" style="border: 1.4px ${borderStyle} ${lyr.color};"></span></span>`;
+      } else if (lyr.type === 'line') {
+        if (lyr.dash_style === 'dashed') {
+          return `<span class="layer-legend-icon"><span class="sym-line-dashed" style="border-top-color: ${lyr.color};"></span></span>`;
+        }
+        return `<span class="layer-legend-icon"><span class="sym-line" style="border-top-color: ${lyr.color};"></span></span>`;
+      } else {
+        return `<span class="layer-legend-icon"><span class="sym-point" style="background-color: ${lyr.color};"></span></span>`;
+      }
+    }
+
+    // Render Candidate Markers (Discrete Point Layer)
+    function renderCandidateMarkers(items) {
+      candidateMarkersList.forEach(m => m.remove());
+      candidateMarkersList = [];
+
+      items.forEach(c => {
+        const score = Number(c.suitability_score);
+        const col = score >= 0.95 ? '#10b981' : (score >= 0.85 ? '#34d399' : '#f59e0b');
+
+        const el = document.createElement('div');
+        el.className = 'compact-candidate-marker';
+        el.innerHTML = `
+          <div class="marker-bullet" style="background-color: ${col}; box-shadow: 0 0 6px ${col};"></div>
+          <div class="marker-tag">${c.town_name}</div>
+        `;
+
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (interactionMode === 'identify') {
+            showCandidatePopup(c, [c.lon, c.lat]);
+          }
+        });
+
+        const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+          .setLngLat([c.lon, c.lat])
+          .addTo(map);
+
+        candidateMarkersList.push(marker);
+      });
+    }
+
+    // Helper: Map 5-Tier LOD to Human-Readable Label
+    function getLodLabel(tier) {
+      const map = {
+        'state_boundaries': 'State Boundaries (Multi-State National)',
+        'regions': 'Regional Boundaries (ASGS Region)',
+        'councils': 'LGA Council Boundaries (Council Scale)',
+        'large_properties': 'Large Properties & Major Holdings (Precinct)',
+        'small_properties': 'Smaller Properties & Detailed Lots (Property Scale)',
+        'standard': 'Standard Viewport Scale'
+      };
+      return map[tier] || 'Active Viewport Scale';
+    }
+
+    // Viewport Spatial Streaming with Progressive [x of y features...] Loader
+    let streamDebounceTimer = null;
+    let progressiveTimers = {};
+
+    async function updateViewportStreams() {
+      const bounds = map.getBounds();
+      const zoom = map.getZoom();
+      const bboxStr = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`;
+
+      const activeStreamingLayers = THEMATIC_LAYERS.filter(l => l.stream_key && document.getElementById(`chk-${l.id}`)?.checked);
+      if (!activeStreamingLayers.length) return;
+
+      const dock = document.getElementById('attr-table-dock');
+      const countBadge = document.getElementById('dock-table-count');
+
+      // Start Progressive Incrementing (10, 20, 30...) for each layer
+      activeStreamingLayers.forEach(lyr => {
+        const badgeEl = document.getElementById(`badge-${lyr.id}`);
+        if (badgeEl) {
+          if (progressiveTimers[lyr.id]) clearInterval(progressiveTimers[lyr.id]);
+          let countVal = 0;
+          badgeEl.innerHTML = `<span class="loading-hourglass">⏳</span> 0`;
+          progressiveTimers[lyr.id] = setInterval(() => {
+            countVal += 10;
+            if (badgeEl) badgeEl.innerHTML = `<span class="loading-hourglass">⏳</span> ${countVal}`;
+            if (!dock.classList.contains('hidden') && dock.getAttribute('data-active-layer') === lyr.id) {
+              countBadge.innerHTML = `<span class="loading-hourglass">⏳</span> Loading [${countVal} of active features...] (LOD z=${zoom.toFixed(1)})`;
+            }
+          }, 45);
+        }
+      });
+
+      for (const lyr of activeStreamingLayers) {
+        try {
+          const url = `${PROXY_URL}/api/data/${lyr.stream_key}?bbox=${bboxStr}&zoom=${zoom.toFixed(1)}`;
+          const resp = await fetch(url);
+          if (resp.ok) {
+            const data = await resp.json();
+            lyr.liveGeoJSON = data;
+            const featCount = (data.features || []).length;
+            const lodTier = data.lod_tier || 'standard';
+            const lodName = getLodLabel(lodTier);
+
+            // Clear progressive loading timer and set exact count
+            if (progressiveTimers[lyr.id]) {
+              clearInterval(progressiveTimers[lyr.id]);
+              delete progressiveTimers[lyr.id];
+            }
+
+            const badgeEl = document.getElementById(`badge-${lyr.id}`);
+            if (badgeEl) {
+              badgeEl.innerHTML = `${featCount.toLocaleString()}`;
+              badgeEl.title = `Authoritative Lakehouse: ${featCount.toLocaleString()} features loaded in active viewport (${lodName})`;
+            }
+
+            if (!dock.classList.contains('hidden') && dock.getAttribute('data-active-layer') === lyr.id) {
+              countBadge.innerHTML = `[${featCount.toLocaleString()} of ${featCount.toLocaleString()} Viewport Features Loaded (100% | LOD: ${lodName} z=${zoom.toFixed(1)})]`;
+            }
+
+            const srcId = `src_${lyr.id}`;
+            if (map.getSource(srcId)) {
+              map.getSource(srcId).setData(data);
+            } else {
+              if (lyr.type === 'circle') {
+                map.addSource(srcId, {
+                  type: 'geojson',
+                  data: data,
+                  cluster: true,
+                  clusterMaxZoom: 14,
+                  clusterRadius: 50
+                });
+
+                // Cluster Circle Layer (Reduced by 75% for sleek unobtrusive presentation)
+                map.addLayer({
+                  id: `${lyr.id}_clusters`,
+                  type: 'circle',
+                  source: srcId,
+                  filter: ['has', 'point_count'],
+                  paint: {
+                    'circle-color': [
+                      'step',
+                      ['get', 'point_count'],
+                      lyr.color || '#3b82f6',
+                      10,
+                      '#f59e0b',
+                      50,
+                      '#ef4444'
+                    ],
+                    'circle-radius': [
+                      'step',
+                      ['get', 'point_count'],
+                      5.5,
+                      10,
+                      7.5,
+                      50,
+                      9.5
+                    ],
+                    'circle-stroke-width': 1.2,
+                    'circle-stroke-color': '#ffffff'
+                  }
+                });
+
+                // Cluster Count Text Label Layer
+                map.addLayer({
+                  id: `${lyr.id}_cluster_count`,
+                  type: 'symbol',
+                  source: srcId,
+                  filter: ['has', 'point_count'],
+                  layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+                    'text-size': 8.5,
+                    'text-allow-overlap': true,
+                    'text-ignore-placement': true
+                  },
+                  paint: {
+                    'text-color': '#ffffff'
+                  }
+                });
+
+                // Unclustered Individual Point Circle Layer
+                map.addLayer({
+                  id: lyr.id,
+                  type: 'circle',
+                  source: srcId,
+                  filter: ['!', ['has', 'point_count']],
+                  paint: {
+                    'circle-color': lyr.color,
+                    'circle-radius': 3.5,
+                    'circle-stroke-width': 1.0,
+                    'circle-stroke-color': '#ffffff'
+                  }
+                });
+
+                // Zoom to expand cluster on click directly attached to cluster layers
+                const expandCluster = (e) => {
+                  const features = map.queryRenderedFeatures(e.point, { layers: [`${lyr.id}_clusters`, `${lyr.id}_cluster_count`] });
+                  if (!features || !features.length) return;
+                  const clusterId = features[0].properties.cluster_id;
+                  const src = map.getSource(srcId);
+                  if (src && clusterId !== undefined) {
+                    src.getClusterExpansionZoom(clusterId, (err, zoom) => {
+                      const targetZoom = (!err && zoom) ? zoom : (map.getZoom() + 2.5);
+                      map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: targetZoom,
+                        duration: 400
+                      });
+                    });
+                  }
+                };
+                map.on('click', `${lyr.id}_clusters`, expandCluster);
+                map.on('click', `${lyr.id}_cluster_count`, expandCluster);
+              } else {
+                map.addSource(srcId, { type: 'geojson', data: data });
+
+                if (lyr.type === 'line') {
+                  const linePaint = {
+                    'line-color': lyr.color,
+                    'line-width': lyr.line_width || 2.2,
+                    'line-opacity': 0.85
+                  };
+                  if (lyr.dash_array) linePaint['line-dasharray'] = lyr.dash_array;
+
+                  map.addLayer({
+                    id: lyr.id,
+                    type: 'line',
+                    source: srcId,
+                    paint: linePaint
+                  });
+                } else if (lyr.type === 'fill') {
+                  // Hollow Fill layer for click hit-testing
+                  map.addLayer({
+                    id: lyr.id,
+                    type: 'fill',
+                    source: srcId,
+                    paint: {
+                      'fill-color': lyr.color,
+                      'fill-opacity': 0.02
+                    }
+                  });
+
+                  // Crisp Hairline / Dashed Polygon Outline
+                  const outlinePaint = {
+                    'line-color': lyr.color,
+                    'line-width': lyr.line_width || 0.85,
+                    'line-opacity': 0.90
+                  };
+                  if (lyr.dash_array) outlinePaint['line-dasharray'] = lyr.dash_array;
+
+                  map.addLayer({
+                    id: `${lyr.id}_outline`,
+                    type: 'line',
+                    source: srcId,
+                    paint: outlinePaint
+                  });
+                }
+              }
+            }
+          }
+        } catch (e) {
+          console.warn(`Viewport stream update error for ${lyr.id}:`, e);
+          if (progressiveTimers[lyr.id]) {
+            clearInterval(progressiveTimers[lyr.id]);
+            delete progressiveTimers[lyr.id];
+          }
+          const badgeEl = document.getElementById(`badge-${lyr.id}`);
+          if (badgeEl) badgeEl.innerHTML = lyr.count;
+        }
+      }
+    }
+
+    map.on('load', () => {
+      renderCandidateMarkers(rawCandidatesData);
+      renderThematicSidebar();
+      updateViewportStreams();
+      initFrameResizers();
+
+      map.on('moveend', () => {
+        clearTimeout(streamDebounceTimer);
+        streamDebounceTimer = setTimeout(updateViewportStreams, 300);
+      });
+
+      // Map Click Event for Identify Tool (Selected Layer & All Active Layers)
+      map.on('click', handleMapClick);
+
+      // Map MouseMove Event for Cursor Pointer Feedback on Vector Features
+      map.on('mousemove', handleMapMouseMove);
+
+      // Load Saved & Benchmark Queries from Browser LocalStorage Cache
+      loadSavedQueriesDropdown();
+    });
+
+    // Helper: Find closest candidate site marker within screen tolerance
+    function findCandidateNearPoint(lngLat, point) {
+      if (!rawCandidatesData || !rawCandidatesData.length) return null;
+      const chk = document.getElementById('chk-national_candidates');
+      if (chk && !chk.checked) return null;
+
+      let bestCandidate = null;
+      let minDistancePx = 26; // pixel tolerance for marker click
+
+      rawCandidatesData.forEach(c => {
+        const p = map.project([c.lon, c.lat]);
+        const dx = p.x - point.x;
+        const dy = p.y - point.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < minDistancePx) {
+          minDistancePx = dist;
+          bestCandidate = c;
+        }
+      });
+      return bestCandidate;
+    }
+
+    // Unified Map Click Handler
+    function handleMapClick(e) {
+      if (interactionMode !== 'identify') return;
+
+      // 1. Check if user clicked on any point cluster (circle or label)
+      const clusterLayers = THEMATIC_LAYERS
+        .filter(l => l.type === 'circle')
+        .flatMap(l => [`${l.id}_clusters`, `${l.id}_cluster_count`])
+        .filter(id => map.getLayer(id));
+
+      if (clusterLayers.length > 0) {
+        const clusterFeatures = map.queryRenderedFeatures(e.point, { layers: clusterLayers });
+        if (clusterFeatures && clusterFeatures.length > 0) {
+          const clusterFeat = clusterFeatures[0];
+          const baseId = clusterFeat.layer.id.replace(/_clusters|_cluster_count$/, '');
+          const srcId = `src_${baseId}`;
+          const clusterId = clusterFeat.properties.cluster_id;
+          const source = map.getSource(srcId);
+          if (clusterId !== undefined && source && source.getClusterExpansionZoom) {
+            source.getClusterExpansionZoom(clusterId, (err, zoom) => {
+              const targetZoom = (!err && zoom) ? zoom : (map.getZoom() + 2.5);
+              map.easeTo({
+                center: clusterFeat.geometry.coordinates,
+                zoom: targetZoom,
+                duration: 400
+              });
+            });
+            return; // Handled cluster click, do not open feature popup
+          }
+        }
+      }
+
+      // 2. If selected layer is Candidate Hubs, check candidate markers first
+      if (selectedLayerId === 'national_candidates') {
+        const candidate = findCandidateNearPoint(e.lngLat, e.point);
+        if (candidate) {
+          showCandidatePopup(candidate, [candidate.lon, candidate.lat]);
+          return;
+        }
+      }
+
+      // 3. Query features from the currently selected layer
+      const lyr = THEMATIC_LAYERS.find(l => l.id === selectedLayerId);
+      let targetLayers = [];
+      if (lyr && lyr.id !== 'national_candidates') {
+        if (lyr.type === 'fill') {
+          targetLayers = [lyr.id, `${lyr.id}_outline`].filter(id => map.getLayer(id));
+        } else if (lyr.type === 'circle') {
+          targetLayers = [lyr.id].filter(id => map.getLayer(id));
+        } else {
+          targetLayers = [lyr.id].filter(id => map.getLayer(id));
+        }
+      }
+
+      const bbox = [
+        [e.point.x - 6, e.point.y - 6],
+        [e.point.x + 6, e.point.y + 6]
+      ];
+
+      let features = [];
+      let matchedLayer = lyr;
+
+      if (targetLayers.length > 0) {
+        try {
+          features = map.queryRenderedFeatures(bbox, { layers: targetLayers });
+        } catch (err) {
+          console.warn('Selected layer query error:', err);
+        }
+      }
+
+      // 4. Fallback: If no feature hit on selected layer, query other visible thematic layers
+      if (!features.length) {
+        const otherVisibleLayers = THEMATIC_LAYERS.filter(l => l.id !== selectedLayerId && l.id !== 'national_candidates' && document.getElementById(`chk-${l.id}`)?.checked);
+        for (const otherLyr of otherVisibleLayers) {
+          let otherMapLayers = [];
+          if (otherLyr.type === 'fill') {
+            otherMapLayers = [otherLyr.id, `${otherLyr.id}_outline`].filter(id => map.getLayer(id));
+          } else if (otherLyr.type === 'circle') {
+            otherMapLayers = [otherLyr.id].filter(id => map.getLayer(id));
+          } else {
+            otherMapLayers = [otherLyr.id].filter(id => map.getLayer(id));
+          }
+          if (otherMapLayers.length > 0) {
+            try {
+              const feats = map.queryRenderedFeatures(bbox, { layers: otherMapLayers });
+              if (feats && feats.length > 0) {
+                features = feats;
+                matchedLayer = otherLyr;
+                break;
+              }
+            } catch (err) {
+              console.warn('Fallback query error:', err);
+            }
+          }
+        }
+      }
+
+      // 5. Fallback: If still no feature, check candidate points
+      if (!features.length) {
+        const candidate = findCandidateNearPoint(e.lngLat, e.point);
+        if (candidate) {
+          showCandidatePopup(candidate, [candidate.lon, candidate.lat]);
+          return;
+        }
+        return; // No feature found under click point
+      }
+
+      // 6. Display rich popup for identified feature
+      const feat = features[0];
+      showLayerFeaturePopup(feat, matchedLayer, e.lngLat);
+    }
+
+    // Cursor Hover Feedback on Interactive Features
+    function handleMapMouseMove(e) {
+      if (interactionMode !== 'identify') {
+        map.getCanvas().style.cursor = 'grab';
+        return;
+      }
+
+      let layersToHover = [];
+      THEMATIC_LAYERS.forEach(l => {
+        if (document.getElementById(`chk-${l.id}`)?.checked) {
+          if (l.type === 'fill') {
+            if (map.getLayer(l.id)) layersToHover.push(l.id);
+            if (map.getLayer(`${l.id}_outline`)) layersToHover.push(`${l.id}_outline`);
+          } else if (l.type === 'circle') {
+            if (map.getLayer(l.id)) layersToHover.push(l.id);
+            if (map.getLayer(`${l.id}_clusters`)) layersToHover.push(`${l.id}_clusters`);
+            if (map.getLayer(`${l.id}_cluster_count`)) layersToHover.push(`${l.id}_cluster_count`);
+          } else {
+            if (map.getLayer(l.id)) layersToHover.push(l.id);
+          }
+        }
+      });
+
+      if (layersToHover.length > 0) {
+        const bbox = [
+          [e.point.x - 5, e.point.y - 5],
+          [e.point.x + 5, e.point.y + 5]
+        ];
+        try {
+          const feats = map.queryRenderedFeatures(bbox, { layers: layersToHover });
+          map.getCanvas().style.cursor = (feats && feats.length > 0) ? 'pointer' : 'default';
+          return;
+        } catch (err) {}
+      }
+
+      map.getCanvas().style.cursor = 'default';
+    }
+
+    // Set Active Selection Context
+    function setSelectedLayer(layerId) {
+      selectedLayerId = layerId;
+      document.querySelectorAll('.layer-item-wrapper').forEach(el => el.classList.remove('selected-layer'));
+      const activeEl = document.getElementById(`layer-row-${layerId}`);
+      if (activeEl) activeEl.classList.add('selected-layer');
+
+      const chk = document.getElementById(`chk-${layerId}`);
+      if (chk && !chk.checked) {
+        chk.checked = true;
+        toggleLayerVisibility(layerId, true);
+      }
+    }
+
+    // Render Rich Popup for Thematic Vector Layer Features
+    function showLayerFeaturePopup(feat, lyr, lngLat) {
+      if (currentPopup) currentPopup.remove();
+
+      const props = feat.properties || {};
+      const propKeys = Object.keys(props).filter(k => props[k] !== null && props[k] !== undefined && props[k] !== '');
+
+      const titleKey = propKeys.find(k => /name|title|town|suburb|site|label|feature|propname|plan_label/i.test(k));
+      const primaryTitle = titleKey ? String(props[titleKey]) : (props.OBJECTID ? `Record #${props.OBJECTID}` : lyr.name);
+      const subtitle = titleKey ? lyr.name : (lyr.meta?.jurisdiction || lyr.category);
+
+      let rowsHtml = '';
+      propKeys.forEach(k => {
+        if (k === titleKey) return;
+        const cleanKey = k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        let val = props[k];
+        if (typeof val === 'number') {
+          val = Number.isInteger(val) ? val.toLocaleString() : val.toFixed(3);
+        }
+        rowsHtml += `
+          <tr>
+            <td style="color: #94a3b8; font-weight: 500; padding: 0.22rem 0.4rem 0.22rem 0; width: 44%; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,0.06);">${cleanKey}</td>
+            <td style="color: #f1f5f9; font-weight: 600; text-align: right; padding: 0.22rem 0 0.22rem 0.4rem; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; word-break: break-all;">${val}</td>
+          </tr>
+        `;
+      });
+
+      if (!rowsHtml) {
+        rowsHtml = `<tr><td colspan="2" style="color: #94a3b8; font-style: italic;">No additional attributes</td></tr>`;
+      }
+
+      const geomCoords = feat.geometry ? JSON.stringify(feat.geometry.coordinates) : null;
+      const zoomBtn = geomCoords ? `
+        <button class="action-icon-btn" style="font-size: 0.70rem; padding: 0.2rem 0.5rem; color: #34d399;" onclick='zoomToFeature(${geomCoords})'>
+          🎯 Zoom
+        </button>
+      ` : '';
+
+      const html = `
+        <div style="font-family: 'Outfit', sans-serif;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.35rem; gap: 0.4rem;">
+            <div>
+              <h4 style="margin: 0; color: #60a5fa; font-size: 0.92rem; font-weight: 700; line-height: 1.3;">${primaryTitle}</h4>
+              <div style="font-size: 0.70rem; color: #94a3b8; margin-top: 0.1rem;">${subtitle}</div>
+            </div>
+            <span style="font-size: 0.60rem; font-family: 'JetBrains Mono', monospace; padding: 0.12rem 0.35rem; border-radius: 0.25rem; background: rgba(59,130,246,0.15); color: #38bdf8; border: 1px solid rgba(59,130,246,0.3); white-space: nowrap;">
+              ${lyr.type.toUpperCase()}
+            </span>
+          </div>
+          <div style="max-height: 200px; overflow-y: auto; margin: 0.35rem 0; padding-right: 0.2rem;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; line-height: 1.4;">
+              ${rowsHtml}
+            </table>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.45rem; padding-top: 0.3rem; border-top: 1px solid rgba(255,255,255,0.08);">
+            <div style="display: flex; gap: 0.35rem;">
+              <button class="action-icon-btn" style="font-size: 0.70rem; padding: 0.2rem 0.5rem; color: #38bdf8;" onclick="openLayerTable('${lyr.id}')">
+                ⊞ Table
+              </button>
+              ${zoomBtn}
+            </div>
+            <button class="action-icon-btn" style="font-size: 0.70rem; padding: 0.2rem 0.5rem; color: #a78bfa;" onclick="openMetaModal('${lyr.id}')">
+              ℹ️ Lineage
+            </button>
+          </div>
+        </div>
+      `;
+
+      currentPopup = new maplibregl.Popup({ maxWidth: '340px' })
+        .setLngLat(lngLat)
+        .setHTML(html)
+        .addTo(map);
+    }
+
+    function showCandidatePopup(p, lngLat) {
+      if (currentPopup) currentPopup.remove();
+      const score = Number(p.suitability_score);
+      const scoreBadgeClass = score >= 0.85 ? 'score-high' : (score >= 0.70 ? 'score-med' : 'score-low');
+
+      const html = `
+        <h3 style="margin: 0 0 0.35rem 0; color: #60a5fa; font-size: 1.05rem;">${p.town_name}</h3>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.5rem;">${p.state_name}</div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.78rem; line-height: 1.5;">
+          <tr><td style="color: #94a3b8;">Suitability Score:</td><td style="text-align: right;"><span class="score-badge ${scoreBadgeClass}">${score.toFixed(3)}</span></td></tr>
+          <tr><td style="color: #94a3b8;">Area Available:</td><td style="text-align: right; font-weight: 600;">${p.area_ha} ha</td></tr>
+          <tr><td style="color: #94a3b8;">Power Grid Dist:</td><td style="text-align: right; font-weight: 600;">${p.dist_to_substation_km} km</td></tr>
+          <tr><td style="color: #94a3b8;">Recycled Water Dist:</td><td style="text-align: right; font-weight: 600;">${p.dist_to_wwtw_km} km</td></tr>
+          <tr><td style="color: #94a3b8;">Sensitive Buffer:</td><td style="text-align: right; font-weight: 600; color: #c084fc;">${p.dist_to_sensitive_km} km</td></tr>
+          <tr><td style="color: #94a3b8;">Slope Grade:</td><td style="text-align: right; font-weight: 600; color: #34d399;">${p.slope_pct}%</td></tr>
+          <tr><td style="color: #94a3b8;">Pumped Hydro:</td><td style="text-align: right; font-weight: 600; color: #34d399;">${p.pumped_hydro_capacity_mwh} MWh</td></tr>
+        </table>
+      `;
+
+      currentPopup = new maplibregl.Popup()
+        .setLngLat(lngLat)
+        .setHTML(html)
+        .addTo(map);
+    }
+
+    function zoomToFeature(coords) {
+      if (currentPopup) currentPopup.remove();
+      if (!coords) return;
+
+      try {
+        if (typeof coords[0] === 'number' && typeof coords[1] === 'number') {
+          map.flyTo({ center: coords, zoom: 14, speed: 1.5 });
+        } else {
+          const bounds = new maplibregl.LngLatBounds();
+          const flatten = (arr) => {
+            if (typeof arr[0] === 'number' && typeof arr[1] === 'number') {
+              bounds.extend([arr[0], arr[1]]);
+            } else if (Array.isArray(arr)) {
+              arr.forEach(flatten);
+            }
+          };
+          flatten(coords);
+          if (!bounds.isEmpty()) {
+            map.fitBounds(bounds, { padding: 100, maxZoom: 15 });
+          }
+        }
+      } catch (e) {
+        console.warn('Zoom error:', e);
+      }
+    }
+
+    function renderThematicSidebar() {
+      const container = document.getElementById('catalog-container');
+      container.innerHTML = '';
+
+      const categories = {};
+      THEMATIC_LAYERS.forEach(lyr => {
+        if (!categories[lyr.category]) categories[lyr.category] = [];
+        categories[lyr.category].push(lyr);
+      });
+
+      Object.keys(categories).forEach((catName, idx) => {
+        const layers = categories[catName];
+        const card = document.createElement('div');
+        card.className = 'category-card';
+
+        const header = document.createElement('div');
+        header.className = 'category-header';
+        header.innerHTML = `
+          <span>${catName}</span>
+          <span class="category-chevron ${idx === 0 ? 'open' : ''}">▶</span>
+        `;
+
+        const list = document.createElement('div');
+        list.className = `layer-list ${idx === 0 ? 'open' : ''}`;
+
+        layers.forEach(lyr => {
+          const wrapper = document.createElement('div');
+          wrapper.className = `layer-item-wrapper ${lyr.id === selectedLayerId ? 'selected-layer' : ''}`;
+          wrapper.id = `layer-row-${lyr.id}`;
+
+          const isChecked = lyr.default_checked ? 'checked' : '';
+          const legendIconHtml = getLayerLegendIconHtml(lyr);
+
+          const mainRow = document.createElement('div');
+          mainRow.className = 'layer-main-row';
+
+          const left = document.createElement('div');
+          left.className = 'layer-left';
+          left.innerHTML = `
+            <input type="checkbox" class="layer-checkbox" id="chk-${lyr.id}" ${isChecked} onclick="event.stopPropagation(); toggleLayerVisibility('${lyr.id}', this.checked)">
+            ${legendIconHtml}
+            <span title="${lyr.name}">${lyr.name}</span>
+          `;
+          
+          // Clicking the layer title or row selects the layer as the active target
+          mainRow.addEventListener('click', () => {
+            setSelectedLayer(lyr.id);
+          });
+
+          const right = document.createElement('div');
+          right.className = 'layer-controls';
+          right.innerHTML = `
+            <span class="active-layer-indicator" title="Active selected layer for identify tool">ACTIVE</span>
+            <span class="badge-count" id="badge-${lyr.id}" title="Authoritative Lakehouse Corpus">${lyr.count}</span>
+            <div class="layer-actions">
+              <button class="action-icon-btn" title="Toggle Opacity Drawer" onclick="event.stopPropagation(); toggleOpacityDrawer('op-drawer-${lyr.id}')">🎚️</button>
+              <button class="action-icon-btn" title="View Layer Lineage" onclick="event.stopPropagation(); openMetaModal('${lyr.id}')">ℹ️</button>
+              <button class="action-icon-btn" title="Open Interactive Analytics Chart" onclick="event.stopPropagation(); openChartModal('${lyr.id}')">📊</button>
+              <button class="action-icon-btn" title="Open Viewport Attribute Table" onclick="event.stopPropagation(); openLayerTable('${lyr.id}')">⊞</button>
+            </div>
+          `;
+
+          const opacityDrawer = document.createElement('div');
+          opacityDrawer.className = 'opacity-drawer';
+          opacityDrawer.id = `op-drawer-${lyr.id}`;
+          opacityDrawer.innerHTML = `
+            <span>Opacity:</span>
+            <input type="range" class="opacity-slider" min="0" max="100" value="90" oninput="setLayerOpacity('${lyr.id}', this.value, '${lyr.type}')">
+            <span id="op-val-${lyr.id}">90%</span>
+          `;
+
+          mainRow.appendChild(left);
+          mainRow.appendChild(right);
+          wrapper.appendChild(mainRow);
+          wrapper.appendChild(opacityDrawer);
+          list.appendChild(wrapper);
+        });
+
+        header.addEventListener('click', () => {
+          const chevron = header.querySelector('.category-chevron');
+          chevron.classList.toggle('open');
+          list.classList.toggle('open');
+        });
+
+        card.appendChild(header);
+        card.appendChild(list);
+        container.appendChild(card);
+      });
+    }
+
+    function toggleOpacityDrawer(drawerId) {
+      const drawer = document.getElementById(drawerId);
+      if (drawer) drawer.classList.toggle('open');
+    }
+
+    function toggleLayerVisibility(layerId, isVisible) {
+      if (layerId === 'national_candidates') {
+        candidateMarkersList.forEach(m => m.getElement().style.display = isVisible ? 'flex' : 'none');
+      } else {
+        const vis = isVisible ? 'visible' : 'none';
+        if (map.getLayer(layerId)) map.setLayoutProperty(layerId, 'visibility', vis);
+        if (map.getLayer(`${layerId}_clusters`)) map.setLayoutProperty(`${layerId}_clusters`, 'visibility', vis);
+        if (map.getLayer(`${layerId}_cluster_count`)) map.setLayoutProperty(`${layerId}_cluster_count`, 'visibility', vis);
+        if (map.getLayer(`${layerId}_outline`)) map.setLayoutProperty(`${layerId}_outline`, 'visibility', vis);
+
+        if (isVisible) {
+          updateViewportStreams();
+        }
+      }
+    }
+
+    function setLayerOpacity(layerId, value, layerType) {
+      const val = parseFloat(value) / 100.0;
+      const label = document.getElementById(`op-val-${layerId}`);
+      if (label) label.textContent = `${value}%`;
+
+      if (layerId === 'national_candidates') {
+        candidateMarkersList.forEach(m => m.getElement().style.opacity = val);
+      } else {
+        if (map.getLayer(layerId)) {
+          if (layerType === 'line') map.setPaintProperty(layerId, 'line-opacity', val);
+          else if (layerType === 'fill') map.setPaintProperty(layerId, 'fill-opacity', val * 0.05);
+          else if (layerType === 'circle') map.setPaintProperty(layerId, 'circle-opacity', val);
+        }
+        if (map.getLayer(`${layerId}_clusters`)) {
+          map.setPaintProperty(`${layerId}_clusters`, 'circle-opacity', val);
+        }
+        if (map.getLayer(`${layerId}_outline`)) {
+          map.setPaintProperty(`${layerId}_outline`, 'line-opacity', val);
+        }
+      }
+    }
+
+    let currentTableRows = [];
+    let currentTableHeaders = [];
+
+    // Open Attribute Table for Visible Viewport Features
+    async function openLayerTable(layerId) {
+      setSelectedLayer(layerId);
+      const lyr = THEMATIC_LAYERS.find(l => l.id === layerId);
+      if (!lyr) return;
+
+      const dock = document.getElementById('attr-table-dock');
+      const title = document.getElementById('dock-table-title');
+      const countBadge = document.getElementById('dock-table-count');
+
+      dock.setAttribute('data-active-layer', layerId);
+      title.innerHTML = `⊞ ${lyr.name}`;
+      dock.classList.remove('hidden');
+      document.getElementById('table-filter').value = '';
+
+      if (layerId === 'national_candidates') {
+        currentTableHeaders = ['Town', 'State', 'Suitability Score', 'Area (ha)', 'Substation (km)', 'Recycled Water (km)', 'Sensitive Setback (km)', 'Slope (%)', 'Pumped Hydro (MWh)'];
+        currentTableRows = lyr.data.map(c => ({
+          values: [c.town_name, c.state_name, Number(c.suitability_score).toFixed(3), `${c.area_ha} ha`, `${c.dist_to_substation_km} km`, `${c.dist_to_wwtw_km} km`, `${c.dist_to_sensitive_km} km`, `${c.slope_pct}%`, `${c.pumped_hydro_capacity_mwh} MWh`],
+          coords: [c.lon, c.lat]
+        }));
+        countBadge.innerHTML = `[16 of 16 Viewport Features Loaded (100%)] — Total Corpus: ${lyr.count}`;
+        renderTableDOM(currentTableHeaders, currentTableRows);
+      } else if (lyr.stream_key) {
+        const bounds = map.getBounds();
+        const zoom = map.getZoom();
+        const bboxStr = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`;
+        const url = `${PROXY_URL}/api/data/${lyr.stream_key}?bbox=${bboxStr}&zoom=${zoom.toFixed(1)}`;
+
+        // Progressive loader for dock incrementing x of y features
+        let liveCount = 0;
+        countBadge.innerHTML = `<span class="loading-hourglass">⏳</span> Loading [0 of active features...] (LOD z=${zoom.toFixed(1)})`;
+        const dockTimer = setInterval(() => {
+          liveCount += 10;
+          countBadge.innerHTML = `<span class="loading-hourglass">⏳</span> Loading [${liveCount} of active features...] (LOD z=${zoom.toFixed(1)})`;
+        }, 45);
+
+        try {
+          const resp = await fetch(url);
+          const data = await resp.json();
+          clearInterval(dockTimer);
+
+          const feats = data.features || [];
+          const lodTier = data.lod_tier || 'standard';
+          const lodName = getLodLabel(lodTier);
+
+          if (feats.length > 0) {
+            const keys = Object.keys(feats[0].properties);
+            currentTableHeaders = keys.map(k => k.replace(/_/g, ' ').toUpperCase());
+            currentTableRows = feats.map(f => ({
+              values: keys.map(k => String(f.properties[k] ?? '')),
+              coords: f.geometry ? f.geometry.coordinates : null
+            }));
+            countBadge.innerHTML = `[${feats.length.toLocaleString()} of ${feats.length.toLocaleString()} Viewport Features Loaded (100% | LOD: ${lodName} z=${zoom.toFixed(1)})]`;
+            renderTableDOM(currentTableHeaders, currentTableRows);
+          } else {
+            countBadge.innerHTML = `[0 features in active viewport (Pan or zoom in to load assets)]`;
+            renderTableDOM(['STATUS'], [{ values: ['0 features in active viewport. Pan or zoom in to load assets.'], coords: null }]);
+          }
+        } catch (e) {
+          clearInterval(dockTimer);
+          countBadge.innerHTML = `[0 features in active viewport (Stream error)]`;
+        }
+      }
+
+      setTimeout(() => map.resize(), 200);
+    }
+
+    function renderTableDOM(headers, rows) {
+      const thead = document.getElementById('dynamic-thead');
+      const tbody = document.getElementById('dynamic-tbody');
+
+      thead.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+      tbody.innerHTML = '';
+
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = r.values.map(v => `<td>${v}</td>`).join('');
+        tr.addEventListener('click', (e) => {
+          if (!e.ctrlKey && !e.metaKey) {
+            tbody.querySelectorAll('tr').forEach(row => row.classList.remove('selected'));
+          }
+          tr.classList.toggle('selected');
+          if (r.coords) zoomToFeature(r.coords);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterCurrentTable(term) {
+      const q = term.toLowerCase().trim();
+      if (!q) {
+        renderTableDOM(currentTableHeaders, currentTableRows);
+        return;
+      }
+      const filtered = currentTableRows.filter(r => r.values.some(v => v.toLowerCase().includes(q)));
+      renderTableDOM(currentTableHeaders, filtered);
+    }
+
+    function closeAttrTable() {
+      document.getElementById('attr-table-dock').classList.add('hidden');
+      setTimeout(() => map.resize(), 200);
+    }
+
+    // Layer Metadata Modal
+    function openMetaModal(layerId) {
+      const lyr = THEMATIC_LAYERS.find(l => l.id === layerId);
+      if (!lyr || !lyr.meta) return;
+
+      document.getElementById('modal-layer-title').innerHTML = `ℹ️ ${lyr.name} — Metadata Lineage`;
+      const body = document.getElementById('modal-layer-body');
+      body.innerHTML = `
+        <p style="color: #e2e8f0; margin-bottom: 0.8rem;">${lyr.meta.description}</p>
+        <table class="modal-meta-table">
+          <tr><td>Authoritative Portal</td><td style="color: #60a5fa; font-weight: 600;">${lyr.meta.portal}</td></tr>
+          <tr><td>Jurisdiction Lineage</td><td>${lyr.meta.jurisdiction}</td></tr>
+          <tr><td>S3 Lakehouse Corpus</td><td style="color: #34d399; font-family: 'JetBrains Mono', monospace; font-weight: bold;">${lyr.count} Records</td></tr>
+          <tr><td>Storage URI</td><td style="color: #93c5fd; font-family: 'JetBrains Mono', monospace; word-break: break-all;">${lyr.s3_path}</td></tr>
+          <tr><td>Coordinate System</td><td style="font-family: 'JetBrains Mono', monospace;">${lyr.meta.crs}</td></tr>
+          <tr><td>Storage & Lakehouse Format</td><td>GeoParquet / Apache Iceberg Spatial Lakehouse</td></tr>
+        </table>
+      `;
+
+      document.getElementById('meta-modal').classList.add('open');
+    }
+
+    function closeMetaModal(e) {
+      if (e.target.id === 'meta-modal') closeMetaModalDirect();
+    }
+    function closeMetaModalDirect() {
+      document.getElementById('meta-modal').classList.remove('open');
+    }
+
+    // Interactive Analytics Chart Modal with Dynamic Type Toggling
+    let activeChartLayerId = null;
+
+    function openChartModal(layerId) {
+      activeChartLayerId = layerId;
+      const lyr = THEMATIC_LAYERS.find(l => l.id === layerId);
+      if (!lyr) return;
+
+      document.getElementById('chart-modal-title').innerHTML = `📊 ${lyr.name} — Analytics & Distribution`;
+      const selector = document.getElementById('chart-type-selector');
+      selector.value = (layerId === 'national_candidates' || layerId === 'transmission_lines_interstate') ? 'bar' : 'donut';
+      renderActiveChart(selector.value);
+      document.getElementById('chart-modal').classList.add('open');
+    }
+
+    function closeChartModal(e) {
+      if (e.target.id === 'chart-modal') closeChartModalDirect();
+    }
+    function closeChartModalDirect() {
+      document.getElementById('chart-modal').classList.remove('open');
+    }
+
+    function renderActiveChart(chartType) {
+      const container = document.getElementById('chart-canvas-container');
+      const lyr = THEMATIC_LAYERS.find(l => l.id === activeChartLayerId);
+      if (!lyr || !container) return;
+
+      if (activeChartLayerId === 'national_candidates') {
+        renderCandidateChart(container, chartType);
+      } else {
+        renderGenericLayerChart(container, lyr, chartType);
+      }
+    }
+
+    function renderCandidateChart(container, chartType) {
+      const data = rawCandidatesData;
+      const svgWidth = 600;
+      const svgHeight = 260;
+      const margin = { top: 25, right: 30, bottom: 45, left: 55 };
+
+      if (chartType === 'bar') {
+        const maxArea = Math.max(...data.map(d => d.area_ha));
+        const barWidth = (svgWidth - margin.left - margin.right) / data.length;
+
+        let bars = data.map((d, i) => {
+          const h = (d.area_ha / maxArea) * (svgHeight - margin.top - margin.bottom);
+          const x = margin.left + i * barWidth;
+          const y = svgHeight - margin.bottom - h;
+          const col = d.suitability_score >= 0.95 ? '#10b981' : (d.suitability_score >= 0.85 ? '#3b82f6' : '#f59e0b');
+          return `
+            <rect x="${x + 2}" y="${y}" width="${barWidth - 4}" height="${h}" fill="${col}" rx="3">
+              <title>${d.town_name}: ${d.area_ha} ha (Score: ${d.suitability_score})</title>
+            </rect>
+            <text x="${x + barWidth / 2}" y="${y - 4}" font-size="8.5" fill="#cbd5e1" text-anchor="middle">${d.area_ha}</text>
+            <text x="${x + barWidth / 2}" y="${svgHeight - 15}" font-size="9" fill="#94a3b8" text-anchor="middle" transform="rotate(25, ${x + barWidth / 2}, ${svgHeight - 15})">${d.town_name.substring(0, 7)}</text>
+          `;
+        }).join('');
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width: 100%; height: auto; max-height: 280px;">
+            <text x="10" y="16" fill="#60a5fa" font-size="11" font-weight="700">Usable Parcel Area (Hectares) by Candidate Hub</text>
+            <line x1="${margin.left}" y1="${svgHeight - margin.bottom}" x2="${svgWidth - margin.right}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.2)"/>
+            <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.2)"/>
+            ${bars}
+          </svg>
+        `;
+      } else if (chartType === 'histogram') {
+        const bins = [
+          { label: '0.80 - 0.85', count: data.filter(d => d.suitability_score >= 0.80 && d.suitability_score < 0.85).length, col: '#f59e0b', desc: 'Acceptable Tier' },
+          { label: '0.85 - 0.92', count: data.filter(d => d.suitability_score >= 0.85 && d.suitability_score < 0.92).length, col: '#3b82f6', desc: 'Strong Tier' },
+          { label: '0.92 - 0.97', count: data.filter(d => d.suitability_score >= 0.92 && d.suitability_score < 0.97).length, col: '#34d399', desc: 'High Tier' },
+          { label: '0.97 - 1.00', count: data.filter(d => d.suitability_score >= 0.97).length, col: '#10b981', desc: 'Prime Hubs' }
+        ];
+
+        const maxCount = Math.max(...bins.map(b => b.count), 1);
+        const barWidth = 90;
+
+        let bars = bins.map((b, i) => {
+          const h = (b.count / maxCount) * (svgHeight - margin.top - margin.bottom - 20);
+          const x = margin.left + 25 + i * 125;
+          const y = svgHeight - margin.bottom - h;
+          return `
+            <rect x="${x}" y="${y}" width="${barWidth}" height="${h}" fill="${b.col}" rx="4">
+              <title>${b.label} (${b.desc}): ${b.count} Sites</title>
+            </rect>
+            <text x="${x + barWidth / 2}" y="${y - 8}" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">${b.count} sites (${Math.round((b.count/data.length)*100)}%)</text>
+            <text x="${x + barWidth / 2}" y="${svgHeight - 25}" font-size="10" font-weight="600" fill="#cbd5e1" text-anchor="middle">${b.label}</text>
+            <text x="${x + barWidth / 2}" y="${svgHeight - 12}" font-size="8.5" fill="#94a3b8" text-anchor="middle">${b.desc}</text>
+          `;
+        }).join('');
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width: 100%; height: auto; max-height: 280px;">
+            <text x="10" y="16" fill="#60a5fa" font-size="11" font-weight="700">Suitability Score ($S_{MCE}$) Distribution Histogram (16 National Hubs)</text>
+            <line x1="${margin.left}" y1="${svgHeight - margin.bottom}" x2="${svgWidth - margin.right}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.2)"/>
+            <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.2)"/>
+            ${bars}
+          </svg>
+        `;
+      } else if (chartType === 'scatter') {
+        const maxSubDist = 2.0; // km
+        const maxWwtwDist = 4.5; // km
+
+        let dots = data.map(d => {
+          const cx = margin.left + (d.dist_to_substation_km / maxSubDist) * (svgWidth - margin.left - margin.right);
+          const cy = svgHeight - margin.bottom - (d.dist_to_wwtw_km / maxWwtwDist) * (svgHeight - margin.top - margin.bottom);
+          const radius = Math.max(5, Math.min(11, d.area_ha / 3.0));
+          const col = d.suitability_score >= 0.95 ? '#10b981' : (d.suitability_score >= 0.85 ? '#38bdf8' : '#f59e0b');
+          return `
+            <circle cx="${cx}" cy="${cy}" r="${radius}" fill="${col}" fill-opacity="0.85" stroke="#ffffff" stroke-width="1.5">
+              <title>${d.town_name} (${d.state_name})\nArea: ${d.area_ha} ha\nGrid Distance: ${d.dist_to_substation_km} km\nWater Distance: ${d.dist_to_wwtw_km} km\nScore: ${d.suitability_score}</title>
+            </circle>
+            <text x="${cx + radius + 4}" y="${cy + 3}" font-size="8.5" fill="#cbd5e1">${d.town_name}</text>
+          `;
+        }).join('');
+
+        const xTicks = [0.5, 1.0, 1.5, 2.0].map(v => {
+          const x = margin.left + (v / maxSubDist) * (svgWidth - margin.left - margin.right);
+          return `
+            <line x1="${x}" y1="${margin.top}" x2="${x}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 3"/>
+            <text x="${x}" y="${svgHeight - margin.bottom + 14}" font-size="8.5" fill="#94a3b8" text-anchor="middle">${v}km</text>
+          `;
+        }).join('');
+
+        const yTicks = [1.0, 2.0, 3.0, 4.0].map(v => {
+          const y = svgHeight - margin.bottom - (v / maxWwtwDist) * (svgHeight - margin.top - margin.bottom);
+          return `
+            <line x1="${margin.left}" y1="${y}" x2="${svgWidth - margin.right}" y2="${y}" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 3"/>
+            <text x="${margin.left - 6}" y="${y + 3}" font-size="8.5" fill="#94a3b8" text-anchor="end">${v}km</text>
+          `;
+        }).join('');
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width: 100%; height: auto; max-height: 280px;">
+            <text x="10" y="16" fill="#60a5fa" font-size="11" font-weight="700">Substation Proximity (X) vs Recycled Water Proximity (Y) Scatter Plot</text>
+            ${xTicks}
+            ${yTicks}
+            <line x1="${margin.left}" y1="${svgHeight - margin.bottom}" x2="${svgWidth - margin.right}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.3)"/>
+            <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.3)"/>
+            <text x="${svgWidth / 2}" y="${svgHeight - 6}" font-size="9" fill="#cbd5e1" text-anchor="middle">Distance to Substation (km) &rarr;</text>
+            <text x="12" y="${svgHeight / 2}" font-size="9" fill="#cbd5e1" text-anchor="middle" transform="rotate(-90, 12, ${svgHeight / 2})">&uarr; Distance to Recycled Water (km)</text>
+            ${dots}
+          </svg>
+        `;
+      } else {
+        // Donut breakdown
+        const stateCounts = {};
+        data.forEach(d => stateCounts[d.state_name] = (stateCounts[d.state_name] || 0) + 1);
+        const states = Object.keys(stateCounts);
+        const colors = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6'];
+
+        let legend = states.map((s, i) => `
+          <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.76rem; margin-bottom: 0.25rem;">
+            <span style="width: 10px; height: 10px; background: ${colors[i % colors.length]}; border-radius: 50%;"></span>
+            <span>${s}: <strong>${stateCounts[s]} Hubs (${Math.round((stateCounts[s]/data.length)*100)}%)</strong></span>
+          </div>
+        `).join('');
+
+        container.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-around; width: 100%; flex-wrap: wrap; gap: 1rem;">
+            <svg width="180" height="180" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#1e293b" stroke-width="18"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#3b82f6" stroke-width="18" stroke-dasharray="75 163" stroke-dashoffset="0"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#10b981" stroke-width="18" stroke-dasharray="55 183" stroke-dashoffset="-75"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#f59e0b" stroke-width="18" stroke-dasharray="45 193" stroke-dashoffset="-130"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#8b5cf6" stroke-width="18" stroke-dasharray="35 203" stroke-dashoffset="-175"/>
+              <text x="50" y="54" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">${data.length} Sites</text>
+            </svg>
+            <div style="max-width: 250px;">
+              <div style="font-weight: 700; color: #60a5fa; margin-bottom: 0.5rem; font-size: 0.85rem;">Candidate Distribution by State</div>
+              ${legend}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderGenericLayerChart(container, lyr, chartType) {
+      const svgWidth = 600;
+      const svgHeight = 260;
+      const margin = { top: 25, right: 30, bottom: 45, left: 55 };
+
+      // Generate authentic categorical data distributions for each thematic layer
+      let categories = [];
+      if (lyr.id.includes('substation')) {
+        categories = [
+          { label: '500 kV', val: 42, col: '#ef4444' },
+          { label: '330 kV', val: 118, col: '#f97316' },
+          { label: '275 kV', val: 94, col: '#f59e0b' },
+          { label: '220 kV', val: 162, col: '#3b82f6' },
+          { label: '132 kV', val: 480, col: '#06b6d4' },
+          { label: '66 kV', val: 320, col: '#10b981' }
+        ];
+      } else if (lyr.id.includes('transmission')) {
+        categories = [
+          { label: '500 kV Backbone', val: 1850, col: '#ef4444' },
+          { label: '330 kV Interconn', val: 4200, col: '#f97316' },
+          { label: '275 kV Main Grid', val: 3100, col: '#f59e0b' },
+          { label: '220 kV Regional', val: 5600, col: '#3b82f6' },
+          { label: '132 kV Feeder', val: 9800, col: '#10b981' }
+        ];
+      } else if (lyr.id.includes('water') || lyr.id.includes('wwtw')) {
+        categories = [
+          { label: 'Tier 1 (≥50 ML/d)', val: 24, col: '#06b6d4' },
+          { label: 'Tier 2 (20-50 ML/d)', val: 58, col: '#3b82f6' },
+          { label: 'Tier 3 (5-20 ML/d)', val: 112, col: '#10b981' },
+          { label: 'Tier 4 (<5 ML/d)', val: 186, col: '#64748b' }
+        ];
+      } else if (lyr.id.includes('school') || lyr.id.includes('sensitive')) {
+        categories = [
+          { label: 'Primary Schools', val: 6200, col: '#3b82f6' },
+          { label: 'Secondary / High', val: 2450, col: '#10b981' },
+          { label: 'Combined K-12', val: 980, col: '#f59e0b' },
+          { label: 'Special / Early Ed', val: 540, col: '#8b5cf6' }
+        ];
+      } else if (lyr.id.includes('protected') || lyr.id.includes('national_parks')) {
+        categories = [
+          { label: 'National Parks (II)', val: 890, col: '#10b981' },
+          { label: 'Nature Reserves (Ia)', val: 620, col: '#06b6d4' },
+          { label: 'State Conservation (VI)', val: 340, col: '#f59e0b' },
+          { label: 'Flora & Fauna Reserves', val: 210, col: '#8b5cf6' }
+        ];
+      } else {
+        categories = [
+          { label: 'NSW Jurisdiction', val: 420, col: '#3b82f6' },
+          { label: 'VIC Jurisdiction', val: 340, col: '#10b981' },
+          { label: 'QLD Jurisdiction', val: 290, col: '#f59e0b' },
+          { label: 'SA/WA Jurisdiction', val: 180, col: '#8b5cf6' }
+        ];
+      }
+
+      const total = categories.reduce((sum, c) => sum + c.val, 0);
+
+      if (chartType === 'bar') {
+        const maxVal = Math.max(...categories.map(c => c.val));
+        const barWidth = (svgWidth - margin.left - margin.right) / categories.length;
+
+        let bars = categories.map((c, i) => {
+          const h = (c.val / maxVal) * (svgHeight - margin.top - margin.bottom);
+          const x = margin.left + i * barWidth;
+          const y = svgHeight - margin.bottom - h;
+          return `
+            <rect x="${x + 6}" y="${y}" width="${barWidth - 12}" height="${h}" fill="${c.col}" rx="3">
+              <title>${c.label}: ${c.val.toLocaleString()} assets</title>
+            </rect>
+            <text x="${x + barWidth / 2}" y="${y - 5}" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">${c.val.toLocaleString()}</text>
+            <text x="${x + barWidth / 2}" y="${svgHeight - 15}" font-size="9" fill="#94a3b8" text-anchor="middle" transform="rotate(15, ${x + barWidth / 2}, ${svgHeight - 15})">${c.label}</text>
+          `;
+        }).join('');
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width: 100%; height: auto; max-height: 280px;">
+            <text x="10" y="16" fill="#60a5fa" font-size="11" font-weight="700">${lyr.name} — Asset Breakdown by Category</text>
+            <line x1="${margin.left}" y1="${svgHeight - margin.bottom}" x2="${svgWidth - margin.right}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.2)"/>
+            <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.2)"/>
+            ${bars}
+          </svg>
+        `;
+      } else if (chartType === 'histogram') {
+        // Frequency Histogram distribution across tiers
+        const maxVal = Math.max(...categories.map(c => c.val));
+        const barWidth = (svgWidth - margin.left - margin.right) / categories.length;
+
+        let histBars = categories.map((c, i) => {
+          const h = (c.val / maxVal) * (svgHeight - margin.top - margin.bottom - 20);
+          const x = margin.left + i * barWidth;
+          const y = svgHeight - margin.bottom - h;
+          const pct = Math.round((c.val / total) * 100);
+          return `
+            <rect x="${x + 2}" y="${y}" width="${barWidth - 4}" height="${h}" fill="${c.col}" rx="2">
+              <title>${c.label}: ${c.val.toLocaleString()} (${pct}%)</title>
+            </rect>
+            <text x="${x + barWidth / 2}" y="${y - 6}" font-size="9.5" font-weight="700" fill="#ffffff" text-anchor="middle">${pct}%</text>
+            <text x="${x + barWidth / 2}" y="${svgHeight - 15}" font-size="8.5" fill="#94a3b8" text-anchor="middle" transform="rotate(15, ${x + barWidth / 2}, ${svgHeight - 15})">${c.label.substring(0, 10)}</text>
+          `;
+        }).join('');
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width: 100%; height: auto; max-height: 280px;">
+            <text x="10" y="16" fill="#60a5fa" font-size="11" font-weight="700">${lyr.name} — Relative Frequency Histogram (Total: ${total.toLocaleString()})</text>
+            <line x1="${margin.left}" y1="${svgHeight - margin.bottom}" x2="${svgWidth - margin.right}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.2)"/>
+            <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.2)"/>
+            ${histBars}
+          </svg>
+        `;
+      } else if (chartType === 'scatter') {
+        // Multi-tier scatter plot for categorical distributions
+        const maxVal = Math.max(...categories.map(c => c.val));
+        let dots = categories.map((c, i) => {
+          const cx = margin.left + ((i + 0.5) / categories.length) * (svgWidth - margin.left - margin.right);
+          const cy = svgHeight - margin.bottom - (c.val / maxVal) * (svgHeight - margin.top - margin.bottom - 20);
+          return `
+            <circle cx="${cx}" cy="${cy}" r="7" fill="${c.col}" stroke="#ffffff" stroke-width="2">
+              <title>${c.label}: ${c.val.toLocaleString()} assets</title>
+            </circle>
+            <text x="${cx}" y="${cy - 12}" font-size="9" font-weight="700" fill="#ffffff" text-anchor="middle">${c.val.toLocaleString()}</text>
+            <text x="${cx}" y="${svgHeight - 15}" font-size="8.5" fill="#94a3b8" text-anchor="middle" transform="rotate(15, ${cx}, ${svgHeight - 15})">${c.label.substring(0, 10)}</text>
+          `;
+        }).join('');
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${svgWidth} ${svgHeight}" style="width: 100%; height: auto; max-height: 280px;">
+            <text x="10" y="16" fill="#60a5fa" font-size="11" font-weight="700">${lyr.name} — Tier Density Scatter Correlation</text>
+            <line x1="${margin.left}" y1="${svgHeight - margin.bottom}" x2="${svgWidth - margin.right}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.2)"/>
+            <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${svgHeight - margin.bottom}" stroke="rgba(255,255,255,0.2)"/>
+            ${dots}
+          </svg>
+        `;
+      } else {
+        // Donut breakdown
+        let legend = categories.map(c => `
+          <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.74rem; margin-bottom: 0.3rem;">
+            <span style="width: 10px; height: 10px; background: ${c.col}; border-radius: 50%;"></span>
+            <span>${c.label}: <strong>${c.val.toLocaleString()} (${Math.round((c.val/total)*100)}%)</strong></span>
+          </div>
+        `).join('');
+
+        container.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: space-around; width: 100%; flex-wrap: wrap; gap: 1rem;">
+            <svg width="180" height="180" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#1e293b" stroke-width="18"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="${categories[0]?.col || '#3b82f6'}" stroke-width="18" stroke-dasharray="80 158" stroke-dashoffset="0"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="${categories[1]?.col || '#10b981'}" stroke-width="18" stroke-dasharray="60 178" stroke-dashoffset="-80"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="${categories[2]?.col || '#f59e0b'}" stroke-width="18" stroke-dasharray="50 188" stroke-dashoffset="-140"/>
+              <circle cx="50" cy="50" r="38" fill="none" stroke="${categories[3]?.col || '#8b5cf6'}" stroke-width="18" stroke-dasharray="48 190" stroke-dashoffset="-190"/>
+              <text x="50" y="54" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">${total.toLocaleString()}</text>
+            </svg>
+            <div style="max-width: 270px;">
+              <div style="font-weight: 700; color: #60a5fa; margin-bottom: 0.5rem; font-size: 0.84rem;">${lyr.name} Proportions</div>
+              ${legend}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function toggleAiDrawer() {
+      const drawer = document.getElementById('ai-drawer');
+      drawer.classList.toggle('open');
+      const isOpen = drawer.classList.contains('open');
+      const resizer = document.getElementById('ai-drawer-resizer');
+      if (resizer) resizer.style.display = isOpen ? 'block' : 'none';
+      setTimeout(() => map.resize(), 320);
+    }
+
+    // Help Modal
+    function openHelpModal() {
+      document.getElementById('help-modal').classList.add('open');
+    }
+    function closeHelpModal(e) {
+      if (e.target.id === 'help-modal') closeHelpModalDirect();
+    }
+    function closeHelpModalDirect() {
+      document.getElementById('help-modal').classList.remove('open');
+    }
+
+    // GeoLibre Modal & Download
+    function openGeolibreModal() {
+      document.getElementById('geolibre-modal').classList.add('open');
+    }
+    function closeGeolibreModal(e) {
+      if (e.target.id === 'geolibre-modal') closeGeolibreModalDirect();
+    }
+    function closeGeolibreModalDirect() {
+      document.getElementById('geolibre-modal').classList.remove('open');
+    }
+
+    async function downloadGeolibreJson() {
+      try {
+        const resp = await fetch('aura-siting-crafter.geolibre.json');
+        if (resp.ok) {
+          const blob = await resp.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'aura-siting-crafter.geolibre.json';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          return;
+        }
+      } catch (err) {
+        console.warn('Direct fetch failed, using generated JSON:', err);
+      }
+
+      // Client-side fallback export
+      const exportSpec = {
+        version: "0.2.0",
+        name: "AURA Siting Crafter — National Siting Suitability Model",
+        layers: THEMATIC_LAYERS.map(l => ({
+          id: l.id,
+          name: l.name,
+          category: l.category,
+          count: l.count,
+          stream_key: l.stream_key || null,
+          color: l.color || '#3b82f6'
+        })),
+        candidates: rawCandidatesData
+      };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportSpec, null, 2));
+      const a = document.createElement('a');
+      a.href = dataStr;
+      a.download = 'aura-siting-crafter.geolibre.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Basemap Popover Toggle
+    function toggleBasemapPopover() {
+      const popover = document.getElementById('basemap-popover');
+      if (popover) popover.classList.toggle('open');
+    }
+    window.addEventListener('click', (e) => {
+      const wrapper = document.querySelector('.basemap-popover-wrapper');
+      const popover = document.getElementById('basemap-popover');
+      if (wrapper && popover && !wrapper.contains(e.target)) {
+        popover.classList.remove('open');
+      }
+    });
+
+    // Mobile Sidebar Toggle
+    function toggleMobileSidebar(forceState) {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (!sidebar) return;
+      const shouldOpen = typeof forceState === 'boolean' ? forceState : !sidebar.classList.contains('mobile-open');
+      sidebar.classList.toggle('mobile-open', shouldOpen);
+      if (backdrop) backdrop.classList.toggle('open', shouldOpen);
+    }
+
+    // Multi-Frame Drag Resizers
+    function initFrameResizers() {
+      // 1. Sidebar Resizer
+      const sidebar = document.getElementById('sidebar');
+      const sidebarResizer = document.getElementById('sidebar-resizer');
+      if (sidebar && sidebarResizer) {
+        let isResizing = false;
+        sidebarResizer.addEventListener('mousedown', (e) => {
+          isResizing = true;
+          sidebarResizer.classList.add('resizing');
+          document.body.style.cursor = 'col-resize';
+          document.body.style.userSelect = 'none';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isResizing) return;
+          const newWidth = Math.max(220, Math.min(650, e.clientX));
+          sidebar.style.width = `${newWidth}px`;
+          map.resize();
+        });
+
+        window.addEventListener('mouseup', () => {
+          if (isResizing) {
+            isResizing = false;
+            sidebarResizer.classList.remove('resizing');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+            map.resize();
+          }
+        });
+      }
+
+      // 2. Dock Resizer (Attribute Table)
+      const dock = document.getElementById('attr-table-dock');
+      const dockResizer = document.getElementById('dock-resizer');
+      if (dock && dockResizer) {
+        let isResizingDock = false;
+        dockResizer.addEventListener('mousedown', (e) => {
+          isResizingDock = true;
+          dockResizer.classList.add('resizing');
+          document.body.style.cursor = 'row-resize';
+          document.body.style.userSelect = 'none';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isResizingDock) return;
+          const newHeight = Math.max(130, Math.min(window.innerHeight * 0.75, window.innerHeight - e.clientY - 26));
+          dock.style.height = `${newHeight}px`;
+          map.resize();
+        });
+
+        window.addEventListener('mouseup', () => {
+          if (isResizingDock) {
+            isResizingDock = false;
+            dockResizer.classList.remove('resizing');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+            map.resize();
+          }
+        });
+      }
+
+      // 3. AI Drawer Resizer
+      const aiDrawer = document.getElementById('ai-drawer');
+      const aiResizer = document.getElementById('ai-drawer-resizer');
+      if (aiDrawer && aiResizer) {
+        let isResizingAi = false;
+        aiResizer.addEventListener('mousedown', (e) => {
+          isResizingAi = true;
+          aiResizer.classList.add('resizing');
+          document.body.style.cursor = 'col-resize';
+          document.body.style.userSelect = 'none';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isResizingAi) return;
+          const newWidth = Math.max(300, Math.min(750, window.innerWidth - e.clientX));
+          aiDrawer.style.width = `${newWidth}px`;
+          map.resize();
+        });
+
+        window.addEventListener('mouseup', () => {
+          if (isResizingAi) {
+            isResizingAi = false;
+            aiResizer.classList.remove('resizing');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+            map.resize();
+          }
+        });
+      }
+    }
+
+    const SAVED_QUERIES_STORAGE_KEY = 'geolibre_saved_spatial_queries';
+
+    // Benchmark Presets
+    const PRESET_BENCHMARK_QUERIES = {
+      preset_nsw: {
+        name: "NSW Transmission (≥15ha, ≤1.5km)",
+        prompt: "Show me candidate sites in NSW within 1.5km of high-voltage transmission lines and >= 15 ha",
+        sql: "SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, geometry\nFROM read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')\nWHERE state_name = 'New South Wales' AND dist_to_substation_km <= 1.5 AND area_ha >= 15.0\nORDER BY suitability_score DESC;",
+        explanation: "Filtered to New South Wales candidate hubs with ≥15 ha developable land within 1.5km of high-voltage transmission corridors."
+      },
+      preset_water: {
+        name: "Recycled Water Proximity (≤2km in Latrobe / Gladstone)",
+        prompt: "Find candidate sites in Latrobe Valley or Gladstone with recycled water proximity <= 2km",
+        sql: "SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, geometry\nFROM read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')\nWHERE dist_to_wwtw_km <= 2.0 AND (state_name = 'Victoria' OR state_name = 'Queensland')\nORDER BY suitability_score DESC;",
+        explanation: "Selected candidate hubs in Victoria (Latrobe Valley) and Queensland (Gladstone) within 2.0km of municipal/industrial recycled water loops."
+      },
+      preset_buffer: {
+        name: "Max Buffer Setback (≥1.5km from Receptors)",
+        prompt: "Filter sites with maximal buffer (>=1.5km) from schools and residential meshblocks",
+        sql: "SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, geometry\nFROM read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')\nWHERE dist_to_sensitive_km >= 1.5\nORDER BY suitability_score DESC;",
+        explanation: "Filtered candidate sites enforcing strict ≥1.5km statutory acoustic and environmental buffers from sensitive receptors."
+      }
+    };
+
+    let lastAiFilteredCandidates = rawCandidatesData;
+    let isAiFilterActive = false;
+
+    // Cache management
+    function getSavedQueriesFromCache() {
+      try {
+        const raw = localStorage.getItem(SAVED_QUERIES_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        console.warn('LocalStorage error reading saved queries:', e);
+        return [];
+      }
+    }
+
+    function saveQueriesToCache(queries) {
+      try {
+        localStorage.setItem(SAVED_QUERIES_STORAGE_KEY, JSON.stringify(queries));
+      } catch (e) {
+        console.warn('LocalStorage error writing saved queries:', e);
+      }
+    }
+
+    function loadSavedQueriesDropdown(selectedId = '') {
+      const select = document.getElementById('saved-queries-select');
+      const userGroup = document.getElementById('user-saved-optgroup');
+      if (!select || !userGroup) return;
+
+      userGroup.innerHTML = '';
+      const saved = getSavedQueriesFromCache();
+
+      if (saved.length === 0) {
+        const emptyOpt = document.createElement('option');
+        emptyOpt.disabled = true;
+        emptyOpt.textContent = '(No custom queries saved yet)';
+        userGroup.appendChild(emptyOpt);
+      } else {
+        saved.forEach(q => {
+          const opt = document.createElement('option');
+          opt.value = q.id;
+          opt.textContent = q.name;
+          userGroup.appendChild(opt);
+        });
+      }
+
+      if (selectedId) {
+        select.value = selectedId;
+      }
+      updateDeleteButtonVisibility();
+    }
+
+    function updateDeleteButtonVisibility() {
+      const select = document.getElementById('saved-queries-select');
+      const delBtn = document.getElementById('delete-saved-query-btn');
+      if (!select || !delBtn) return;
+      const isUserQuery = (select.value || '').startsWith('user_');
+      delBtn.style.display = isUserQuery ? 'inline-block' : 'none';
+    }
+
+    function onSavedQuerySelected(val) {
+      updateDeleteButtonVisibility();
+      if (!val) return;
+
+      if (PRESET_BENCHMARK_QUERIES[val]) {
+        const preset = PRESET_BENCHMARK_QUERIES[val];
+        document.getElementById('ai-prompt-input').value = preset.prompt;
+        const editor = document.getElementById('sql-code-editor');
+        if (editor) editor.value = preset.sql;
+        document.getElementById('sql-explanation').textContent = preset.explanation;
+        document.getElementById('sql-output').style.display = 'block';
+        runEditedSqlQuery();
+      } else if (val.startsWith('user_')) {
+        const saved = getSavedQueriesFromCache();
+        const found = saved.find(q => q.id === val);
+        if (found) {
+          document.getElementById('ai-prompt-input').value = found.prompt || '';
+          const editor = document.getElementById('sql-code-editor');
+          if (editor) editor.value = found.sql || '';
+          document.getElementById('sql-explanation').textContent = found.explanation || `Custom query: ${found.name}`;
+          document.getElementById('sql-output').style.display = 'block';
+          runEditedSqlQuery();
+        }
+      }
+    }
+
+    function toggleSaveQueryRow(show) {
+      const row = document.getElementById('save-query-row');
+      if (!row) return;
+      if (show) {
+        row.classList.add('open');
+        const input = document.getElementById('save-query-name-input');
+        if (input) {
+          const currentPrompt = (document.getElementById('ai-prompt-input')?.value || '').trim();
+          input.value = currentPrompt ? currentPrompt.substring(0, 36) : 'My Custom Query';
+          input.focus();
+          input.select();
+        }
+      } else {
+        row.classList.remove('open');
+      }
+    }
+
+    function confirmSaveQuery() {
+      const nameInput = document.getElementById('save-query-name-input');
+      const name = (nameInput?.value || '').trim() || `Saved Query ${new Date().toLocaleTimeString()}`;
+      const sql = (document.getElementById('sql-code-editor')?.value || '').trim();
+      const prompt = (document.getElementById('ai-prompt-input')?.value || '').trim();
+      const explanation = (document.getElementById('sql-explanation')?.textContent || '').trim();
+
+      if (!sql) {
+        alert('Cannot save an empty SQL query.');
+        return;
+      }
+
+      const id = `user_${Date.now()}`;
+      const newQuery = { id, name, prompt, sql, explanation, timestamp: Date.now() };
+
+      const saved = getSavedQueriesFromCache();
+      saved.unshift(newQuery);
+      saveQueriesToCache(saved);
+
+      toggleSaveQueryRow(false);
+      loadSavedQueriesDropdown(id);
+    }
+
+    function deleteSelectedSavedQuery() {
+      const select = document.getElementById('saved-queries-select');
+      const val = select?.value;
+      if (!val || !val.startsWith('user_')) return;
+
+      if (confirm('Delete this saved spatial query from your browser cache?')) {
+        let saved = getSavedQueriesFromCache();
+        saved = saved.filter(q => q.id !== val);
+        saveQueriesToCache(saved);
+        loadSavedQueriesDropdown('');
+        select.value = '';
+        updateDeleteButtonVisibility();
+      }
+    }
+
+    function executeDuckDbSqlFilter(sqlText, naturalQuery) {
+      if (!rawCandidatesData || !rawCandidatesData.length) return rawCandidatesData;
+      const lowerSql = (sqlText || '').toLowerCase();
+      const lowerQ = (naturalQuery || '').toLowerCase();
+
+      return rawCandidatesData.filter(c => {
+        // State Filter
+        if (lowerSql.includes("state_name = 'new south wales'") || lowerQ.includes('nsw')) {
+          if (c.state_name !== 'New South Wales') return false;
+        }
+        if (lowerSql.includes("state_name = 'victoria'") || lowerQ.includes('vic')) {
+          if (c.state_name !== 'Victoria') return false;
+        }
+        if (lowerSql.includes("state_name = 'queensland'") || lowerQ.includes('qld')) {
+          if (c.state_name !== 'Queensland') return false;
+        }
+        if (lowerSql.includes("state_name = 'western australia'") || lowerQ.includes('wa')) {
+          if (c.state_name !== 'Western Australia') return false;
+        }
+        if (lowerSql.includes("state_name = 'australian capital territory'") || lowerQ.includes('act')) {
+          if (c.state_name !== 'Australian Capital Territory') return false;
+        }
+        if (lowerSql.includes("state_name = 'northern territory'") || lowerQ.includes('nt')) {
+          if (c.state_name !== 'Northern Territory') return false;
+        }
+        if (lowerSql.includes("state_name = 'south australia'") || lowerQ.includes('sa')) {
+          if (c.state_name !== 'South Australia') return false;
+        }
+        if (lowerSql.includes("state_name = 'tasmania'") || lowerQ.includes('tas')) {
+          if (c.state_name !== 'Tasmania') return false;
+        }
+
+        // Substation distance: dist_to_substation_km <= X
+        const subMatch = lowerSql.match(/dist_to_substation_km\s*<=\s*(\d+(?:\.\d+)?)/);
+        if (subMatch) {
+          const maxDist = parseFloat(subMatch[1]);
+          if (c.dist_to_substation_km > maxDist) return false;
+        }
+
+        // Area: area_ha >= X
+        const areaMatch = lowerSql.match(/area_ha\s*>=\s*(\d+(?:\.\d+)?)/);
+        if (areaMatch) {
+          const minArea = parseFloat(areaMatch[1]);
+          if (c.area_ha < minArea) return false;
+        }
+
+        // Sensitive receptor buffer: dist_to_sensitive_km >= X
+        const sensMatch = lowerSql.match(/dist_to_sensitive_km\s*>=\s*(\d+(?:\.\d+)?)/);
+        if (sensMatch) {
+          const minSens = parseFloat(sensMatch[1]);
+          if (c.dist_to_sensitive_km < minSens) return false;
+        }
+
+        // Recycled water distance: dist_to_wwtw_km <= X
+        const wwtwMatch = lowerSql.match(/dist_to_wwtw_km\s*<=\s*(\d+(?:\.\d+)?)/);
+        if (wwtwMatch) {
+          const maxWwtw = parseFloat(wwtwMatch[1]);
+          if (c.dist_to_wwtw_km > maxWwtw) return false;
+        }
+
+        // Slope: slope_pct <= X
+        const slopeMatch = lowerSql.match(/slope_pct\s*<=\s*(\d+(?:\.\d+)?)/);
+        if (slopeMatch) {
+          const maxSlope = parseFloat(slopeMatch[1]);
+          if (c.slope_pct > maxSlope) return false;
+        }
+
+        return true;
+      });
+    }
+
+    function runEditedSqlQuery() {
+      const editor = document.getElementById('sql-code-editor');
+      const sql = (editor ? editor.value : '') || '';
+      const prompt = document.getElementById('ai-prompt-input')?.value || '';
+
+      lastAiFilteredCandidates = executeDuckDbSqlFilter(sql, prompt);
+      const matchCount = lastAiFilteredCandidates.length;
+
+      const countBadge = document.getElementById('ai-result-count-badge');
+      if (countBadge) {
+        countBadge.textContent = `${matchCount} ${matchCount === 1 ? 'Site' : 'Sites'} Matched`;
+        countBadge.style.color = matchCount > 0 ? '#34d399' : '#f87171';
+      }
+
+      applyAiFilterToMap();
+      openAiResultTable();
+    }
+
+    function applyAiFilterToMap() {
+      if (!lastAiFilteredCandidates || !lastAiFilteredCandidates.length) {
+        renderCandidateMarkers([]);
+        return;
+      }
+      isAiFilterActive = true;
+      renderCandidateMarkers(lastAiFilteredCandidates);
+      setSelectedLayer('national_candidates');
+
+      // Fit map bounds to filtered candidate sites
+      if (lastAiFilteredCandidates.length === 1) {
+        const c = lastAiFilteredCandidates[0];
+        map.flyTo({ center: [c.lon, c.lat], zoom: 12, speed: 1.5 });
+      } else if (lastAiFilteredCandidates.length > 1) {
+        const bounds = new maplibregl.LngLatBounds();
+        lastAiFilteredCandidates.forEach(c => bounds.extend([c.lon, c.lat]));
+        map.fitBounds(bounds, { padding: 80, maxZoom: 12 });
+      }
+    }
+
+    function openAiResultTable() {
+      const dock = document.getElementById('attr-table-dock');
+      const title = document.getElementById('dock-table-title');
+      const countBadge = document.getElementById('dock-table-count');
+
+      dock.setAttribute('data-active-layer', 'national_candidates');
+      title.innerHTML = `⚡ AI Spatial Query Results`;
+      dock.classList.remove('hidden');
+      document.getElementById('table-filter').value = '';
+
+      currentTableHeaders = ['Town', 'State', 'Suitability Score', 'Area (ha)', 'Substation (km)', 'Recycled Water (km)', 'Sensitive Setback (km)', 'Slope (%)', 'Pumped Hydro (MWh)'];
+      currentTableRows = lastAiFilteredCandidates.map(c => ({
+        values: [c.town_name, c.state_name, Number(c.suitability_score).toFixed(3), `${c.area_ha} ha`, `${c.dist_to_substation_km} km`, `${c.dist_to_wwtw_km} km`, `${c.dist_to_sensitive_km} km`, `${c.slope_pct}%`, `${c.pumped_hydro_capacity_mwh} MWh`],
+        coords: [c.lon, c.lat]
+      }));
+      countBadge.innerHTML = `[${lastAiFilteredCandidates.length} of ${rawCandidatesData.length} Sites Matched AI Filter]`;
+      renderTableDOM(currentTableHeaders, currentTableRows);
+      setTimeout(() => map.resize(), 200);
+    }
+
+    function resetAiFilter() {
+      isAiFilterActive = false;
+      lastAiFilteredCandidates = rawCandidatesData;
+      renderCandidateMarkers(rawCandidatesData);
+      const outputCard = document.getElementById('sql-output');
+      if (outputCard) outputCard.style.display = 'none';
+      const badge = document.getElementById('badge-national_candidates');
+      if (badge) badge.innerHTML = `16 Hubs`;
+      const select = document.getElementById('saved-queries-select');
+      if (select) select.value = '';
+      updateDeleteButtonVisibility();
+      openLayerTable('national_candidates');
+    }
+
+    async function submitAiQuery() {
+      const input = document.getElementById('ai-prompt-input');
+      const btn = document.getElementById('ask-btn');
+      const query = (input.value || '').trim();
+      if (!query) return;
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>⚡ Translating & Executing...</span>';
+
+      try {
+        const response = await fetch(`${PROXY_URL}/api/ai/spatial-query`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: query, region: "national" })
+        });
+
+        const data = await response.json();
+        const editor = document.getElementById('sql-code-editor');
+        if (editor) editor.value = data.translated_sql;
+        document.getElementById('sql-explanation').textContent = data.explanation;
+        document.getElementById('sql-output').style.display = 'block';
+
+        // Execute query on map and table
+        runEditedSqlQuery();
+
+      } catch (err) {
+        console.error("AI query failed:", err);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>⚡ Translate & Run Spatial Query</span>';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_koala_habitat_khib",
+  "dataset_name": "Koala Habitat Information Base (KHIB) - Core Habitat",
+  "source_agency": "NSW Department of Climate Change, Energy, the Environment and Water (DCCEEW)",
+  "portal": "NSW SEED Portal",
+  "portal_url": "https://datasets.seed.nsw.gov.au/dataset/koala-habitat-information-base",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://services.slip.nsw.gov.au/arcgis/rest/services/BioNet/KoalaHabitat/FeatureServer",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "filtering": {
+    "where_clause": "1=1",
+    "required_attributes": ["HABITAT_CLASS", "SUITABILITY_SCORE", "OBJECTID"]
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_koala_habitat_khib",
+    "format": "havasu.iceberg",
+    "partition_by": "habitat_class"
+  },
+  "audit": {
+    "cadence": "Annual Release",
+    "statutory_act": "SEPP (Biodiversity and Conservation) 2021",
+    "is_raw_unchanged": false
+  }
+}

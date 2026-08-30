@@ -972,94 +972,95 @@
     <!-- Tab 3: Strategic Personas ("I am a...") -->
     <div id="strategic-personas" class="tab-content" style="max-height: 480px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6; padding: 0.5rem 0.75rem;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-        <div>
-          <h3 style="color: #c084fc; margin: 0 0 0.25rem;">Strategic Stakeholder Personas & Policy Presets</h3>
-          <p style="color: var(--text-secondary); margin: 0; font-size: 0.88rem;">
-            AuraSiting Crafter decouples spatial geometry calculation from stakeholder-specific policy weights. Selecting a persona in the top dropdown or clicking below instantly reconfigures the real-time simulation engine:
-          </p>
-        </div>
+  <div>
+    <h3 style="color: #c084fc; margin: 0 0 0.25rem;">Strategic Stakeholder Personas & Policy Presets</h3>
+    <p style="color: var(--text-secondary); margin: 0; font-size: 0.88rem;">
+      AURA Siting Crafter decouples spatial geometry calculation from stakeholder-specific policy weights. Selecting a persona in the top dropdown or clicking below reconfigures the real-time simulation engine:
+    </p>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('general-public')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">🌐</span>
+        <h4 style="margin: 0; color: #38bdf8; font-size: 0.95rem;">General Public</h4>
       </div>
+      <span class="metadata-pill" style="border-color: #38bdf8; color: #38bdf8; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Balanced Baseline</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 20%, Size 15%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>Balanced Siting:</strong> Equitably balances grid proximity, acoustic setbacks, and water reuse.</li>
+      <li><strong>Open Evidence:</strong> Transparent, reproducible spatial analysis with no black-box scoring.</li>
+    </ul>
+  </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('general-public')">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.35rem;">🌐</span>
-              <h4 style="margin: 0; color: #38bdf8; font-size: 0.95rem;">General Public</h4>
-            </div>
-            <span class="metadata-pill" style="border-color: #38bdf8; color: #38bdf8; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Balanced Baseline</span>
-          </div>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 20%, Size 15%</p>
-          <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-            <li><strong>Balanced Siting:</strong> Equitably balances grid proximity, acoustic setbacks, and water reuse.</li>
-            <li><strong>Open Evidence:</strong> Transparent, reproducible spatial analysis with no black-box scoring.</li>
-          </ul>
-        </div>
-
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('planner')">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.35rem;">🏛️</span>
-              <h4 style="margin: 0; color: #38bdf8; font-size: 0.95rem;">Planner</h4>
-            </div>
-            <span class="metadata-pill" style="border-color: #38bdf8; color: #38bdf8; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Statutory & Cadastre</span>
-          </div>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 20%, Size 15%</p>
-          <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-            <li><strong>Automated NDA:</strong> Computes Net Developable Area by subtracting 30m riparian, 20m pipeline, &gt;5% slope, and mine subsidence overlays in seconds.</li>
-            <li><strong>Housing Protection:</strong> Automatically disqualifies residential meshblocks and Transport Oriented Development (TOD) precincts.</li>
-            <li><strong>Digital Twin Ready:</strong> Native GDA2020 GeoParquet outputs stream straight into state Spatial Digital Twins.</li>
-          </ul>
-        </div>
-
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('regulator')">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.35rem;">⚡</span>
-              <h4 style="margin: 0; color: #fbbf24; font-size: 0.95rem;">Regulator</h4>
-            </div>
-            <span class="metadata-pill" style="border-color: #fbbf24; color: #fbbf24; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Net-Zero & Water</span>
-          </div>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 25%, Size 10%</p>
-          <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-            <li><strong>Net-Zero Mandate:</strong> Verifies co-location with &ge;132kV transmission substations and declared Renewable Energy Zones (REZs).</li>
-            <li><strong>Potable Water Protection:</strong> Hard exclusion buffers on drinking catchments; prioritizes recycled wastewater cooling loops.</li>
-            <li><strong>Sovereign Scenario Engine:</strong> Zero-cloud-cost JavaScript browser engine allows regulators to test proposed legislation dynamically.</li>
-          </ul>
-        </div>
-
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('developer')">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.35rem;">💼</span>
-              <h4 style="margin: 0; color: #34d399; font-size: 0.95rem;">Developer</h4>
-            </div>
-            <span class="metadata-pill" style="border-color: #34d399; color: #34d399; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Power & Scale</span>
-          </div>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 50%, Size 20%, Water 15%, Sensitive 15%</p>
-          <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-            <li><strong>National 8-Jurisdiction Screening:</strong> Unifies 17+ benchmark candidates across NEM & SWIS under a single consistent spatial matrix.</li>
-            <li><strong>Brownfield Advantage:</strong> Highlights retired coal power station sites with grandfathered transmission capacity and pre-zoned industrial pads.</li>
-            <li><strong>Granular Due Diligence:</strong> Instant search by Lot/Plan and street address with topographic slope and flood risk reports.</li>
-          </ul>
-        </div>
-
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('community')">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.35rem;">🏘️</span>
-              <h4 style="margin: 0; color: #c084fc; font-size: 0.95rem;">Community</h4>
-            </div>
-            <span class="metadata-pill" style="border-color: #c084fc; color: #c084fc; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Amenity & Trust</span>
-          </div>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Sensitive 40%, Water 25%, Power 25%, Size 10%</p>
-          <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-            <li><strong>Acoustic & Sensitive Buffers:</strong> Enforces continuous sigmoidal setbacks (&ge;500m) safeguarding homes, schools, and hospitals from industrial noise.</li>
-            <li><strong>Just Transition:</strong> Repurposes legacy mining voids and rail infrastructure for clean high-tech digital jobs.</li>
-            <li><strong>Public Trust:</strong> 100% open-data spatial evidence replaces speculative developer marketing with auditable facts.</li>
-          </ul>
-        </div>
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('planner')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">🏛️</span>
+        <h4 style="margin: 0; color: #38bdf8; font-size: 0.95rem;">Planner</h4>
       </div>
+      <span class="metadata-pill" style="border-color: #38bdf8; color: #38bdf8; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Statutory & Cadastre</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 20%, Size 15%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>Automated NDA:</strong> Computes Net Developable Area by subtracting 30m riparian, 20m pipeline, &gt;5% slope, and mine subsidence overlays in seconds.</li>
+      <li><strong>Housing Protection:</strong> Disqualifies residential meshblocks and Transport Oriented Development (TOD) precincts.</li>
+      <li><strong>Digital Twin Ready:</strong> Native GDA2020 GeoParquet outputs stream straight into state Spatial Digital Twins.</li>
+    </ul>
+  </div>
+
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('regulator')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">⚡</span>
+        <h4 style="margin: 0; color: #fbbf24; font-size: 0.95rem;">Regulator</h4>
+      </div>
+      <span class="metadata-pill" style="border-color: #fbbf24; color: #fbbf24; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Net-Zero & Water</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 25%, Size 10%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>Net-Zero Mandate:</strong> Verifies co-location with &ge;132kV transmission substations and declared Renewable Energy Zones (REZs).</li>
+      <li><strong>Potable Water Protection:</strong> Hard exclusion buffers on drinking catchments; prioritizes recycled wastewater cooling loops.</li>
+      <li><strong>Scenario Engine:</strong> Zero-cloud-cost JavaScript browser engine allows regulators to test proposed criteria dynamically.</li>
+    </ul>
+  </div>
+
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('developer')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">💼</span>
+        <h4 style="margin: 0; color: #34d399; font-size: 0.95rem;">Developer</h4>
+      </div>
+      <span class="metadata-pill" style="border-color: #34d399; color: #34d399; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Power & Scale</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 50%, Size 20%, Water 15%, Sensitive 15%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>National 8-Jurisdiction Screening:</strong> Unifies 17+ benchmark candidates across NEM & SWIS under a single consistent spatial matrix.</li>
+      <li><strong>Brownfield Advantage:</strong> Highlights retired coal power station sites with existing transmission capacity and pre-zoned industrial pads.</li>
+      <li><strong>Granular Due Diligence:</strong> Instant search by Lot/Plan and street address with topographic slope and flood risk reports.</li>
+    </ul>
+  </div>
+
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('community')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">🏘️</span>
+        <h4 style="margin: 0; color: #c084fc; font-size: 0.95rem;">Community</h4>
+      </div>
+      <span class="metadata-pill" style="border-color: #c084fc; color: #c084fc; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Amenity & Trust</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Sensitive 40%, Water 25%, Power 25%, Size 10%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>Acoustic & Sensitive Buffers:</strong> Enforces continuous sigmoidal setbacks (&ge;500m) safeguarding homes, schools, and hospitals from industrial noise.</li>
+      <li><strong>Just Transition:</strong> Repurposes legacy industrial and rail infrastructure for high-tech digital jobs.</li>
+      <li><strong>Public Trust:</strong> 100% open-data spatial evidence replaces speculative developer marketing with auditable facts.</li>
+    </ul>
+  </div>
+</div>
+
     </div>
 
     <!-- Tab 4: Cost Reduction Tips & Incremental Compute -->
@@ -1188,44 +1189,46 @@
       </table>
     </div>
 
-    <!-- Tab 4: Lakehouse Storage -->
+    <!-- Tab 6: Lakehouse Storage -->
     <div id="lakehouse-storage" class="tab-content" style="max-height: 450px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6; padding: 0.5rem 1rem;">
-      <h3 style="margin-top: 0; color: #fbbf24;">Concrete Lakehouse Storage & Table Directory Structure</h3>
-      <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-        All spatial tables are cataloged under <code>org_catalog.fgsdb.*</code> on Wherobots Cloud and persisted directly in cloud object storage at <code>s3://wherobots-cloud-us-west-2/&lt;org-id&gt;/fgsdb/</code> in <strong>AWS us-west-2</strong> (GDA2020 / MGA Zone 56 projected CRS <code>EPSG:7856</code> and GDA2020 geographic <code>EPSG:7844</code>).
-      </p>
-      <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.25rem; border-radius: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #e2e8f0; line-height: 1.6;">
-        <div style="color: #60a5fa; font-weight: bold; margin-bottom: 0.5rem;">s3://wherobots-cloud-us-west-2/&lt;org-id&gt;/fgsdb/</div>
-        <div style="padding-left: 1rem; border-left: 2px solid rgba(59, 130, 246, 0.3);">
-          <div style="color: #34d399; font-weight: bold;">├── national_sensitive_receptors/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[ACARA, NHSD & OSM National POIs]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── national_electricity_grid/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[GA & AEMO 500kV/330kV/132kV Infrastructure]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── national_cadastre_gnaf/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[15.4M Geoscape & State Lot/Plans]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── national_elvis_dem_slope/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[25m Raster Elevation Models]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── abs_demographics_meshblocks/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[1.18M Meshblocks Partitioned]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── precinct_net_developable_zones/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[High-Res Buildable Pad Space]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── precinct_biodiversity_constraints/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[High-Res Environmental Setbacks]</span></div>
-          <div style="color: #34d399; font-weight: bold;">└── precinct_pipeline_corridors/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[20m Gas & Water Corridors]</span></div>
-        </div>
-      </div>
+      <h3 style="margin-top: 0; color: #fbbf24;">Lakehouse Storage & Table Directory Structure</h3>
+<p style="color: var(--text-secondary); margin-bottom: 1rem;">
+  All spatial tables are cataloged under <code>org_catalog.fgsdb.*</code> on Wherobots Cloud and persisted directly in cloud object storage at <code>s3://wherobots-user-storage/aura_siting/</code> (GDA2020 / MGA Zone 56 projected CRS <code>EPSG:7856</code> and GDA2020 geographic <code>EPSG:7844</code>).
+</p>
+<div style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.25rem; border-radius: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #e2e8f0; line-height: 1.6;">
+  <div style="color: #60a5fa; font-weight: bold; margin-bottom: 0.5rem;">s3://wherobots-user-storage/aura_siting/</div>
+  <div style="padding-left: 1rem; border-left: 2px solid rgba(59, 130, 246, 0.3);">
+    <div style="color: #34d399; font-weight: bold;">├── national_sensitive_receptors/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[ACARA, NHSD & OSM National POIs]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── national_electricity_grid/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[GA & AEMO 500kV/330kV/132kV Infrastructure]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── national_cadastre_gnaf/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[15.4M Geoscape & State Lot/Plans]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── national_elvis_dem_slope/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[25m Raster Elevation Models]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── abs_demographics_meshblocks/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[1.18M Meshblocks Partitioned]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── precinct_net_developable_zones/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[Buildable Pad Space]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── precinct_biodiversity_constraints/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[Environmental Setbacks]</span></div>
+    <div style="color: #34d399; font-weight: bold;">└── precinct_pipeline_corridors/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[20m Gas & Water Corridors]</span></div>
+  </div>
+</div>
+
     </div>
 
-    <!-- Tab 5: Table Footprint -->
+    <!-- Tab 7: Table Footprint -->
     <div id="table-footprint" class="tab-content" style="max-height: 450px; overflow-y: auto;">
       <table>
-        <thead><tr><th>Table Identifier</th><th>Geometry Format</th><th>Record Count</th><th>Disk Size</th><th>Compression</th></tr></thead>
-        <tbody>
-          <tr><td>national_cadastre_gnaf</td><td>MULTIPOLYGON / POINT (EPSG:7844)</td><td>15,420,800</td><td>1.42 GB</td><td>Hilbert-Curve Parquet</td></tr>
-          <tr><td>abs_demographics_meshblocks</td><td>MULTIPOLYGON (EPSG:7844)</td><td>1,187,334</td><td>342.0 MB</td><td>Hilbert-Curve Parquet</td></tr>
-          <tr><td>national_sensitive_receptors</td><td>POINT (EPSG:7844)</td><td>47,510</td><td>18.4 MB</td><td>ZSTD (Snappy)</td></tr>
-          <tr><td>national_electricity_grid</td><td>MULTILINESTRING / POINT (EPSG:7844)</td><td>4,820</td><td>8.6 MB</td><td>ZSTD (Snappy)</td></tr>
-          <tr><td>precinct_abs_meshblocks</td><td>MULTIPOLYGON (EPSG:7856)</td><td>8,412</td><td>24.2 MB</td><td>ZSTD (Snappy)</td></tr>
-          <tr><td>precinct_rail_network</td><td>MULTILINESTRING (EPSG:7856)</td><td>3,047</td><td>14.8 MB</td><td>ZSTD (Snappy)</td></tr>
-          <tr><td>precinct_energy_infrastructure</td><td>POINT / MULTILINE (EPSG:7856)</td><td>128</td><td>1.2 MB</td><td>ZSTD (Snappy)</td></tr>
-        </tbody>
-      </table>
+  <thead><tr><th>Table Identifier</th><th>Geometry Format</th><th>Record Count</th><th>Disk Size</th><th>Compression</th></tr></thead>
+  <tbody>
+    <tr><td>national_cadastre_gnaf</td><td>MULTIPOLYGON / POINT (EPSG:7844)</td><td>15,420,800</td><td>1.42 GB</td><td>Hilbert-Curve Parquet</td></tr>
+    <tr><td>abs_demographics_meshblocks</td><td>MULTIPOLYGON (EPSG:7844)</td><td>1,187,334</td><td>342.0 MB</td><td>Hilbert-Curve Parquet</td></tr>
+    <tr><td>national_sensitive_receptors</td><td>POINT (EPSG:7844)</td><td>47,510</td><td>18.4 MB</td><td>ZSTD (Snappy)</td></tr>
+    <tr><td>national_electricity_grid</td><td>MULTILINESTRING / POINT (EPSG:7844)</td><td>4,820</td><td>8.6 MB</td><td>ZSTD (Snappy)</td></tr>
+    <tr><td>precinct_abs_meshblocks</td><td>MULTIPOLYGON (EPSG:7856)</td><td>8,412</td><td>24.2 MB</td><td>ZSTD (Snappy)</td></tr>
+    <tr><td>precinct_rail_network</td><td>MULTILINESTRING (EPSG:7856)</td><td>3,047</td><td>14.8 MB</td><td>ZSTD (Snappy)</td></tr>
+    <tr><td>precinct_energy_infrastructure</td><td>POINT / MULTILINE (EPSG:7856)</td><td>128</td><td>1.2 MB</td><td>ZSTD (Snappy)</td></tr>
+  </tbody>
+</table>
+
     </div>
 
-    <!-- Tab 6: Whitepapers -->
+    <!-- Tab 8: Whitepapers -->
     <div id="whitepapers-specs" class="tab-content" style="max-height: 450px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6;">
       <h3 style="color: #60a5fa;">Whitepapers, Engineering Standards & Citations</h3>
       <ul style="padding-left: 1.5rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.6rem;">
@@ -1454,127 +1457,122 @@ function executeCustomAiQuery() {
     <!-- Tab 10: Recent Changes -->
     <div id="recent-changes" class="tab-content" style="max-height: 500px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6;">
       <h2>Recent Changes</h2>
-<p>All active files in <code>docs/</code> (excluding <code>docs/archive/</code>) have been systematically reviewed one-by-one for currency, link integrity, and technical accuracy. A new author biography document has also been created.</p>
+<p>The AURA Siting Crafter platform has been updated across the spatial ETL lakehouse, the GeoLibre WebGIS client, conversational AI querying, and documentation architecture.</p>
 
 <hr>
 
-<h3>1. Summary of Actions by File</h3>
+<h3>1. Summary of Recent Platform Enhancements</h3>
 <table>
   <thead>
-    <tr><th>#</th><th>File</th><th>Type</th><th>Review &amp; Update Summary</th></tr>
+    <tr><th>#</th><th>Component / Module</th><th>Type</th><th>Enhancement Summary</th></tr>
   </thead>
   <tbody>
-    <tr><td><strong>1</strong></td><td><code>ai_speech_discourse_alignment_plan.md</code></td><td>.md</td><td>Updated the Deliverables table to link directly to active documents (submission, NSW benefits, guest blog announcement, cost architecture).</td></tr>
-    <tr><td><strong>2</strong></td><td><code>cost_reduction_and_incremental_compute.md</code></td><td>.md</td><td>Audited and verified cloud spend breakdown (~$36 AUD / US$24.13 across ~35 batch runs), 80/20 active/idle ratio, and client-side JavaScript zero-cost offload.</td></tr>
-    <tr><td><strong>3</strong></td><td><code>dphi_macquarie_coal_precinct_late_submission.md</code></td><td>.md</td><td>Confirmed Net Developable Area (NDA) figures, 500m acoustic buffers, pumped hydro capacity, and external links.</td></tr>
-    <tr><td><strong>4</strong></td><td><code>linkedin_article_3_wherobots_guest_blog_announcement.md</code></td><td>.md</td><td>Cleaned up outgoing blog post hyperlinks and verified metrics.</td></tr>
-    <tr><td><strong>5</strong></td><td><code>next_steps_and_geolibre_tab.md</code></td><td>.md</td><td>Audited GeoLibre GCP Cloud Run architecture, DuckDB-WASM query workflows, and OpenRouter BYOK tier specifications.</td></tr>
-    <tr><td><strong>6</strong></td><td><code>nsw_govt_geospatial_benefits.md</code></td><td>.md</td><td>Confirmed government persona alignment, DCDB 3.5M+ parcel join scale, and SEED/Digital Twin compatibility.</td></tr>
-    <tr><td><strong>7</strong></td><td><code>walkthrough.md</code></td><td>.md</td><td>Updated to summarize the systematic audit and document status across all active files.</td></tr>
-    <tr><td><strong>8</strong></td><td><code>author_bio.md</code> <em>(NEW)</em></td><td>.md</td><td>Created a ~150-word professional bio for George Chandeep Corea covering cloud-native GIS, Sedona/Wherobots/DuckDB, GDA2020 standards, and AuraSiting Crafter.</td></tr>
-    <tr><td><strong>9</strong></td><td><code>data_verification_audit.json</code></td><td>.json</td><td>Validated JSON schema and syntax; verified 8 jurisdictions and 16 portal lineage records.</td></tr>
-    <tr><td><strong>10</strong></td><td><code>spatial_calculations_reference.json</code></td><td>.json</td><td>Validated JSON schema and syntax; verified formulas for thermodynamic decay, pumped hydro, sigmoidal acoustic buffer, and DEM slope.</td></tr>
+    <tr>
+      <td><strong>1</strong></td>
+      <td><code>GeoLibre WebGIS Platform (v2.5.0)</code></td>
+      <td>Frontend &amp; Proxy</td>
+      <td>Deployed MapLibre GL WebGIS interface on Google Cloud Run with scale-to-zero serverless architecture ($0.00 idle cost) streaming live S3 GeoParquet/Iceberg tables.</td>
+    </tr>
+    <tr>
+      <td><strong>2</strong></td>
+      <td><code>Interactive Tooling &amp; Map Modes</code></td>
+      <td>UI / UX</td>
+      <td>Implemented dual interaction modes: <strong>Click (Identify)</strong> with rich attribute popup inspection and <strong>Hand (Pan)</strong> for smooth continental navigation. Added Layer Opacity sliders (🎚️), Lineage Metadata modal (ℹ️), Viewport Attribute Table Dock with coordinate zoom (⊞), and Attribute Distribution Charts (📊).</td>
+    </tr>
+    <tr>
+      <td><strong>3</strong></td>
+      <td><code>Conversational Spatial AI &amp; SQL Engine</code></td>
+      <td>AI / Analytics</td>
+      <td>Integrated natural language to DuckDB Spatial SQL translation with direct in-browser execution via DuckDB-WASM v1.28.0. Added query presets and browser-cached saved queries with inline SQL editor and Ctrl+Enter execution.</td>
+    </tr>
+    <tr>
+      <td><strong>4</strong></td>
+      <td><code>National Siting Suitability Report (v3.0.0)</code></td>
+      <td>Reporting</td>
+      <td>Refactored into 11 benchmarking tabs including dynamic Geoscience Australia transmission grid voltage filtering, Strategic Stakeholder Personas ("I am a..." Planner, Regulator, Developer, Community, General Public), and client-side real-time MCDA weight re-scoring.</td>
+    </tr>
+    <tr>
+      <td><strong>5</strong></td>
+      <td><code>Modular Attachment Architecture</code></td>
+      <td>Refactoring</td>
+      <td>Decoupled 100% of report content and GeoLibre help modals into modular files in <code>runner/attachments/</code> (including <code>geolibre_help.html</code>, <code>geolibre_guide.html</code>, <code>lakehouse_storage.html</code>, <code>table_footprint.html</code>, <code>strategic_personas.html</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>6</strong></td>
+      <td><code>Archive &amp; Documentation Consolidation</code></td>
+      <td>Maintenance</td>
+      <td>Consolidated completed sprint implementation plans into <code>docs/archive/plans_and_walkthroughs/</code> and moved legacy/scratch runner scripts to <code>runner/archive/</code>. Cleaned AI speech and promotional fluff across all technical documentation.</td>
+    </tr>
   </tbody>
 </table>
 
 <hr>
 
-<h3>2. Verification Results</h3>
+<h3>2. Verification & Integrity Results</h3>
 <ul>
-  <li><strong>JSON Validation:</strong> Verified both <code>.json</code> files via Python <code>json.load()</code> with zero syntax errors.</li>
-  <li><strong>Link Integrity:</strong> Confirmed all relative and markdown links across <code>docs/</code> point to active files without broken references.</li>
-  <li><strong>Archive Isolation:</strong> <code>docs/archive/</code> was untouched throughout the entire process.</li>
-  <li><strong>Compute / Instance Status:</strong> All processes and tasks are terminated; zero background compute or active Spark/Sedona sessions are running.</li>
+  <li><strong>Graphify AST Analysis:</strong> Validated dependencies across Python modules, GeoLibre proxy, and SQL table references.</li>
+  <li><strong>Lint &amp; Security Gate:</strong> 100% pass on <code>pytest tests/lint/ -v</code> (zero plain-text credentials, zero banned legacy identifiers).</li>
+  <li><strong>Attachment Resolution:</strong> All 11 dashboard tabs and GeoLibre modal dialogs render directly from standalone files in <code>runner/attachments/</code>.</li>
+  <li><strong>Compute Resource Teardown:</strong> All local and cloud compute instances are terminated; zero idle container spend ($0.00 / hr).</li>
 </ul>
 
     </div>
 
     <!-- Tab 11: Next Steps -->
     <div id="next-steps" class="tab-content" style="max-height: 500px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6;">
-      <h2>Next Steps: GeoLibre Open-Source AI Spatial Platform Integration</h2>
+      <h2>Next Steps &amp; Technical Roadmap</h2>
 
 <h3>Executive Summary</h3>
-<p>The primary next step for the <strong>National Data Center Siting Suitability Model</strong> (<code>aura_siting_crafter</code>) is connecting our spatial outputs to an open-source <a href="https://github.com/opengeos/GeoLibre" target="_blank">opengeos/GeoLibre</a> deployment hosted serverless on <strong>Google Cloud Platform (GCP)</strong> to enable free public conversational spatial analytics ("Ask AI") using DuckDB-WASM and Gemini.</p>
+<p>Following the deployment of the <strong>AURA Siting Crafter</strong> national suitability model and the <strong>GeoLibre WebGIS</strong> platform, the immediate technical priorities focus on high-resolution vector tile streaming, direct client-side Parquet querying, multi-model LLM integration, and state digital twin exports.</p>
 
 <hr>
 
-<h3>1. GeoLibre AI Spatial Platform Architecture on GCP</h3>
-<pre style="background:rgba(0,0,0,0.4);padding:1rem;border-radius:0.5rem;font-size:0.8rem;overflow-x:auto;color:#94a3b8;">
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                                GOOGLE CLOUD PLATFORM (GCP)                              │
-│   ┌────────────────────────────────┐                 ┌──────────────────────────────┐   │
-│   │ Google Cloud Storage (GCS)     │                 │ GCP Cloud Run (Serverless)   │   │
-│   │ • GeoParquet Suitability Data  │◄────────────────┤ • FastAPI Spatial AI Proxy   │   │
-│   │ • PMTiles Vector Layers        │  (Direct HTTP)  │ • Scale-to-Zero Container    │   │
-│   │ • Static GeoLibre App UI       │                 │ • Gemini &amp; OpenRouter Client │   │
-│   └───────────────▲────────────────┘                 └──────────────▲───────────────┘   │
-└───────────────────┼─────────────────────────────────────────────────┼───────────────────┘
-                    │ static assets &amp; byte-range queries              │ Prompts &amp; AI SQL
-                    ▼                                                 ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                                END-USER WEB BROWSER                                     │
-│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
-│   │ GeoLibre Web Application (Free Web Platform)                                    │   │
-│   │  ┌─────────────────────────────┐           ┌─────────────────────────────────┐  │   │
-│   │  │ Client-Side DuckDB-WASM     │           │ AI Spatial Chat Drawer          │  │   │
-│   │  │ (Zero-Cost In-Browser SQL)  │           │ (Free Tier + BYOK OpenRouter)   │  │   │
-│   │  └─────────────────────────────┘           └─────────────────────────────────┘  │   │
-│   └─────────────────────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
-</pre>
-
-<hr>
-
-<h3>2. Shared Cloud Data Storage Architecture</h3>
-<p>Rather than maintaining separate file servers or copying data onto local web server disk storage, GeoLibre and Wherobots share the exact same cloud-native dataset repository:</p>
+<h3>1. High-Resolution Vector Tile Pyramids (PMTiles &amp; MVT)</h3>
 <ol>
-  <li><strong>Zero-Duplication Central Data Layer:</strong> Wherobots Cloud (Apache Sedona Spark) outputs suitability modeling layers directly into a central GCS / S3 bucket as <strong>GeoParquet</strong> and <strong>PMTiles</strong>. GeoLibre queries these exact same files without any dataset conversion or server duplication.</li>
-  <li><strong>HTTP Range-Request Querying:</strong> GeoLibre's in-browser DuckDB-WASM engine fetches only the required byte ranges and spatial row groups via HTTP range requests (<code>read_parquet('https://storage.googleapis.com/.../datacenter_candidates.parquet')</code>). Eliminates downloading large files to the client or maintaining expensive local NVMe storage.</li>
-  <li><strong>Cloud-Native Storage Tradeoff:</strong>
-    <table>
-      <thead><tr><th>Architecture Model</th><th>Data Sync / Duplication</th><th>Storage &amp; Server Cost</th><th>Scalability</th></tr></thead>
-      <tbody>
-        <tr><td>Shared Cloud Storage (GCS)</td><td>Zero Duplication (Unified)</td><td>Near-Zero (~$0.02/GB/mo)</td><td>Infinite Public Scale</td></tr>
-        <tr><td>Local Web Server Storage</td><td>High Duplication Needed</td><td>Expensive Server Disks</td><td>Constrained by VM I/O</td></tr>
-      </tbody>
-    </table>
-  </li>
+  <li><strong>Distributed Vector Tiling:</strong> Implement Apache Sedona / Tilezen pipelines to generate multi-resolution <strong>PMTiles</strong> for the 15.4M parcel national cadastre and 1.18M ABS meshblocks.</li>
+  <li><strong>Sub-Second Client Rendering:</strong> Stream parcel boundaries directly into MapLibre GL JS at zoom levels 14–18 using byte-range HTTP requests, eliminating GeoJSON payload bottlenecks.</li>
+  <li><strong>Automated Cache Invalidation:</strong> Establish ETag/hash-based cache update triggers when authoritative state cadastral datasets are refreshed.</li>
 </ol>
 
 <hr>
 
-<h3>3. Free Public Conversational AI Workflow ("Ask AI")</h3>
+<h3>2. Direct Client-Side Parquet Range Streaming</h3>
 <ol>
-  <li><strong>User Ask:</strong> The user types a natural language query: <em>"Show me all candidate sites in VIC larger than 10 hectares that are within 2km of high-voltage transmission lines and at least 1km away from any school or hospital."</em></li>
-  <li><strong>AI Translation:</strong> GeoLibre sends the user prompt + active dataset schemas to the FastAPI gateway on GCP Cloud Run. Cloud Run queries Gemini LLM to generate DuckDB Spatial SQL.</li>
-  <li><strong>In-Browser Compute:</strong> The SQL query is executed directly inside the user's browser using DuckDB-WASM, fetching only required byte ranges from GCS.</li>
-  <li><strong>Instant Visualisation:</strong> GeoLibre renders matching candidates on an interactive Mapbox/Leaflet map with dynamic stats and spatial boundaries.</li>
+  <li><strong>Zero-Proxy Architecture:</strong> Enable browser-native DuckDB-WASM to execute HTTP byte-range queries directly against S3/GCS GeoParquet tables (<code>s3://wherobots-user-storage/aura_siting/</code>) without routing queries through the Cloud Run backend.</li>
+  <li><strong>Spatial Hilbert-Curve Partitioning:</strong> Partition national datasets along Hilbert space-filling curves to minimize HTTP range request counts during bounding box queries.</li>
+  <li><strong>Client Memory Optimization:</strong> Implement automatic row-group pruning and memory garbage collection for low-memory mobile browser sessions.</li>
 </ol>
 
 <hr>
 
-<h3>4. Dual-Model LLM Access: Free Tier &amp; OpenRouter BYOK</h3>
-<p>Inspired by <a href="https://github.com/GetBack2Basics/LivePersonaCrafter" target="_blank">GetBack2Basics/LivePersonaCrafter</a>, GeoLibre provides a flexible dual-tier model:</p>
-<ul>
-  <li><strong>Free Default Tier:</strong> Powered by Google Cloud Gemini API (hosted on Cloud Run), allowing the public to ask natural language questions for free without creating accounts.</li>
-  <li><strong>OpenRouter BYOK Tier:</strong> Users can enter their own OpenRouter API key directly in the GeoLibre settings drawer to unlock premium models (e.g., Claude 3.5 Sonnet, GPT-4o, DeepSeek-R1, Llama 3) for specialized spatial reasoning.</li>
-</ul>
+<h3>3. Multi-Model LLM OpenRouter BYOK (Bring-Your-Own-Key) Integration</h3>
+<ol>
+  <li><strong>Dual-Tier Model Selection:</strong> Provide a free tier powered by Google Gemini 2.5 Flash on Cloud Run alongside a Bring-Your-Own-Key (BYOK) OpenRouter interface.</li>
+  <li><strong>Advanced Spatial Reasoning:</strong> Allow users to select specialized reasoning models (e.g. Claude 3.5 Sonnet, GPT-4o, DeepSeek-R1) directly within the GeoLibre settings drawer for complex planning queries.</li>
+  <li><strong>Secure Local Storage:</strong> Store user API keys exclusively within browser <code>localStorage</code>, never logging or transmitting keys to backend servers.</li>
+</ol>
 
 <hr>
 
-<h3>5. Planned Conversational AI Benchmark Queries</h3>
-<ul>
-  <li><em>"Show me all candidate sites in NSW within 2km of 330kV transmission lines that are at least 1km away from schools and child care centers."</em></li>
-  <li><em>"Which sites in Latrobe Valley or Gladstone score highest for recycled water availability without impacting residential meshblocks?"</em></li>
-  <li><em>"Find data center parcels co-located within Renewable Energy Zones that have over 15 hectares of developable land."</em></li>
-  <li><em>"Compare the developable pad area of the Macquarie Coal Complex against the proponent masterplan after deducting 30m riparian buffers and slope constraints."</em></li>
-</ul>
+<h3>4. Fine-Grained Regional Precinct Expansion (<code>AURA_REGION</code>)</h3>
+<ol>
+  <li><strong>Automated Slope &amp; Riparian Ingest:</strong> Run targeted 1m LiDAR DEM slope analysis and 30m riparian buffer clipping for declared Renewable Energy Zones in Queensland (Central/North QLD REZs) and Victoria (Latrobe Valley / Western VIC).</li>
+  <li><strong>Net Developable Area (NDA) Quantification:</strong> Automate statutory land subtraction (easements, mine subsidence, flood overlays) for all major national energy transition hubs.</li>
+</ol>
+
+<hr>
+
+<h3>5. State Spatial Digital Twin &amp; TerriaJS Integration</h3>
+<ol>
+  <li><strong>Standardized GeoLibre Project Spec:</strong> Maintain <code>aura-siting-crafter.geolibre.json</code> with direct compatibility for 1-click loading into the NSW Spatial Digital Twin and National Map.</li>
+  <li><strong>Automated Catalog Sync:</strong> Export OGC API - Features and STAC catalog endpoints for seamless ingestion by state geospatial agencies (NSW Spatial Services, Geoscience Australia).</li>
+</ol>
 
     </div>
   </div>
 
   <footer style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.8rem; color: var(--text-secondary); text-align: center;">
-    &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for information only and is the authors private opinion | <span id="build-timestamp">202608302223</span>
+    &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for information only and is the authors private opinion | <span id="build-timestamp">202608302259</span>
   </footer>
 </div>
 

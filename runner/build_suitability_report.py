@@ -1127,95 +1127,7 @@ HTML_PAGE = """<!DOCTYPE html>
 
     <!-- Tab 3: Strategic Personas ("I am a...") -->
     <div id="strategic-personas" class="tab-content" style="max-height: 480px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6; padding: 0.5rem 0.75rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-        <div>
-          <h3 style="color: #c084fc; margin: 0 0 0.25rem;">Strategic Stakeholder Personas & Policy Presets</h3>
-          <p style="color: var(--text-secondary); margin: 0; font-size: 0.88rem;">
-            AuraSiting Crafter decouples spatial geometry calculation from stakeholder-specific policy weights. Selecting a persona in the top dropdown or clicking below instantly reconfigures the real-time simulation engine:
-          </p>
-        </div>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('general-public')">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.35rem;">🌐</span>
-              <h4 style="margin: 0; color: #38bdf8; font-size: 0.95rem;">General Public</h4>
-            </div>
-            <span class="metadata-pill" style="border-color: #38bdf8; color: #38bdf8; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Balanced Baseline</span>
-          </div>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 20%, Size 15%</p>
-          <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-            <li><strong>Balanced Siting:</strong> Equitably balances grid proximity, acoustic setbacks, and water reuse.</li>
-            <li><strong>Open Evidence:</strong> Transparent, reproducible spatial analysis with no black-box scoring.</li>
-          </ul>
-        </div>
-
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('planner')">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.35rem;">🏛️</span>
-              <h4 style="margin: 0; color: #38bdf8; font-size: 0.95rem;">Planner</h4>
-            </div>
-            <span class="metadata-pill" style="border-color: #38bdf8; color: #38bdf8; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Statutory & Cadastre</span>
-          </div>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 20%, Size 15%</p>
-          <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-            <li><strong>Automated NDA:</strong> Computes Net Developable Area by subtracting 30m riparian, 20m pipeline, &gt;5% slope, and mine subsidence overlays in seconds.</li>
-            <li><strong>Housing Protection:</strong> Automatically disqualifies residential meshblocks and Transport Oriented Development (TOD) precincts.</li>
-            <li><strong>Digital Twin Ready:</strong> Native GDA2020 GeoParquet outputs stream straight into state Spatial Digital Twins.</li>
-          </ul>
-        </div>
-
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('regulator')">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.35rem;">⚡</span>
-              <h4 style="margin: 0; color: #fbbf24; font-size: 0.95rem;">Regulator</h4>
-            </div>
-            <span class="metadata-pill" style="border-color: #fbbf24; color: #fbbf24; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Net-Zero & Water</span>
-          </div>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 25%, Size 10%</p>
-          <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-            <li><strong>Net-Zero Mandate:</strong> Verifies co-location with &ge;132kV transmission substations and declared Renewable Energy Zones (REZs).</li>
-            <li><strong>Potable Water Protection:</strong> Hard exclusion buffers on drinking catchments; prioritizes recycled wastewater cooling loops.</li>
-            <li><strong>Sovereign Scenario Engine:</strong> Zero-cloud-cost JavaScript browser engine allows regulators to test proposed legislation dynamically.</li>
-          </ul>
-        </div>
-
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('developer')">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.35rem;">💼</span>
-              <h4 style="margin: 0; color: #34d399; font-size: 0.95rem;">Developer</h4>
-            </div>
-            <span class="metadata-pill" style="border-color: #34d399; color: #34d399; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Power & Scale</span>
-          </div>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 50%, Size 20%, Water 15%, Sensitive 15%</p>
-          <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-            <li><strong>National 8-Jurisdiction Screening:</strong> Unifies 17+ benchmark candidates across NEM & SWIS under a single consistent spatial matrix.</li>
-            <li><strong>Brownfield Advantage:</strong> Highlights retired coal power station sites with grandfathered transmission capacity and pre-zoned industrial pads.</li>
-            <li><strong>Granular Due Diligence:</strong> Instant search by Lot/Plan and street address with topographic slope and flood risk reports.</li>
-          </ul>
-        </div>
-
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('community')">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 1.35rem;">🏘️</span>
-              <h4 style="margin: 0; color: #c084fc; font-size: 0.95rem;">Community</h4>
-            </div>
-            <span class="metadata-pill" style="border-color: #c084fc; color: #c084fc; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Amenity & Trust</span>
-          </div>
-          <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Sensitive 40%, Water 25%, Power 25%, Size 10%</p>
-          <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-            <li><strong>Acoustic & Sensitive Buffers:</strong> Enforces continuous sigmoidal setbacks (&ge;500m) safeguarding homes, schools, and hospitals from industrial noise.</li>
-            <li><strong>Just Transition:</strong> Repurposes legacy mining voids and rail infrastructure for clean high-tech digital jobs.</li>
-            <li><strong>Public Trust:</strong> 100% open-data spatial evidence replaces speculative developer marketing with auditable facts.</li>
-          </ul>
-        </div>
-      </div>
+      __STRATEGIC_PERSONAS_HTML__
     </div>
 
     <!-- Tab 4: Cost Reduction Tips & Incremental Compute -->
@@ -1236,44 +1148,17 @@ HTML_PAGE = """<!DOCTYPE html>
       </table>
     </div>
 
-    <!-- Tab 4: Lakehouse Storage -->
+    <!-- Tab 6: Lakehouse Storage -->
     <div id="lakehouse-storage" class="tab-content" style="max-height: 450px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6; padding: 0.5rem 1rem;">
-      <h3 style="margin-top: 0; color: #fbbf24;">Concrete Lakehouse Storage & Table Directory Structure</h3>
-      <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-        All spatial tables are cataloged under <code>org_catalog.fgsdb.*</code> on Wherobots Cloud and persisted directly in cloud object storage at <code>s3://wherobots-cloud-us-west-2/&lt;org-id&gt;/fgsdb/</code> in <strong>AWS us-west-2</strong> (GDA2020 / MGA Zone 56 projected CRS <code>EPSG:7856</code> and GDA2020 geographic <code>EPSG:7844</code>).
-      </p>
-      <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.25rem; border-radius: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #e2e8f0; line-height: 1.6;">
-        <div style="color: #60a5fa; font-weight: bold; margin-bottom: 0.5rem;">s3://wherobots-cloud-us-west-2/&lt;org-id&gt;/fgsdb/</div>
-        <div style="padding-left: 1rem; border-left: 2px solid rgba(59, 130, 246, 0.3);">
-          <div style="color: #34d399; font-weight: bold;">├── national_sensitive_receptors/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[ACARA, NHSD & OSM National POIs]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── national_electricity_grid/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[GA & AEMO 500kV/330kV/132kV Infrastructure]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── national_cadastre_gnaf/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[15.4M Geoscape & State Lot/Plans]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── national_elvis_dem_slope/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[25m Raster Elevation Models]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── abs_demographics_meshblocks/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[1.18M Meshblocks Partitioned]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── precinct_net_developable_zones/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[High-Res Buildable Pad Space]</span></div>
-          <div style="color: #34d399; font-weight: bold;">├── precinct_biodiversity_constraints/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[High-Res Environmental Setbacks]</span></div>
-          <div style="color: #34d399; font-weight: bold;">└── precinct_pipeline_corridors/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[20m Gas & Water Corridors]</span></div>
-        </div>
-      </div>
+      __LAKEHOUSE_STORAGE_HTML__
     </div>
 
-    <!-- Tab 5: Table Footprint -->
+    <!-- Tab 7: Table Footprint -->
     <div id="table-footprint" class="tab-content" style="max-height: 450px; overflow-y: auto;">
-      <table>
-        <thead><tr><th>Table Identifier</th><th>Geometry Format</th><th>Record Count</th><th>Disk Size</th><th>Compression</th></tr></thead>
-        <tbody>
-          <tr><td>national_cadastre_gnaf</td><td>MULTIPOLYGON / POINT (EPSG:7844)</td><td>15,420,800</td><td>1.42 GB</td><td>Hilbert-Curve Parquet</td></tr>
-          <tr><td>abs_demographics_meshblocks</td><td>MULTIPOLYGON (EPSG:7844)</td><td>1,187,334</td><td>342.0 MB</td><td>Hilbert-Curve Parquet</td></tr>
-          <tr><td>national_sensitive_receptors</td><td>POINT (EPSG:7844)</td><td>47,510</td><td>18.4 MB</td><td>ZSTD (Snappy)</td></tr>
-          <tr><td>national_electricity_grid</td><td>MULTILINESTRING / POINT (EPSG:7844)</td><td>4,820</td><td>8.6 MB</td><td>ZSTD (Snappy)</td></tr>
-          <tr><td>precinct_abs_meshblocks</td><td>MULTIPOLYGON (EPSG:7856)</td><td>8,412</td><td>24.2 MB</td><td>ZSTD (Snappy)</td></tr>
-          <tr><td>precinct_rail_network</td><td>MULTILINESTRING (EPSG:7856)</td><td>3,047</td><td>14.8 MB</td><td>ZSTD (Snappy)</td></tr>
-          <tr><td>precinct_energy_infrastructure</td><td>POINT / MULTILINE (EPSG:7856)</td><td>128</td><td>1.2 MB</td><td>ZSTD (Snappy)</td></tr>
-        </tbody>
-      </table>
+      __TABLE_FOOTPRINT_HTML__
     </div>
 
-    <!-- Tab 6: Whitepapers -->
+    <!-- Tab 8: Whitepapers -->
     <div id="whitepapers-specs" class="tab-content" style="max-height: 450px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6;">
       <h3 style="color: #60a5fa;">Whitepapers, Engineering Standards & Citations</h3>
       <ul style="padding-left: 1.5rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.6rem;">
@@ -2009,7 +1894,10 @@ html_final = html_final.replace("__CDN_ASSETS__", load_attachment("cdn_assets.ht
 html_final = html_final.replace("__PROVENANCE_JS__", load_attachment("dashboard_provenance.js"))
 html_final = html_final.replace("__PERSONA_CONFIGS_JSON__", load_attachment("persona_configs.json"))
 html_final = html_final.replace("__METHODOLOGY_NOTES__", notes_html)
+html_final = html_final.replace("__STRATEGIC_PERSONAS_HTML__", load_attachment("strategic_personas.html"))
 html_final = html_final.replace("__DATA_SOURCES_ROWS__", load_attachment("data_sources.html"))
+html_final = html_final.replace("__LAKEHOUSE_STORAGE_HTML__", load_attachment("lakehouse_storage.html"))
+html_final = html_final.replace("__TABLE_FOOTPRINT_HTML__", load_attachment("table_footprint.html"))
 html_final = html_final.replace("__RECENT_CHANGES_HTML__", load_attachment("recent_changes.html"))
 html_final = html_final.replace("__NEXT_STEPS_HTML__", load_attachment("next_steps.html"))
 html_final = html_final.replace("__COST_REDUCTION_HTML__", load_attachment("cost_reduction_tips.html"))

@@ -1334,7 +1334,7 @@
         <div class="modal-title">❔ AURA Siting Crafter — System Guide & Architecture</div>
         <button class="close-btn" onclick="closeHelpModalDirect()">&times;</button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="help-modal-body">
         <div class="help-grid">
           <div class="help-card">
             <div class="help-card-title">🗺️ Map Navigation & Modes</div>
@@ -1347,7 +1347,7 @@
           <div class="help-card">
             <div class="help-card-title">🗂️ Thematic Lakehouse & Siting Scoring</div>
             <div class="help-card-text">
-              • <strong>Decoupled Geometry vs Scoring</strong>: Siting criteria evaluate Power Proximity ($S_{\text{power}}$), Water Recycled Access ($S_{\text{water}}$), Slope Stability, and Sensitive Receptor setbacks ($S_{\text{sensitive}}$).<br>
+              • <strong>Decoupled Geometry vs Scoring</strong>: Siting criteria evaluate Power Proximity (S_power), Water Recycled Access (S_water), Slope Stability, and Sensitive Receptor setbacks (S_sensitive).<br>
               • <strong>Hover Actions</strong>: Hover over any layer row in the left sidebar to reveal Opacity slider (🎚️), Lineage Metadata (ℹ️), Distribution Charts (📊), and Viewport Attribute Table (⊞).
             </div>
           </div>
@@ -1401,7 +1401,7 @@
         <div class="modal-title">🌐 GeoLibre Open GIS Project Spec</div>
         <button class="close-btn" onclick="closeGeolibreModalDirect()">&times;</button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="geolibre-modal-body">
         <div class="geolibre-guide-box">
           <div style="font-size: 0.88rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.4rem;">What is the GeoLibre Project Spec?</div>
           The <code>aura-siting-crafter.geolibre.json</code> file contains the full declarative spatial definition of this national siting model, including all 16 candidate hubs, MCE suitability formulas, thematic vector styling, and direct S3 lakehouse stream configurations.
@@ -3202,7 +3202,19 @@
     }
 
     // Help Modal
-    function openHelpModal() {
+    async function openHelpModal() {
+      const modalBody = document.getElementById('help-modal-body');
+      if (modalBody && !modalBody.hasAttribute('data-loaded')) {
+        try {
+          const resp = await fetch('/runner/attachments/geolibre_help.html');
+          if (resp.ok) {
+            modalBody.innerHTML = await resp.text();
+            modalBody.setAttribute('data-loaded', 'true');
+          }
+        } catch (e) {
+          console.warn('Could not fetch geolibre_help.html dynamically:', e);
+        }
+      }
       document.getElementById('help-modal').classList.add('open');
     }
     function closeHelpModal(e) {
@@ -3213,7 +3225,19 @@
     }
 
     // GeoLibre Modal & Download
-    function openGeolibreModal() {
+    async function openGeolibreModal() {
+      const modalBody = document.getElementById('geolibre-modal-body');
+      if (modalBody && !modalBody.hasAttribute('data-loaded')) {
+        try {
+          const resp = await fetch('/runner/attachments/geolibre_guide.html');
+          if (resp.ok) {
+            modalBody.innerHTML = await resp.text();
+            modalBody.setAttribute('data-loaded', 'true');
+          }
+        } catch (e) {
+          console.warn('Could not fetch geolibre_guide.html dynamically:', e);
+        }
+      }
       document.getElementById('geolibre-modal').classList.add('open');
     }
     function closeGeolibreModal(e) {

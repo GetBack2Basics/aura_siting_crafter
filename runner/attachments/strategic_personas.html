@@ -1,0 +1,89 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+  <div>
+    <h3 style="color: #c084fc; margin: 0 0 0.25rem;">Strategic Stakeholder Personas & Policy Presets</h3>
+    <p style="color: var(--text-secondary); margin: 0; font-size: 0.88rem;">
+      AURA Siting Crafter decouples spatial geometry calculation from stakeholder-specific policy weights. Selecting a persona in the top dropdown or clicking below reconfigures the real-time simulation engine:
+    </p>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('general-public')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">🌐</span>
+        <h4 style="margin: 0; color: #38bdf8; font-size: 0.95rem;">General Public</h4>
+      </div>
+      <span class="metadata-pill" style="border-color: #38bdf8; color: #38bdf8; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Balanced Baseline</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 20%, Size 15%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>Balanced Siting:</strong> Equitably balances grid proximity, acoustic setbacks, and water reuse.</li>
+      <li><strong>Open Evidence:</strong> Transparent, reproducible spatial analysis with no black-box scoring.</li>
+    </ul>
+  </div>
+
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('planner')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">🏛️</span>
+        <h4 style="margin: 0; color: #38bdf8; font-size: 0.95rem;">Planner</h4>
+      </div>
+      <span class="metadata-pill" style="border-color: #38bdf8; color: #38bdf8; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Statutory & Cadastre</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 20%, Size 15%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>Automated NDA:</strong> Computes Net Developable Area by subtracting 30m riparian, 20m pipeline, &gt;5% slope, and mine subsidence overlays in seconds.</li>
+      <li><strong>Housing Protection:</strong> Disqualifies residential meshblocks and Transport Oriented Development (TOD) precincts.</li>
+      <li><strong>Digital Twin Ready:</strong> Native GDA2020 GeoParquet outputs stream straight into state Spatial Digital Twins.</li>
+    </ul>
+  </div>
+
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('regulator')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">⚡</span>
+        <h4 style="margin: 0; color: #fbbf24; font-size: 0.95rem;">Regulator</h4>
+      </div>
+      <span class="metadata-pill" style="border-color: #fbbf24; color: #fbbf24; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Net-Zero & Water</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 40%, Sensitive 25%, Water 25%, Size 10%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>Net-Zero Mandate:</strong> Verifies co-location with &ge;132kV transmission substations and declared Renewable Energy Zones (REZs).</li>
+      <li><strong>Potable Water Protection:</strong> Hard exclusion buffers on drinking catchments; prioritizes recycled wastewater cooling loops.</li>
+      <li><strong>Scenario Engine:</strong> Zero-cloud-cost JavaScript browser engine allows regulators to test proposed criteria dynamically.</li>
+    </ul>
+  </div>
+
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('developer')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">💼</span>
+        <h4 style="margin: 0; color: #34d399; font-size: 0.95rem;">Developer</h4>
+      </div>
+      <span class="metadata-pill" style="border-color: #34d399; color: #34d399; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Power & Scale</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 50%, Size 20%, Water 15%, Sensitive 15%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>National 8-Jurisdiction Screening:</strong> Unifies 17+ benchmark candidates across NEM & SWIS under a single consistent spatial matrix.</li>
+      <li><strong>Brownfield Advantage:</strong> Highlights retired coal power station sites with existing transmission capacity and pre-zoned industrial pads.</li>
+      <li><strong>Granular Due Diligence:</strong> Instant search by Lot/Plan and street address with topographic slope and flood risk reports.</li>
+    </ul>
+  </div>
+
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(192, 132, 252, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('community')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">🏘️</span>
+        <h4 style="margin: 0; color: #c084fc; font-size: 0.95rem;">Community</h4>
+      </div>
+      <span class="metadata-pill" style="border-color: #c084fc; color: #c084fc; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Amenity & Trust</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Sensitive 40%, Water 25%, Power 25%, Size 10%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>Acoustic & Sensitive Buffers:</strong> Enforces continuous sigmoidal setbacks (&ge;500m) safeguarding homes, schools, and hospitals from industrial noise.</li>
+      <li><strong>Just Transition:</strong> Repurposes legacy industrial and rail infrastructure for high-tech digital jobs.</li>
+      <li><strong>Public Trust:</strong> 100% open-data spatial evidence replaces speculative developer marketing with auditable facts.</li>
+    </ul>
+  </div>
+</div>

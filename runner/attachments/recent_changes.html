@@ -1,33 +1,59 @@
 <h2>Recent Changes</h2>
-<p>All active files in <code>docs/</code> (excluding <code>docs/archive/</code>) have been systematically reviewed one-by-one for currency, link integrity, and technical accuracy. A new author biography document has also been created.</p>
+<p>The AURA Siting Crafter platform has been updated across the spatial ETL lakehouse, the GeoLibre WebGIS client, conversational AI querying, and documentation architecture.</p>
 
 <hr>
 
-<h3>1. Summary of Actions by File</h3>
+<h3>1. Summary of Recent Platform Enhancements</h3>
 <table>
   <thead>
-    <tr><th>#</th><th>File</th><th>Type</th><th>Review &amp; Update Summary</th></tr>
+    <tr><th>#</th><th>Component / Module</th><th>Type</th><th>Enhancement Summary</th></tr>
   </thead>
   <tbody>
-    <tr><td><strong>1</strong></td><td><code>ai_speech_discourse_alignment_plan.md</code></td><td>.md</td><td>Updated the Deliverables table to link directly to active documents (submission, NSW benefits, guest blog announcement, cost architecture).</td></tr>
-    <tr><td><strong>2</strong></td><td><code>cost_reduction_and_incremental_compute.md</code></td><td>.md</td><td>Audited and verified cloud spend breakdown (~$36 AUD / US$24.13 across ~35 batch runs), 80/20 active/idle ratio, and client-side JavaScript zero-cost offload.</td></tr>
-    <tr><td><strong>3</strong></td><td><code>dphi_macquarie_coal_precinct_late_submission.md</code></td><td>.md</td><td>Confirmed Net Developable Area (NDA) figures, 500m acoustic buffers, pumped hydro capacity, and external links.</td></tr>
-    <tr><td><strong>4</strong></td><td><code>linkedin_article_3_wherobots_guest_blog_announcement.md</code></td><td>.md</td><td>Cleaned up outgoing blog post hyperlinks and verified metrics.</td></tr>
-    <tr><td><strong>5</strong></td><td><code>next_steps_and_geolibre_tab.md</code></td><td>.md</td><td>Audited GeoLibre GCP Cloud Run architecture, DuckDB-WASM query workflows, and OpenRouter BYOK tier specifications.</td></tr>
-    <tr><td><strong>6</strong></td><td><code>nsw_govt_geospatial_benefits.md</code></td><td>.md</td><td>Confirmed government persona alignment, DCDB 3.5M+ parcel join scale, and SEED/Digital Twin compatibility.</td></tr>
-    <tr><td><strong>7</strong></td><td><code>walkthrough.md</code></td><td>.md</td><td>Updated to summarize the systematic audit and document status across all active files.</td></tr>
-    <tr><td><strong>8</strong></td><td><code>author_bio.md</code> <em>(NEW)</em></td><td>.md</td><td>Created a ~150-word professional bio for George Chandeep Corea covering cloud-native GIS, Sedona/Wherobots/DuckDB, GDA2020 standards, and AuraSiting Crafter.</td></tr>
-    <tr><td><strong>9</strong></td><td><code>data_verification_audit.json</code></td><td>.json</td><td>Validated JSON schema and syntax; verified 8 jurisdictions and 16 portal lineage records.</td></tr>
-    <tr><td><strong>10</strong></td><td><code>spatial_calculations_reference.json</code></td><td>.json</td><td>Validated JSON schema and syntax; verified formulas for thermodynamic decay, pumped hydro, sigmoidal acoustic buffer, and DEM slope.</td></tr>
+    <tr>
+      <td><strong>1</strong></td>
+      <td><code>GeoLibre WebGIS Platform (v2.5.0)</code></td>
+      <td>Frontend &amp; Proxy</td>
+      <td>Deployed MapLibre GL WebGIS interface on Google Cloud Run with scale-to-zero serverless architecture ($0.00 idle cost) streaming live S3 GeoParquet/Iceberg tables.</td>
+    </tr>
+    <tr>
+      <td><strong>2</strong></td>
+      <td><code>Interactive Tooling &amp; Map Modes</code></td>
+      <td>UI / UX</td>
+      <td>Implemented dual interaction modes: <strong>Click (Identify)</strong> with rich attribute popup inspection and <strong>Hand (Pan)</strong> for smooth continental navigation. Added Layer Opacity sliders (🎚️), Lineage Metadata modal (ℹ️), Viewport Attribute Table Dock with coordinate zoom (⊞), and Attribute Distribution Charts (📊).</td>
+    </tr>
+    <tr>
+      <td><strong>3</strong></td>
+      <td><code>Conversational Spatial AI &amp; SQL Engine</code></td>
+      <td>AI / Analytics</td>
+      <td>Integrated natural language to DuckDB Spatial SQL translation with direct in-browser execution via DuckDB-WASM v1.28.0. Added query presets and browser-cached saved queries with inline SQL editor and Ctrl+Enter execution.</td>
+    </tr>
+    <tr>
+      <td><strong>4</strong></td>
+      <td><code>National Siting Suitability Report (v3.0.0)</code></td>
+      <td>Reporting</td>
+      <td>Refactored into 11 benchmarking tabs including dynamic Geoscience Australia transmission grid voltage filtering, Strategic Stakeholder Personas ("I am a..." Planner, Regulator, Developer, Community, General Public), and client-side real-time MCDA weight re-scoring.</td>
+    </tr>
+    <tr>
+      <td><strong>5</strong></td>
+      <td><code>Modular Attachment Architecture</code></td>
+      <td>Refactoring</td>
+      <td>Decoupled 100% of report content and GeoLibre help modals into modular files in <code>runner/attachments/</code> (including <code>geolibre_help.html</code>, <code>geolibre_guide.html</code>, <code>lakehouse_storage.html</code>, <code>table_footprint.html</code>, <code>strategic_personas.html</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>6</strong></td>
+      <td><code>Archive &amp; Documentation Consolidation</code></td>
+      <td>Maintenance</td>
+      <td>Consolidated completed sprint implementation plans into <code>docs/archive/plans_and_walkthroughs/</code> and moved legacy/scratch runner scripts to <code>runner/archive/</code>. Cleaned AI speech and promotional fluff across all technical documentation.</td>
+    </tr>
   </tbody>
 </table>
 
 <hr>
 
-<h3>2. Verification Results</h3>
+<h3>2. Verification & Integrity Results</h3>
 <ul>
-  <li><strong>JSON Validation:</strong> Verified both <code>.json</code> files via Python <code>json.load()</code> with zero syntax errors.</li>
-  <li><strong>Link Integrity:</strong> Confirmed all relative and markdown links across <code>docs/</code> point to active files without broken references.</li>
-  <li><strong>Archive Isolation:</strong> <code>docs/archive/</code> was untouched throughout the entire process.</li>
-  <li><strong>Compute / Instance Status:</strong> All processes and tasks are terminated; zero background compute or active Spark/Sedona sessions are running.</li>
+  <li><strong>Graphify AST Analysis:</strong> Validated dependencies across Python modules, GeoLibre proxy, and SQL table references.</li>
+  <li><strong>Lint &amp; Security Gate:</strong> 100% pass on <code>pytest tests/lint/ -v</code> (zero plain-text credentials, zero banned legacy identifiers).</li>
+  <li><strong>Attachment Resolution:</strong> All 11 dashboard tabs and GeoLibre modal dialogs render directly from standalone files in <code>runner/attachments/</code>.</li>
+  <li><strong>Compute Resource Teardown:</strong> All local and cloud compute instances are terminated; zero idle container spend ($0.00 / hr).</li>
 </ul>

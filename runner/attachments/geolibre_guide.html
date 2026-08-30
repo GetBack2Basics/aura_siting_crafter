@@ -1,0 +1,43 @@
+<div class="geolibre-guide-box">
+  <div style="font-size: 0.88rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.4rem;">What is the GeoLibre Project Spec?</div>
+  The <code>aura-siting-crafter.geolibre.json</code> file contains the declarative spatial definition of this national siting model, including all candidate hubs, MCE suitability formulas, thematic vector styling, and direct S3 lakehouse stream configurations.
+</div>
+
+<div style="font-size: 0.82rem; font-weight: 700; color: #e2e8f0; margin-bottom: 0.5rem;">How to Use in Desktop GIS (GeoLibre, QGIS, ArcGIS Pro):</div>
+
+<div class="geolibre-step">
+  <span class="step-num">1</span>
+  <div>
+    <strong>Download the JSON Project Spec</strong> using the button below.
+  </div>
+</div>
+
+<div class="geolibre-step">
+  <span class="step-num">2</span>
+  <div>
+    <strong>Open with GeoLibre App</strong>: Launch the GeoLibre desktop application or web GIS and choose <em>"Import Project"</em> &rarr; select <code>aura-siting-crafter.geolibre.json</code>.
+  </div>
+</div>
+
+<div class="geolibre-step">
+  <span class="step-num">3</span>
+  <div>
+    <strong>Direct S3 Lakehouse Streaming</strong>: GeoLibre connects directly to the S3 Iceberg/GeoParquet endpoints for live querying and spatial joins without downloading full datasets locally.
+  </div>
+</div>
+
+<div class="geolibre-step">
+  <span class="step-num">4</span>
+  <div>
+    <strong>QGIS / Python GIS / DuckDB Access</strong>: Import candidate GeoJSON features directly into QGIS, or read candidate parquet with <code>read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')</code> in DuckDB or GeoPandas.
+  </div>
+</div>
+
+<div style="display: flex; gap: 0.5rem; margin-top: 1.2rem; justify-content: flex-end;">
+  <button class="nav-btn nav-btn-primary" onclick="downloadGeolibreJson()" style="padding: 0.45rem 1rem; font-size: 0.8rem;">
+    <span>⬇️ Download aura-siting-crafter.geolibre.json</span>
+  </button>
+  <button class="nav-btn" onclick="closeGeolibreModalDirect()" style="padding: 0.45rem 0.8rem;">
+    <span>Close</span>
+  </button>
+</div>

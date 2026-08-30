@@ -1,78 +1,47 @@
-<h2>Next Steps: GeoLibre Open-Source AI Spatial Platform Integration</h2>
+<h2>Next Steps &amp; Technical Roadmap</h2>
 
 <h3>Executive Summary</h3>
-<p>The primary next step for the <strong>National Data Center Siting Suitability Model</strong> (<code>aura_siting_crafter</code>) is connecting our spatial outputs to an open-source <a href="https://github.com/opengeos/GeoLibre" target="_blank">opengeos/GeoLibre</a> deployment hosted serverless on <strong>Google Cloud Platform (GCP)</strong> to enable free public conversational spatial analytics ("Ask AI") using DuckDB-WASM and Gemini.</p>
+<p>Following the deployment of the <strong>AURA Siting Crafter</strong> national suitability model and the <strong>GeoLibre WebGIS</strong> platform, the immediate technical priorities focus on high-resolution vector tile streaming, direct client-side Parquet querying, multi-model LLM integration, and state digital twin exports.</p>
 
 <hr>
 
-<h3>1. GeoLibre AI Spatial Platform Architecture on GCP</h3>
-<pre style="background:rgba(0,0,0,0.4);padding:1rem;border-radius:0.5rem;font-size:0.8rem;overflow-x:auto;color:#94a3b8;">
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                                GOOGLE CLOUD PLATFORM (GCP)                              │
-│   ┌────────────────────────────────┐                 ┌──────────────────────────────┐   │
-│   │ Google Cloud Storage (GCS)     │                 │ GCP Cloud Run (Serverless)   │   │
-│   │ • GeoParquet Suitability Data  │◄────────────────┤ • FastAPI Spatial AI Proxy   │   │
-│   │ • PMTiles Vector Layers        │  (Direct HTTP)  │ • Scale-to-Zero Container    │   │
-│   │ • Static GeoLibre App UI       │                 │ • Gemini &amp; OpenRouter Client │   │
-│   └───────────────▲────────────────┘                 └──────────────▲───────────────┘   │
-└───────────────────┼─────────────────────────────────────────────────┼───────────────────┘
-                    │ static assets &amp; byte-range queries              │ Prompts &amp; AI SQL
-                    ▼                                                 ▼
-┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                                END-USER WEB BROWSER                                     │
-│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
-│   │ GeoLibre Web Application (Free Web Platform)                                    │   │
-│   │  ┌─────────────────────────────┐           ┌─────────────────────────────────┐  │   │
-│   │  │ Client-Side DuckDB-WASM     │           │ AI Spatial Chat Drawer          │  │   │
-│   │  │ (Zero-Cost In-Browser SQL)  │           │ (Free Tier + BYOK OpenRouter)   │  │   │
-│   │  └─────────────────────────────┘           └─────────────────────────────────┘  │   │
-│   └─────────────────────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────────────────────┘
-</pre>
-
-<hr>
-
-<h3>2. Shared Cloud Data Storage Architecture</h3>
-<p>Rather than maintaining separate file servers or copying data onto local web server disk storage, GeoLibre and Wherobots share the exact same cloud-native dataset repository:</p>
+<h3>1. High-Resolution Vector Tile Pyramids (PMTiles &amp; MVT)</h3>
 <ol>
-  <li><strong>Zero-Duplication Central Data Layer:</strong> Wherobots Cloud (Apache Sedona Spark) outputs suitability modeling layers directly into a central GCS / S3 bucket as <strong>GeoParquet</strong> and <strong>PMTiles</strong>. GeoLibre queries these exact same files without any dataset conversion or server duplication.</li>
-  <li><strong>HTTP Range-Request Querying:</strong> GeoLibre's in-browser DuckDB-WASM engine fetches only the required byte ranges and spatial row groups via HTTP range requests (<code>read_parquet('https://storage.googleapis.com/.../datacenter_candidates.parquet')</code>). Eliminates downloading large files to the client or maintaining expensive local NVMe storage.</li>
-  <li><strong>Cloud-Native Storage Tradeoff:</strong>
-    <table>
-      <thead><tr><th>Architecture Model</th><th>Data Sync / Duplication</th><th>Storage &amp; Server Cost</th><th>Scalability</th></tr></thead>
-      <tbody>
-        <tr><td>Shared Cloud Storage (GCS)</td><td>Zero Duplication (Unified)</td><td>Near-Zero (~$0.02/GB/mo)</td><td>Infinite Public Scale</td></tr>
-        <tr><td>Local Web Server Storage</td><td>High Duplication Needed</td><td>Expensive Server Disks</td><td>Constrained by VM I/O</td></tr>
-      </tbody>
-    </table>
-  </li>
+  <li><strong>Distributed Vector Tiling:</strong> Implement Apache Sedona / Tilezen pipelines to generate multi-resolution <strong>PMTiles</strong> for the 15.4M parcel national cadastre and 1.18M ABS meshblocks.</li>
+  <li><strong>Sub-Second Client Rendering:</strong> Stream parcel boundaries directly into MapLibre GL JS at zoom levels 14–18 using byte-range HTTP requests, eliminating GeoJSON payload bottlenecks.</li>
+  <li><strong>Automated Cache Invalidation:</strong> Establish ETag/hash-based cache update triggers when authoritative state cadastral datasets are refreshed.</li>
 </ol>
 
 <hr>
 
-<h3>3. Free Public Conversational AI Workflow ("Ask AI")</h3>
+<h3>2. Direct Client-Side Parquet Range Streaming</h3>
 <ol>
-  <li><strong>User Ask:</strong> The user types a natural language query: <em>"Show me all candidate sites in VIC larger than 10 hectares that are within 2km of high-voltage transmission lines and at least 1km away from any school or hospital."</em></li>
-  <li><strong>AI Translation:</strong> GeoLibre sends the user prompt + active dataset schemas to the FastAPI gateway on GCP Cloud Run. Cloud Run queries Gemini LLM to generate DuckDB Spatial SQL.</li>
-  <li><strong>In-Browser Compute:</strong> The SQL query is executed directly inside the user's browser using DuckDB-WASM, fetching only required byte ranges from GCS.</li>
-  <li><strong>Instant Visualisation:</strong> GeoLibre renders matching candidates on an interactive Mapbox/Leaflet map with dynamic stats and spatial boundaries.</li>
+  <li><strong>Zero-Proxy Architecture:</strong> Enable browser-native DuckDB-WASM to execute HTTP byte-range queries directly against S3/GCS GeoParquet tables (<code>s3://wherobots-user-storage/aura_siting/</code>) without routing queries through the Cloud Run backend.</li>
+  <li><strong>Spatial Hilbert-Curve Partitioning:</strong> Partition national datasets along Hilbert space-filling curves to minimize HTTP range request counts during bounding box queries.</li>
+  <li><strong>Client Memory Optimization:</strong> Implement automatic row-group pruning and memory garbage collection for low-memory mobile browser sessions.</li>
 </ol>
 
 <hr>
 
-<h3>4. Dual-Model LLM Access: Free Tier &amp; OpenRouter BYOK</h3>
-<p>Inspired by <a href="https://github.com/GetBack2Basics/LivePersonaCrafter" target="_blank">GetBack2Basics/LivePersonaCrafter</a>, GeoLibre provides a flexible dual-tier model:</p>
-<ul>
-  <li><strong>Free Default Tier:</strong> Powered by Google Cloud Gemini API (hosted on Cloud Run), allowing the public to ask natural language questions for free without creating accounts.</li>
-  <li><strong>OpenRouter BYOK Tier:</strong> Users can enter their own OpenRouter API key directly in the GeoLibre settings drawer to unlock premium models (e.g., Claude 3.5 Sonnet, GPT-4o, DeepSeek-R1, Llama 3) for specialized spatial reasoning.</li>
-</ul>
+<h3>3. Multi-Model LLM OpenRouter BYOK (Bring-Your-Own-Key) Integration</h3>
+<ol>
+  <li><strong>Dual-Tier Model Selection:</strong> Provide a free tier powered by Google Gemini 2.5 Flash on Cloud Run alongside a Bring-Your-Own-Key (BYOK) OpenRouter interface.</li>
+  <li><strong>Advanced Spatial Reasoning:</strong> Allow users to select specialized reasoning models (e.g. Claude 3.5 Sonnet, GPT-4o, DeepSeek-R1) directly within the GeoLibre settings drawer for complex planning queries.</li>
+  <li><strong>Secure Local Storage:</strong> Store user API keys exclusively within browser <code>localStorage</code>, never logging or transmitting keys to backend servers.</li>
+</ol>
 
 <hr>
 
-<h3>5. Planned Conversational AI Benchmark Queries</h3>
-<ul>
-  <li><em>"Show me all candidate sites in NSW within 2km of 330kV transmission lines that are at least 1km away from schools and child care centers."</em></li>
-  <li><em>"Which sites in Latrobe Valley or Gladstone score highest for recycled water availability without impacting residential meshblocks?"</em></li>
-  <li><em>"Find data center parcels co-located within Renewable Energy Zones that have over 15 hectares of developable land."</em></li>
-  <li><em>"Compare the developable pad area of the Macquarie Coal Complex against the proponent masterplan after deducting 30m riparian buffers and slope constraints."</em></li>
-</ul>
+<h3>4. Fine-Grained Regional Precinct Expansion (<code>AURA_REGION</code>)</h3>
+<ol>
+  <li><strong>Automated Slope &amp; Riparian Ingest:</strong> Run targeted 1m LiDAR DEM slope analysis and 30m riparian buffer clipping for declared Renewable Energy Zones in Queensland (Central/North QLD REZs) and Victoria (Latrobe Valley / Western VIC).</li>
+  <li><strong>Net Developable Area (NDA) Quantification:</strong> Automate statutory land subtraction (easements, mine subsidence, flood overlays) for all major national energy transition hubs.</li>
+</ol>
+
+<hr>
+
+<h3>5. State Spatial Digital Twin &amp; TerriaJS Integration</h3>
+<ol>
+  <li><strong>Standardized GeoLibre Project Spec:</strong> Maintain <code>aura-siting-crafter.geolibre.json</code> with direct compatibility for 1-click loading into the NSW Spatial Digital Twin and National Map.</li>
+  <li><strong>Automated Catalog Sync:</strong> Export OGC API - Features and STAC catalog endpoints for seamless ingestion by state geospatial agencies (NSW Spatial Services, Geoscience Australia).</li>
+</ol>

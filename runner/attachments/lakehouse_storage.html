@@ -1,0 +1,17 @@
+<h3 style="margin-top: 0; color: #fbbf24;">Lakehouse Storage & Table Directory Structure</h3>
+<p style="color: var(--text-secondary); margin-bottom: 1rem;">
+  All spatial tables are cataloged under <code>org_catalog.fgsdb.*</code> on Wherobots Cloud and persisted directly in cloud object storage at <code>s3://wherobots-user-storage/aura_siting/</code> (GDA2020 / MGA Zone 56 projected CRS <code>EPSG:7856</code> and GDA2020 geographic <code>EPSG:7844</code>).
+</p>
+<div style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.25rem; border-radius: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #e2e8f0; line-height: 1.6;">
+  <div style="color: #60a5fa; font-weight: bold; margin-bottom: 0.5rem;">s3://wherobots-user-storage/aura_siting/</div>
+  <div style="padding-left: 1rem; border-left: 2px solid rgba(59, 130, 246, 0.3);">
+    <div style="color: #34d399; font-weight: bold;">├── national_sensitive_receptors/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[ACARA, NHSD & OSM National POIs]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── national_electricity_grid/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[GA & AEMO 500kV/330kV/132kV Infrastructure]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── national_cadastre_gnaf/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[15.4M Geoscape & State Lot/Plans]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── national_elvis_dem_slope/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[25m Raster Elevation Models]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── abs_demographics_meshblocks/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[1.18M Meshblocks Partitioned]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── precinct_net_developable_zones/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[Buildable Pad Space]</span></div>
+    <div style="color: #34d399; font-weight: bold;">├── precinct_biodiversity_constraints/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[Environmental Setbacks]</span></div>
+    <div style="color: #34d399; font-weight: bold;">└── precinct_pipeline_corridors/ <span style="color: #94a3b8; font-weight: normal; font-size: 0.8rem;">[20m Gas & Water Corridors]</span></div>
+  </div>
+</div>

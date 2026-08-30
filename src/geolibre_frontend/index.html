@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -7,12 +8,14 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>AURA Siting Crafter — GeoLibre WebGIS</title>
-  
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+
   <!-- MapLibre GL JS & CSS -->
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
@@ -33,8 +36,14 @@
       --sidebar-width: 400px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
       width: 100vw;
       height: 100vh;
       max-width: 100vw;
@@ -48,10 +57,19 @@
 
     /* Rotating Sand Timer Loader Animation */
     @keyframes spinHourglass {
-      0% { transform: rotate(0deg); }
-      50% { transform: rotate(180deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      50% {
+        transform: rotate(180deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
+
     .loading-hourglass {
       display: inline-block;
       animation: spinHourglass 1.2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
@@ -131,22 +149,26 @@
       transition: all 0.18s ease;
       font-family: inherit;
     }
+
     .nav-btn:hover {
       background: var(--accent-blue);
       color: #ffffff;
       border-color: var(--accent-blue);
       box-shadow: 0 0 10px rgba(59, 130, 246, 0.35);
     }
+
     .nav-btn.nav-btn-primary {
       background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(6, 182, 212, 0.3) 100%);
       border-color: rgba(56, 189, 248, 0.5);
       color: #38bdf8;
     }
+
     .nav-btn.nav-btn-primary:hover {
       background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
       color: #ffffff;
       border-color: #38bdf8;
     }
+
     .nav-btn-help {
       padding: 0.32rem 0.55rem;
       font-weight: 700;
@@ -158,6 +180,7 @@
       position: relative;
       display: inline-block;
     }
+
     .basemap-popover-card {
       position: absolute;
       top: calc(100% + 6px);
@@ -167,21 +190,24 @@
       border-radius: 0.45rem;
       padding: 0.65rem 0.8rem;
       min-width: 230px;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.75);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75);
       display: none;
       flex-direction: column;
       gap: 0.55rem;
       z-index: 250;
       backdrop-filter: blur(12px);
     }
+
     .basemap-popover-card.open {
       display: flex;
     }
+
     .basemap-popover-row {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
     }
+
     .popover-label {
       font-size: 0.68rem;
       font-weight: 600;
@@ -189,6 +215,7 @@
       display: flex;
       justify-content: space-between;
     }
+
     .basemap-select {
       background: #1a2236;
       color: #93c5fd;
@@ -201,6 +228,7 @@
       outline: none;
       cursor: pointer;
     }
+
     .basemap-opacity-slider {
       width: 100%;
       height: 5px;
@@ -233,10 +261,13 @@
       z-index: 45;
       transition: background 0.15s;
     }
-    .resizer-v:hover, .resizer-v.resizing {
+
+    .resizer-v:hover,
+    .resizer-v.resizing {
       background: var(--accent-blue);
       box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
     }
+
     .resizer-h {
       height: 6px;
       background: rgba(59, 130, 246, 0.25);
@@ -246,7 +277,9 @@
       z-index: 45;
       transition: background 0.15s;
     }
-    .resizer-h:hover, .resizer-h.resizing {
+
+    .resizer-h:hover,
+    .resizer-h.resizing {
       background: var(--accent-blue);
       box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
     }
@@ -272,10 +305,28 @@
       border-bottom: 1px solid var(--border-color);
       background: rgba(10, 15, 29, 0.7);
     }
-    .sidebar-title { font-size: 0.82rem; font-weight: 700; color: #e2e8f0; text-transform: uppercase; letter-spacing: 0.05em; }
-    .sidebar-sub { font-size: 0.68rem; color: #34d399; font-family: 'JetBrains Mono', monospace; margin-top: 0.15rem; }
 
-    .layer-catalog-container { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0.5rem; }
+    .sidebar-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sidebar-sub {
+      font-size: 0.68rem;
+      color: #34d399;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 0.15rem;
+    }
+
+    .layer-catalog-container {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0.5rem;
+    }
 
     .category-card {
       background: var(--card-bg);
@@ -294,25 +345,43 @@
       font-weight: 600;
       font-size: 0.76rem;
       color: #e2e8f0;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0, 0, 0, 0.35);
       user-select: none;
     }
-    .category-header:hover { color: #60a5fa; }
-    .category-chevron { font-size: 0.65rem; color: var(--text-secondary); transition: transform 0.2s; }
-    .category-chevron.open { transform: rotate(90deg); }
 
-    .layer-list { padding: 0.2rem 0.45rem; display: none; }
-    .layer-list.open { display: block; }
+    .category-header:hover {
+      color: #60a5fa;
+    }
+
+    .category-chevron {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      transition: transform 0.2s;
+    }
+
+    .category-chevron.open {
+      transform: rotate(90deg);
+    }
+
+    .layer-list {
+      padding: 0.2rem 0.45rem;
+      display: none;
+    }
+
+    .layer-list.open {
+      display: block;
+    }
 
     .layer-item-wrapper {
       padding: 0.4rem 0.45rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       border-left: 4px solid transparent;
       border-radius: 0.35rem;
       transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
       cursor: pointer;
       position: relative;
     }
+
     .layer-item-wrapper {
       position: relative;
       padding: 0.35rem 0.6rem;
@@ -321,19 +390,23 @@
       margin-bottom: 0.2rem;
       transition: all 0.15s ease-in-out;
     }
+
     .layer-item-wrapper:hover {
       background: rgba(255, 255, 255, 0.05);
     }
+
     .layer-item-wrapper.selected-layer {
       background: linear-gradient(90deg, rgba(6, 182, 212, 0.28) 0%, rgba(59, 130, 246, 0.18) 100%) !important;
       border-left: 4px solid #06b6d4 !important;
       box-shadow: 0 0 14px rgba(6, 182, 212, 0.25), inset 0 0 12px rgba(6, 182, 212, 0.12) !important;
     }
+
     .layer-item-wrapper.selected-layer .layer-left span {
       color: #38bdf8 !important;
       font-weight: 700 !important;
       text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
     }
+
     .layer-item-wrapper.selected-layer .badge-count {
       border-color: #06b6d4 !important;
       background: rgba(6, 182, 212, 0.25) !important;
@@ -352,6 +425,7 @@
       border-radius: 0.2rem;
       letter-spacing: 0.04em;
     }
+
     .layer-item-wrapper.selected-layer .active-layer-indicator {
       display: inline-block;
     }
@@ -377,13 +451,22 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .layer-left:hover { color: #fff; }
+
+    .layer-left:hover {
+      color: #fff;
+    }
+
     .layer-left span {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .layer-checkbox { accent-color: var(--accent-blue); cursor: pointer; flex-shrink: 0; }
+
+    .layer-checkbox {
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
 
     /* Accurate Legend Symbology Icons */
     .layer-legend-icon {
@@ -394,29 +477,33 @@
       height: 14px;
       flex-shrink: 0;
     }
+
     .sym-point {
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.8);
+      border: 1px solid rgba(255, 255, 255, 0.8);
     }
+
     .sym-line {
       width: 13px;
       height: 0;
       border-top-width: 2px;
       border-top-style: solid;
     }
+
     .sym-line-dashed {
       width: 13px;
       height: 0;
       border-top-width: 2px;
       border-top-style: dashed;
     }
+
     .sym-poly-hollow {
       width: 12px;
       height: 9px;
       border-radius: 2px;
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
       border-width: 1.2px;
     }
 
@@ -439,6 +526,7 @@
       transition: opacity 0.15s ease-in-out;
       z-index: 5;
     }
+
     .layer-item-wrapper:hover .layer-controls {
       opacity: 1;
       pointer-events: auto;
@@ -467,8 +555,8 @@
     }
 
     .action-icon-btn {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: #94a3b8;
       cursor: pointer;
       font-size: 0.74rem;
@@ -480,7 +568,12 @@
       justify-content: center;
       line-height: 1;
     }
-    .action-icon-btn:hover { color: #60a5fa; background: rgba(59, 130, 246, 0.25); border-color: #60a5fa; }
+
+    .action-icon-btn:hover {
+      color: #60a5fa;
+      background: rgba(59, 130, 246, 0.25);
+      border-color: #60a5fa;
+    }
 
     .opacity-drawer {
       display: none;
@@ -488,13 +581,22 @@
       gap: 0.4rem;
       margin-top: 0.25rem;
       padding: 0.2rem 0.45rem;
-      background: rgba(0,0,0,0.3);
+      background: rgba(0, 0, 0, 0.3);
       border-radius: 0.3rem;
       font-size: 0.66rem;
       color: var(--text-secondary);
     }
-    .opacity-drawer.open { display: flex; }
-    .opacity-slider { flex: 1; height: 3px; accent-color: var(--accent-blue); cursor: pointer; }
+
+    .opacity-drawer.open {
+      display: flex;
+    }
+
+    .opacity-slider {
+      flex: 1;
+      height: 3px;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
 
     /* Central Map Viewport */
     #map-wrapper {
@@ -507,7 +609,11 @@
       background-color: #0a0f1d;
     }
 
-    #map { flex: 1; width: 100%; height: 100%; }
+    #map {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+    }
 
     /* Floating Bottom-Left Interaction Mode Switcher (Hand & Finger) */
     .map-mode-dock {
@@ -533,18 +639,20 @@
       align-items: center;
       cursor: pointer;
       backdrop-filter: blur(10px);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       overflow: hidden;
       white-space: nowrap;
       user-select: none;
     }
+
     .dock-mode-btn.active {
       background: var(--accent-blue);
       color: #ffffff;
       border-color: #60a5fa;
       box-shadow: 0 0 16px rgba(59, 130, 246, 0.6);
     }
+
     .mode-icon {
       font-size: 1rem;
       display: inline-flex;
@@ -552,6 +660,7 @@
       justify-content: center;
       flex-shrink: 0;
     }
+
     .mode-label {
       max-width: 0;
       opacity: 0;
@@ -562,11 +671,13 @@
       font-weight: 600;
       white-space: nowrap;
     }
+
     .dock-mode-btn:hover .mode-label {
       max-width: 140px;
       opacity: 1;
       margin-left: 0.4rem;
     }
+
     .dock-mode-btn:hover {
       border-color: #60a5fa;
       color: #ffffff;
@@ -592,13 +703,17 @@
       font-size: 0.74rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       gap: 0.3rem;
     }
-    .floating-btn:hover { background: var(--accent-blue); color: #fff; }
+
+    .floating-btn:hover {
+      background: var(--accent-blue);
+      color: #fff;
+    }
 
     /* Candidate Marker Styling */
     .compact-candidate-marker {
@@ -608,19 +723,23 @@
       cursor: pointer;
       transition: transform 0.2s;
     }
-    .compact-candidate-marker:hover { transform: scale(1.35); z-index: 50; }
+
+    .compact-candidate-marker:hover {
+      transform: scale(1.35);
+      z-index: 50;
+    }
 
     .marker-bullet {
       width: 12px;
       height: 12px;
       border-radius: 50%;
       border: 1.5px solid #ffffff;
-      box-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 8px currentColor;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.9), 0 0 8px currentColor;
     }
 
     .marker-tag {
       background: rgba(10, 15, 29, 0.92);
-      border: 1px solid rgba(255,255,255,0.25);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       color: #f8fafc;
       font-size: 0.65rem;
       font-weight: 600;
@@ -629,7 +748,7 @@
       margin-top: 2px;
       white-space: nowrap;
       pointer-events: none;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
     }
 
     /* Bottom Attribute Table Dock */
@@ -641,11 +760,14 @@
       display: flex;
       flex-direction: column;
       z-index: 40;
-      box-shadow: 0 -6px 25px rgba(0,0,0,0.7);
+      box-shadow: 0 -6px 25px rgba(0, 0, 0, 0.7);
       flex-shrink: 0;
       overflow: hidden;
     }
-    .attribute-table-dock.hidden { display: none; }
+
+    .attribute-table-dock.hidden {
+      display: none;
+    }
 
     .table-dock-header {
       padding: 0.4rem 1rem;
@@ -662,7 +784,7 @@
     }
 
     .table-search-input {
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       border: 1px solid rgba(59, 130, 246, 0.3);
       border-radius: 0.3rem;
       padding: 0.2rem 0.5rem;
@@ -680,11 +802,41 @@
       padding: 0.2rem 0.4rem;
     }
 
-    table { width: 100%; border-collapse: collapse; font-size: 0.74rem; text-align: left; white-space: nowrap; }
-    th { padding: 0.45rem 0.55rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 0.68rem; border-bottom: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.7); position: sticky; top: 0; z-index: 5; }
-    td { padding: 0.4rem 0.55rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    tr:hover { background: rgba(59, 130, 246, 0.2); cursor: pointer; }
-    tr.selected { background: rgba(59, 130, 246, 0.35) !important; border-left: 3px solid #34d399; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.74rem;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      padding: 0.45rem 0.55rem;
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.7);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    td {
+      padding: 0.4rem 0.55rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    tr:hover {
+      background: rgba(59, 130, 246, 0.2);
+      cursor: pointer;
+    }
+
+    tr.selected {
+      background: rgba(59, 130, 246, 0.35) !important;
+      border-left: 3px solid #34d399;
+    }
 
     /* Modal / Metadata & Chart Drawers */
     .modal-overlay {
@@ -693,14 +845,17 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0,0,0,0.65);
+      background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(8px);
       z-index: 300;
       display: none;
       align-items: center;
       justify-content: center;
     }
-    .modal-overlay.open { display: flex; }
+
+    .modal-overlay.open {
+      display: flex;
+    }
 
     .modal-card {
       background: #111827;
@@ -708,11 +863,22 @@
       border-radius: 0.65rem;
       width: 90%;
       max-width: 680px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
       overflow: hidden;
       animation: popIn 0.2s ease;
     }
-    @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.95);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
 
     .modal-header {
       padding: 0.8rem 1.2rem;
@@ -722,11 +888,42 @@
       justify-content: space-between;
       align-items: center;
     }
-    .modal-title { font-size: 0.92rem; font-weight: 700; color: #60a5fa; display: flex; align-items: center; gap: 0.4rem; }
-    .modal-body { padding: 1.2rem; font-size: 0.8rem; color: #cbd5e1; line-height: 1.6; max-height: 480px; overflow-y: auto; }
-    .modal-meta-table { width: 100%; border-collapse: collapse; margin-top: 0.6rem; }
-    .modal-meta-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; }
-    .modal-meta-table td:first-child { color: #94a3b8; font-weight: 600; width: 35%; }
+
+    .modal-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #60a5fa;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .modal-body {
+      padding: 1.2rem;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    .modal-meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.6rem;
+    }
+
+    .modal-meta-table td {
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.78rem;
+    }
+
+    .modal-meta-table td:first-child {
+      color: #94a3b8;
+      font-weight: 600;
+      width: 35%;
+    }
 
     /* Chart Container Controls */
     .chart-controls {
@@ -735,8 +932,9 @@
       align-items: center;
       margin-bottom: 1rem;
       padding-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
+
     .chart-type-select {
       background: #1e293b;
       color: #93c5fd;
@@ -763,10 +961,13 @@
       display: flex;
       flex-direction: column;
       transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: -6px 0 25px rgba(0,0,0,0.6);
+      box-shadow: -6px 0 25px rgba(0, 0, 0, 0.6);
       overflow: hidden;
     }
-    .ai-drawer.open { right: 0; }
+
+    .ai-drawer.open {
+      right: 0;
+    }
 
     .ai-drawer-header {
       padding: 0.85rem 1.1rem;
@@ -775,16 +976,42 @@
       justify-content: space-between;
       align-items: center;
     }
-    .ai-drawer-title { font-size: 0.92rem; font-weight: 700; color: #60a5fa; display: flex; align-items: center; gap: 0.4rem; }
-    .close-btn { background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; }
-    .close-btn:hover { color: #fff; }
 
-    .ai-drawer-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0.9rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .ai-drawer-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #60a5fa;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      color: #fff;
+    }
+
+    .ai-drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
 
     .ai-textarea {
       width: 100%;
       height: 75px;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       border: 1px solid rgba(59, 130, 246, 0.3);
       border-radius: 0.45rem;
       padding: 0.55rem 0.75rem;
@@ -810,7 +1037,10 @@
       gap: 0.4rem;
       margin-top: 0.35rem;
     }
-    .ask-btn:hover { background: #1d4ed8; }
+
+    .ask-btn:hover {
+      background: #1d4ed8;
+    }
 
     .preset-chip {
       background: rgba(59, 130, 246, 0.12);
@@ -823,10 +1053,14 @@
       display: inline-block;
       margin: 0.15rem 0.15rem 0.15rem 0;
     }
-    .preset-chip:hover { background: rgba(59, 130, 246, 0.25); color: #fff; }
+
+    .preset-chip:hover {
+      background: rgba(59, 130, 246, 0.25);
+      color: #fff;
+    }
 
     .sql-output-card {
-      background: rgba(0,0,0,0.5);
+      background: rgba(0, 0, 0, 0.5);
       border: 1px solid rgba(16, 185, 129, 0.3);
       border-radius: 0.5rem;
       padding: 0.75rem;
@@ -847,12 +1081,13 @@
       line-height: 1.45;
       resize: vertical;
       outline: none;
-      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6);
       transition: border-color 0.2s, box-shadow 0.2s;
     }
+
     .sql-code-editor:focus {
       border-color: #38bdf8;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3), inset 0 0 8px rgba(0,0,0,0.6);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3), inset 0 0 8px rgba(0, 0, 0, 0.6);
     }
 
     .saved-queries-select {
@@ -869,6 +1104,7 @@
       cursor: pointer;
       margin-bottom: 0.5rem;
     }
+
     .saved-queries-select:focus {
       border-color: #38bdf8;
     }
@@ -879,13 +1115,15 @@
       gap: 0.35rem;
       margin: 0.45rem 0 0.55rem 0;
       padding: 0.35rem 0.45rem;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       border-radius: 0.35rem;
       border: 1px solid rgba(59, 130, 246, 0.35);
     }
+
     .save-query-row.open {
       display: flex;
     }
+
     .save-query-input {
       flex: 1;
       background: rgba(10, 15, 29, 0.9);
@@ -897,11 +1135,17 @@
       font-family: inherit;
       outline: none;
     }
+
     .save-query-input:focus {
       border-color: #38bdf8;
     }
 
-    pre { font-family: 'JetBrains Mono', monospace; color: #34d399; overflow-x: auto; margin-top: 0.35rem; }
+    pre {
+      font-family: 'JetBrains Mono', monospace;
+      color: #34d399;
+      overflow-x: auto;
+      margin-top: 0.35rem;
+    }
 
     /* Popups */
     .maplibregl-popup-content {
@@ -914,13 +1158,39 @@
       font-family: 'Outfit', sans-serif !important;
       min-width: 260px;
     }
-    .maplibregl-popup-close-button { color: #94a3b8 !important; }
-    .maplibregl-popup-tip { border-top-color: rgba(15, 23, 42, 0.98) !important; }
 
-    .score-badge { padding: 0.15rem 0.45rem; border-radius: 0.3rem; font-weight: 700; font-size: 0.78rem; }
-    .score-high { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
-    .score-med { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
-    .score-low { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .maplibregl-popup-close-button {
+      color: #94a3b8 !important;
+    }
+
+    .maplibregl-popup-tip {
+      border-top-color: rgba(15, 23, 42, 0.98) !important;
+    }
+
+    .score-badge {
+      padding: 0.15rem 0.45rem;
+      border-radius: 0.3rem;
+      font-weight: 700;
+      font-size: 0.78rem;
+    }
+
+    .score-high {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .score-med {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .score-low {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
 
     /* System Guide & Telemetry Modal Styling */
     .help-grid {
@@ -929,12 +1199,14 @@
       gap: 0.8rem;
       margin-bottom: 1rem;
     }
+
     .help-card {
       background: rgba(19, 26, 44, 0.8);
       border: 1px solid var(--border-color);
       border-radius: 0.5rem;
       padding: 0.85rem;
     }
+
     .help-card-title {
       font-size: 0.82rem;
       font-weight: 700;
@@ -944,11 +1216,13 @@
       align-items: center;
       gap: 0.4rem;
     }
+
     .help-card-text {
       font-size: 0.75rem;
       color: #cbd5e1;
       line-height: 1.5;
     }
+
     .telemetry-banner {
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(6, 182, 212, 0.12) 100%);
       border: 1px solid rgba(16, 185, 129, 0.4);
@@ -956,17 +1230,20 @@
       padding: 0.85rem 1rem;
       margin-top: 0.5rem;
     }
+
     .telemetry-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 0.74rem;
       padding: 0.25rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
+
     .telemetry-row:last-child {
       border-bottom: none;
     }
+
     .telemetry-val {
       font-family: 'JetBrains Mono', monospace;
       color: #34d399;
@@ -983,12 +1260,14 @@
       font-size: 0.77rem;
       line-height: 1.55;
     }
+
     .geolibre-step {
       display: flex;
       gap: 0.6rem;
       margin-top: 0.6rem;
       align-items: flex-start;
     }
+
     .step-num {
       background: var(--accent-blue);
       color: #fff;
@@ -1011,23 +1290,29 @@
         flex-wrap: wrap;
         gap: 0.4rem;
       }
+
       .nav-brand-title {
         font-size: 0.88rem;
       }
+
       .nav-brand-subtitle {
         font-size: 0.60rem;
       }
+
       .nav-actions {
         flex-wrap: wrap;
         gap: 0.3rem;
       }
+
       .nav-btn {
         padding: 0.25rem 0.5rem;
         font-size: 0.70rem;
       }
+
       .mobile-toggle-btn {
         display: inline-flex;
       }
+
       .sidebar {
         position: fixed;
         top: 0;
@@ -1037,49 +1322,59 @@
         height: 100vh;
         z-index: 500;
         transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 6px 0 30px rgba(0,0,0,0.85);
+        box-shadow: 6px 0 30px rgba(0, 0, 0, 0.85);
       }
+
       .sidebar.mobile-open {
         left: 0;
       }
+
       .sidebar-backdrop {
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0,0,0,0.6);
+        background: rgba(0, 0, 0, 0.6);
         backdrop-filter: blur(4px);
         z-index: 490;
         display: none;
       }
+
       .sidebar-backdrop.open {
         display: block;
       }
+
       .resizer-v#sidebar-resizer {
         display: none;
       }
+
       .ai-drawer {
         width: 100vw !important;
         right: -100vw;
       }
+
       .map-mode-dock {
         bottom: 12px;
         left: 10px;
       }
+
       .dock-mode-btn {
         height: 40px;
         min-width: 40px;
       }
+
       .dock-mode-btn .mode-label {
         max-width: 130px;
         opacity: 1;
         margin-left: 0.35rem;
       }
+
       .modal-card {
         width: 95%;
         max-height: 92vh;
       }
+
       .attribute-table-dock {
         height: 220px;
       }
@@ -1101,29 +1396,41 @@
       z-index: 100;
       flex-shrink: 0;
       white-space: nowrap;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
     }
-    .app-footer a { color: #60a5fa; text-decoration: underline; }
-    .app-footer a:hover { color: #93c5fd; }
+
+    .app-footer a {
+      color: #60a5fa;
+      text-decoration: underline;
+    }
+
+    .app-footer a:hover {
+      color: #93c5fd;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- Top Application Bar -->
   <header class="top-navbar">
     <div class="nav-brand-container">
       <div class="nav-brand-title">🌐 AURA Siting Crafter</div>
-      <div class="nav-brand-subtitle"><span class="aura-highlight">A</span>ustralian <span class="aura-highlight">U</span>rban and <span class="aura-highlight">R</span>egional <span class="aura-highlight">A</span>I Datacenter Siting</div>
+      <div class="nav-brand-subtitle"><span class="aura-highlight">A</span>ustralian <span
+          class="aura-highlight">U</span>rban and <span class="aura-highlight">R</span>egional <span
+          class="aura-highlight">A</span>I Datacenter Siting</div>
     </div>
 
     <div class="nav-actions">
       <!-- Full System Help & User Guide -->
-      <button class="nav-btn nav-btn-help" onclick="openHelpModal()" title="Help & System Guide: How to use the spatial platform">
+      <button class="nav-btn nav-btn-help" onclick="openHelpModal()"
+        title="Help & System Guide: How to use the spatial platform">
         <span>❔ Help</span>
       </button>
 
       <!-- Published Suitability Report Link -->
-      <a class="nav-btn" href="/runner/national_suitability_report.html" target="_blank" title="View Published National Siting & Suitability Report">
+      <a class="nav-btn" href="/runner/national_suitability_report.html" target="_blank"
+        title="View Published National Siting & Suitability Report">
         <span>📑 Published Report</span>
       </a>
 
@@ -1139,7 +1446,8 @@
 
       <!-- Basemap Controls Dropdown Popover -->
       <div class="basemap-popover-wrapper">
-        <button class="nav-btn" id="basemap-popover-btn" onclick="toggleBasemapPopover()" title="Change Basemap Style & Opacity">
+        <button class="nav-btn" id="basemap-popover-btn" onclick="toggleBasemapPopover()"
+          title="Change Basemap Style & Opacity">
           <span>🗺️ Basemap ▾</span>
         </button>
         <div class="basemap-popover-card" id="basemap-popover">
@@ -1160,7 +1468,8 @@
               <span>Basemap Opacity</span>
               <span id="basemap-opacity-val">50%</span>
             </div>
-            <input type="range" class="basemap-opacity-slider" id="basemap-opacity" min="0" max="100" value="50" oninput="setBasemapOpacity(this.value)">
+            <input type="range" class="basemap-opacity-slider" id="basemap-opacity" min="0" max="100" value="50"
+              oninput="setBasemapOpacity(this.value)">
           </div>
         </div>
       </div>
@@ -1184,13 +1493,17 @@
           <div class="sidebar-title">S3 Thematic Lakehouse</div>
           <div class="sidebar-sub">s3://wherobots-user-storage/aura_siting/</div>
         </div>
-        <button class="close-btn mobile-toggle-btn" onclick="toggleMobileSidebar(false)" style="font-size: 1rem;">&times;</button>
+        <button class="close-btn mobile-toggle-btn" onclick="toggleMobileSidebar(false)"
+          style="font-size: 1rem;">&times;</button>
       </div>
       <div class="layer-catalog-container" id="catalog-container">
         <!-- Dynamically loaded layers with hover-only action menus -->
       </div>
-      <div class="sidebar-footer" style="padding: 0.45rem 0.65rem; font-size: 0.62rem; color: #94a3b8; border-top: 1px solid var(--border-color); background: rgba(10, 15, 29, 0.9); text-align: center; flex-shrink: 0; line-height: 1.35;">
-        &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for information only and is the authors private opinion | <span class="dynamic-build-ts"></span>
+      <div class="sidebar-footer"
+        style="padding: 0.45rem 0.65rem; font-size: 0.62rem; color: #94a3b8; border-top: 1px solid var(--border-color); background: rgba(10, 15, 29, 0.9); text-align: center; flex-shrink: 0; line-height: 1.35;">
+        &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank"
+          style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for
+        information only and is the authors private opinion | <span class="dynamic-build-ts"></span>
       </div>
     </aside>
 
@@ -1203,35 +1516,41 @@
 
       <!-- Floating Quick Map Extent Controls -->
       <div class="map-floating-controls">
-        <button class="floating-btn" onclick="resetToNationalExtent()" title="Reset Map to Full National Extent (Australia)">
+        <button class="floating-btn" onclick="resetToNationalExtent()"
+          title="Reset Map to Full National Extent (Australia)">
           <span>🇦🇺 National Scale</span>
         </button>
       </div>
 
       <!-- Floating Bottom-Left Interaction Mode Switcher (Identify vs Pan) -->
       <div class="map-mode-dock" id="map-mode-dock">
-        <button id="mode-identify" class="dock-mode-btn active" onclick="setInteractionMode('identify')" title="Click features on map to view popup attributes">
+        <button id="mode-identify" class="dock-mode-btn active" onclick="setInteractionMode('identify')"
+          title="Click features on map to view popup attributes">
           <span class="mode-icon">👆</span>
           <span class="mode-label">Click (Identify)</span>
         </button>
-        <button id="mode-pan" class="dock-mode-btn" onclick="setInteractionMode('pan')" title="Drag and explore the map">
+        <button id="mode-pan" class="dock-mode-btn" onclick="setInteractionMode('pan')"
+          title="Drag and explore the map">
           <span class="mode-icon">✋</span>
           <span class="mode-label">Hand (Pan)</span>
         </button>
       </div>
 
       <!-- Dock Resizer Splitter (Height Draggable) -->
-      <div class="resizer-h" id="dock-resizer" title="Drag vertically to resize attribute table height" style="display: none;"></div>
+      <div class="resizer-h" id="dock-resizer" title="Drag vertically to resize attribute table height"
+        style="display: none;"></div>
 
       <!-- Bottom Attribute Table Dock with Direct Live Stream & Filter -->
       <div class="attribute-table-dock hidden" id="attr-table-dock">
         <div class="table-dock-header">
           <div style="display: flex; align-items: center; gap: 0.6rem;">
             <span id="dock-table-title" style="font-weight: 700;">⊞ Layer Attribute Table</span>
-            <span id="dock-table-count" style="color: #34d399; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;"></span>
+            <span id="dock-table-count"
+              style="color: #34d399; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;"></span>
           </div>
           <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <input type="text" id="table-filter" class="table-search-input" placeholder="🔍 Search real attributes..." oninput="filterCurrentTable(this.value)">
+            <input type="text" id="table-filter" class="table-search-input" placeholder="🔍 Search real attributes..."
+              oninput="filterCurrentTable(this.value)">
             <span style="cursor: pointer; color: #94a3b8; font-size: 0.85rem;" onclick="closeAttrTable()">✖ Close</span>
           </div>
         </div>
@@ -1245,7 +1564,8 @@
     </div>
 
     <!-- AI Drawer Resizer Splitter (Width Draggable) -->
-    <div class="resizer-v" id="ai-drawer-resizer" title="Drag horizontally to resize AI drawer width" style="display: none;"></div>
+    <div class="resizer-v" id="ai-drawer-resizer" title="Drag horizontally to resize AI drawer width"
+      style="display: none;"></div>
 
     <!-- Right AI Spatial Drawer -->
     <div class="ai-drawer" id="ai-drawer">
@@ -1260,8 +1580,11 @@
         <!-- Saved Queries & Benchmark Presets Dropdown -->
         <div>
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem;">
-            <label for="saved-queries-select" style="font-size: 0.76rem; font-weight: 600; color: #cbd5e1;">📁 Presets & Saved Queries:</label>
-            <button id="delete-saved-query-btn" class="action-icon-btn" style="display: none; color: #f87171; font-size: 0.66rem; padding: 0.1rem 0.35rem; border-color: rgba(248,113,113,0.3);" title="Delete selected query from browser cache" onclick="deleteSelectedSavedQuery()">
+            <label for="saved-queries-select" style="font-size: 0.76rem; font-weight: 600; color: #cbd5e1;">📁 Presets &
+              Saved Queries:</label>
+            <button id="delete-saved-query-btn" class="action-icon-btn"
+              style="display: none; color: #f87171; font-size: 0.66rem; padding: 0.1rem 0.35rem; border-color: rgba(248,113,113,0.3);"
+              title="Delete selected query from browser cache" onclick="deleteSelectedSavedQuery()">
               🗑️ Delete Saved
             </button>
           </div>
@@ -1279,8 +1602,10 @@
         </div>
 
         <div>
-          <label for="ai-prompt-input" style="font-size: 0.76rem; color: #94a3b8; font-weight: 500;">Ask spatial question (or edit SQL below):</label>
-          <textarea id="ai-prompt-input" class="ai-textarea" placeholder="e.g. Show me all candidate sites within 2km of 330kV lines in VIC..."></textarea>
+          <label for="ai-prompt-input" style="font-size: 0.76rem; color: #94a3b8; font-weight: 500;">Ask spatial
+            question (or edit SQL below):</label>
+          <textarea id="ai-prompt-input" class="ai-textarea"
+            placeholder="e.g. Show me all candidate sites within 2km of 330kV lines in VIC..."></textarea>
           <button class="ask-btn" id="ask-btn" onclick="submitAiQuery()">
             <span>⚡ Translate & Run Spatial Query</span>
           </button>
@@ -1292,33 +1617,48 @@
             <span style="color: #60a5fa; font-weight: 700; font-size: 0.78rem;">Editable DuckDB Spatial SQL:</span>
             <span id="ai-result-count-badge" class="badge-count" style="font-size: 0.65rem;">0 matches</span>
           </div>
-          
-          <textarea id="sql-code-editor" class="sql-code-editor" spellcheck="false" title="Directly edit SQL criteria (dist_to_substation_km, area_ha, state_name, etc.) and click Run SQL or press Ctrl+Enter" onkeydown="if((event.ctrlKey || event.metaKey) && event.key === 'Enter') runEditedSqlQuery()"></textarea>
-          
+
+          <textarea id="sql-code-editor" class="sql-code-editor" spellcheck="false"
+            title="Directly edit SQL criteria (dist_to_substation_km, area_ha, state_name, etc.) and click Run SQL or press Ctrl+Enter"
+            onkeydown="if((event.ctrlKey || event.metaKey) && event.key === 'Enter') runEditedSqlQuery()"></textarea>
+
           <div id="sql-explanation" style="color: #cbd5e1; font-size: 0.73rem; margin: 0.4rem 0 0.55rem;"></div>
 
           <!-- Save Query Form (Inline Toggle) -->
           <div id="save-query-row" class="save-query-row">
-            <input type="text" id="save-query-name-input" class="save-query-input" placeholder="Query name (e.g. NSW HV Transmission >=30ha)..." onkeydown="if(event.key === 'Enter') confirmSaveQuery()">
-            <button class="action-icon-btn" style="color: #34d399; font-weight: 600; font-size: 0.70rem; padding: 0.25rem 0.5rem; border-color: rgba(52,211,153,0.4);" onclick="confirmSaveQuery()">
+            <input type="text" id="save-query-name-input" class="save-query-input"
+              placeholder="Query name (e.g. NSW HV Transmission >=30ha)..."
+              onkeydown="if(event.key === 'Enter') confirmSaveQuery()">
+            <button class="action-icon-btn"
+              style="color: #34d399; font-weight: 600; font-size: 0.70rem; padding: 0.25rem 0.5rem; border-color: rgba(52,211,153,0.4);"
+              onclick="confirmSaveQuery()">
               Save
             </button>
-            <button class="action-icon-btn" style="color: #94a3b8; font-size: 0.70rem; padding: 0.25rem 0.4rem;" onclick="toggleSaveQueryRow(false)">
+            <button class="action-icon-btn" style="color: #94a3b8; font-size: 0.70rem; padding: 0.25rem 0.4rem;"
+              onclick="toggleSaveQueryRow(false)">
               ✖
             </button>
           </div>
-          
-          <div style="display: flex; gap: 0.35rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem; flex-wrap: wrap;">
-            <button class="action-icon-btn" style="flex: 1; padding: 0.35rem 0.5rem; color: #34d399; font-weight: 700; font-size: 0.72rem; border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.12);" onclick="runEditedSqlQuery()" title="Execute currently edited SQL against candidate lakehouse">
+
+          <div
+            style="display: flex; gap: 0.35rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem; flex-wrap: wrap;">
+            <button class="action-icon-btn"
+              style="flex: 1; padding: 0.35rem 0.5rem; color: #34d399; font-weight: 700; font-size: 0.72rem; border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.12);"
+              onclick="runEditedSqlQuery()" title="Execute currently edited SQL against candidate lakehouse">
               ▶️ Run SQL
             </button>
-            <button class="action-icon-btn" style="padding: 0.35rem 0.55rem; color: #60a5fa; font-weight: 600; font-size: 0.72rem; border-color: rgba(59,130,246,0.4);" onclick="toggleSaveQueryRow(true)" title="Save this SQL query to browser cache">
+            <button class="action-icon-btn"
+              style="padding: 0.35rem 0.55rem; color: #60a5fa; font-weight: 600; font-size: 0.72rem; border-color: rgba(59,130,246,0.4);"
+              onclick="toggleSaveQueryRow(true)" title="Save this SQL query to browser cache">
               💾 Save
             </button>
-            <button class="action-icon-btn" style="flex: 1; padding: 0.35rem 0.5rem; color: #38bdf8; font-weight: 600; font-size: 0.72rem; border-color: rgba(56,189,248,0.4);" onclick="openAiResultTable()" title="Open Attribute Table Dock">
+            <button class="action-icon-btn"
+              style="flex: 1; padding: 0.35rem 0.5rem; color: #38bdf8; font-weight: 600; font-size: 0.72rem; border-color: rgba(56,189,248,0.4);"
+              onclick="openAiResultTable()" title="Open Attribute Table Dock">
               ⊞ Table
             </button>
-            <button class="action-icon-btn" style="padding: 0.35rem 0.5rem; color: #94a3b8; font-size: 0.72rem;" title="Reset Map Filter" onclick="resetAiFilter()">
+            <button class="action-icon-btn" style="padding: 0.35rem 0.5rem; color: #94a3b8; font-size: 0.72rem;"
+              title="Reset Map Filter" onclick="resetAiFilter()">
               ↺ Reset
             </button>
           </div>
@@ -1339,38 +1679,48 @@
           <div class="help-card">
             <div class="help-card-title">🗺️ Map Navigation & Modes</div>
             <div class="help-card-text">
-              • <strong>👆 Click (Identify)</strong>: Click candidate site markers or any lakehouse infrastructure feature to inspect genuine authoritative attributes in rich popups.<br>
-              • <strong>✋ Hand (Pan)</strong>: Drag to explore national corridors across Australia without triggering feature click popups.<br>
+              • <strong>👆 Click (Identify)</strong>: Click candidate site markers or any lakehouse infrastructure
+              feature to inspect genuine authoritative attributes in rich popups.<br>
+              • <strong>✋ Hand (Pan)</strong>: Drag to explore national corridors across Australia without triggering
+              feature click popups.<br>
               • <strong>🇦🇺 National Scale</strong>: Instantly resets viewport extent to the full Australian continent.
             </div>
           </div>
           <div class="help-card">
             <div class="help-card-title">🗂️ Thematic Lakehouse & Siting Scoring</div>
             <div class="help-card-text">
-              • <strong>Decoupled Geometry vs Scoring</strong>: Siting criteria evaluate Power Proximity (S_power), Water Recycled Access (S_water), Slope Stability, and Sensitive Receptor setbacks (S_sensitive).<br>
-              • <strong>Hover Actions</strong>: Hover over any layer row in the left sidebar to reveal Opacity slider (🎚️), Lineage Metadata (ℹ️), Distribution Charts (📊), and Viewport Attribute Table (⊞).
+              • <strong>Decoupled Geometry vs Scoring</strong>: Siting criteria evaluate Power Proximity (S_power),
+              Water Recycled Access (S_water), Slope Stability, and Sensitive Receptor setbacks (S_sensitive).<br>
+              • <strong>Hover Actions</strong>: Hover over any layer row in the left sidebar to reveal Opacity slider
+              (🎚️), Lineage Metadata (ℹ️), Distribution Charts (📊), and Viewport Attribute Table (⊞).
             </div>
           </div>
           <div class="help-card">
             <div class="help-card-title">⚡ Conversational Spatial AI</div>
             <div class="help-card-text">
-              • <strong>Natural Language to SQL</strong>: Ask questions like <em>"Show sites in NSW within 1.5km of 330kV lines"</em>.<br>
-              • <strong>Zero-Cost Client Execution</strong>: DuckDB-WASM executes queries directly inside your browser against authentic GeoParquet candidate records ($0.00 cloud compute).<br>
-              • <strong>Direct SQL Editor</strong>: Edit spatial SQL conditions and press Ctrl+Enter to re-filter markers in real time.
+              • <strong>Natural Language to SQL</strong>: Ask questions like <em>"Show sites in NSW within 1.5km of
+                330kV lines"</em>.<br>
+              • <strong>Zero-Cost Client Execution</strong>: DuckDB-WASM executes queries directly inside your browser
+              against authentic GeoParquet candidate records ($0.00 cloud compute).<br>
+              • <strong>Direct SQL Editor</strong>: Edit spatial SQL conditions and press Ctrl+Enter to re-filter
+              markers in real time.
             </div>
           </div>
           <div class="help-card">
             <div class="help-card-title">⊞ Viewport Attribute Table Dock</div>
             <div class="help-card-text">
-              • <strong>Live Streaming Attributes</strong>: Click ⊞ on any layer to stream genuine attributes for visible features.<br>
-              • <strong>Interactive Feature Zoom</strong>: Click any table row to automatically pan and zoom to the feature coordinate.
+              • <strong>Live Streaming Attributes</strong>: Click ⊞ on any layer to stream genuine attributes for
+              visible features.<br>
+              • <strong>Interactive Feature Zoom</strong>: Click any table row to automatically pan and zoom to the
+              feature coordinate.
             </div>
           </div>
         </div>
 
         <!-- Live GCP Serverless Compute & Cost Telemetry Banner -->
         <div class="telemetry-banner">
-          <div style="font-size: 0.82rem; font-weight: 700; color: #34d399; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.4rem;">
+          <div
+            style="font-size: 0.82rem; font-weight: 700; color: #34d399; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.4rem;">
             <span>☁️ Live Serverless Compute & Cost Telemetry</span>
           </div>
           <div class="telemetry-row">
@@ -1403,12 +1753,16 @@
       </div>
       <div class="modal-body" id="geolibre-modal-body">
         <div class="geolibre-guide-box">
-          <div style="font-size: 0.88rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.4rem;">What is the GeoLibre Project Spec?</div>
-          The <code>aura-siting-crafter.geolibre.json</code> file contains the full declarative spatial definition of this national siting model, including all 16 candidate hubs, MCE suitability formulas, thematic vector styling, and direct S3 lakehouse stream configurations.
+          <div style="font-size: 0.88rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.4rem;">What is the GeoLibre
+            Project Spec?</div>
+          The <code>aura-siting-crafter.geolibre.json</code> file contains the full declarative spatial definition of
+          this national siting model, including all 16 candidate hubs, MCE suitability formulas, thematic vector
+          styling, and direct S3 lakehouse stream configurations.
         </div>
 
-        <div style="font-size: 0.82rem; font-weight: 700; color: #e2e8f0; margin-bottom: 0.5rem;">How to Use in Desktop GIS (GeoLibre, QGIS, ArcGIS Pro):</div>
-        
+        <div style="font-size: 0.82rem; font-weight: 700; color: #e2e8f0; margin-bottom: 0.5rem;">How to Use in Desktop
+          GIS (GeoLibre, QGIS, ArcGIS Pro):</div>
+
         <div class="geolibre-step">
           <span class="step-num">1</span>
           <div>
@@ -1419,26 +1773,32 @@
         <div class="geolibre-step">
           <span class="step-num">2</span>
           <div>
-            <strong>Open with GeoLibre App</strong>: Launch the GeoLibre desktop application or web GIS and choose <em>"Import Project"</em> &rarr; select <code>aura-siting-crafter.geolibre.json</code>.
+            <strong>Open with GeoLibre App</strong>: Launch the GeoLibre desktop application or web GIS and choose
+            <em>"Import Project"</em> &rarr; select <code>aura-siting-crafter.geolibre.json</code>.
           </div>
         </div>
 
         <div class="geolibre-step">
           <span class="step-num">3</span>
           <div>
-            <strong>Direct S3 Lakehouse Streaming</strong>: GeoLibre connects directly to the S3 Iceberg/GeoParquet endpoints for live querying and spatial joins without re-downloading gigabytes of data.
+            <strong>Direct S3 Lakehouse Streaming</strong>: GeoLibre connects directly to the S3 Iceberg/GeoParquet
+            endpoints for live querying and spatial joins without re-downloading gigabytes of data.
           </div>
         </div>
 
         <div class="geolibre-step">
           <span class="step-num">4</span>
           <div>
-            <strong>QGIS / Python GIS / DuckDB Access</strong>: Import the candidate GeoJSON features directly into QGIS, or read candidate parquet with <code>read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')</code> in DuckDB or GeoPandas.
+            <strong>QGIS / Python GIS / DuckDB Access</strong>: Import the candidate GeoJSON features directly into
+            QGIS, or read candidate parquet with
+            <code>read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')</code>
+            in DuckDB or GeoPandas.
           </div>
         </div>
 
         <div style="display: flex; gap: 0.5rem; margin-top: 1.2rem; justify-content: flex-end;">
-          <button class="nav-btn nav-btn-primary" onclick="downloadGeolibreJson()" style="padding: 0.45rem 1rem; font-size: 0.8rem;">
+          <button class="nav-btn nav-btn-primary" onclick="downloadGeolibreJson()"
+            style="padding: 0.45rem 1rem; font-size: 0.8rem;">
             <span>⬇️ Download aura-siting-crafter.geolibre.json</span>
           </button>
           <button class="nav-btn" onclick="closeGeolibreModalDirect()" style="padding: 0.45rem 0.8rem;">
@@ -1477,7 +1837,8 @@
             <option value="scatter">📈 Scatter Plot</option>
           </select>
         </div>
-        <div id="chart-canvas-container" style="width: 100%; min-height: 280px; display: flex; align-items: center; justify-content: center;">
+        <div id="chart-canvas-container"
+          style="width: 100%; min-height: 280px; display: flex; align-items: center; justify-content: center;">
           <!-- Interactive SVG Chart -->
         </div>
       </div>
@@ -1486,8 +1847,11 @@
 
   <!-- Footer with Report Build Identifier and National Status -->
   <footer class="app-footer">
-    <span>&copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for information only and is the authors private opinion | <span class="dynamic-build-ts"></span></span>
-    <span style="font-family: 'JetBrains Mono', monospace; color: #93c5fd; font-size: 0.66rem;">Live S3 Lakehouse & WFS/REST Streams | EPSG:7844 GDA2020</span>
+    <span>&copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank"
+        style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for
+      information only and is the authors private opinion | <span class="dynamic-build-ts"></span></span>
+    <span style="font-family: 'JetBrains Mono', monospace; color: #93c5fd; font-size: 0.66rem;">Live S3 Lakehouse &
+      WFS/REST Streams | EPSG:7844 GDA2020</span>
   </footer>
 
   <script>
@@ -1547,23 +1911,23 @@
 
     // 16 National Candidate Sites (Matching Multi-Criteria Decision Analysis Report)
     const rawCandidatesData = [
-      {"mb_code21": "NSW_MCC01", "town_name": "Teralba", "state_name": "New South Wales", "area_ha": 44.5, "slope_pct": 2.1, "dist_to_substation_km": 0.35, "dist_to_wwtw_km": 0.85, "dist_to_sensitive_km": 0.82, "suitability_score": 0.998, "pumped_hydro_capacity_mwh": 49.0, "lon": 151.60, "lat": -32.94},
-      {"mb_code21": "NSW_MCC02", "town_name": "Killingworth", "state_name": "New South Wales", "area_ha": 28.2, "slope_pct": 3.4, "dist_to_substation_km": 0.45, "dist_to_wwtw_km": 1.4, "dist_to_sensitive_km": 1.25, "suitability_score": 0.991, "pumped_hydro_capacity_mwh": 130.8, "lon": 151.56, "lat": -32.92},
-      {"mb_code21": "NSW_MCC03", "town_name": "Cockle Creek", "state_name": "New South Wales", "area_ha": 18.7, "slope_pct": 1.2, "dist_to_substation_km": 0.2, "dist_to_wwtw_km": 0.6, "dist_to_sensitive_km": 0.42, "suitability_score": 0.845, "pumped_hydro_capacity_mwh": 27.2, "lon": 151.62, "lat": -32.94},
-      {"mb_code21": "NSW_MCC04", "town_name": "West Lake", "state_name": "New South Wales", "area_ha": 35.0, "slope_pct": 4.1, "dist_to_substation_km": 1.1, "dist_to_wwtw_km": 2.1, "dist_to_sensitive_km": 1.8, "suitability_score": 0.922, "pumped_hydro_capacity_mwh": 196.2, "lon": 151.55, "lat": -32.96},
-      {"mb_code21": "QLD_GLD01", "town_name": "Yarwun", "state_name": "Queensland", "area_ha": 18.5, "slope_pct": 1.8, "dist_to_substation_km": 0.35, "dist_to_wwtw_km": 0.8, "dist_to_sensitive_km": 1.1, "suitability_score": 1.0, "pumped_hydro_capacity_mwh": 38.1, "lon": 151.25, "lat": -23.84},
-      {"mb_code21": "QLD_GLD02", "town_name": "Gladstone City", "state_name": "Queensland", "area_ha": 15.0, "slope_pct": 2.3, "dist_to_substation_km": 0.75, "dist_to_wwtw_km": 1.5, "dist_to_sensitive_km": 0.65, "suitability_score": 0.958, "pumped_hydro_capacity_mwh": 32.7, "lon": 151.17, "lat": -23.82},
-      {"mb_code21": "QLD_GLD03", "town_name": "Calliope", "state_name": "Queensland", "area_ha": 13.5, "slope_pct": 2.9, "dist_to_substation_km": 1.8, "dist_to_wwtw_km": 3.2, "dist_to_sensitive_km": 2.2, "suitability_score": 0.817, "pumped_hydro_capacity_mwh": 54.5, "lon": 151.21, "lat": -23.97},
-      {"mb_code21": "VIC_LTB01", "town_name": "Morwell", "state_name": "Victoria", "area_ha": 12.5, "slope_pct": 1.5, "dist_to_substation_km": 0.45, "dist_to_wwtw_km": 1.2, "dist_to_sensitive_km": 0.95, "suitability_score": 0.964, "pumped_hydro_capacity_mwh": 119.9, "lon": 146.40, "lat": -38.23},
-      {"mb_code21": "VIC_LTB02", "town_name": "Traralgon", "state_name": "Victoria", "area_ha": 8.2, "slope_pct": 2.0, "dist_to_substation_km": 1.2, "dist_to_wwtw_km": 2.5, "dist_to_sensitive_km": 1.6, "suitability_score": 0.819, "pumped_hydro_capacity_mwh": 76.3, "lon": 146.53, "lat": -38.19},
-      {"mb_code21": "VIC_LTB03", "town_name": "Moe", "state_name": "Victoria", "area_ha": 10.5, "slope_pct": 3.1, "dist_to_substation_km": 0.9, "dist_to_wwtw_km": 1.8, "dist_to_sensitive_km": 1.4, "suitability_score": 0.89, "pumped_hydro_capacity_mwh": 87.2, "lon": 146.26, "lat": -38.17},
-      {"mb_code21": "WA_COL01", "town_name": "Collie", "state_name": "Western Australia", "area_ha": 22.0, "slope_pct": 1.4, "dist_to_substation_km": 0.15, "dist_to_wwtw_km": 4.2, "dist_to_sensitive_km": 1.35, "suitability_score": 0.929, "pumped_hydro_capacity_mwh": 130.8, "lon": 116.15, "lat": -33.36},
-      {"mb_code21": "WA_COL02", "town_name": "Collie East", "state_name": "Western Australia", "area_ha": 17.5, "slope_pct": 2.2, "dist_to_substation_km": 0.6, "dist_to_wwtw_km": 3.5, "dist_to_sensitive_km": 2.1, "suitability_score": 0.936, "pumped_hydro_capacity_mwh": 109.0, "lon": 116.20, "lat": -33.35},
-      {"mb_code21": "ACT_CBR01", "town_name": "Fyshwick", "state_name": "Australian Capital Territory", "area_ha": 14.2, "slope_pct": 1.1, "dist_to_substation_km": 0.4, "dist_to_wwtw_km": 1.1, "dist_to_sensitive_km": 0.78, "suitability_score": 0.985, "pumped_hydro_capacity_mwh": 43.6, "lon": 149.172, "lat": -35.325},
-      {"mb_code21": "ACT_CBR02", "town_name": "Hume", "state_name": "Australian Capital Territory", "area_ha": 19.8, "slope_pct": 2.0, "dist_to_substation_km": 0.55, "dist_to_wwtw_km": 1.9, "dist_to_sensitive_km": 1.65, "suitability_score": 0.976, "pumped_hydro_capacity_mwh": 60.0, "lon": 149.164, "lat": -35.385},
-      {"mb_code21": "NT_DWN01", "town_name": "East Arm", "state_name": "Northern Territory", "area_ha": 24.5, "slope_pct": 0.8, "dist_to_substation_km": 0.5, "dist_to_wwtw_km": 1.6, "dist_to_sensitive_km": 2.4, "suitability_score": 0.987, "pumped_hydro_capacity_mwh": 21.8, "lon": 130.895, "lat": -12.482},
-      {"mb_code21": "SA_PTA01", "town_name": "Port Augusta", "state_name": "South Australia", "area_ha": 20.1, "slope_pct": 1.6, "dist_to_substation_km": 0.3, "dist_to_wwtw_km": 2.8, "dist_to_sensitive_km": 1.9, "suitability_score": 0.96, "pumped_hydro_capacity_mwh": 32.7, "lon": 137.780, "lat": -32.510},
-      {"mb_code21": "TAS_DEV01", "town_name": "Devonport", "state_name": "Tasmania", "area_ha": 16.4, "slope_pct": 2.4, "dist_to_substation_km": 0.7, "dist_to_wwtw_km": 1.5, "dist_to_sensitive_km": 1.15, "suitability_score": 0.971, "pumped_hydro_capacity_mwh": 38.1, "lon": 146.360, "lat": -41.190}
+      { "mb_code21": "NSW_MCC01", "town_name": "Teralba", "state_name": "New South Wales", "area_ha": 44.5, "slope_pct": 2.1, "dist_to_substation_km": 0.35, "dist_to_wwtw_km": 0.85, "dist_to_sensitive_km": 0.82, "suitability_score": 0.998, "pumped_hydro_capacity_mwh": 49.0, "lon": 151.60, "lat": -32.94 },
+      { "mb_code21": "NSW_MCC02", "town_name": "Killingworth", "state_name": "New South Wales", "area_ha": 28.2, "slope_pct": 3.4, "dist_to_substation_km": 0.45, "dist_to_wwtw_km": 1.4, "dist_to_sensitive_km": 1.25, "suitability_score": 0.991, "pumped_hydro_capacity_mwh": 130.8, "lon": 151.56, "lat": -32.92 },
+      { "mb_code21": "NSW_MCC03", "town_name": "Cockle Creek", "state_name": "New South Wales", "area_ha": 18.7, "slope_pct": 1.2, "dist_to_substation_km": 0.2, "dist_to_wwtw_km": 0.6, "dist_to_sensitive_km": 0.42, "suitability_score": 0.845, "pumped_hydro_capacity_mwh": 27.2, "lon": 151.62, "lat": -32.94 },
+      { "mb_code21": "NSW_MCC04", "town_name": "West Lake", "state_name": "New South Wales", "area_ha": 35.0, "slope_pct": 4.1, "dist_to_substation_km": 1.1, "dist_to_wwtw_km": 2.1, "dist_to_sensitive_km": 1.8, "suitability_score": 0.922, "pumped_hydro_capacity_mwh": 196.2, "lon": 151.55, "lat": -32.96 },
+      { "mb_code21": "QLD_GLD01", "town_name": "Yarwun", "state_name": "Queensland", "area_ha": 18.5, "slope_pct": 1.8, "dist_to_substation_km": 0.35, "dist_to_wwtw_km": 0.8, "dist_to_sensitive_km": 1.1, "suitability_score": 1.0, "pumped_hydro_capacity_mwh": 38.1, "lon": 151.25, "lat": -23.84 },
+      { "mb_code21": "QLD_GLD02", "town_name": "Gladstone City", "state_name": "Queensland", "area_ha": 15.0, "slope_pct": 2.3, "dist_to_substation_km": 0.75, "dist_to_wwtw_km": 1.5, "dist_to_sensitive_km": 0.65, "suitability_score": 0.958, "pumped_hydro_capacity_mwh": 32.7, "lon": 151.17, "lat": -23.82 },
+      { "mb_code21": "QLD_GLD03", "town_name": "Calliope", "state_name": "Queensland", "area_ha": 13.5, "slope_pct": 2.9, "dist_to_substation_km": 1.8, "dist_to_wwtw_km": 3.2, "dist_to_sensitive_km": 2.2, "suitability_score": 0.817, "pumped_hydro_capacity_mwh": 54.5, "lon": 151.21, "lat": -23.97 },
+      { "mb_code21": "VIC_LTB01", "town_name": "Morwell", "state_name": "Victoria", "area_ha": 12.5, "slope_pct": 1.5, "dist_to_substation_km": 0.45, "dist_to_wwtw_km": 1.2, "dist_to_sensitive_km": 0.95, "suitability_score": 0.964, "pumped_hydro_capacity_mwh": 119.9, "lon": 146.40, "lat": -38.23 },
+      { "mb_code21": "VIC_LTB02", "town_name": "Traralgon", "state_name": "Victoria", "area_ha": 8.2, "slope_pct": 2.0, "dist_to_substation_km": 1.2, "dist_to_wwtw_km": 2.5, "dist_to_sensitive_km": 1.6, "suitability_score": 0.819, "pumped_hydro_capacity_mwh": 76.3, "lon": 146.53, "lat": -38.19 },
+      { "mb_code21": "VIC_LTB03", "town_name": "Moe", "state_name": "Victoria", "area_ha": 10.5, "slope_pct": 3.1, "dist_to_substation_km": 0.9, "dist_to_wwtw_km": 1.8, "dist_to_sensitive_km": 1.4, "suitability_score": 0.89, "pumped_hydro_capacity_mwh": 87.2, "lon": 146.26, "lat": -38.17 },
+      { "mb_code21": "WA_COL01", "town_name": "Collie", "state_name": "Western Australia", "area_ha": 22.0, "slope_pct": 1.4, "dist_to_substation_km": 0.15, "dist_to_wwtw_km": 4.2, "dist_to_sensitive_km": 1.35, "suitability_score": 0.929, "pumped_hydro_capacity_mwh": 130.8, "lon": 116.15, "lat": -33.36 },
+      { "mb_code21": "WA_COL02", "town_name": "Collie East", "state_name": "Western Australia", "area_ha": 17.5, "slope_pct": 2.2, "dist_to_substation_km": 0.6, "dist_to_wwtw_km": 3.5, "dist_to_sensitive_km": 2.1, "suitability_score": 0.936, "pumped_hydro_capacity_mwh": 109.0, "lon": 116.20, "lat": -33.35 },
+      { "mb_code21": "ACT_CBR01", "town_name": "Fyshwick", "state_name": "Australian Capital Territory", "area_ha": 14.2, "slope_pct": 1.1, "dist_to_substation_km": 0.4, "dist_to_wwtw_km": 1.1, "dist_to_sensitive_km": 0.78, "suitability_score": 0.985, "pumped_hydro_capacity_mwh": 43.6, "lon": 149.172, "lat": -35.325 },
+      { "mb_code21": "ACT_CBR02", "town_name": "Hume", "state_name": "Australian Capital Territory", "area_ha": 19.8, "slope_pct": 2.0, "dist_to_substation_km": 0.55, "dist_to_wwtw_km": 1.9, "dist_to_sensitive_km": 1.65, "suitability_score": 0.976, "pumped_hydro_capacity_mwh": 60.0, "lon": 149.164, "lat": -35.385 },
+      { "mb_code21": "NT_DWN01", "town_name": "East Arm", "state_name": "Northern Territory", "area_ha": 24.5, "slope_pct": 0.8, "dist_to_substation_km": 0.5, "dist_to_wwtw_km": 1.6, "dist_to_sensitive_km": 2.4, "suitability_score": 0.987, "pumped_hydro_capacity_mwh": 21.8, "lon": 130.895, "lat": -12.482 },
+      { "mb_code21": "SA_PTA01", "town_name": "Port Augusta", "state_name": "South Australia", "area_ha": 20.1, "slope_pct": 1.6, "dist_to_substation_km": 0.3, "dist_to_wwtw_km": 2.8, "dist_to_sensitive_km": 1.9, "suitability_score": 0.96, "pumped_hydro_capacity_mwh": 32.7, "lon": 137.780, "lat": -32.510 },
+      { "mb_code21": "TAS_DEV01", "town_name": "Devonport", "state_name": "Tasmania", "area_ha": 16.4, "slope_pct": 2.4, "dist_to_substation_km": 0.7, "dist_to_wwtw_km": 1.5, "dist_to_sensitive_km": 1.15, "suitability_score": 0.971, "pumped_hydro_capacity_mwh": 38.1, "lon": 146.360, "lat": -41.190 }
     ];
 
     const BASEMAP_TILES = {
@@ -1623,7 +1987,7 @@
 
     function changeBasemap(key) {
       const mapWrapper = document.getElementById('map-wrapper');
-      
+
       if (key === 'white-canvas') {
         if (map.getLayer('basemap-layer')) map.setLayoutProperty('basemap-layer', 'visibility', 'none');
         mapWrapper.style.backgroundColor = '#ffffff';
@@ -2442,7 +2806,7 @@
           const feats = map.queryRenderedFeatures(bbox, { layers: layersToHover });
           map.getCanvas().style.cursor = (feats && feats.length > 0) ? 'pointer' : 'default';
           return;
-        } catch (err) {}
+        } catch (err) { }
       }
 
       map.getCanvas().style.cursor = 'default';
@@ -2630,7 +2994,7 @@
             ${legendIconHtml}
             <span title="${lyr.name}">${lyr.name}</span>
           `;
-          
+
           // Clicking the layer title or row selects the layer as the active target
           mainRow.addEventListener('click', () => {
             setSelectedLayer(lyr.id);
@@ -2941,7 +3305,7 @@
             <rect x="${x}" y="${y}" width="${barWidth}" height="${h}" fill="${b.col}" rx="4">
               <title>${b.label} (${b.desc}): ${b.count} Sites</title>
             </rect>
-            <text x="${x + barWidth / 2}" y="${y - 8}" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">${b.count} sites (${Math.round((b.count/data.length)*100)}%)</text>
+            <text x="${x + barWidth / 2}" y="${y - 8}" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">${b.count} sites (${Math.round((b.count / data.length) * 100)}%)</text>
             <text x="${x + barWidth / 2}" y="${svgHeight - 25}" font-size="10" font-weight="600" fill="#cbd5e1" text-anchor="middle">${b.label}</text>
             <text x="${x + barWidth / 2}" y="${svgHeight - 12}" font-size="8.5" fill="#94a3b8" text-anchor="middle">${b.desc}</text>
           `;
@@ -3010,7 +3374,7 @@
         let legend = states.map((s, i) => `
           <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.76rem; margin-bottom: 0.25rem;">
             <span style="width: 10px; height: 10px; background: ${colors[i % colors.length]}; border-radius: 50%;"></span>
-            <span>${s}: <strong>${stateCounts[s]} Hubs (${Math.round((stateCounts[s]/data.length)*100)}%)</strong></span>
+            <span>${s}: <strong>${stateCounts[s]} Hubs (${Math.round((stateCounts[s] / data.length) * 100)}%)</strong></span>
           </div>
         `).join('');
 
@@ -3169,7 +3533,7 @@
         let legend = categories.map(c => `
           <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.74rem; margin-bottom: 0.3rem;">
             <span style="width: 10px; height: 10px; background: ${c.col}; border-radius: 50%;"></span>
-            <span>${c.label}: <strong>${c.val.toLocaleString()} (${Math.round((c.val/total)*100)}%)</strong></span>
+            <span>${c.label}: <strong>${c.val.toLocaleString()} (${Math.round((c.val / total) * 100)}%)</strong></span>
           </div>
         `).join('');
 
@@ -3745,4 +4109,5 @@
     }
   </script>
 </body>
+
 </html>

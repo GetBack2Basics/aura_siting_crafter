@@ -1715,10 +1715,42 @@
               feature coordinate.
             </div>
           </div>
+        <!-- Technical Architecture Deep Dive -->
+        <div style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.85rem;">
+          <div style="font-size: 0.88rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+            <span>🛠️ How the Tech Works (Under the Hood)</span>
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.76rem; color: #cbd5e1; line-height: 1.45;">
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #38bdf8;">
+              <strong style="color: #f8fafc;">1. Streaming Data Straight from the Cloud:</strong>
+              Instead of downloading huge files or running heavy servers, the map grabs only the exact slices of data it needs from cloud storage as you pan and zoom.
+            </div>
+            
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #10b981;">
+              <strong style="color: #f8fafc;">2. Instant Scoring in Your Browser ($0 Server Cost):</strong>
+              When you adjust weights for power, water, or environment, your browser does all the math locally with DuckDB. You get instant updates without paying for cloud servers.
+            </div>
+            
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #a855f7;">
+              <strong style="color: #f8fafc;">3. Ask Questions in Plain English:</strong>
+              Type everyday questions like <em>"Show sites in NSW within 1.5km of 330kV lines"</em> and the system automatically turns your words into database queries.
+            </div>
+            
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #f59e0b;">
+              <strong style="color: #f8fafc;">4. Open in Desktop GIS (GeoLibre / QGIS):</strong>
+              Download a single project file (<code>aura-siting-crafter.geolibre.json</code>) to open the exact same map and data in desktop tools like QGIS, ArcGIS, or GeoLibre.
+            </div>
+            
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #ec4899;">
+              <strong style="color: #f8fafc;">5. Official Australian Public Data:</strong>
+              All property boundaries, power lines, water corridors, and protected areas are pulled straight from official government and industry sources (AEMO, Geoscience Australia, BoM, and NSW Spatial Services).
+            </div>
+          </div>
         </div>
 
         <!-- Live GCP Serverless Compute & Cost Telemetry Banner -->
-        <div class="telemetry-banner">
+        <div class="telemetry-banner" style="margin-top: 0.85rem;">
           <div
             style="font-size: 0.82rem; font-weight: 700; color: #34d399; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.4rem;">
             <span>☁️ Live Serverless Compute & Cost Telemetry</span>

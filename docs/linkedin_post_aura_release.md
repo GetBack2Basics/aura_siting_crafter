@@ -1,42 +1,46 @@
-# 🚀 Launching AURA Siting Crafter & GeoLibre WebGIS v1.0: Zero-Copy, Serverless Spatial AI for National Infrastructure
+# 🚀 AURA Siting Crafter & GeoLibre WebGIS: Zero-Copy Cloud Lakehouses & In-Browser Spatial Analytics
 
-Excited to unveil **AURA Siting Crafter** (Australian Urban & Regional AI Siting Crafter) and **GeoLibre WebGIS v1.0** — an open, cloud-native spatial multi-criteria decision analysis (MCDA) and precision siting platform for critical infrastructure and next-gen data centers across Australia. 🇦🇺⚡
+Can you site a 50ha data center near 330kV lines taking into account slope, riparian veg, and proximity to public spaces as well as requirements for wastewater and thermal discharge, nationally in 5 seconds? 
 
-Finding optimal, low-risk sites for multi-gigawatt compute hubs, transmission connections, and clean energy assets usually takes months of siloed GIS consultancy. We engineered an end-to-end, zero-copy, serverless geospatial pipeline that delivers live national site intelligence in milliseconds.
+Well, AURA can. 
 
----
+The Australian Urban and Regional AI (AURA) Data Center Siting Crafter is a personal learning project that delivers real, practical value for national infrastructure planning. 🇦🇺⚡
 
-### 🌐 What’s New in AURA Siting Crafter & GeoLibre WebGIS:
-
-1️⃣ **Direct Zero-Copy Lakehouse Streaming**
-• Direct HTTP range requests against Wherobots Cloud GeoParquet lakehouses (`s3://wherobots-user-storage/aura_siting/`).
-• Zero data duplication or slow ETL hops — updates in cloud spatial storage stream instantly to the browser.
-
-2️⃣ **Zero-Cost Client-Side Scenario Simulation**
-• Offloaded heavy MCDA parameter re-scoring and sensitivity curves to in-browser DuckDB-WASM and JavaScript.
-• Adjust power, water, cooling, and environmental weights in real time with instant viewport re-ranking — at **$0 server compute cost**.
-
-3️⃣ **Conversational Spatial AI Assistant (Cloud Run)**
-• Natural language to Spatial SQL agent deployed on Google Cloud Run (`australia-southeast1`).
-• Translates queries like *"Show me candidate parcels >50 ha within 5 km of 330kV transmission and recycled water"* into live DuckDB spatial queries with scale-to-zero efficiency.
-
-4️⃣ **Streamlined WebGIS & Multi-Frame Resizing**
-• Interactive MapLibre GL engine with draggable splitters for sidebar, attribute tables, and AI drawer.
-• Hover-activated layer telemetry, responsive SVG distribution charts (NEM voltage tiers, water capacity, slope grades), and mobile-responsive off-canvas drawer.
-
-5️⃣ **100% Real Data Integrity (Zero-Mock Standard)**
-• Fully grounded in authoritative data: AEMO transmission topology (500kV to 66kV), Geoscience Australia, NSW Spatial Services cadastre, EPA sensitive receptor setbacks, and BoM hydrology.
+Finding optimal, low-risk land for energy-intensive compute hubs, grid interconnects, and clean energy assets traditionally takes months of manual GIS consulting. As an independent learning project, I wanted to explore how modern cloud-native data stacks and client-side compute can transform this into instant, interactive intelligence.
 
 ---
 
-### 🛠️ The Tech Stack:
-- **Spatial Lakehouse**: Wherobots Cloud / Apache Sedona / GeoParquet / Iceberg
-- **Serverless AI Gateway**: FastAPI + Cloud Run + DuckDB Spatial
-- **Client Engine**: MapLibre GL JS + DuckDB-WASM + Vanilla JS / CSS
-- **Automated Quality**: Pytest lint gates ensuring 0 secret leaks & strict catalog validation
+### 🌐 How the Journey Unfolded:
 
-The future of infrastructure planning is transparent, instantaneous, and cloud-native.
+• **The Cloud Backbone**: Started with Wherobots Cloud & Apache Sedona to streamline distributed spatial joins and serve as the high-precision lakehouse backbone. 
+• **Interactive Public Reporting**: Used my Spatial Report Crafter to turn those lakehouse insights into an interactive report for the public. Check out the guest blog for details: https://blog.wherobots.com/aura-siting-crafter
+• **Bridging Web & Desktop GIS**: Next, bridged the lakehouse back into open GIS workflows with **GeoLibre**, thanks to in/giswqs (Prof. Qiusheng Wu). This exposes the spatial data collected and analysed by Wherobots far beyond a traditional desktop GIS stack directly to the browser.
 
-Check out the documentation and live deployment in the repository! 🔗👇
+---
 
-#Geospatial #SpatialAI #DataCenters #CleanEnergy #GIS #Wherobots #GoogleCloud #CloudRun #ApacheSedona #DuckDB #Infrastructure #OpenSource #Innovation
+### 🕹️ What You Can Do in the App:
+
+• **Explore & Inspect**: Review authentic national data and layer attribution, adjust layer opacity/order, and explore candidate hubs nationally or locally in milliseconds.
+• **Ask AI in Plain English**: Ask questions in natural language (*"Show me parcels >50 ha within 5 km of 330kV transmission"*). The query is translated to spatial SQL, executed against the lakehouse, and rendered instantly on the map.
+• **Export to Desktop GIS**: Download the declarative GeoLibre JSON project spec to load the entire national model directly into GeoLibre, QGIS, or ArcGIS Pro.
+
+And what did this cost apart from a few late nights? A Google AI monthly subscription to help build the codebase, and Google Cloud free tier credits to host the serverless gateway.
+
+---
+
+### 🙌 Standing on the Shoulders of Giants (Tech Credits):
+
+Massive credit to the open-source communities and platform creators who make modern spatial engineering accessible:
+- **GeoLibre & @giswqs (Prof. Qiusheng Wu)** for the open spatial specification and desktop GIS tooling.
+- **Wherobots & Apache Sedona** (Jia Yu, Jialin Ding & team) for distributed spatial lakehouse compute and GeoParquet standards.
+- **DuckDB Labs & DuckDB-WASM** (Hannes Mühleisen, Mark Raasveldt & team) for client-side analytical SQL in browser memory.
+- **MapLibre Team** for performant, open-source WebGL mapping.
+- **FastAPI** (Sebastián Ramírez / tiangolo) for clean, high-performance serverless microservices.
+
+---
+
+*Note: This is an independent, personal research project exploring open data and modern cloud-native architectures.*
+
+The full technical architecture and MCDA formulas are documented in the GitHub repository and inside the app's Help modal. Give it a spin and explore the map! 🔗👇
+
+#DataEngineering #SpatialAI #CloudNative #DuckDB #WebGIS #DataCenters #CleanEnergy #Wherobots #ApacheSedona #MapLibre #GeoLibre #OpenSource #OpenData #GIS

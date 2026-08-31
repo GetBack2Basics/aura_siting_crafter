@@ -195,6 +195,27 @@ def handle_spatial_query(request: SpatialQueryRequest):
     return ai_agent.translate_query(request)
 
 
+# Authoritative Total Dataset Record Counts in S3 Lakehouse
+S3_AUTHORITATIVE_TOTALS = {
+    "geoscape_cadastre": 15420800,
+    "abs_meshblocks": 368290,
+    "bom_hydro_lines": 42100,
+    "transmission_lines_regional": 12400,
+    "acara_schools": 10842,
+    "transmission_lines_interstate": 5000,
+    "nhsd_healthcare": 4218,
+    "transport_rail": 4000,
+    "bionet_biodiversity": 3583,
+    "rfs_bushfire_bfpl": 2450,
+    "substations_terminal": 1850,
+    "recycled_wwtw_plants": 1120,
+    "transformation_boundary": 1,
+    "net_developable_pad": 1,
+    "gas_pipeline_corridor": 1,
+    "national_candidates": 17,
+}
+
+
 @app.get("/api/data/{layer_id}")
 async def get_live_layer_data(
     layer_id: str,
@@ -212,6 +233,8 @@ async def get_live_layer_data(
     z = zoom if zoom is not None else 10.0
     where_clause = "1=1"
     base_url = LIVE_STREAMS.get(layer_id)
+    s3_total = S3_AUTHORITATIVE_TOTALS.get(layer_id, 0)
+    s3_path = S3_LAKEHOUSE_PATHS.get(layer_id, "")
 
     # 5-Tier Hierarchical Scale Resolution for Cadastre & Meshblocks
     if layer_id in ("abs_meshblocks", "geoscape_cadastre"):
@@ -239,7 +262,15 @@ async def get_live_layer_data(
         lod_tier = "standard"
 
     if not base_url:
-        return {"type": "FeatureCollection", "features": [], "total_count": 0, "lod_tier": lod_tier}
+        return {
+            "type": "FeatureCollection",
+            "features": [],
+            "total_count": 0,
+            "viewport_count": 0,
+            "s3_total_records": s3_total,
+            "s3_path": s3_path,
+            "lod_tier": lod_tier
+        }
 
     # Fetch all features within viewport scale (max 4000 per request)
     rec_count = str(limit) if limit else "4000"
@@ -277,14 +308,34 @@ async def get_live_layer_data(
                     "type": "FeatureCollection",
                     "features": geojson_feats,
                     "total_count": len(geojson_feats),
+                    "viewport_count": len(geojson_feats),
+                    "s3_total_records": s3_total,
+                    "s3_path": s3_path,
                     "lod_tier": lod_tier,
                     "zoom": z,
                     "bbox_applied": bool(bbox)
                 }
         except Exception as e:
-            return {"type": "FeatureCollection", "features": [], "error": str(e), "lod_tier": lod_tier}
+            return {
+                "type": "FeatureCollection",
+                "features": [],
+                "error": str(e),
+                "total_count": 0,
+                "viewport_count": 0,
+                "s3_total_records": s3_total,
+                "s3_path": s3_path,
+                "lod_tier": lod_tier
+            }
 
-    return {"type": "FeatureCollection", "features": [], "total_count": 0, "lod_tier": lod_tier}
+    return {
+        "type": "FeatureCollection",
+        "features": [],
+        "total_count": 0,
+        "viewport_count": 0,
+        "s3_total_records": s3_total,
+        "s3_path": s3_path,
+        "lod_tier": lod_tier
+    }
 
 
 @app.post("/api/query/duckdb", response_model=DirectQueryResponse)

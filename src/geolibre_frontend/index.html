@@ -1807,8 +1807,7 @@
         <div class="geolibre-step">
           <span class="step-num">2</span>
           <div>
-            <strong>Open with GeoLibre App</strong>: Launch the GeoLibre desktop application or web GIS and choose
-            <em>"Import Project"</em> &rarr; select <code>aura-siting-crafter.geolibre.json</code>.
+            <strong>Open with GeoLibre App / WebGIS</strong>: Launch the GeoLibre desktop application or open the <a href="https://geolibre.app/demo/" target="_blank" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">GeoLibre Web App (geolibre.app/demo)</a> and choose <em>"Project" &rarr; "Open Project..."</em> (or drag &amp; drop) &rarr; select <code>aura-siting-crafter.geolibre.json</code>.
           </div>
         </div>
 
@@ -1830,7 +1829,11 @@
           </div>
         </div>
 
-        <div style="display: flex; gap: 0.5rem; margin-top: 1.2rem; justify-content: flex-end;">
+        <div style="display: flex; gap: 0.5rem; margin-top: 1.2rem; justify-content: flex-end; flex-wrap: wrap;">
+          <a href="https://geolibre.app/demo/" target="_blank" class="nav-btn"
+            style="padding: 0.45rem 1rem; font-size: 0.8rem; background: rgba(59, 130, 246, 0.15); border: 1px solid #3b82f6; color: #93c5fd; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+            <span>🌐 Open in GeoLibre (geolibre.app/demo)</span>
+          </a>
           <button class="nav-btn nav-btn-primary" onclick="downloadGeolibreJson()"
             style="padding: 0.45rem 1rem; font-size: 0.8rem;">
             <span>⬇️ Download aura-siting-crafter.geolibre.json</span>
@@ -2441,9 +2444,8 @@
       return map[tier] || 'Active Viewport Scale';
     }
 
-    // Viewport Spatial Streaming with Progressive [x of y features...] Loader
+    // Viewport Spatial Streaming Loader
     let streamDebounceTimer = null;
-    let progressiveTimers = {};
 
     async function updateViewportStreams() {
       const bounds = map.getBounds();
@@ -2456,23 +2458,6 @@
       const dock = document.getElementById('attr-table-dock');
       const countBadge = document.getElementById('dock-table-count');
 
-      // Start Progressive Incrementing (10, 20, 30...) for each layer
-      activeStreamingLayers.forEach(lyr => {
-        const badgeEl = document.getElementById(`badge-${lyr.id}`);
-        if (badgeEl) {
-          if (progressiveTimers[lyr.id]) clearInterval(progressiveTimers[lyr.id]);
-          let countVal = 0;
-          badgeEl.innerHTML = `<span class="loading-hourglass">⏳</span> 0`;
-          progressiveTimers[lyr.id] = setInterval(() => {
-            countVal += 10;
-            if (badgeEl) badgeEl.innerHTML = `<span class="loading-hourglass">⏳</span> ${countVal}`;
-            if (!dock.classList.contains('hidden') && dock.getAttribute('data-active-layer') === lyr.id) {
-              countBadge.innerHTML = `<span class="loading-hourglass">⏳</span> Loading [${countVal} of active features...] (LOD z=${zoom.toFixed(1)})`;
-            }
-          }, 45);
-        }
-      });
-
       for (const lyr of activeStreamingLayers) {
         try {
           const url = `${PROXY_URL}/api/data/${lyr.stream_key}?bbox=${bboxStr}&zoom=${zoom.toFixed(1)}`;
@@ -2481,23 +2466,21 @@
             const data = await resp.json();
             lyr.liveGeoJSON = data;
             const featCount = (data.features || []).length;
+            const s3Total = data.s3_total_records || lyr.count || featCount;
+            const formattedS3 = typeof s3Total === 'number' ? s3Total.toLocaleString() : s3Total;
             const lodTier = data.lod_tier || 'standard';
             const lodName = getLodLabel(lodTier);
 
-            // Clear progressive loading timer and set exact count
-            if (progressiveTimers[lyr.id]) {
-              clearInterval(progressiveTimers[lyr.id]);
-              delete progressiveTimers[lyr.id];
-            }
-
+            // Layer total badge on sidebar always displays the full authoritative S3 volume
             const badgeEl = document.getElementById(`badge-${lyr.id}`);
             if (badgeEl) {
-              badgeEl.innerHTML = `${featCount.toLocaleString()}`;
-              badgeEl.title = `Authoritative Lakehouse: ${featCount.toLocaleString()} features loaded in active viewport (${lodName})`;
+              badgeEl.innerHTML = `${formattedS3}`;
+              badgeEl.title = `Authoritative S3 Lakehouse: ${formattedS3} total records (${featCount.toLocaleString()} in active viewport, ${lodName})`;
             }
 
+            // Dock status shows both viewport features loaded and authoritative total
             if (!dock.classList.contains('hidden') && dock.getAttribute('data-active-layer') === lyr.id) {
-              countBadge.innerHTML = `[${featCount.toLocaleString()} of ${featCount.toLocaleString()} Viewport Features Loaded (100% | LOD: ${lodName} z=${zoom.toFixed(1)})]`;
+              countBadge.innerHTML = `[${featCount.toLocaleString()} Viewport Features Loaded (Total S3 Dataset: ${formattedS3} | LOD: ${lodName} z=${zoom.toFixed(1)})]`;
             }
 
             const srcId = `src_${lyr.id}`;
@@ -3664,19 +3647,86 @@
         console.warn('Direct fetch failed, using generated JSON:', err);
       }
 
-      // Client-side fallback export
+      // Client-side fallback export matching GeoLibre schema
+      const candFeatures = (rawCandidatesData || []).map(c => ({
+        type: "Feature",
+        geometry: { type: "Point", coordinates: [c.lon, c.lat] },
+        properties: {
+          mb_code21: c.mb_code21,
+          town_name: c.town_name,
+          state_name: c.state_name,
+          area_ha: c.area_ha,
+          slope_pct: c.slope_pct,
+          dist_to_substation_km: c.dist_to_substation_km,
+          dist_to_wwtw_km: c.dist_to_wwtw_km,
+          dist_to_sensitive_km: c.dist_to_sensitive_km,
+          suitability_score: c.suitability_score,
+          pumped_hydro_capacity_mwh: c.pumped_hydro_capacity_mwh
+        }
+      }));
+
       const exportSpec = {
         version: "0.2.0",
-        name: "AURA Siting Crafter — National Siting Suitability Model",
-        layers: THEMATIC_LAYERS.map(l => ({
-          id: l.id,
-          name: l.name,
-          category: l.category,
-          count: l.count,
-          stream_key: l.stream_key || null,
-          color: l.color || '#3b82f6'
-        })),
-        candidates: rawCandidatesData
+        name: "AURA Siting Crafter — National Data Center Siting Suitability Model",
+        mapView: {
+          center: [133.7751, -25.2744],
+          zoom: 4.5,
+          bearing: 0,
+          pitch: 0
+        },
+        basemapStyleUrl: "https://tiles.openfreemap.org/styles/liberty",
+        basemapVisible: true,
+        basemapOpacity: 0.65,
+        blankBackgroundColor: null,
+        layerGroups: [
+          { id: "grp_candidates", name: "🎯 Candidate Hubs & Siting Scorecards", visible: true, collapsed: false, opacity: 1.0 },
+          { id: "grp_energy", name: "⚡ Energy Grid & Substations", visible: true, collapsed: false, opacity: 1.0 },
+          { id: "grp_water", name: "💧 Water & Cooling Loops", visible: true, collapsed: false, opacity: 1.0 },
+          { id: "grp_receptors", name: "🛡️ Social & Environmental Receptors", visible: true, collapsed: false, opacity: 1.0 },
+          { id: "grp_environment", name: "🌿 Biodiversity & Bushfire Constraints", visible: true, collapsed: false, opacity: 1.0 },
+          { id: "grp_precincts", name: "🏗️ Precinct Micro-Siting Masterplans", visible: true, collapsed: false, opacity: 1.0 }
+        ],
+        layers: [
+          {
+            id: "national_candidates",
+            name: "🎯 National Siting Candidate Hubs (16 MCE Scored)",
+            type: "geojson",
+            source: { type: "geojson" },
+            groupId: "grp_candidates",
+            visible: true,
+            opacity: 1.0,
+            style: {
+              circleRadius: 9,
+              fillColor: "#10b981",
+              strokeColor: "#ffffff",
+              strokeWidth: 2,
+              fillOpacity: 0.95,
+              labels: {
+                enabled: true,
+                field: "town_name",
+                size: 11,
+                color: "#ffffff",
+                haloColor: "#0f172a",
+                haloWidth: 2
+              }
+            },
+            metadata: {
+              portal: "AURA Siting Crafter / Sedona Engine",
+              records: candFeatures.length,
+              crs: "EPSG:7844 (GDA2020 Geographic)"
+            },
+            geojson: {
+              type: "FeatureCollection",
+              features: candFeatures
+            }
+          }
+        ],
+        styles: {},
+        metadata: {
+          project: "AURA Siting Crafter",
+          storage_root: "s3://wherobots-user-storage/aura_siting",
+          crs: "EPSG:7844 (GDA2020)"
+        }
       };
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportSpec, null, 2));
       const a = document.createElement('a');

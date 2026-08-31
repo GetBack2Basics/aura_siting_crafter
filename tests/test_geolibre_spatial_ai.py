@@ -46,3 +46,17 @@ def test_spatial_query_empty_error():
     request_data = {"query": "   "}
     response = client.post("/api/ai/spatial-query", json=request_data)
     assert response.status_code == 400
+
+
+def test_get_live_layer_data_viewport_and_s3_total():
+    # Test requesting live layer data with viewport bbox
+    response = client.get("/api/data/nhsd_healthcare?bbox=151.5,-33.0,151.7,-32.8&zoom=12.0&limit=50")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["type"] == "FeatureCollection"
+    assert "features" in data
+    assert "viewport_count" in data
+    assert data["s3_total_records"] == 4218
+    assert data["s3_path"] == "s3://wherobots-user-storage/aura_siting/receptors/nhsd_national_healthcare.parquet"
+    assert data["bbox_applied"] is True
+

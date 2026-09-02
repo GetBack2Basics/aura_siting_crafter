@@ -6,7 +6,7 @@
   "source_agency": "Powerlink Queensland / Department of Energy and Climate",
   "portal": "QSpatial / Queensland Globe",
   "service_type": "arcgis_featureserver",
-  "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Energy/ElectricityInfrastructure/MapServer/2?f=json",
+  "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2?f=json",
   "layer_id": 2,
   "geometry_type": "LineString",
   "source_crs": "EPSG:4326",

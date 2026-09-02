@@ -33,12 +33,22 @@ def audit_endpoints(timeout=6):
 
         try:
             r = requests.get(endpoint, timeout=timeout, allow_redirects=True)
-            if r.status_code == 200:
+            has_error_json = False
+            if r.status_code == 200 and r.text.strip().startswith("{"):
+                try:
+                    j = r.json()
+                    if "error" in j and ("code" in j["error"] or "message" in j["error"]):
+                        has_error_json = True
+                except Exception:
+                    pass
+
+            if r.status_code == 200 and not has_error_json:
                 print(f"[200 OK] {k} -> {endpoint}")
                 success_count += 1
                 results.append((k, endpoint, True))
             else:
-                print(f"[{r.status_code} FAIL] {k} -> {endpoint}")
+                err_msg = f"HTTP {r.status_code}" if r.status_code != 200 else "ArcGIS JSON Error"
+                print(f"[{err_msg}] {k} -> {endpoint}")
                 failed_count += 1
                 results.append((k, endpoint, False))
         except Exception as ex:

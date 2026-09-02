@@ -160,10 +160,20 @@ def audit_live_endpoints_realtime(configs: List[str], timeout: int = 5) -> Tuple
             k = data.get("dataset_key", os.path.basename(c))
             if ep:
                 r = requests.get(ep, timeout=timeout, allow_redirects=True)
-                if r.status_code == 200:
+                has_error_json = False
+                if r.status_code == 200 and r.text.strip().startswith("{"):
+                    try:
+                        j = r.json()
+                        if "error" in j and ("code" in j["error"] or "message" in j["error"]):
+                            has_error_json = True
+                    except Exception:
+                        pass
+
+                if r.status_code == 200 and not has_error_json:
                     passed += 1
                 else:
-                    failures.append(f"{k} -> HTTP {r.status_code}")
+                    err_label = f"HTTP {r.status_code}" if r.status_code != 200 else "ArcGIS JSON Error"
+                    failures.append(f"{k} -> {err_label}")
             else:
                 failures.append(f"{k} -> No endpoint defined")
         except Exception as ex:

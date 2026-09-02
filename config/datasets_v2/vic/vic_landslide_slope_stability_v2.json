@@ -1,0 +1,34 @@
+{
+  "dataset_key": "vic_landslide_slope_stability_v2",
+  "canonical_theme": "siting_landslide_hazard",
+  "state": "vic",
+  "dataset_name": "Victorian Geotechnical Slope Stability and Landslide Hazard Overlay",
+  "source_agency": "Geological Survey of Victoria / DEECA",
+  "portal": "Data.Vic / Vicmap Spatial Platform",
+  "service_type": "wfs",
+  "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+  "layer_id": 3,
+  "geometry_type": "MultiPolygon",
+  "source_crs": "EPSG:4283",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "hazard_id": "OBJECTID",
+    "slope_degrees": "SLOPE_DEG",
+    "susceptibility": "SUSCEPTIBILITY_CLASS",
+    "instability_type": "LANDSLIDE_TYPE"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "vic_landslide_hazard_v2",
+    "format": "havasu.iceberg"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "dataset_key": "qld_landslide_susceptibility_v2",
+  "canonical_theme": "siting_landslide_hazard",
+  "state": "qld",
+  "dataset_name": "Queensland State Planning Policy (SPP) Landslide Hazard Overlays",
+  "source_agency": "Queensland Department of Resources",
+  "portal": "QSpatial / QLD Globe",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Geoscientific/GeologyAndSoils/MapServer/4?f=json",
+  "layer_id": 4,
+  "geometry_type": "MultiPolygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "hazard_id": "OBJECTID",
+    "slope_degrees": "SLOPE_PERCENT",
+    "susceptibility": "LANDSLIDE_HAZARD_CATEGORY",
+    "instability_type": "GEOTECH_TYPE"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "qld_landslide_hazard_v2",
+    "format": "havasu.iceberg"
+  }
+}

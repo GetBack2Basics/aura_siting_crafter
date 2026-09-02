@@ -1,0 +1,31 @@
+{
+  "dataset_key": "national_cadastre_gnaf_v2",
+  "canonical_theme": "siting_cadastre_parcels",
+  "state": "national",
+  "dataset_name": "Geoscape National Cadastre & G-NAF Parcel Fabric",
+  "source_agency": "Geoscape Australia / ICSM",
+  "portal": "NationalMap / Geoscape",
+  "service_type": "wfs",
+  "endpoint": "https://services.ga.gov.au/gis/rest/services/Topographic_Base_Map/MapServer/0?f=json",
+  "layer_id": 0,
+  "geometry_type": "MultiPolygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "lot_id": "OBJECTID",
+    "lot_plan": "LOT_PLAN_ID",
+    "tenure": "TENURE_TYPE",
+    "area_ha": "AREA_HA",
+    "lga_name": "LGA_NAME"
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "national_cadastre_gnaf_v2",
+    "format": "havasu.iceberg"
+  }
+}

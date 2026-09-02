@@ -1,0 +1,35 @@
+{
+  "dataset_key": "vic_transmission_grid_vicgrid_v2",
+  "canonical_theme": "siting_transmission_grid",
+  "state": "vic",
+  "dataset_name": "Victorian High-Voltage Transmission Network (>=66kV)",
+  "source_agency": "VicGrid / AusNet Services / AEMO",
+  "portal": "Data.Vic / Vicmap Spatial Platform",
+  "service_type": "wfs",
+  "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+  "layer_id": 0,
+  "geometry_type": "LineString",
+  "source_crs": "EPSG:4283",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "line_id": "OBJECTID",
+    "line_name": "FEATURE_NAME",
+    "voltage_kv": "VOLTAGE",
+    "operator": "SUPPLIER"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 30.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "vic_transmission_grid_v2",
+    "format": "havasu.iceberg",
+    "partition_by": "operator"
+  }
+}

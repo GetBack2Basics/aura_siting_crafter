@@ -1,0 +1,30 @@
+{
+  "dataset_key": "national_healthcare_nhsd_v2",
+  "canonical_theme": "siting_sensitive_receptors",
+  "state": "national",
+  "dataset_name": "National Health Services Directory (NHSD) Hospitals & Health Facilities",
+  "source_agency": "Australian Digital Health Agency / Healthdirect",
+  "portal": "NationalMap / NHSD",
+  "service_type": "wfs",
+  "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=health",
+  "layer_id": 0,
+  "geometry_type": "Point",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "receptor_id": "OBJECTID",
+    "name": "FACILITY_NAME",
+    "category": "FACILITY_TYPE",
+    "buffer_m": 300.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "national_healthcare_nhsd_v2",
+    "format": "havasu.iceberg"
+  }
+}

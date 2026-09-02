@@ -1,0 +1,35 @@
+{
+  "dataset_key": "sa_transmission_grid_electranet_v2",
+  "canonical_theme": "siting_transmission_grid",
+  "state": "sa",
+  "dataset_name": "ElectraNet & SA Power Networks High-Voltage Grid (>=132kV)",
+  "source_agency": "ElectraNet / Department for Energy and Mining",
+  "portal": "LocationSA / Data.SA",
+  "service_type": "wfs",
+  "endpoint": "https://data.sa.gov.au/data/api/3/action/package_list",
+  "layer_id": 0,
+  "geometry_type": "LineString",
+  "source_crs": "EPSG:4283",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "line_id": "OBJECTID",
+    "line_name": "CIRCUIT_DESCR",
+    "voltage_kv": "VOLTAGE_KV",
+    "operator": "NETWORK_OPERATOR"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 30.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "sa_transmission_grid_v2",
+    "format": "havasu.iceberg",
+    "partition_by": "operator"
+  }
+}

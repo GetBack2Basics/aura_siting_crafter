@@ -1,0 +1,35 @@
+{
+  "dataset_key": "qld_transmission_grid_v2",
+  "canonical_theme": "siting_transmission_grid",
+  "state": "qld",
+  "dataset_name": "Powerlink & Energex High-Voltage Transmission Grid (>=110kV)",
+  "source_agency": "Powerlink Queensland / Department of Energy and Climate",
+  "portal": "QSpatial / Queensland Globe",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Energy/ElectricityInfrastructure/MapServer/2?f=json",
+  "layer_id": 2,
+  "geometry_type": "LineString",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "line_id": "OBJECTID",
+    "line_name": "CIRCUIT_NAME",
+    "voltage_kv": "VOLTAGE",
+    "operator": "OPERATOR"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 30.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "qld_transmission_grid_v2",
+    "format": "havasu.iceberg",
+    "partition_by": "operator"
+  }
+}

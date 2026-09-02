@@ -1,0 +1,30 @@
+{
+  "dataset_key": "vic_planning_scheme_zones_v2",
+  "canonical_theme": "siting_cadastre_parcels",
+  "state": "vic",
+  "dataset_name": "Vicmap Planning Schemes (VPP Standardised Zones)",
+  "source_agency": "Department of Transport and Planning (DTP)",
+  "portal": "Data.Vic / Vicmap Spatial Platform",
+  "service_type": "wfs",
+  "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+  "layer_id": 1,
+  "geometry_type": "MultiPolygon",
+  "source_crs": "EPSG:4283",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "lot_id": "OBJECTID",
+    "lot_plan": "PARCEL_SPI",
+    "zoning_code": "ZONE_CODE",
+    "lga_name": "LGA_NAME"
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "vic_cadastre_parcels_v2",
+    "format": "havasu.iceberg"
+  }
+}

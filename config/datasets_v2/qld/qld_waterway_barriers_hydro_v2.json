@@ -1,0 +1,36 @@
+{
+  "dataset_key": "qld_waterway_barriers_hydro_v2",
+  "canonical_theme": "siting_water_hydrography",
+  "state": "qld",
+  "dataset_name": "Queensland Waterways for Waterway Barrier Works & Riparian Networks",
+  "source_agency": "Department of Agriculture and Fisheries (DAF) / RDMW",
+  "portal": "QSpatial / Queensland Globe",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/Watercourses/MapServer/0?f=json",
+  "layer_id": 0,
+  "geometry_type": "LineString",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "hydro_id": "OBJECTID",
+    "waterway_name": "WATERCOURSE_NAME",
+    "strahler_order": "STRAHLER_STREAM_ORDER",
+    "water_type": "FEATURE_TYPE"
+  },
+  "buffer_rules": {
+    "type": "strahler_dynamic",
+    "order_1_2_m": 10.0,
+    "order_3_m": 20.0,
+    "order_4_plus_m": 30.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "qld_water_hydrography_v2",
+    "format": "havasu.iceberg"
+  }
+}

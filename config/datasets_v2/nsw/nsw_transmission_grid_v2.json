@@ -1,0 +1,39 @@
+{
+  "dataset_key": "nsw_transmission_grid_v2",
+  "canonical_theme": "siting_transmission_grid",
+  "state": "nsw",
+  "dataset_name": "High-Voltage Transmission Network and Terminal Substations (>=132kV)",
+  "source_agency": "Transgrid / Geoscience Australia / AEMO",
+  "portal": "NSW Spatial Services / NationalMap",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/6?f=json",
+  "layer_id": 6,
+  "geometry_type": "LineString",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "line_id": "OBJECTID",
+    "line_name": "NAME",
+    "voltage_kv": "VOLTAGE_KV",
+    "operator": "OPERATOR"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 30.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_transmission_grid_v2",
+    "format": "havasu.iceberg",
+    "partition_by": "operator"
+  },
+  "audit": {
+    "cadence": "Weekly Sync Check",
+    "statutory_act": "National Electricity (NSW) Law"
+  }
+}

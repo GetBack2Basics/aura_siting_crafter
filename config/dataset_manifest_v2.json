@@ -1,0 +1,180 @@
+{
+  "manifest_version": "2.0.0",
+  "crs_standard": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "storage_root": "s3://wherobots-user-storage/aura_siting_v2",
+  "last_differential_check": "2026-09-01T19:21:52.182000+00:00",
+  "datasets": {
+    "nsw_bionet_bv_map_v2": {
+      "state": "nsw",
+      "canonical_theme": "siting_biodiversity_constraints",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "e84c9d4f144ac35d",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "nsw_coastal_inundation_hazard_v2": {
+      "state": "nsw",
+      "canonical_theme": "siting_coastal_inundation_hazard",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "b2d8d83d6516888c",
+      "last_modified": "Tue, 01 Sep 2026 11:18:27 GMT",
+      "etag": null,
+      "status": "OK"
+    },
+    "nsw_landslide_susceptibility_v2": {
+      "state": "nsw",
+      "canonical_theme": "siting_landslide_hazard",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "ca1489e43448fa7e",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "nsw_national_seismic_hazard_v2": {
+      "state": "nsw",
+      "canonical_theme": "siting_earthquake_hazard",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "ef0090b06033a9c1",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "nsw_transmission_grid_v2": {
+      "state": "nsw",
+      "canonical_theme": "siting_transmission_grid",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "7eb91ebc827827b3",
+      "last_modified": null,
+      "etag": "\"ba971b94\"",
+      "status": "OK"
+    },
+    "qld_cyclone_hazard_tcha_v2": {
+      "state": "qld",
+      "canonical_theme": "siting_cyclone_hazard",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "ef0090b06033a9c1",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "qld_landslide_susceptibility_v2": {
+      "state": "qld",
+      "canonical_theme": "siting_landslide_hazard",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "b316b63c6219b7b3",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "qld_regulated_vegetation_vma_v2": {
+      "state": "qld",
+      "canonical_theme": "siting_biodiversity_constraints",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "b316b63c6219b7b3",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "qld_transmission_grid_v2": {
+      "state": "qld",
+      "canonical_theme": "siting_transmission_grid",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "b316b63c6219b7b3",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "qld_waterway_barriers_hydro_v2": {
+      "state": "qld",
+      "canonical_theme": "siting_water_hydrography",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "b316b63c6219b7b3",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "sa_transmission_grid_electranet_v2": {
+      "state": "sa",
+      "canonical_theme": "siting_transmission_grid",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "ef0090b06033a9c1",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "tas_transmission_grid_tasnetworks_v2": {
+      "state": "tas",
+      "canonical_theme": "siting_transmission_grid",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "ef0090b06033a9c1",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "vic_hydro_watercourses_v2": {
+      "state": "vic",
+      "canonical_theme": "siting_water_hydrography",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "5529912c55201c0e",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "vic_landslide_slope_stability_v2": {
+      "state": "vic",
+      "canonical_theme": "siting_landslide_hazard",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "5529912c55201c0e",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "vic_native_veg_nvim_v2": {
+      "state": "vic",
+      "canonical_theme": "siting_biodiversity_constraints",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "5529912c55201c0e",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "vic_planning_scheme_zones_v2": {
+      "state": "vic",
+      "canonical_theme": "siting_cadastre_parcels",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "5529912c55201c0e",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "vic_transmission_grid_vicgrid_v2": {
+      "state": "vic",
+      "canonical_theme": "siting_transmission_grid",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "5529912c55201c0e",
+      "last_modified": null,
+      "etag": null,
+      "status": "OK"
+    },
+    "wa_dbca_threatened_ecological_communities_v2": {
+      "state": "wa",
+      "canonical_theme": "siting_biodiversity_constraints",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "f3746f27549d1dcd",
+      "last_modified": null,
+      "etag": null,
+      "status": "UNREACHABLE (ConnectionError)"
+    },
+    "wa_transmission_grid_v2": {
+      "state": "wa",
+      "canonical_theme": "siting_transmission_grid",
+      "last_checked": "2026-09-01T19:21:52.182000+00:00",
+      "signature_hash": "f18b0bb9e61677e2",
+      "last_modified": null,
+      "etag": null,
+      "status": "UNREACHABLE (ConnectionError)"
+    }
+  }
+}

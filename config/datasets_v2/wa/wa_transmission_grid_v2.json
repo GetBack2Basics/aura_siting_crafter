@@ -1,0 +1,35 @@
+{
+  "dataset_key": "wa_transmission_grid_v2",
+  "canonical_theme": "siting_transmission_grid",
+  "state": "wa",
+  "dataset_name": "Western Power SWIS & Horizon Power Transmission Network (>=66kV)",
+  "source_agency": "Western Power / EnergyPolicy WA",
+  "portal": "Data WA / SLIP Platform",
+  "service_type": "wfs",
+  "endpoint": "https://catalogue.data.wa.gov.au/api/3/action/package_show?id=western-power-network",
+  "layer_id": 0,
+  "geometry_type": "LineString",
+  "source_crs": "EPSG:4283",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "line_id": "OBJECTID",
+    "line_name": "FEEDER_NAME",
+    "voltage_kv": "OPERATING_VOLTAGE",
+    "operator": "UTILITY_OWNER"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 30.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "wa_transmission_grid_v2",
+    "format": "havasu.iceberg",
+    "partition_by": "operator"
+  }
+}

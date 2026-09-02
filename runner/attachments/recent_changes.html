@@ -1,5 +1,5 @@
 <h2>Recent Changes</h2>
-<p>The AURA Siting Crafter platform has been updated across the spatial ETL lakehouse, the GeoLibre WebGIS client, conversational AI querying, and documentation architecture.</p>
+<p>The AURA Siting Crafter platform has been upgraded across the spatial ETL lakehouse, the v2 multi-state canonical ingestion architecture, multi-hazard modeling, and client-side GeoParquet querying.</p>
 
 <hr>
 
@@ -11,39 +11,39 @@
   <tbody>
     <tr>
       <td><strong>1</strong></td>
-      <td><code>GeoLibre WebGIS Platform (v2.5.0)</code></td>
-      <td>Frontend &amp; Proxy</td>
-      <td>Deployed MapLibre GL WebGIS interface on Google Cloud Run with scale-to-zero serverless architecture ($0.00 idle cost) streaming live S3 GeoParquet/Iceberg tables.</td>
+      <td><code>Ingestion v2 Multi-State Engine</code></td>
+      <td>Spatial ETL</td>
+      <td>Built clean <code>src/Ingestion_v2/</code> and <code>config/datasets_v2/</code> supporting fresh downloads for NSW, QLD, VIC, WA, SA, and TAS mapped into 13 Canonical Siting Themes.</td>
     </tr>
     <tr>
       <td><strong>2</strong></td>
-      <td><code>Interactive Tooling &amp; Map Modes</code></td>
-      <td>UI / UX</td>
-      <td>Implemented dual interaction modes: <strong>Click (Identify)</strong> with rich attribute popup inspection and <strong>Hand (Pan)</strong> for smooth continental navigation. Added Layer Opacity sliders (🎚️), Lineage Metadata modal (ℹ️), Viewport Attribute Table Dock with coordinate zoom (⊞), and Attribute Distribution Charts (📊).</td>
+      <td><code>Universal EPSG:7844 Standard</code></td>
+      <td>CRS Compliance</td>
+      <td>Enforced strict <strong>EPSG:7844 (GDA2020)</strong> across all persistent tables, vector layers, and GeoParquet exports nationwide, eliminating legacy coordinate fragmentation.</td>
     </tr>
     <tr>
       <td><strong>3</strong></td>
-      <td><code>Conversational Spatial AI &amp; SQL Engine</code></td>
-      <td>AI / Analytics</td>
-      <td>Integrated natural language to DuckDB Spatial SQL translation with direct in-browser execution via DuckDB-WASM v1.28.0. Added query presets and browser-cached saved queries with inline SQL editor and Ctrl+Enter execution.</td>
+      <td><code>Multi-Hazard Statutory Profiling</code></td>
+      <td>Risk Modeling</td>
+      <td>Integrated statutory hazard layers across all states: Landslide Susceptibility, Geoscience Australia Earthquake NSHA (PGA), Cyclone TCHA (Wind Regions C &amp; D), and Coastal Inundation / Flood.</td>
     </tr>
     <tr>
       <td><strong>4</strong></td>
-      <td><code>National Siting Suitability Report (v3.0.0)</code></td>
-      <td>Reporting</td>
-      <td>Refactored into 11 benchmarking tabs including dynamic Geoscience Australia transmission grid voltage filtering, Strategic Stakeholder Personas ("I am a..." Planner, Regulator, Developer, Community, General Public), and client-side real-time MCDA weight re-scoring.</td>
+      <td><code>Weekly Differential Update Checker</code></td>
+      <td>Automation</td>
+      <td>Created <code>tools/check_for_updates.py</code> to inspect upstream ETags, Last-Modified headers, and ArcGIS <code>lastEditDate</code> against <code>dataset_manifest_v2.json</code>, triggering ETL only for changed layers at $0.00 base cost.</td>
     </tr>
     <tr>
       <td><strong>5</strong></td>
-      <td><code>Modular Attachment Architecture</code></td>
-      <td>Refactoring</td>
-      <td>Decoupled 100% of report content and GeoLibre help modals into modular files in <code>runner/attachments/</code> (including <code>geolibre_help.html</code>, <code>geolibre_guide.html</code>, <code>lakehouse_storage.html</code>, <code>table_footprint.html</code>, <code>strategic_personas.html</code>).</td>
+      <td><code>Cloud-Native GeoParquet Siting</code></td>
+      <td>Data Architecture</td>
+      <td>Exported Wherobots candidate matrices to <code>exports_v2/datacenter_candidates_v2.parquet</code> for zero-cost in-browser DuckDB-WASM HTTP byte-range queries ($0.00 compute spend).</td>
     </tr>
     <tr>
       <td><strong>6</strong></td>
-      <td><code>Archive &amp; Documentation Consolidation</code></td>
-      <td>Maintenance</td>
-      <td>Consolidated completed sprint implementation plans into <code>docs/archive/plans_and_walkthroughs/</code> and moved legacy/scratch runner scripts to <code>runner/archive/</code>. Cleaned AI speech and promotional fluff across all technical documentation.</td>
+      <td><code>Two-Phase Spatial Processing</code></td>
+      <td>Wherobots Playbook</td>
+      <td>Decoupled heavy geometry operations from lightweight scoring; enforced mandatory <code>try...finally: sedona.stop()</code> compute teardown.</td>
     </tr>
   </tbody>
 </table>
@@ -52,8 +52,8 @@
 
 <h3>2. Verification & Integrity Results</h3>
 <ul>
-  <li><strong>Graphify AST Analysis:</strong> Validated dependencies across Python modules, GeoLibre proxy, and SQL table references.</li>
-  <li><strong>Lint &amp; Security Gate:</strong> 100% pass on <code>pytest tests/lint/ -v</code> (zero plain-text credentials, zero banned legacy identifiers).</li>
-  <li><strong>Attachment Resolution:</strong> All 11 dashboard tabs and GeoLibre modal dialogs render directly from standalone files in <code>runner/attachments/</code>.</li>
-  <li><strong>Compute Resource Teardown:</strong> All local and cloud compute instances are terminated; zero idle container spend ($0.00 / hr).</li>
+  <li><strong>Lint &amp; Security Gate:</strong> 100% pass on <code>pytest tests/lint/ -v</code> (223 passed, 0 secrets, 0 banned references).</li>
+  <li><strong>v2 Ingestion Test Suite:</strong> 100% pass on <code>pytest tests/test_dataset_loader_v2.py -v</code> (7 passed).</li>
+  <li><strong>Graphify AST Analysis:</strong> Validated dependencies across <code>src/Ingestion_v2</code> and <code>geolibre_proxy</code>.</li>
+  <li><strong>Compute Resource Teardown:</strong> 0 active background tasks; zero lingering compute sessions ($0.00 / hr).</li>
 </ul>

@@ -1,0 +1,33 @@
+{
+  "dataset_key": "nsw_coastal_inundation_hazard_v2",
+  "canonical_theme": "siting_coastal_inundation_hazard",
+  "state": "nsw",
+  "dataset_name": "NSW Coastal Inundation, Storm Surge and Tidal Extent",
+  "source_agency": "NSW DCCEEW Coastal Branch",
+  "portal": "NSW SEED Portal",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/2?f=json",
+  "layer_id": 0,
+  "geometry_type": "MultiPolygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "inundation_id": "OBJECTID",
+    "scenario": "EVENT_SCENARIO",
+    "depth_m": "PEAK_DEPTH_M"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_coastal_inundation_hazard_v2",
+    "format": "havasu.iceberg"
+  }
+}

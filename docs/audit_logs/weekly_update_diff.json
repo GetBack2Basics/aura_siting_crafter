@@ -1,0 +1,144 @@
+{
+  "timestamp": "2026-09-01T19:21:52.182000+00:00",
+  "target_state": "all",
+  "total_datasets_checked": 19,
+  "changed_datasets": [],
+  "unchanged_datasets": [],
+  "new_datasets": [
+    {
+      "dataset_key": "nsw_bionet_bv_map_v2",
+      "state": "nsw",
+      "canonical_theme": "siting_biodiversity_constraints",
+      "signature_hash": "e84c9d4f144ac35d",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "nsw_coastal_inundation_hazard_v2",
+      "state": "nsw",
+      "canonical_theme": "siting_coastal_inundation_hazard",
+      "signature_hash": "b2d8d83d6516888c",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "nsw_landslide_susceptibility_v2",
+      "state": "nsw",
+      "canonical_theme": "siting_landslide_hazard",
+      "signature_hash": "ca1489e43448fa7e",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "nsw_national_seismic_hazard_v2",
+      "state": "nsw",
+      "canonical_theme": "siting_earthquake_hazard",
+      "signature_hash": "ef0090b06033a9c1",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "nsw_transmission_grid_v2",
+      "state": "nsw",
+      "canonical_theme": "siting_transmission_grid",
+      "signature_hash": "7eb91ebc827827b3",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "qld_cyclone_hazard_tcha_v2",
+      "state": "qld",
+      "canonical_theme": "siting_cyclone_hazard",
+      "signature_hash": "ef0090b06033a9c1",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "qld_landslide_susceptibility_v2",
+      "state": "qld",
+      "canonical_theme": "siting_landslide_hazard",
+      "signature_hash": "b316b63c6219b7b3",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "qld_regulated_vegetation_vma_v2",
+      "state": "qld",
+      "canonical_theme": "siting_biodiversity_constraints",
+      "signature_hash": "b316b63c6219b7b3",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "qld_transmission_grid_v2",
+      "state": "qld",
+      "canonical_theme": "siting_transmission_grid",
+      "signature_hash": "b316b63c6219b7b3",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "qld_waterway_barriers_hydro_v2",
+      "state": "qld",
+      "canonical_theme": "siting_water_hydrography",
+      "signature_hash": "b316b63c6219b7b3",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "sa_transmission_grid_electranet_v2",
+      "state": "sa",
+      "canonical_theme": "siting_transmission_grid",
+      "signature_hash": "ef0090b06033a9c1",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "tas_transmission_grid_tasnetworks_v2",
+      "state": "tas",
+      "canonical_theme": "siting_transmission_grid",
+      "signature_hash": "ef0090b06033a9c1",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "vic_hydro_watercourses_v2",
+      "state": "vic",
+      "canonical_theme": "siting_water_hydrography",
+      "signature_hash": "5529912c55201c0e",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "vic_landslide_slope_stability_v2",
+      "state": "vic",
+      "canonical_theme": "siting_landslide_hazard",
+      "signature_hash": "5529912c55201c0e",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "vic_native_veg_nvim_v2",
+      "state": "vic",
+      "canonical_theme": "siting_biodiversity_constraints",
+      "signature_hash": "5529912c55201c0e",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "vic_planning_scheme_zones_v2",
+      "state": "vic",
+      "canonical_theme": "siting_cadastre_parcels",
+      "signature_hash": "5529912c55201c0e",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "vic_transmission_grid_vicgrid_v2",
+      "state": "vic",
+      "canonical_theme": "siting_transmission_grid",
+      "signature_hash": "5529912c55201c0e",
+      "status": "OK"
+    },
+    {
+      "dataset_key": "wa_dbca_threatened_ecological_communities_v2",
+      "state": "wa",
+      "canonical_theme": "siting_biodiversity_constraints",
+      "signature_hash": "f3746f27549d1dcd",
+      "status": "UNREACHABLE (ConnectionError)"
+    },
+    {
+      "dataset_key": "wa_transmission_grid_v2",
+      "state": "wa",
+      "canonical_theme": "siting_transmission_grid",
+      "signature_hash": "f18b0bb9e61677e2",
+      "status": "UNREACHABLE (ConnectionError)"
+    }
+  ],
+  "errors": [],
+  "elapsed_seconds": 11.1672
+}

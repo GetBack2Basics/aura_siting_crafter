@@ -1,0 +1,34 @@
+{
+  "dataset_key": "national_electricity_grid_v2",
+  "canonical_theme": "siting_transmission_grid",
+  "state": "national",
+  "dataset_name": "Geoscience Australia National Electricity Transmission Grid (>=66kV)",
+  "source_agency": "Geoscience Australia / AEMO",
+  "portal": "NationalMap / Geoscience Australia",
+  "service_type": "wfs",
+  "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/0?f=json",
+  "layer_id": 0,
+  "geometry_type": "LineString",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "line_id": "OBJECTID",
+    "line_name": "NAME",
+    "voltage_kv": "VOLTAGE_KV",
+    "operator": "OPERATOR"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 30.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "national_electricity_grid_v2",
+    "format": "havasu.iceberg"
+  }
+}

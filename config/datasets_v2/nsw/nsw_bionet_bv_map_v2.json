@@ -1,0 +1,34 @@
+{
+  "dataset_key": "nsw_bionet_bv_map_v2",
+  "canonical_theme": "siting_biodiversity_constraints",
+  "state": "nsw",
+  "dataset_name": "Biodiversity Values Map (Biodiversity Conservation Act 2016)",
+  "source_agency": "NSW DCCEEW / Biodiversity Conservation Trust",
+  "portal": "NSW SEED Portal",
+  "service_type": "arcgis_featureserver",
+  "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/1?f=json",
+  "layer_id": 0,
+  "geometry_type": "MultiPolygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "constraint_id": "OBJECTID",
+    "tec_name": "BV_REASON",
+    "status": "THRESHOLD_STATUS",
+    "statutory_act": "Biodiversity Conservation Act 2016"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_biodiversity_constraints_v2",
+    "format": "havasu.iceberg"
+  }
+}

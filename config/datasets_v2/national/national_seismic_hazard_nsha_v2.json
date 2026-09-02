@@ -1,0 +1,29 @@
+{
+  "dataset_key": "national_seismic_hazard_nsha_v2",
+  "canonical_theme": "siting_earthquake_hazard",
+  "state": "national",
+  "dataset_name": "National Seismic Hazard Assessment (NSHA) Ground Motion PGA (National)",
+  "source_agency": "Geoscience Australia",
+  "portal": "NationalMap / Geoscience Australia",
+  "service_type": "wfs",
+  "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json",
+  "layer_id": 0,
+  "geometry_type": "Polygon",
+  "source_crs": "EPSG:4326",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "zone_id": "OBJECTID",
+    "pga_value": "PGA_500YR",
+    "site_subsoil_class": "SITE_CLASS"
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "national_seismic_hazard_nsha_v2",
+    "format": "havasu.iceberg"
+  }
+}

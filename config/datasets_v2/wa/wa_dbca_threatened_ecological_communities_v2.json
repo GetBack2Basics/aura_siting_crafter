@@ -1,0 +1,34 @@
+{
+  "dataset_key": "wa_dbca_threatened_ecological_communities_v2",
+  "canonical_theme": "siting_biodiversity_constraints",
+  "state": "wa",
+  "dataset_name": "DBCA Threatened Ecological Communities (TEC) & Priority Flora/Fauna",
+  "source_agency": "Department of Biodiversity, Conservation and Attractions (DBCA)",
+  "portal": "Data WA / SLIP Platform",
+  "service_type": "wfs",
+  "endpoint": "https://catalogue.data.wa.gov.au/api/3/action/package_show?id=dbca-threatened-ecological-communities",
+  "layer_id": 1,
+  "geometry_type": "MultiPolygon",
+  "source_crs": "EPSG:4283",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "schema_mapping": {
+    "constraint_id": "OBJECTID",
+    "tec_name": "COMMUNITY_NAME",
+    "status": "STATUS_CODE",
+    "statutory_act": "Biodiversity Conservation Act 2016 (WA)"
+  },
+  "buffer_rules": {
+    "type": "fixed",
+    "distance_m": 0.0
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "wa_biodiversity_constraints_v2",
+    "format": "havasu.iceberg"
+  }
+}

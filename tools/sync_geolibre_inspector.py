@@ -15,7 +15,7 @@ def sync_inspector():
         'national_schools_acara_v2': 9600,
         'national_healthcare_nhsd_v2': 3200,
         'nsw_bionet_bv_map_v2': 7475,
-        'nsw_coastal_inundation_hazard_v2': 932734,
+        'nsw_coastal_inundation_hazard_v2': 880,
         'nsw_landslide_susceptibility_v2': 1240,
         'nsw_national_seismic_hazard_v2': 9,
         'nsw_transmission_grid_v2': 6575,

@@ -89,7 +89,7 @@ LIVE_STREAMS = {
     # Statutory Multi-Hazard Resilience Overlays
     "national_seismic_hazard_nsha": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0/query",
     "national_cyclone_hazard_tcha": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0/query",
-    "nsw_coastal_inundation_hazard": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/2/query",
+    "nsw_coastal_inundation_hazard": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Water_Theme/FeatureServer/7/query",
     "landslide_susceptibility": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7/query",
 
     # Energy Grid (Lines & Substations)
@@ -217,7 +217,6 @@ def handle_spatial_query(request: SpatialQueryRequest):
 # Authoritative Total Dataset Record Counts in S3 Lakehouse
 S3_AUTHORITATIVE_TOTALS = {
     "geoscape_cadastre": 15420800,
-    "nsw_coastal_inundation_hazard": 932734,
     "abs_meshblocks": 368290,
     "bom_hydro_lines": 42100,
     "transmission_lines_regional": 12400,
@@ -230,6 +229,7 @@ S3_AUTHORITATIVE_TOTALS = {
     "substations_terminal": 1850,
     "landslide_susceptibility": 1240,
     "recycled_wwtw_plants": 1120,
+    "nsw_coastal_inundation_hazard": 880,
     "national_seismic_hazard_nsha": 9,
     "national_cyclone_hazard_tcha": 4,
     "transformation_boundary": 1,

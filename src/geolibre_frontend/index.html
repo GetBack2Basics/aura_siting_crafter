@@ -2137,21 +2137,21 @@
         id: "nsw_coastal_inundation_hazard",
         name: "1% AEP Flood & Coastal Inundation",
         color: "#06b6d4",
-        line_width: 1.0,
+        line_width: 1.2,
         dash_style: "dashed",
         dash_array: [3, 2],
-        count: "932,734",
+        count: "880 Extents",
         category: "🛡️ Statutory Multi-Hazard Resilience Overlays",
-        type: "circle",
+        type: "fill",
         default_checked: false,
         s3_path: "s3://wherobots-user-storage/aura_siting/hazards/nsw_coastal_inundation_hazard.parquet",
         stream_key: "nsw_coastal_inundation_hazard",
         meta: {
-          portal: "ARR 2019 / NSW Flood Data Portal",
+          portal: "ARR 2019 / NSW Spatial Water Theme",
           jurisdiction: "Australian Rainfall & Runoff / NCC 2022",
-          records: "1% AEP (1-in-100 Year) Hydrodynamic Inundation",
+          records: "880 Subject to Inundation & Hydrographic Flood Extent Zones",
           crs: "EPSG:7844 (GDA2020 Geographic)",
-          description: "Hydrodynamic peak flood depths and floodway exclusion zones enforcing Tier-IV elevation criteria (Smith et al. 2014)."
+          description: "Hydrodynamic peak flood depths and subject-to-inundation polygon exclusion zones enforcing Tier-IV elevation criteria (Smith et al. 2014)."
         }
       },
       {
@@ -2538,7 +2538,7 @@
     const DIRECT_STREAM_URLS = {
       "national_seismic_hazard_nsha": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0/query",
       "national_cyclone_hazard_tcha": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0/query",
-      "nsw_coastal_inundation_hazard": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/2/query",
+      "nsw_coastal_inundation_hazard": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Water_Theme/FeatureServer/7/query",
       "landslide_susceptibility": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7/query",
       "transmission_lines_interstate": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/6/query",
       "transmission_lines_regional": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/6/query",

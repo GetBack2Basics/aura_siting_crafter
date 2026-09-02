@@ -6,16 +6,17 @@
   "source_agency": "NSW DCCEEW Coastal Branch",
   "portal": "NSW SEED Portal",
   "service_type": "arcgis_featureserver",
-  "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/2?f=json",
-  "layer_id": 0,
+  "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Water_Theme/FeatureServer/7?f=json",
+  "layer_id": 7,
   "geometry_type": "MultiPolygon",
   "source_crs": "EPSG:4326",
   "target_crs": "EPSG:7844",
   "metric_crs": "EPSG:3112",
   "schema_mapping": {
-    "inundation_id": "OBJECTID",
-    "scenario": "EVENT_SCENARIO",
-    "depth_m": "PEAK_DEPTH_M"
+    "inundation_id": "objectid",
+    "name": "hydroname",
+    "subtype": "classsubtype",
+    "area_m2": "Shape__Area"
   },
   "buffer_rules": {
     "type": "fixed",

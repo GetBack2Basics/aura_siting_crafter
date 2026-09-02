@@ -23,55 +23,171 @@
   "layerGroups": [
     {
       "id": "grp_candidates",
-      "name": "\ud83c\udfaf Candidate Hubs & Siting Scorecards",
+      "name": "🎯 Candidate Hubs & Siting Scorecards",
+      "visible": true,
+      "collapsed": false,
+      "opacity": 1.0
+    },
+    {
+      "id": "grp_hazards",
+      "name": "🛡️ Statutory Multi-Hazard Resilience Overlays",
       "visible": true,
       "collapsed": false,
       "opacity": 1.0
     },
     {
       "id": "grp_cadastre",
-      "name": "\ud83d\udcd0 Cadastre & Statistical Boundaries",
+      "name": "📐 Cadastre & Statistical Boundaries",
       "visible": false,
       "collapsed": false,
       "opacity": 1.0
     },
     {
       "id": "grp_energy",
-      "name": "\u26a1 Energy Grid & Substations",
+      "name": "⚡ Energy Grid & Substations",
       "visible": true,
       "collapsed": false,
       "opacity": 1.0
     },
     {
       "id": "grp_water",
-      "name": "\ud83d\udca7 Water & Cooling Loops",
+      "name": "💧 Water & Cooling Loops",
       "visible": true,
       "collapsed": false,
       "opacity": 1.0
     },
     {
       "id": "grp_receptors",
-      "name": "\ud83d\udee1\ufe0f Social & Environmental Receptors",
+      "name": "🛡️ Social & Environmental Receptors",
       "visible": true,
       "collapsed": false,
       "opacity": 1.0
     },
     {
       "id": "grp_environment",
-      "name": "\ud83c\udf3f Biodiversity & Bushfire Constraints",
+      "name": "🌿 Biodiversity & Bushfire Constraints",
       "visible": true,
       "collapsed": false,
       "opacity": 1.0
     },
     {
       "id": "grp_precincts",
-      "name": "\ud83c\udfd7\ufe0f Precinct Micro-Siting Masterplans",
+      "name": "🏗️ Precinct Micro-Siting Masterplans",
       "visible": true,
       "collapsed": false,
       "opacity": 1.0
     }
   ],
   "layers": [
+    {
+      "id": "national_seismic_hazard_nsha",
+      "name": "GA NSHA 2018 Seismic PGA Contours",
+      "type": "geoparquet",
+      "source": {
+        "type": "parquet",
+        "s3_path": "s3://wherobots-user-storage/aura_siting/hazards/national_seismic_hazard_nsha.parquet",
+        "format": "parquet",
+        "spatial_engine": "DuckDB-WASM"
+      },
+      "groupId": "grp_hazards",
+      "visible": false,
+      "opacity": 0.85,
+      "style": {
+        "strokeColor": "#f59e0b",
+        "strokeWidth": 1.5,
+        "lineDasharray": [4, 2]
+      },
+      "metadata": {
+        "portal": "Geoscience Australia / AS 1170.4:2007",
+        "jurisdiction": "National Seismic Hazard Assessment (NSHA 2018)",
+        "records": "500-Year Return Period Peak Ground Acceleration (PGA)",
+        "crs": "EPSG:7844 (GDA2020)",
+        "description": "Authoritative national seismic ground motion hazard contours governing structural design and foundation dynamics (Allen et al. 2018)."
+      }
+    },
+    {
+      "id": "national_cyclone_hazard_tcha",
+      "name": "GA TCHA 2018 Cyclone Wind Regions",
+      "type": "geoparquet",
+      "source": {
+        "type": "parquet",
+        "s3_path": "s3://wherobots-user-storage/aura_siting/hazards/national_cyclone_hazard_tcha.parquet",
+        "format": "parquet",
+        "spatial_engine": "DuckDB-WASM"
+      },
+      "groupId": "grp_hazards",
+      "visible": false,
+      "opacity": 0.70,
+      "style": {
+        "fillColor": "#38bdf8",
+        "fillOpacity": 0.15,
+        "strokeColor": "#38bdf8",
+        "strokeWidth": 1.2
+      },
+      "metadata": {
+        "portal": "Geoscience Australia / AS/NZS 1170.2:2021",
+        "jurisdiction": "Tropical Cyclone Hazard Assessment (TCHA 2018)",
+        "records": "4 Continental Wind Climate Design Regions (A, B, C, D)",
+        "crs": "EPSG:7844 (GDA2020)",
+        "description": "Regional design wind speeds and cyclonic gust boundaries for mission-critical envelope rating (Arthur 2018)."
+      }
+    },
+    {
+      "id": "nsw_coastal_inundation_hazard",
+      "name": "1% AEP Flood & Coastal Inundation",
+      "type": "geoparquet",
+      "source": {
+        "type": "parquet",
+        "s3_path": "s3://wherobots-user-storage/aura_siting/hazards/nsw_coastal_inundation_hazard.parquet",
+        "format": "parquet",
+        "spatial_engine": "DuckDB-WASM"
+      },
+      "groupId": "grp_hazards",
+      "visible": false,
+      "opacity": 0.75,
+      "style": {
+        "fillColor": "#06b6d4",
+        "fillOpacity": 0.20,
+        "strokeColor": "#06b6d4",
+        "strokeWidth": 1.0,
+        "lineDasharray": [3, 2]
+      },
+      "metadata": {
+        "portal": "ARR 2019 / NSW Flood Data Portal",
+        "jurisdiction": "Australian Rainfall & Runoff / NCC 2022",
+        "records": "1% AEP (1-in-100 Year) Hydrodynamic Inundation",
+        "crs": "EPSG:7844 (GDA2020)",
+        "description": "Hydrodynamic peak flood depths and floodway exclusion zones enforcing Tier-IV elevation criteria (Smith et al. 2014)."
+      }
+    },
+    {
+      "id": "landslide_susceptibility",
+      "name": "AGS Landslide & Slope Susceptibility",
+      "type": "geoparquet",
+      "source": {
+        "type": "parquet",
+        "s3_path": "s3://wherobots-user-storage/aura_siting/hazards/nsw_landslide_susceptibility.parquet",
+        "format": "parquet",
+        "spatial_engine": "DuckDB-WASM"
+      },
+      "groupId": "grp_hazards",
+      "visible": false,
+      "opacity": 0.75,
+      "style": {
+        "fillColor": "#a855f7",
+        "fillOpacity": 0.15,
+        "strokeColor": "#a855f7",
+        "strokeWidth": 1.0,
+        "lineDasharray": [5, 2]
+      },
+      "metadata": {
+        "portal": "Australian Geomechanics Society (AGS 2007)",
+        "jurisdiction": "National Slope Stability Guidelines",
+        "records": "Slope Stability Susceptibility & Geohazard Classifications",
+        "crs": "EPSG:7844 (GDA2020)",
+        "description": "Slope instability and landslide hazard zones filtering candidates above 5% and 8% critical slope grades (Fell et al. 2008)."
+      }
+    },
     {
       "id": "national_candidates",
       "name": "\ud83c\udfaf National Siting Candidate Hubs (16 MCE Scored)",

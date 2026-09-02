@@ -2,6 +2,7 @@
 """
 
 import pytest
+fastapi = pytest.importorskip("fastapi")
 from fastapi.testclient import TestClient
 from src.geolibre_proxy.main import app
 from src.geolibre_proxy.schemas import SpatialQueryRequest

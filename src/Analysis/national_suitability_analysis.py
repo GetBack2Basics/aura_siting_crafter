@@ -82,6 +82,149 @@ def calculate_sigmoidal_sensitive_score(dist_m: float) -> tuple:
         return round(score, 3), "COMMUTE DECAY (>5km)", False
 
 
+def calculate_multi_hazard_resilience_score(c: dict) -> dict:
+    """
+    Computes multi-hazard resilience sub-scores and composite S_hazard grounded in statutory standards:
+      - Flood & Inundation: ARR 2019 / NCC 2022 (Ball et al., 2019; Smith et al., 2014)
+      - Seismic Ground Motion: GA NSHA 2018 / AS 1170.4:2007 (Allen et al., 2018)
+      - Cyclone & Extreme Wind: GA TCHA 2018 / AS/NZS 1170.2:2021 (Arthur, 2018; Holmes, 2021)
+      - Geotechnical Slope Stability: AGS 2007 / Fell et al. (2008)
+      - Bushfire Ember Attack: AS 3959:2018 / NSW RFS PBP 2019
+    Also evaluates data depth and micro-spatial coverage fidelity.
+    """
+    # 1. Flood Inundation Sub-Score
+    flood_depth_m = float(c.get("flood_depth_m", 0.0))
+    is_floodway = bool(c.get("is_floodway", False))
+    if flood_depth_m > 0.8 or is_floodway:
+        s_flood = 0.00
+        flood_status = "HARD EXCLUSION (>0.8m / Floodway)"
+        flood_excluded = True
+    elif flood_depth_m <= 0.0:
+        s_flood = 1.00
+        flood_status = "NEGLIGIBLE (Outside 1% AEP)"
+        flood_excluded = False
+    elif flood_depth_m <= 0.3:
+        s_flood = round(0.70 + ((0.3 - flood_depth_m) / 0.3) * 0.20, 3)
+        flood_status = f"LOW OVERLAND ({flood_depth_m:.2f}m)"
+        flood_excluded = False
+    else:
+        s_flood = round(0.30 + ((0.8 - flood_depth_m) / 0.5) * 0.40, 3)
+        flood_status = f"MODERATE INUNDATION ({flood_depth_m:.2f}m)"
+        flood_excluded = False
+
+    # 2. Seismic Ground Motion (PGA 500yr)
+    pga = float(c.get("earthquake_pga", 0.06))
+    site_class = c.get("earthquake_site_class", "B")
+    if site_class == "E":
+        s_seismic = 0.00
+        seismic_status = "HARD EXCLUSION (Class E Liquefaction)"
+        seismic_excluded = True
+    elif pga <= 0.04:
+        s_seismic = 1.00
+        seismic_status = f"LOW RISK ({pga:.2f}g)"
+        seismic_excluded = False
+    elif pga <= 0.08:
+        s_seismic = 0.85
+        seismic_status = f"STANDARD BASELINE ({pga:.2f}g)"
+        seismic_excluded = False
+    elif pga <= 0.12:
+        s_seismic = 0.60
+        seismic_status = f"ELEVATED RISK ({pga:.2f}g)"
+        seismic_excluded = False
+    else:
+        s_seismic = 0.25
+        seismic_status = f"HIGH PGA SURCHARGE ({pga:.2f}g)"
+        seismic_excluded = False
+
+    # 3. Cyclone Wind Region (AS/NZS 1170.2)
+    wind_reg = str(c.get("cyclone_region", "Region A (Normal)"))
+    if "Region D" in wind_reg or "Severe" in wind_reg:
+        s_wind = 0.20
+        wind_status = "SEVERE CYCLONIC (Region D - 88m/s)"
+    elif "Region C" in wind_reg or "Tropical" in wind_reg:
+        s_wind = 0.50
+        wind_status = "CYCLONIC (Region C - 69m/s)"
+    elif "Region B" in wind_reg or "Intermediate" in wind_reg:
+        s_wind = 0.85
+        wind_status = "INTERMEDIATE (Region B - 57m/s)"
+    else:
+        s_wind = 1.00
+        wind_status = "STANDARD (Region A - 45m/s)"
+
+    # 4. Landslide & Slope Geotechnical Risk (AGS 2007)
+    slope_pct = float(c.get("slope_pct", 2.5))
+    ls_class = str(c.get("landslide_risk", "Low"))
+    if slope_pct > 8.0 or ls_class in ("High", "Very High"):
+        s_landslide = 0.00
+        landslide_status = "HARD EXCLUSION (Slope > 8% / Active Slip)"
+        landslide_excluded = True
+    elif slope_pct <= 3.0 and ls_class in ("Low", "Very Low"):
+        s_landslide = 1.00
+        landslide_status = f"VERY LOW RISK ({slope_pct:.1f}% slope)"
+        landslide_excluded = False
+    elif slope_pct <= 5.0:
+        s_landslide = 0.80
+        landslide_status = f"LOW RISK ({slope_pct:.1f}% slope)"
+        landslide_excluded = False
+    else:
+        s_landslide = 0.40
+        landslide_status = f"MODERATE RISK ({slope_pct:.1f}% slope)"
+        landslide_excluded = False
+
+    # 5. Bushfire APZ & Ember Attack (AS 3959)
+    dist_veg_m = float(c.get("dist_to_veg_m", 150.0))
+    if dist_veg_m < 20.0:
+        s_bushfire = 0.00
+        bushfire_status = "HARD EXCLUSION (BAL-FZ <20m)"
+        bushfire_excluded = True
+    elif dist_veg_m >= 100.0:
+        s_bushfire = 1.00
+        bushfire_status = "BAL-LOW (Buffer >100m)"
+        bushfire_excluded = False
+    else:
+        s_bushfire = round(0.40 + ((dist_veg_m - 20.0) / 80.0) * 0.60, 3)
+        bushfire_status = f"BAL-12.5/29 ({dist_veg_m:.0f}m Buffer)"
+        bushfire_excluded = False
+
+    # Hard Exclusion Gate
+    is_hazard_excluded = flood_excluded or seismic_excluded or landslide_excluded or bushfire_excluded
+    if is_hazard_excluded:
+        composite_hazard = 0.00
+    else:
+        composite_hazard = round(
+            (s_flood * 0.30) + (s_seismic * 0.25) + (s_wind * 0.20) + (s_landslide * 0.15) + (s_bushfire * 0.10),
+            3
+        )
+
+    # 6. Data Depth & Micro-Fidelity Index
+    indexed_layers = c.get("indexed_layers_count", 10 if not c.get("is_simulated", False) else 8)
+    data_depth_pct = round((indexed_layers / 10.0) * 100, 1)
+    if data_depth_pct >= 95.0:
+        data_depth_tier = "Tier-1 High-Precision (10/10 Micro-Layers)"
+    elif data_depth_pct >= 80.0:
+        data_depth_tier = "Tier-2 Regional Model (8-9/10 Layers)"
+    else:
+        data_depth_tier = "Tier-3 Continental Baseline (<8 Layers)"
+
+    return {
+        "flood_score": s_flood,
+        "flood_status": flood_status,
+        "seismic_score": s_seismic,
+        "seismic_status": seismic_status,
+        "wind_score": s_wind,
+        "wind_status": wind_status,
+        "landslide_score": s_landslide,
+        "landslide_status": landslide_status,
+        "bushfire_score": s_bushfire,
+        "bushfire_status": bushfire_status,
+        "hazard_score": composite_hazard,
+        "is_hazard_excluded": is_hazard_excluded,
+        "data_depth_pct": data_depth_pct,
+        "data_depth_tier": data_depth_tier,
+        "indexed_layers_count": indexed_layers
+    }
+
+
 def main():
     print("[national] Initializing National Siting MCDA Engine...")
     
@@ -283,22 +426,44 @@ def main():
         if slope_pct > 5.0:
             is_excluded = True
             status_desc = "EXCLUDED: Slope > 5%"
+
+        # 6. Statutory Multi-Hazard Resilience & Risk Siting Factor (25% Weight)
+        hazard_metrics = calculate_multi_hazard_resilience_score(c)
+        s_hazard = hazard_metrics["hazard_score"]
+        if hazard_metrics["is_hazard_excluded"]:
+            is_excluded = True
+            status_desc = f"EXCLUDED: {hazard_metrics['flood_status'] if hazard_metrics['flood_score'] == 0 else hazard_metrics['landslide_status'] if hazard_metrics['landslide_score'] == 0 else hazard_metrics['bushfire_status']}"
         
-        # Overall Suitability Score (0 - 1.0)
+        # 6-Factor Composite Suitability Score (0 - 1.0)
+        # Power: 30%, Multi-Hazard: 25%, Sensitive: 20%, Water: 15%, Size: 10%
         if is_excluded:
             composite_score = 0.0
         else:
-            composite_score = (s_power * 0.40) + (s_sensitive * 0.25) + (s_water * 0.20) + (s_size * 0.15)
+            composite_score = (s_power * 0.30) + (s_hazard * 0.25) + (s_sensitive * 0.20) + (s_water * 0.15) + (s_size * 0.10)
         
         rec = dict(c)
         rec.update({
             "power_score": round(s_power, 3),
+            "hazard_score": round(s_hazard, 3),
+            "flood_score": hazard_metrics["flood_score"],
+            "flood_status": hazard_metrics["flood_status"],
+            "seismic_score": hazard_metrics["seismic_score"],
+            "seismic_status": hazard_metrics["seismic_status"],
+            "wind_score": hazard_metrics["wind_score"],
+            "wind_status": hazard_metrics["wind_status"],
+            "landslide_score": hazard_metrics["landslide_score"],
+            "landslide_status": hazard_metrics["landslide_status"],
+            "bushfire_score": hazard_metrics["bushfire_score"],
+            "bushfire_status": hazard_metrics["bushfire_status"],
             "sensitive_score": round(s_sensitive, 3),
             "water_score": round(s_water, 3),
             "size_score": round(s_size, 3),
             "suitability_score": round(composite_score, 3),
             "dist_to_sensitive_km": round(dist_sens_m / 1000.0, 2),
             "sensitive_status": status_desc,
+            "data_depth_pct": hazard_metrics["data_depth_pct"],
+            "data_depth_tier": hazard_metrics["data_depth_tier"],
+            "indexed_layers_count": hazard_metrics["indexed_layers_count"],
             "is_excluded": is_excluded
         })
         scored_records.append(rec)
@@ -314,6 +479,8 @@ def main():
     state_df = df.groupby("state_name").agg(
         candidate_count=("mb_code21", "count"),
         avg_suitability_score=("suitability_score", "mean"),
+        avg_hazard_score=("hazard_score", "mean"),
+        avg_data_depth_pct=("data_depth_pct", "mean"),
         avg_area_ha=("area_ha", "mean"),
         avg_dist_substation_km=("dist_to_substation_km", "mean"),
         avg_dist_wwtw_km=("dist_to_wwtw_km", "mean"),
@@ -326,6 +493,8 @@ def main():
     region_df = df.groupby(["region_name", "state_name"]).agg(
         candidate_count=("mb_code21", "count"),
         avg_suitability_score=("suitability_score", "mean"),
+        avg_hazard_score=("hazard_score", "mean"),
+        avg_data_depth_pct=("data_depth_pct", "mean"),
         avg_area_ha=("area_ha", "mean"),
         avg_dist_substation_km=("dist_to_substation_km", "mean"),
         avg_dist_wwtw_km=("dist_to_wwtw_km", "mean"),

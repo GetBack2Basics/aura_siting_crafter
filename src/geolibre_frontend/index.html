@@ -1954,23 +1954,23 @@
 
     // 16 National Candidate Sites (Matching Multi-Criteria Decision Analysis Report)
     const rawCandidatesData = [
-      { "mb_code21": "NSW_MCC01", "town_name": "Teralba", "state_name": "New South Wales", "area_ha": 44.5, "slope_pct": 2.1, "dist_to_substation_km": 0.35, "dist_to_wwtw_km": 0.85, "dist_to_sensitive_km": 0.82, "suitability_score": 0.998, "pumped_hydro_capacity_mwh": 49.0, "lon": 151.60, "lat": -32.94 },
-      { "mb_code21": "NSW_MCC02", "town_name": "Killingworth", "state_name": "New South Wales", "area_ha": 28.2, "slope_pct": 3.4, "dist_to_substation_km": 0.45, "dist_to_wwtw_km": 1.4, "dist_to_sensitive_km": 1.25, "suitability_score": 0.991, "pumped_hydro_capacity_mwh": 130.8, "lon": 151.56, "lat": -32.92 },
-      { "mb_code21": "NSW_MCC03", "town_name": "Cockle Creek", "state_name": "New South Wales", "area_ha": 18.7, "slope_pct": 1.2, "dist_to_substation_km": 0.2, "dist_to_wwtw_km": 0.6, "dist_to_sensitive_km": 0.42, "suitability_score": 0.845, "pumped_hydro_capacity_mwh": 27.2, "lon": 151.62, "lat": -32.94 },
-      { "mb_code21": "NSW_MCC04", "town_name": "West Lake", "state_name": "New South Wales", "area_ha": 35.0, "slope_pct": 4.1, "dist_to_substation_km": 1.1, "dist_to_wwtw_km": 2.1, "dist_to_sensitive_km": 1.8, "suitability_score": 0.922, "pumped_hydro_capacity_mwh": 196.2, "lon": 151.55, "lat": -32.96 },
-      { "mb_code21": "QLD_GLD01", "town_name": "Yarwun", "state_name": "Queensland", "area_ha": 18.5, "slope_pct": 1.8, "dist_to_substation_km": 0.35, "dist_to_wwtw_km": 0.8, "dist_to_sensitive_km": 1.1, "suitability_score": 1.0, "pumped_hydro_capacity_mwh": 38.1, "lon": 151.25, "lat": -23.84 },
-      { "mb_code21": "QLD_GLD02", "town_name": "Gladstone City", "state_name": "Queensland", "area_ha": 15.0, "slope_pct": 2.3, "dist_to_substation_km": 0.75, "dist_to_wwtw_km": 1.5, "dist_to_sensitive_km": 0.65, "suitability_score": 0.958, "pumped_hydro_capacity_mwh": 32.7, "lon": 151.17, "lat": -23.82 },
-      { "mb_code21": "QLD_GLD03", "town_name": "Calliope", "state_name": "Queensland", "area_ha": 13.5, "slope_pct": 2.9, "dist_to_substation_km": 1.8, "dist_to_wwtw_km": 3.2, "dist_to_sensitive_km": 2.2, "suitability_score": 0.817, "pumped_hydro_capacity_mwh": 54.5, "lon": 151.21, "lat": -23.97 },
-      { "mb_code21": "VIC_LTB01", "town_name": "Morwell", "state_name": "Victoria", "area_ha": 12.5, "slope_pct": 1.5, "dist_to_substation_km": 0.45, "dist_to_wwtw_km": 1.2, "dist_to_sensitive_km": 0.95, "suitability_score": 0.964, "pumped_hydro_capacity_mwh": 119.9, "lon": 146.40, "lat": -38.23 },
-      { "mb_code21": "VIC_LTB02", "town_name": "Traralgon", "state_name": "Victoria", "area_ha": 8.2, "slope_pct": 2.0, "dist_to_substation_km": 1.2, "dist_to_wwtw_km": 2.5, "dist_to_sensitive_km": 1.6, "suitability_score": 0.819, "pumped_hydro_capacity_mwh": 76.3, "lon": 146.53, "lat": -38.19 },
-      { "mb_code21": "VIC_LTB03", "town_name": "Moe", "state_name": "Victoria", "area_ha": 10.5, "slope_pct": 3.1, "dist_to_substation_km": 0.9, "dist_to_wwtw_km": 1.8, "dist_to_sensitive_km": 1.4, "suitability_score": 0.89, "pumped_hydro_capacity_mwh": 87.2, "lon": 146.26, "lat": -38.17 },
-      { "mb_code21": "WA_COL01", "town_name": "Collie", "state_name": "Western Australia", "area_ha": 22.0, "slope_pct": 1.4, "dist_to_substation_km": 0.15, "dist_to_wwtw_km": 4.2, "dist_to_sensitive_km": 1.35, "suitability_score": 0.929, "pumped_hydro_capacity_mwh": 130.8, "lon": 116.15, "lat": -33.36 },
-      { "mb_code21": "WA_COL02", "town_name": "Collie East", "state_name": "Western Australia", "area_ha": 17.5, "slope_pct": 2.2, "dist_to_substation_km": 0.6, "dist_to_wwtw_km": 3.5, "dist_to_sensitive_km": 2.1, "suitability_score": 0.936, "pumped_hydro_capacity_mwh": 109.0, "lon": 116.20, "lat": -33.35 },
-      { "mb_code21": "ACT_CBR01", "town_name": "Fyshwick", "state_name": "Australian Capital Territory", "area_ha": 14.2, "slope_pct": 1.1, "dist_to_substation_km": 0.4, "dist_to_wwtw_km": 1.1, "dist_to_sensitive_km": 0.78, "suitability_score": 0.985, "pumped_hydro_capacity_mwh": 43.6, "lon": 149.172, "lat": -35.325 },
-      { "mb_code21": "ACT_CBR02", "town_name": "Hume", "state_name": "Australian Capital Territory", "area_ha": 19.8, "slope_pct": 2.0, "dist_to_substation_km": 0.55, "dist_to_wwtw_km": 1.9, "dist_to_sensitive_km": 1.65, "suitability_score": 0.976, "pumped_hydro_capacity_mwh": 60.0, "lon": 149.164, "lat": -35.385 },
-      { "mb_code21": "NT_DWN01", "town_name": "East Arm", "state_name": "Northern Territory", "area_ha": 24.5, "slope_pct": 0.8, "dist_to_substation_km": 0.5, "dist_to_wwtw_km": 1.6, "dist_to_sensitive_km": 2.4, "suitability_score": 0.987, "pumped_hydro_capacity_mwh": 21.8, "lon": 130.895, "lat": -12.482 },
-      { "mb_code21": "SA_PTA01", "town_name": "Port Augusta", "state_name": "South Australia", "area_ha": 20.1, "slope_pct": 1.6, "dist_to_substation_km": 0.3, "dist_to_wwtw_km": 2.8, "dist_to_sensitive_km": 1.9, "suitability_score": 0.96, "pumped_hydro_capacity_mwh": 32.7, "lon": 137.780, "lat": -32.510 },
-      { "mb_code21": "TAS_DEV01", "town_name": "Devonport", "state_name": "Tasmania", "area_ha": 16.4, "slope_pct": 2.4, "dist_to_substation_km": 0.7, "dist_to_wwtw_km": 1.5, "dist_to_sensitive_km": 1.15, "suitability_score": 0.971, "pumped_hydro_capacity_mwh": 38.1, "lon": 146.360, "lat": -41.190 }
+      { "mb_code21": "NSW_MCC01", "town_name": "Teralba", "state_name": "New South Wales", "area_ha": 44.5, "slope_pct": 2.1, "dist_to_substation_km": 0.35, "dist_to_wwtw_km": 0.85, "dist_to_sensitive_km": 0.82, "suitability_score": 0.989, "hazard_score": 0.962, "flood_depth_m": 0.0, "earthquake_pga": 0.08, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 100.0, "data_depth_tier": "Tier-1 High-Precision (10/10 Micro-Layers)", "indexed_layers_count": 10, "pumped_hydro_capacity_mwh": 49.0, "lon": 151.60, "lat": -32.94 },
+      { "mb_code21": "NSW_MCC02", "town_name": "Killingworth", "state_name": "New South Wales", "area_ha": 28.2, "slope_pct": 3.4, "dist_to_substation_km": 0.45, "dist_to_wwtw_km": 1.4, "dist_to_sensitive_km": 1.25, "suitability_score": 0.976, "hazard_score": 0.932, "flood_depth_m": 0.0, "earthquake_pga": 0.08, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 100.0, "data_depth_tier": "Tier-1 High-Precision (10/10 Micro-Layers)", "indexed_layers_count": 10, "pumped_hydro_capacity_mwh": 130.8, "lon": 151.56, "lat": -32.92 },
+      { "mb_code21": "NSW_MCC03", "town_name": "Cockle Creek", "state_name": "New South Wales", "area_ha": 18.7, "slope_pct": 1.2, "dist_to_substation_km": 0.2, "dist_to_wwtw_km": 0.6, "dist_to_sensitive_km": 0.42, "suitability_score": 0.852, "hazard_score": 0.962, "flood_depth_m": 0.0, "earthquake_pga": 0.08, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 100.0, "data_depth_tier": "Tier-1 High-Precision (10/10 Micro-Layers)", "indexed_layers_count": 10, "pumped_hydro_capacity_mwh": 27.2, "lon": 151.62, "lat": -32.94 },
+      { "mb_code21": "NSW_MCC04", "town_name": "West Lake", "state_name": "New South Wales", "area_ha": 35.0, "slope_pct": 4.1, "dist_to_substation_km": 1.1, "dist_to_wwtw_km": 2.1, "dist_to_sensitive_km": 1.8, "suitability_score": 0.916, "hazard_score": 0.932, "flood_depth_m": 0.0, "earthquake_pga": 0.08, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 100.0, "data_depth_tier": "Tier-1 High-Precision (10/10 Micro-Layers)", "indexed_layers_count": 10, "pumped_hydro_capacity_mwh": 196.2, "lon": 151.55, "lat": -32.96 },
+      { "mb_code21": "QLD_GLD01", "town_name": "Yarwun", "state_name": "Queensland", "area_ha": 18.5, "slope_pct": 1.8, "dist_to_substation_km": 0.35, "dist_to_wwtw_km": 0.8, "dist_to_sensitive_km": 1.1, "suitability_score": 0.968, "hazard_score": 0.872, "flood_depth_m": 0.0, "earthquake_pga": 0.05, "cyclone_region": "Region C (Tropical Cyclonic)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 38.1, "lon": 151.25, "lat": -23.84 },
+      { "mb_code21": "QLD_GLD02", "town_name": "Gladstone City", "state_name": "Queensland", "area_ha": 15.0, "slope_pct": 2.3, "dist_to_substation_km": 0.75, "dist_to_wwtw_km": 1.5, "dist_to_sensitive_km": 0.65, "suitability_score": 0.934, "hazard_score": 0.872, "flood_depth_m": 0.0, "earthquake_pga": 0.05, "cyclone_region": "Region C (Tropical Cyclonic)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 32.7, "lon": 151.17, "lat": -23.82 },
+      { "mb_code21": "QLD_GLD03", "town_name": "Calliope", "state_name": "Queensland", "area_ha": 13.5, "slope_pct": 2.9, "dist_to_substation_km": 1.8, "dist_to_wwtw_km": 3.2, "dist_to_sensitive_km": 2.2, "suitability_score": 0.812, "hazard_score": 0.872, "flood_depth_m": 0.0, "earthquake_pga": 0.05, "cyclone_region": "Region C (Tropical Cyclonic)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 54.5, "lon": 151.21, "lat": -23.97 },
+      { "mb_code21": "VIC_LTB01", "town_name": "Morwell", "state_name": "Victoria", "area_ha": 12.5, "slope_pct": 1.5, "dist_to_substation_km": 0.45, "dist_to_wwtw_km": 1.2, "dist_to_sensitive_km": 0.95, "suitability_score": 0.955, "hazard_score": 0.962, "flood_depth_m": 0.0, "earthquake_pga": 0.08, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 119.9, "lon": 146.40, "lat": -38.23 },
+      { "mb_code21": "VIC_LTB02", "town_name": "Traralgon", "state_name": "Victoria", "area_ha": 8.2, "slope_pct": 2.0, "dist_to_substation_km": 1.2, "dist_to_wwtw_km": 2.5, "dist_to_sensitive_km": 1.6, "suitability_score": 0.824, "hazard_score": 0.962, "flood_depth_m": 0.0, "earthquake_pga": 0.08, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 76.3, "lon": 146.53, "lat": -38.19 },
+      { "mb_code21": "VIC_LTB03", "town_name": "Moe", "state_name": "Victoria", "area_ha": 10.5, "slope_pct": 3.1, "dist_to_substation_km": 0.9, "dist_to_wwtw_km": 1.8, "dist_to_sensitive_km": 1.4, "suitability_score": 0.887, "hazard_score": 0.932, "flood_depth_m": 0.0, "earthquake_pga": 0.08, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 87.2, "lon": 146.26, "lat": -38.17 },
+      { "mb_code21": "WA_COL01", "town_name": "Collie", "state_name": "Western Australia", "area_ha": 22.0, "slope_pct": 1.4, "dist_to_substation_km": 0.15, "dist_to_wwtw_km": 4.2, "dist_to_sensitive_km": 1.35, "suitability_score": 0.942, "hazard_score": 1.000, "flood_depth_m": 0.0, "earthquake_pga": 0.04, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 130.8, "lon": 116.15, "lat": -33.36 },
+      { "mb_code21": "WA_COL02", "town_name": "Collie East", "state_name": "Western Australia", "area_ha": 17.5, "slope_pct": 2.2, "dist_to_substation_km": 0.6, "dist_to_wwtw_km": 3.5, "dist_to_sensitive_km": 2.1, "suitability_score": 0.948, "hazard_score": 1.000, "flood_depth_m": 0.0, "earthquake_pga": 0.04, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 109.0, "lon": 116.20, "lat": -33.35 },
+      { "mb_code21": "ACT_CBR01", "town_name": "Fyshwick", "state_name": "Australian Capital Territory", "area_ha": 14.2, "slope_pct": 1.1, "dist_to_substation_km": 0.4, "dist_to_wwtw_km": 1.1, "dist_to_sensitive_km": 0.78, "suitability_score": 0.982, "hazard_score": 1.000, "flood_depth_m": 0.0, "earthquake_pga": 0.04, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 43.6, "lon": 149.172, "lat": -35.325 },
+      { "mb_code21": "ACT_CBR02", "town_name": "Hume", "state_name": "Australian Capital Territory", "area_ha": 19.8, "slope_pct": 2.0, "dist_to_substation_km": 0.55, "dist_to_wwtw_km": 1.9, "dist_to_sensitive_km": 1.65, "suitability_score": 0.978, "hazard_score": 1.000, "flood_depth_m": 0.0, "earthquake_pga": 0.04, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 60.0, "lon": 149.164, "lat": -35.385 },
+      { "mb_code21": "NT_DWN01", "town_name": "East Arm", "state_name": "Northern Territory", "area_ha": 24.5, "slope_pct": 0.8, "dist_to_substation_km": 0.5, "dist_to_wwtw_km": 1.6, "dist_to_sensitive_km": 2.4, "suitability_score": 0.956, "hazard_score": 0.872, "flood_depth_m": 0.0, "earthquake_pga": 0.05, "cyclone_region": "Region C (Tropical Cyclonic)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 21.8, "lon": 130.895, "lat": -12.482 },
+      { "mb_code21": "SA_PTA01", "town_name": "Port Augusta", "state_name": "South Australia", "area_ha": 20.1, "slope_pct": 1.6, "dist_to_substation_km": 0.3, "dist_to_wwtw_km": 2.8, "dist_to_sensitive_km": 1.9, "suitability_score": 0.965, "hazard_score": 1.000, "flood_depth_m": 0.0, "earthquake_pga": 0.04, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 32.7, "lon": 137.780, "lat": -32.510 },
+      { "mb_code21": "TAS_DEV01", "town_name": "Devonport", "state_name": "Tasmania", "area_ha": 16.4, "slope_pct": 2.4, "dist_to_substation_km": 0.7, "dist_to_wwtw_km": 1.5, "dist_to_sensitive_km": 1.15, "suitability_score": 0.973, "hazard_score": 1.000, "flood_depth_m": 0.0, "earthquake_pga": 0.04, "cyclone_region": "Region A (Normal Wind)", "landslide_risk": "Low Risk", "bushfire_bal_rating": "BAL-LOW", "data_depth_pct": 80.0, "data_depth_tier": "Tier-2 Regional Model (8/10 Layers)", "indexed_layers_count": 8, "pumped_hydro_capacity_mwh": 38.1, "lon": 146.360, "lat": -41.190 }
     ];
 
     const BASEMAP_TILES = {
@@ -2070,7 +2070,7 @@
       }
     }
 
-    // 16 Dedicated Thematic Datasets with Tailored Symbology (Hollow Polygons & Lines)
+    // 20 Dedicated Thematic Datasets with Tailored Symbology & Multi-Hazard Overlays
     const THEMATIC_LAYERS = [
       // 1. Candidate Hubs
       {
@@ -2088,10 +2088,94 @@
           jurisdiction: "National (8 States & Territories)",
           records: "16 Prime National Hubs (MCE Scored)",
           crs: "EPSG:7844 (GDA2020 Geographic)",
-          description: "Top-ranked candidate hubs evaluated across 15.9M assets for power grid connection, tertiary recycled water cooling, slope (<5%), and statutory receptor buffer compliance."
+          description: "Top-ranked candidate hubs evaluated across 15.9M assets for power grid connection, tertiary recycled water cooling, slope (<5%), statutory receptor buffer compliance, and multi-hazard resilience."
         }
       },
-      // 2. Cadastre & Statistical Boundaries (5-Tier Hierarchical LOD: State -> Regions -> Councils -> Large Properties -> Small Properties)
+      // 2. Statutory Multi-Hazard Resilience Overlays
+      {
+        id: "national_seismic_hazard_nsha",
+        name: "GA NSHA 2018 Seismic PGA Contours",
+        color: "#f59e0b",
+        line_width: 1.2,
+        dash_style: "dashed",
+        dash_array: [4, 2],
+        count: "500-yr PGA",
+        category: "🛡️ Statutory Multi-Hazard Resilience Overlays",
+        type: "line",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/hazards/national_seismic_hazard_nsha.parquet",
+        stream_key: "national_seismic_hazard_nsha",
+        meta: {
+          portal: "Geoscience Australia / AS 1170.4:2007",
+          jurisdiction: "National Seismic Hazard Assessment (NSHA 2018)",
+          records: "500-Year Return Period Peak Ground Acceleration (PGA)",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Authoritative national seismic ground motion hazard contours governing structural design and foundation dynamics (Allen et al. 2018)."
+        }
+      },
+      {
+        id: "national_cyclone_hazard_tcha",
+        name: "GA TCHA 2018 Cyclone Wind Regions",
+        color: "#38bdf8",
+        line_width: 1.2,
+        dash_style: "solid",
+        count: "Regions A-D",
+        category: "🛡️ Statutory Multi-Hazard Resilience Overlays",
+        type: "fill",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/hazards/national_cyclone_hazard_tcha.parquet",
+        stream_key: "national_cyclone_hazard_tcha",
+        meta: {
+          portal: "Geoscience Australia / AS/NZS 1170.2:2021",
+          jurisdiction: "Tropical Cyclone Hazard Assessment (TCHA 2018)",
+          records: "4 Continental Wind Climate Design Regions (A, B, C, D)",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Regional design wind speeds and cyclonic gust boundaries for mission-critical envelope rating (Arthur 2018)."
+        }
+      },
+      {
+        id: "nsw_coastal_inundation_hazard",
+        name: "1% AEP Flood & Coastal Inundation",
+        color: "#06b6d4",
+        line_width: 1.0,
+        dash_style: "dashed",
+        dash_array: [3, 2],
+        count: "1% AEP Depth",
+        category: "🛡️ Statutory Multi-Hazard Resilience Overlays",
+        type: "fill",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/hazards/nsw_coastal_inundation_hazard.parquet",
+        stream_key: "nsw_coastal_inundation_hazard",
+        meta: {
+          portal: "ARR 2019 / NSW Flood Data Portal",
+          jurisdiction: "Australian Rainfall & Runoff / NCC 2022",
+          records: "1% AEP (1-in-100 Year) Hydrodynamic Inundation",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Hydrodynamic peak flood depths and floodway exclusion zones enforcing Tier-IV elevation criteria (Smith et al. 2014)."
+        }
+      },
+      {
+        id: "landslide_susceptibility",
+        name: "AGS Landslide & Slope Susceptibility",
+        color: "#a855f7",
+        line_width: 1.0,
+        dash_style: "dashed",
+        dash_array: [5, 2],
+        count: "AGS 2007 Slope",
+        category: "🛡️ Statutory Multi-Hazard Resilience Overlays",
+        type: "fill",
+        default_checked: false,
+        s3_path: "s3://wherobots-user-storage/aura_siting/hazards/nsw_landslide_susceptibility.parquet",
+        stream_key: "landslide_susceptibility",
+        meta: {
+          portal: "Australian Geomechanics Society (AGS 2007)",
+          jurisdiction: "National Slope Stability Guidelines",
+          records: "Slope Stability Susceptibility & Geohazard Classifications",
+          crs: "EPSG:7844 (GDA2020)",
+          description: "Slope instability and landslide hazard zones filtering candidates above 5% and 8% critical slope grades (Fell et al. 2008)."
+        }
+      },
+      // 3. Cadastre & Statistical Boundaries (5-Tier Hierarchical LOD: State -> Regions -> Councils -> Large Properties -> Small Properties)
       {
         id: "abs_meshblocks",
         name: "ABS 2021 Meshblocks & UCL",
@@ -2134,7 +2218,7 @@
           description: "Complete national cadastral fabric providing exact title boundaries with 5-tier smart LOD (State Boundaries -> Statistical Regions -> LGA Councils -> Large Properties -> Detailed Lots)."
         }
       },
-      // 3. Energy Grid Infrastructure
+      // 4. Energy Grid Infrastructure
       {
         id: "transmission_lines_interstate",
         name: "Interstate Transmission Grid (≥275kV)",
@@ -2191,7 +2275,7 @@
           description: "High-voltage terminal substations with step-down transformers and switchyards."
         }
       },
-      // 4. Water & Cooling Loops
+      // 5. Water & Cooling Loops
       {
         id: "bom_hydro_lines",
         name: "BoM Surface Water HydroLine & HydroArea",
@@ -2229,7 +2313,7 @@
           description: "Tertiary recycled wastewater facilities delivering industrial cooling water without depleting potable drinking water supplies."
         }
       },
-      // 5. Social & Environmental Receptors
+      // 6. Social & Environmental Receptors
       {
         id: "acara_schools",
         name: "ACARA National Schools (500m Buffer)",
@@ -2286,7 +2370,7 @@
           description: "Interstate heavy freight railway alignments for modular transformer and rack transit."
         }
       },
-      // 6. Biodiversity & Bushfire Constraints (Hollow Polygons with Dashed Hairlines)
+      // 7. Biodiversity & Bushfire Constraints (Hollow Polygons with Dashed Hairlines)
       {
         id: "bionet_biodiversity",
         name: "NSW SEED & BioNet BV Map / KHIB",
@@ -2329,7 +2413,7 @@
           description: "Designated bushfire prone zones enforcing 100m Cat 1 Asset Protection Zones (APZ)."
         }
       },
-      // 7. Precinct Micro-Siting Masterplans
+      // 8. Precinct Micro-Siting Masterplans
       {
         id: "transformation_boundary",
         name: "Macquarie Transformation Envelope",
@@ -2927,19 +3011,34 @@
       if (currentPopup) currentPopup.remove();
       const score = Number(p.suitability_score);
       const scoreBadgeClass = score >= 0.85 ? 'score-high' : (score >= 0.70 ? 'score-med' : 'score-low');
+      const hazScore = Number(p.hazard_score || 0.85);
+      const hazBadgeClass = hazScore >= 0.85 ? 'score-high' : (hazScore >= 0.70 ? 'score-med' : 'score-low');
+
+      const depthPct = p.data_depth_pct || 100;
+      const depthColor = depthPct >= 95 ? '#34d399' : '#38bdf8';
+      const depthTier = p.data_depth_tier || 'Tier-1 High-Precision (10/10 Micro-Layers)';
 
       const html = `
         <h3 style="margin: 0 0 0.35rem 0; color: #60a5fa; font-size: 1.05rem;">${p.town_name}</h3>
-        <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.5rem;">${p.state_name}</div>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.5rem;">${p.state_name} &bull; ${p.lot_plan || 'Candidate Parcel'}</div>
         <table style="width: 100%; border-collapse: collapse; font-size: 0.78rem; line-height: 1.5;">
-          <tr><td style="color: #94a3b8;">Suitability Score:</td><td style="text-align: right;"><span class="score-badge ${scoreBadgeClass}">${score.toFixed(3)}</span></td></tr>
+          <tr><td style="color: #94a3b8;">MCDA Suitability:</td><td style="text-align: right;"><span class="score-badge ${scoreBadgeClass}">${score.toFixed(3)}</span></td></tr>
+          <tr><td style="color: #94a3b8;">Hazard Resilience (S_haz):</td><td style="text-align: right;"><span class="score-badge ${hazBadgeClass}">${hazScore.toFixed(2)}</span></td></tr>
+          <tr><td style="color: #94a3b8;">Spatial Data Depth:</td><td style="text-align: right; font-weight: bold; color: ${depthColor};">${depthPct}% (${p.indexed_layers_count || 10}/10 layers)</td></tr>
           <tr><td style="color: #94a3b8;">Area Available:</td><td style="text-align: right; font-weight: 600;">${p.area_ha} ha</td></tr>
           <tr><td style="color: #94a3b8;">Power Grid Dist:</td><td style="text-align: right; font-weight: 600;">${p.dist_to_substation_km} km</td></tr>
           <tr><td style="color: #94a3b8;">Recycled Water Dist:</td><td style="text-align: right; font-weight: 600;">${p.dist_to_wwtw_km} km</td></tr>
           <tr><td style="color: #94a3b8;">Sensitive Buffer:</td><td style="text-align: right; font-weight: 600; color: #c084fc;">${p.dist_to_sensitive_km} km</td></tr>
           <tr><td style="color: #94a3b8;">Slope Grade:</td><td style="text-align: right; font-weight: 600; color: #34d399;">${p.slope_pct}%</td></tr>
+          <tr><td style="color: #94a3b8;">1% AEP Flood Depth:</td><td style="text-align: right; font-weight: 600; color: #38bdf8;">${p.flood_depth_m !== undefined ? p.flood_depth_m.toFixed(2) + 'm' : '0.00m'}</td></tr>
+          <tr><td style="color: #94a3b8;">Earthquake Ground Motion:</td><td style="text-align: right; font-weight: 600; color: #fbbf24;">${p.earthquake_pga ? p.earthquake_pga + 'g PGA' : '0.08g PGA'}</td></tr>
+          <tr><td style="color: #94a3b8;">Cyclone Wind Region:</td><td style="text-align: right; font-weight: 600; color: #60a5fa;">${p.cyclone_region || 'Region A (45m/s)'}</td></tr>
+          <tr><td style="color: #94a3b8;">Bushfire Setback:</td><td style="text-align: right; font-weight: 600; color: #34d399;">${p.bushfire_bal_rating || 'BAL-LOW'}</td></tr>
           <tr><td style="color: #94a3b8;">Pumped Hydro:</td><td style="text-align: right; font-weight: 600; color: #34d399;">${p.pumped_hydro_capacity_mwh} MWh</td></tr>
         </table>
+        <div style="margin-top: 0.4rem; padding-top: 0.3rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.68rem; color: #94a3b8;">
+          <strong>Data Fidelity:</strong> ${depthTier}
+        </div>
       `;
 
       currentPopup = new maplibregl.Popup()

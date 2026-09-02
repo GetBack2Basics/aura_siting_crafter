@@ -2096,12 +2096,12 @@
         id: "national_seismic_hazard_nsha",
         name: "GA NSHA 2018 Seismic PGA Contours",
         color: "#f59e0b",
-        line_width: 1.2,
+        line_width: 1.5,
         dash_style: "dashed",
         dash_array: [4, 2],
-        count: "500-yr PGA",
+        count: "9 Contours",
         category: "🛡️ Statutory Multi-Hazard Resilience Overlays",
-        type: "line",
+        type: "fill",
         default_checked: false,
         s3_path: "s3://wherobots-user-storage/aura_siting/hazards/national_seismic_hazard_nsha.parquet",
         stream_key: "national_seismic_hazard_nsha",
@@ -2109,7 +2109,7 @@
           portal: "Geoscience Australia / AS 1170.4:2007",
           jurisdiction: "National Seismic Hazard Assessment (NSHA 2018)",
           records: "500-Year Return Period Peak Ground Acceleration (PGA)",
-          crs: "EPSG:7844 (GDA2020)",
+          crs: "EPSG:7844 (GDA2020 Geographic)",
           description: "Authoritative national seismic ground motion hazard contours governing structural design and foundation dynamics (Allen et al. 2018)."
         }
       },
@@ -2119,7 +2119,7 @@
         color: "#38bdf8",
         line_width: 1.2,
         dash_style: "solid",
-        count: "Regions A-D",
+        count: "4 Regions",
         category: "🛡️ Statutory Multi-Hazard Resilience Overlays",
         type: "fill",
         default_checked: false,
@@ -2129,7 +2129,7 @@
           portal: "Geoscience Australia / AS/NZS 1170.2:2021",
           jurisdiction: "Tropical Cyclone Hazard Assessment (TCHA 2018)",
           records: "4 Continental Wind Climate Design Regions (A, B, C, D)",
-          crs: "EPSG:7844 (GDA2020)",
+          crs: "EPSG:7844 (GDA2020 Geographic)",
           description: "Regional design wind speeds and cyclonic gust boundaries for mission-critical envelope rating (Arthur 2018)."
         }
       },
@@ -2140,9 +2140,9 @@
         line_width: 1.0,
         dash_style: "dashed",
         dash_array: [3, 2],
-        count: "1% AEP Depth",
+        count: "932,734",
         category: "🛡️ Statutory Multi-Hazard Resilience Overlays",
-        type: "fill",
+        type: "circle",
         default_checked: false,
         s3_path: "s3://wherobots-user-storage/aura_siting/hazards/nsw_coastal_inundation_hazard.parquet",
         stream_key: "nsw_coastal_inundation_hazard",
@@ -2150,7 +2150,7 @@
           portal: "ARR 2019 / NSW Flood Data Portal",
           jurisdiction: "Australian Rainfall & Runoff / NCC 2022",
           records: "1% AEP (1-in-100 Year) Hydrodynamic Inundation",
-          crs: "EPSG:7844 (GDA2020)",
+          crs: "EPSG:7844 (GDA2020 Geographic)",
           description: "Hydrodynamic peak flood depths and floodway exclusion zones enforcing Tier-IV elevation criteria (Smith et al. 2014)."
         }
       },
@@ -2158,10 +2158,10 @@
         id: "landslide_susceptibility",
         name: "AGS Landslide & Slope Susceptibility",
         color: "#a855f7",
-        line_width: 1.0,
+        line_width: 1.2,
         dash_style: "dashed",
         dash_array: [5, 2],
-        count: "AGS 2007 Slope",
+        count: "1,240",
         category: "🛡️ Statutory Multi-Hazard Resilience Overlays",
         type: "fill",
         default_checked: false,
@@ -2171,7 +2171,7 @@
           portal: "Australian Geomechanics Society (AGS 2007)",
           jurisdiction: "National Slope Stability Guidelines",
           records: "Slope Stability Susceptibility & Geohazard Classifications",
-          crs: "EPSG:7844 (GDA2020)",
+          crs: "EPSG:7844 (GDA2020 Geographic)",
           description: "Slope instability and landslide hazard zones filtering candidates above 5% and 8% critical slope grades (Fell et al. 2008)."
         }
       },
@@ -2534,6 +2534,52 @@
       return map[tier] || 'Active Viewport Scale';
     }
 
+    // Authoritative Live Spatial Endpoints for Direct Fallback
+    const DIRECT_STREAM_URLS = {
+      "national_seismic_hazard_nsha": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0/query",
+      "national_cyclone_hazard_tcha": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0/query",
+      "nsw_coastal_inundation_hazard": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/2/query",
+      "landslide_susceptibility": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7/query",
+      "transmission_lines_interstate": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/6/query",
+      "transmission_lines_regional": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/6/query",
+      "substations_terminal": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/6/query",
+      "bom_hydro_lines": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/4/query",
+      "recycled_wwtw_plants": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/4/query",
+      "acara_schools": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/3/query",
+      "nhsd_healthcare": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/2/query",
+      "transport_rail": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Transport_Theme/MapServer/7/query",
+      "bionet_biodiversity": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/5/query",
+      "rfs_bushfire_bfpl": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/5/query",
+      "abs_meshblocks": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/MapServer/0/query",
+      "geoscape_cadastre": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/MapServer/0/query"
+    };
+
+    function arcgisToGeoJson(data) {
+      if (!data) return { type: 'FeatureCollection', features: [] };
+      if (data.type === 'FeatureCollection') return data;
+      const rawFeats = data.features || [];
+      const features = rawFeats.map((f, i) => {
+        if (f.type === 'Feature' && f.geometry) return f;
+        const geom = f.geometry || {};
+        const attrs = f.attributes || f.properties || {};
+        let geojsonGeom = null;
+        if (geom.x !== undefined && geom.y !== undefined) {
+          geojsonGeom = { type: 'Point', coordinates: [geom.x, geom.y] };
+        } else if (geom.paths) {
+          geojsonGeom = geom.paths.length === 1 ? { type: 'LineString', coordinates: geom.paths[0] } : { type: 'MultiLineString', coordinates: geom.paths };
+        } else if (geom.rings) {
+          geojsonGeom = geom.rings.length === 1 ? { type: 'Polygon', coordinates: geom.rings } : { type: 'MultiPolygon', coordinates: [geom.rings] };
+        }
+        return {
+          type: 'Feature',
+          id: f.id !== undefined ? f.id : (attrs.OBJECTID || i),
+          geometry: geojsonGeom,
+          properties: attrs
+        };
+      }).filter(f => f.geometry !== null);
+      return { type: 'FeatureCollection', features: features };
+    }
+
     // Viewport Spatial Streaming Loader
     let streamDebounceTimer = null;
 
@@ -2550,10 +2596,33 @@
 
       for (const lyr of activeStreamingLayers) {
         try {
-          const url = `${PROXY_URL}/api/data/${lyr.stream_key}?bbox=${bboxStr}&zoom=${zoom.toFixed(1)}`;
-          const resp = await fetch(url);
-          if (resp.ok) {
-            const data = await resp.json();
+          let data = null;
+          try {
+            const url = `${PROXY_URL}/api/data/${lyr.stream_key}?bbox=${bboxStr}&zoom=${zoom.toFixed(1)}`;
+            const resp = await fetch(url);
+            if (resp.ok) {
+              const resData = await resp.json();
+              if (resData.features && resData.features.length > 0) {
+                data = resData;
+              }
+            }
+          } catch (e) {
+            // Fallback to direct service query
+          }
+
+          if (!data && DIRECT_STREAM_URLS[lyr.stream_key]) {
+            const directBase = DIRECT_STREAM_URLS[lyr.stream_key];
+            const directUrl = `${directBase}?where=1=1&outFields=*&f=json&outSR=4326&geometry=${bboxStr}&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&inSR=4326&resultRecordCount=1000`;
+            const directResp = await fetch(directUrl);
+            if (directResp.ok) {
+              const rawArcgis = await directResp.json();
+              data = arcgisToGeoJson(rawArcgis);
+              data.s3_total_records = lyr.count;
+              data.lod_tier = 'standard';
+            }
+          }
+
+          if (data) {
             lyr.liveGeoJSON = data;
             const featCount = (data.features || []).length;
             const s3Total = data.s3_total_records || lyr.count || featCount;

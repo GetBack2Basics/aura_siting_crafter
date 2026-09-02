@@ -86,6 +86,12 @@ ai_agent = SpatialAiAgent(catalog_mgr)
 
 # Authoritative REST / WFS Live Spatial Endpoints
 LIVE_STREAMS = {
+    # Statutory Multi-Hazard Resilience Overlays
+    "national_seismic_hazard_nsha": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0/query",
+    "national_cyclone_hazard_tcha": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0/query",
+    "nsw_coastal_inundation_hazard": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/2/query",
+    "landslide_susceptibility": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7/query",
+
     # Energy Grid (Lines & Substations)
     "transmission_lines_interstate": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/6/query",
     "transmission_lines_regional": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/MapServer/6/query",
@@ -120,6 +126,10 @@ LOD_STREAMS = {
 # S3 Lakehouse Parquet Storage Registry
 S3_LAKEHOUSE_PATHS = {
     "national_candidates": "s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet",
+    "national_seismic_hazard_nsha": "s3://wherobots-user-storage/aura_siting/hazards/national_seismic_hazard_nsha.parquet",
+    "national_cyclone_hazard_tcha": "s3://wherobots-user-storage/aura_siting/hazards/national_cyclone_hazard_tcha.parquet",
+    "nsw_coastal_inundation_hazard": "s3://wherobots-user-storage/aura_siting/hazards/nsw_coastal_inundation_hazard.parquet",
+    "landslide_susceptibility": "s3://wherobots-user-storage/aura_siting/hazards/nsw_landslide_susceptibility.parquet",
     "abs_meshblocks": "s3://wherobots-user-storage/aura_siting/cadastre/abs_meshblocks_2021.parquet",
     "geoscape_cadastre": "s3://wherobots-user-storage/aura_siting/cadastre/geoscape_cadastre.parquet",
     "transmission_lines_interstate": "s3://wherobots-user-storage/aura_siting/energy/national_transmission_grid.parquet",
@@ -139,22 +149,31 @@ S3_LAKEHOUSE_PATHS = {
 
 
 def arcgis_to_geojson_feature(f: Dict[str, Any]) -> Dict[str, Any]:
-    """Converts ArcGIS REST feature dictionary to standard GeoJSON feature."""
+    """Converts ArcGIS REST feature dictionary or raw GeoJSON feature to standard GeoJSON feature."""
+    if f.get("type") == "Feature" and "geometry" in f and isinstance(f["geometry"], dict) and "type" in f["geometry"]:
+        return f
+
     geom = f.get("geometry", {})
-    attrs = f.get("attributes", {})
+    attrs = f.get("attributes", f.get("properties", {}))
     geojson_geom = None
 
-    if "x" in geom and "y" in geom:
-        geojson_geom = {"type": "Point", "coordinates": [geom["x"], geom["y"]]}
-    elif "paths" in geom:
-        paths = geom["paths"]
-        if len(paths) == 1:
-            geojson_geom = {"type": "LineString", "coordinates": paths[0]}
-        else:
-            geojson_geom = {"type": "MultiLineString", "coordinates": paths}
-    elif "rings" in geom:
-        rings = geom["rings"]
-        geojson_geom = {"type": "Polygon", "coordinates": rings}
+    if isinstance(geom, dict):
+        if "type" in geom and "coordinates" in geom:
+            geojson_geom = geom
+        elif "x" in geom and "y" in geom:
+            geojson_geom = {"type": "Point", "coordinates": [geom["x"], geom["y"]]}
+        elif "paths" in geom:
+            paths = geom["paths"]
+            if len(paths) == 1:
+                geojson_geom = {"type": "LineString", "coordinates": paths[0]}
+            else:
+                geojson_geom = {"type": "MultiLineString", "coordinates": paths}
+        elif "rings" in geom:
+            rings = geom["rings"]
+            if len(rings) == 1:
+                geojson_geom = {"type": "Polygon", "coordinates": rings[0]}
+            else:
+                geojson_geom = {"type": "MultiPolygon", "coordinates": [rings]}
 
     return {
         "type": "Feature",
@@ -198,6 +217,7 @@ def handle_spatial_query(request: SpatialQueryRequest):
 # Authoritative Total Dataset Record Counts in S3 Lakehouse
 S3_AUTHORITATIVE_TOTALS = {
     "geoscape_cadastre": 15420800,
+    "nsw_coastal_inundation_hazard": 932734,
     "abs_meshblocks": 368290,
     "bom_hydro_lines": 42100,
     "transmission_lines_regional": 12400,
@@ -208,7 +228,10 @@ S3_AUTHORITATIVE_TOTALS = {
     "bionet_biodiversity": 3583,
     "rfs_bushfire_bfpl": 2450,
     "substations_terminal": 1850,
+    "landslide_susceptibility": 1240,
     "recycled_wwtw_plants": 1120,
+    "national_seismic_hazard_nsha": 9,
+    "national_cyclone_hazard_tcha": 4,
     "transformation_boundary": 1,
     "net_developable_pad": 1,
     "gas_pipeline_corridor": 1,

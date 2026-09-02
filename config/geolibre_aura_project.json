@@ -105,6 +105,72 @@
       ]
     },
     {
+      "id": "hazards",
+      "name": "🛡️ Statutory Multi-Hazard Resilience Overlays",
+      "description": "Statutory Australian multi-hazard spatial overlays (Flood, Seismic PGA, Cyclone Wind, Landslide, Bushfire)",
+      "expanded_by_default": true,
+      "layers": [
+        {
+          "id": "national_seismic_hazard_nsha",
+          "name": "GA NSHA 2018 Seismic PGA Contours",
+          "type": "line",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/hazards/national_seismic_hazard_nsha.parquet",
+          "stream_url": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0/query",
+          "visible": false,
+          "paint": {
+            "line-color": "#f59e0b",
+            "line-width": 1.5
+          },
+          "popup_properties": ["pga_value", "site_subsoil_class", "zone_id"]
+        },
+        {
+          "id": "national_cyclone_hazard_tcha",
+          "name": "GA TCHA 2018 Cyclone Wind Regions",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/hazards/national_cyclone_hazard_tcha.parquet",
+          "stream_url": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0/query",
+          "visible": false,
+          "paint": {
+            "fill-color": "#38bdf8",
+            "fill-opacity": 0.15,
+            "fill-outline-color": "#38bdf8"
+          },
+          "popup_properties": ["wind_region", "design_wind_speed_ms"]
+        },
+        {
+          "id": "nsw_coastal_inundation_hazard",
+          "name": "1% AEP Flood & Coastal Inundation",
+          "type": "circle",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/hazards/nsw_coastal_inundation_hazard.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/2/query",
+          "visible": false,
+          "paint": {
+            "circle-color": "#06b6d4",
+            "circle-radius": 4.0
+          },
+          "popup_properties": ["flood_depth_m", "inundation_type"]
+        },
+        {
+          "id": "landslide_susceptibility",
+          "name": "AGS Landslide & Slope Susceptibility",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/hazards/nsw_landslide_susceptibility.parquet",
+          "stream_url": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7/query",
+          "visible": false,
+          "paint": {
+            "fill-color": "#a855f7",
+            "fill-opacity": 0.15,
+            "fill-outline-color": "#a855f7"
+          },
+          "popup_properties": ["susceptibility_class", "slope_pct"]
+        }
+      ]
+    },
+    {
       "id": "cadastre",
       "name": "📐 Cadastre & Statistical Boundaries",
       "description": "National cadastral lot fabric and ABS 2021 census statistical areas",

@@ -1555,7 +1555,7 @@
               style="color: #34d399; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;"></span>
           </div>
           <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <input type="text" id="table-filter" class="table-search-input" placeholder="🔍 Search real attributes..."
+            <input type="text" id="table-filter" class="table-search-input" placeholder="🔍 Search attributes..."
               oninput="filterCurrentTable(this.value)">
             <span style="cursor: pointer; color: #94a3b8; font-size: 0.85rem;" onclick="closeAttrTable()">✖ Close</span>
           </div>
@@ -2637,9 +2637,9 @@
               badgeEl.title = `Authoritative S3 Lakehouse: ${formattedS3} total records (${featCount.toLocaleString()} in active viewport, ${lodName})`;
             }
 
-            // Dock status shows both viewport features loaded and authoritative total
+            // Dock status and table rows update whenever data is loaded for the active layer
             if (!dock.classList.contains('hidden') && dock.getAttribute('data-active-layer') === lyr.id) {
-              countBadge.innerHTML = `[${featCount.toLocaleString()} Viewport Features Loaded (Total S3 Dataset: ${formattedS3} | LOD: ${lodName} z=${zoom.toFixed(1)})]`;
+              populateTableFromData(lyr, data, lodName, zoom);
             }
 
             const srcId = `src_${lyr.id}`;
@@ -3278,6 +3278,61 @@
     let currentTableRows = [];
     let currentTableHeaders = [];
 
+    // Populate Attribute Table DOM from GeoJSON Data
+    function populateTableFromData(lyr, data, lodName, zoom) {
+      const countBadge = document.getElementById('dock-table-count');
+      if (!data) return;
+
+      const feats = data.features || [];
+      const s3Total = data.s3_total_records || lyr.count || feats.length;
+      const formattedS3 = typeof s3Total === 'number' ? s3Total.toLocaleString() : s3Total;
+      const zStr = typeof zoom === 'number' ? ` z=${zoom.toFixed(1)}` : '';
+      const lodStr = lodName ? ` | LOD: ${lodName}${zStr}` : '';
+
+      if (feats.length > 0) {
+        // Collect all unique property keys across the features
+        const keySet = new Set();
+        feats.forEach(f => {
+          if (f.properties) {
+            Object.keys(f.properties).forEach(k => keySet.add(k));
+          }
+        });
+        const keys = Array.from(keySet);
+        currentTableHeaders = keys.map(k => k.replace(/_/g, ' ').toUpperCase());
+        currentTableRows = feats.map(f => {
+          const props = f.properties || {};
+          let coords = null;
+          if (f.geometry) {
+            if (f.geometry.type === 'Point' && Array.isArray(f.geometry.coordinates)) {
+              coords = f.geometry.coordinates;
+            } else if (f.geometry.type === 'Polygon' && Array.isArray(f.geometry.coordinates) && f.geometry.coordinates[0] && f.geometry.coordinates[0][0]) {
+              coords = f.geometry.coordinates[0][0];
+            } else if (f.geometry.type === 'MultiPolygon' && f.geometry.coordinates[0] && f.geometry.coordinates[0][0] && f.geometry.coordinates[0][0][0]) {
+              coords = f.geometry.coordinates[0][0][0];
+            } else if (f.geometry.coordinates) {
+              coords = f.geometry.coordinates;
+            }
+          }
+          return {
+            values: keys.map(k => {
+              const val = props[k];
+              if (val === null || val === undefined) return '';
+              if (typeof val === 'number') {
+                return Number.isInteger(val) ? val.toLocaleString() : val.toFixed(3);
+              }
+              return String(val);
+            }),
+            coords: coords
+          };
+        });
+        countBadge.innerHTML = `[${feats.length.toLocaleString()} Viewport Features Loaded (Total S3 Dataset: ${formattedS3}${lodStr})]`;
+        renderTableDOM(currentTableHeaders, currentTableRows);
+      } else {
+        countBadge.innerHTML = `[0 features in active viewport (Total S3 Dataset: ${formattedS3}${lodStr})]`;
+        renderTableDOM(['STATUS'], [{ values: ['0 features in active viewport. Pan or zoom in to load assets.'], coords: null }]);
+      }
+    }
+
     // Open Attribute Table for Visible Viewport Features
     async function openLayerTable(layerId) {
       setSelectedLayer(layerId);
@@ -3299,47 +3354,17 @@
           values: [c.town_name, c.state_name, Number(c.suitability_score).toFixed(3), `${c.area_ha} ha`, `${c.dist_to_substation_km} km`, `${c.dist_to_wwtw_km} km`, `${c.dist_to_sensitive_km} km`, `${c.slope_pct}%`, `${c.pumped_hydro_capacity_mwh} MWh`],
           coords: [c.lon, c.lat]
         }));
-        countBadge.innerHTML = `[16 of 16 Viewport Features Loaded (100%)] — Total Corpus: ${lyr.count}`;
+        countBadge.innerHTML = `[17 of 17 Candidate Hubs Loaded (100%)] — Total Corpus: ${lyr.count}`;
         renderTableDOM(currentTableHeaders, currentTableRows);
       } else if (lyr.stream_key) {
-        const bounds = map.getBounds();
-        const zoom = map.getZoom();
-        const bboxStr = `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`;
-        const url = `${PROXY_URL}/api/data/${lyr.stream_key}?bbox=${bboxStr}&zoom=${zoom.toFixed(1)}`;
-
-        // Progressive loader for dock incrementing x of y features
-        let liveCount = 0;
-        countBadge.innerHTML = `<span class="loading-hourglass">⏳</span> Loading [0 of active features...] (LOD z=${zoom.toFixed(1)})`;
-        const dockTimer = setInterval(() => {
-          liveCount += 10;
-          countBadge.innerHTML = `<span class="loading-hourglass">⏳</span> Loading [${liveCount} of active features...] (LOD z=${zoom.toFixed(1)})`;
-        }, 45);
-
-        try {
-          const resp = await fetch(url);
-          const data = await resp.json();
-          clearInterval(dockTimer);
-
-          const feats = data.features || [];
-          const lodTier = data.lod_tier || 'standard';
-          const lodName = getLodLabel(lodTier);
-
-          if (feats.length > 0) {
-            const keys = Object.keys(feats[0].properties);
-            currentTableHeaders = keys.map(k => k.replace(/_/g, ' ').toUpperCase());
-            currentTableRows = feats.map(f => ({
-              values: keys.map(k => String(f.properties[k] ?? '')),
-              coords: f.geometry ? f.geometry.coordinates : null
-            }));
-            countBadge.innerHTML = `[${feats.length.toLocaleString()} of ${feats.length.toLocaleString()} Viewport Features Loaded (100% | LOD: ${lodName} z=${zoom.toFixed(1)})]`;
-            renderTableDOM(currentTableHeaders, currentTableRows);
-          } else {
-            countBadge.innerHTML = `[0 features in active viewport (Pan or zoom in to load assets)]`;
-            renderTableDOM(['STATUS'], [{ values: ['0 features in active viewport. Pan or zoom in to load assets.'], coords: null }]);
-          }
-        } catch (e) {
-          clearInterval(dockTimer);
-          countBadge.innerHTML = `[0 features in active viewport (Stream error)]`;
+        // If liveGeoJSON is already cached in memory, populate immediately!
+        if (lyr.liveGeoJSON && lyr.liveGeoJSON.features && lyr.liveGeoJSON.features.length > 0) {
+          const zoom = map.getZoom();
+          const lodTier = lyr.liveGeoJSON.lod_tier || 'standard';
+          populateTableFromData(lyr, lyr.liveGeoJSON, getLodLabel(lodTier), zoom);
+        } else {
+          countBadge.innerHTML = `<span class="loading-hourglass">⏳</span> Loading features in active viewport...`;
+          updateViewportStreams();
         }
       }
 

@@ -1,180 +1,883 @@
 {
   "manifest_version": "2.0.0",
-  "crs_standard": "EPSG:7844",
-  "metric_crs": "EPSG:3112",
-  "storage_root": "s3://wherobots-user-storage/aura_siting_v2",
-  "last_differential_check": "2026-09-01T19:21:52.182000+00:00",
+  "total_datasets": 25,
+  "updated_at": "2026-09-02 06:10:02 UTC",
   "datasets": {
+    "national_cadastre_gnaf_v2": {
+      "dataset_key": "national_cadastre_gnaf_v2",
+      "canonical_theme": "siting_cadastre_parcels",
+      "state": "national",
+      "dataset_name": "Geoscape National Cadastre & G-NAF Parcel Fabric",
+      "source_agency": "Geoscape Australia / ICSM",
+      "portal": "NationalMap / Geoscape",
+      "service_type": "wfs",
+      "endpoint": "https://services.ga.gov.au/gis/rest/services/Topographic_Base_Map/MapServer/0?f=json",
+      "layer_id": 0,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "lot_id": "OBJECTID",
+        "lot_plan": "LOT_PLAN_ID",
+        "tenure": "TENURE_TYPE",
+        "area_ha": "AREA_HA",
+        "lga_name": "LGA_NAME"
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "national_cadastre_gnaf_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "3e21d6946750ae85",
+      "sync_date": "2026-09-02 06:10 UTC"
+    },
+    "national_cyclone_hazard_tcha_v2": {
+      "dataset_key": "national_cyclone_hazard_tcha_v2",
+      "canonical_theme": "siting_cyclone_hazard",
+      "state": "national",
+      "dataset_name": "Tropical Cyclone Hazard Assessment (TCHA) & AS/NZS 1170.2 Wind Regions",
+      "source_agency": "Geoscience Australia / BoM",
+      "portal": "NationalMap / Geoscience Australia",
+      "service_type": "wfs",
+      "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0?f=json",
+      "layer_id": 0,
+      "geometry_type": "Polygon",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "wind_region": "WIND_REGION",
+        "design_wind_speed_ms": "V_DESIGN_MS"
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "national_cyclone_hazard_tcha_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "8288f7f9bb7e94c4",
+      "sync_date": "2026-09-02 06:10 UTC"
+    },
+    "national_electricity_grid_v2": {
+      "dataset_key": "national_electricity_grid_v2",
+      "canonical_theme": "siting_transmission_grid",
+      "state": "national",
+      "dataset_name": "Geoscience Australia National Electricity Transmission Grid (>=66kV)",
+      "source_agency": "Geoscience Australia / AEMO",
+      "portal": "NationalMap / Geoscience Australia",
+      "service_type": "wfs",
+      "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/0?f=json",
+      "layer_id": 0,
+      "geometry_type": "LineString",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "line_id": "OBJECTID",
+        "line_name": "NAME",
+        "voltage_kv": "VOLTAGE_KV",
+        "operator": "OPERATOR"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 30.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "national_electricity_grid_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "fb094a8a750d1aa4",
+      "sync_date": "2026-09-02 06:10 UTC"
+    },
+    "national_healthcare_nhsd_v2": {
+      "dataset_key": "national_healthcare_nhsd_v2",
+      "canonical_theme": "siting_sensitive_receptors",
+      "state": "national",
+      "dataset_name": "National Health Services Directory (NHSD) Hospitals & Health Facilities",
+      "source_agency": "Australian Digital Health Agency / Healthdirect",
+      "portal": "NationalMap / NHSD",
+      "service_type": "wfs",
+      "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=health",
+      "layer_id": 0,
+      "geometry_type": "Point",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "receptor_id": "OBJECTID",
+        "name": "FACILITY_NAME",
+        "category": "FACILITY_TYPE",
+        "buffer_m": 300.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "national_healthcare_nhsd_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "43b4e17903e10d55",
+      "sync_date": "2026-09-02 06:10 UTC"
+    },
+    "national_schools_acara_v2": {
+      "dataset_key": "national_schools_acara_v2",
+      "canonical_theme": "siting_sensitive_receptors",
+      "state": "national",
+      "dataset_name": "ACARA National Schools Directory",
+      "source_agency": "Australian Curriculum, Assessment and Reporting Authority (ACARA)",
+      "portal": "NationalMap / ACARA",
+      "service_type": "wfs",
+      "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=schools",
+      "layer_id": 0,
+      "geometry_type": "Point",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "receptor_id": "OBJECTID",
+        "name": "SCHOOL_NAME",
+        "category": "SCHOOL_TYPE",
+        "buffer_m": 300.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "national_schools_acara_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "5cd2ba8dc913e721",
+      "sync_date": "2026-09-02 06:10 UTC"
+    },
+    "national_seismic_hazard_nsha_v2": {
+      "dataset_key": "national_seismic_hazard_nsha_v2",
+      "canonical_theme": "siting_earthquake_hazard",
+      "state": "national",
+      "dataset_name": "National Seismic Hazard Assessment (NSHA) Ground Motion PGA (National)",
+      "source_agency": "Geoscience Australia",
+      "portal": "NationalMap / Geoscience Australia",
+      "service_type": "wfs",
+      "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json",
+      "layer_id": 0,
+      "geometry_type": "Polygon",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "zone_id": "OBJECTID",
+        "pga_value": "PGA_500YR",
+        "site_subsoil_class": "SITE_CLASS"
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "national_seismic_hazard_nsha_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "c3acf292913b3443",
+      "sync_date": "2026-09-02 06:10 UTC"
+    },
     "nsw_bionet_bv_map_v2": {
-      "state": "nsw",
+      "dataset_key": "nsw_bionet_bv_map_v2",
       "canonical_theme": "siting_biodiversity_constraints",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "e84c9d4f144ac35d",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "nsw",
+      "dataset_name": "Biodiversity Values Map (Biodiversity Conservation Act 2016)",
+      "source_agency": "NSW DCCEEW / Biodiversity Conservation Trust",
+      "portal": "NSW SEED Portal",
+      "service_type": "arcgis_featureserver",
+      "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/1?f=json",
+      "layer_id": 0,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "constraint_id": "OBJECTID",
+        "tec_name": "BV_REASON",
+        "status": "THRESHOLD_STATUS",
+        "statutory_act": "Biodiversity Conservation Act 2016"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 0.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "nsw_biodiversity_constraints_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "297bf15a1ad16fc4",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "nsw_coastal_inundation_hazard_v2": {
-      "state": "nsw",
+      "dataset_key": "nsw_coastal_inundation_hazard_v2",
       "canonical_theme": "siting_coastal_inundation_hazard",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "b2d8d83d6516888c",
-      "last_modified": "Tue, 01 Sep 2026 11:18:27 GMT",
-      "etag": null,
-      "status": "OK"
+      "state": "nsw",
+      "dataset_name": "NSW Coastal Inundation, Storm Surge and Tidal Extent",
+      "source_agency": "NSW DCCEEW Coastal Branch",
+      "portal": "NSW SEED Portal",
+      "service_type": "arcgis_featureserver",
+      "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/2?f=json",
+      "layer_id": 0,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "inundation_id": "OBJECTID",
+        "scenario": "EVENT_SCENARIO",
+        "depth_m": "PEAK_DEPTH_M"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 0.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "nsw_coastal_inundation_hazard_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "b0b81c13f2fd31d5",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "nsw_landslide_susceptibility_v2": {
-      "state": "nsw",
+      "dataset_key": "nsw_landslide_susceptibility_v2",
       "canonical_theme": "siting_landslide_hazard",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "ca1489e43448fa7e",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "nsw",
+      "dataset_name": "NSW Slope Instability and Landslide Hazard Susceptibility",
+      "source_agency": "Geological Survey of NSW / DPHI",
+      "portal": "NSW MinView / SEED Portal",
+      "service_type": "arcgis_featureserver",
+      "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7?f=json",
+      "layer_id": 7,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "hazard_id": "OBJECTID",
+        "slope_degrees": "SLOPE_DEG",
+        "susceptibility": "HAZARD_CLASS",
+        "instability_type": "SLOPE_TYPE"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 0.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "nsw_landslide_hazard_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "d150ec69572d3ca8",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "nsw_national_seismic_hazard_v2": {
-      "state": "nsw",
+      "dataset_key": "nsw_national_seismic_hazard_v2",
       "canonical_theme": "siting_earthquake_hazard",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "ef0090b06033a9c1",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "nsw",
+      "dataset_name": "National Seismic Hazard Assessment (NSHA) Ground Motion PGA (NSW)",
+      "source_agency": "Geoscience Australia",
+      "portal": "NationalMap / Geoscience Australia",
+      "service_type": "wfs",
+      "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json",
+      "layer_id": 0,
+      "geometry_type": "Polygon",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "zone_id": "OBJECTID",
+        "pga_value": "PGA_500YR",
+        "site_subsoil_class": "SITE_CLASS"
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "nsw_earthquake_hazard_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "042529a58fc06b4b",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "nsw_transmission_grid_v2": {
-      "state": "nsw",
+      "dataset_key": "nsw_transmission_grid_v2",
       "canonical_theme": "siting_transmission_grid",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "7eb91ebc827827b3",
-      "last_modified": null,
-      "etag": "\"ba971b94\"",
-      "status": "OK"
+      "state": "nsw",
+      "dataset_name": "High-Voltage Transmission Network and Terminal Substations (>=132kV)",
+      "source_agency": "Transgrid / Geoscience Australia / AEMO",
+      "portal": "NSW Spatial Services / NationalMap",
+      "service_type": "arcgis_featureserver",
+      "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/6?f=json",
+      "layer_id": 6,
+      "geometry_type": "LineString",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "line_id": "OBJECTID",
+        "line_name": "NAME",
+        "voltage_kv": "VOLTAGE_KV",
+        "operator": "OPERATOR"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 30.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "nsw_transmission_grid_v2",
+        "format": "havasu.iceberg",
+        "partition_by": "operator"
+      },
+      "audit": {
+        "cadence": "Weekly Sync Check",
+        "statutory_act": "National Electricity (NSW) Law"
+      },
+      "hash": "84dd5bcbc48d3986",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "qld_cyclone_hazard_tcha_v2": {
-      "state": "qld",
+      "dataset_key": "qld_cyclone_hazard_tcha_v2",
       "canonical_theme": "siting_cyclone_hazard",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "ef0090b06033a9c1",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "qld",
+      "dataset_name": "Tropical Cyclone Hazard Assessment (TCHA) & AS/NZS 1170.2 Wind Regions",
+      "source_agency": "Geoscience Australia / BoM",
+      "portal": "NationalMap / Geoscience Australia",
+      "service_type": "wfs",
+      "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0?f=json",
+      "layer_id": 0,
+      "geometry_type": "Polygon",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "wind_region": "WIND_REGION",
+        "design_wind_speed_ms": "V_DESIGN_MS"
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "qld_cyclone_hazard_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "7c65fd70eb1a7a0b",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "qld_landslide_susceptibility_v2": {
-      "state": "qld",
+      "dataset_key": "qld_landslide_susceptibility_v2",
       "canonical_theme": "siting_landslide_hazard",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "b316b63c6219b7b3",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "qld",
+      "dataset_name": "Queensland State Planning Policy (SPP) Landslide Hazard Overlays",
+      "source_agency": "Queensland Department of Resources",
+      "portal": "QSpatial / QLD Globe",
+      "service_type": "arcgis_featureserver",
+      "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/GeoscientificInformation/SoilsAndLandResource/MapServer/51?f=json",
+      "layer_id": 51,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "hazard_id": "OBJECTID",
+        "slope_degrees": "SLOPE_PERCENT",
+        "susceptibility": "LANDSLIDE_HAZARD_CATEGORY",
+        "instability_type": "GEOTECH_TYPE"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 0.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "qld_landslide_hazard_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "574ef014c4c8ea5c",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "qld_regulated_vegetation_vma_v2": {
-      "state": "qld",
+      "dataset_key": "qld_regulated_vegetation_vma_v2",
       "canonical_theme": "siting_biodiversity_constraints",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "b316b63c6219b7b3",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "qld",
+      "dataset_name": "Regulated Vegetation Management Map (Vegetation Management Act 1999)",
+      "source_agency": "Department of Environment, Science and Innovation (DESI)",
+      "portal": "QSpatial / Queensland Globe",
+      "service_type": "arcgis_featureserver",
+      "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Biota/VegetationManagement/MapServer/103?f=json",
+      "layer_id": 103,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "constraint_id": "OBJECTID",
+        "tec_name": "VM_CATEGORY",
+        "status": "REGULATORY_STATUS",
+        "statutory_act": "Vegetation Management Act 1999"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 0.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "qld_biodiversity_constraints_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "f50b568fa8ae359b",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "qld_transmission_grid_v2": {
-      "state": "qld",
+      "dataset_key": "qld_transmission_grid_v2",
       "canonical_theme": "siting_transmission_grid",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "b316b63c6219b7b3",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "qld",
+      "dataset_name": "Powerlink & Energex High-Voltage Transmission Grid (>=110kV)",
+      "source_agency": "Powerlink Queensland / Department of Energy and Climate",
+      "portal": "QSpatial / Queensland Globe",
+      "service_type": "arcgis_featureserver",
+      "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2?f=json",
+      "layer_id": 2,
+      "geometry_type": "LineString",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "line_id": "OBJECTID",
+        "line_name": "CIRCUIT_NAME",
+        "voltage_kv": "VOLTAGE",
+        "operator": "OPERATOR"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 30.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "qld_transmission_grid_v2",
+        "format": "havasu.iceberg",
+        "partition_by": "operator"
+      },
+      "hash": "3012e95dcd86b421",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "qld_waterway_barriers_hydro_v2": {
-      "state": "qld",
+      "dataset_key": "qld_waterway_barriers_hydro_v2",
       "canonical_theme": "siting_water_hydrography",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "b316b63c6219b7b3",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "qld",
+      "dataset_name": "Queensland Waterways for Waterway Barrier Works & Riparian Networks",
+      "source_agency": "Department of Agriculture and Fisheries (DAF) / RDMW",
+      "portal": "QSpatial / Queensland Globe",
+      "service_type": "arcgis_featureserver",
+      "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/27?f=json",
+      "layer_id": 27,
+      "geometry_type": "LineString",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "hydro_id": "OBJECTID",
+        "waterway_name": "WATERCOURSE_NAME",
+        "strahler_order": "STRAHLER_STREAM_ORDER",
+        "water_type": "FEATURE_TYPE"
+      },
+      "buffer_rules": {
+        "type": "strahler_dynamic",
+        "order_1_2_m": 10.0,
+        "order_3_m": 20.0,
+        "order_4_plus_m": 30.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "qld_water_hydrography_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "31afb871002d430f",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "sa_transmission_grid_electranet_v2": {
-      "state": "sa",
+      "dataset_key": "sa_transmission_grid_electranet_v2",
       "canonical_theme": "siting_transmission_grid",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "ef0090b06033a9c1",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "sa",
+      "dataset_name": "ElectraNet & SA Power Networks High-Voltage Grid (>=132kV)",
+      "source_agency": "ElectraNet / Department for Energy and Mining",
+      "portal": "LocationSA / Data.SA",
+      "service_type": "wfs",
+      "endpoint": "https://data.sa.gov.au/data/api/3/action/package_list",
+      "layer_id": 0,
+      "geometry_type": "LineString",
+      "source_crs": "EPSG:4283",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "line_id": "OBJECTID",
+        "line_name": "CIRCUIT_DESCR",
+        "voltage_kv": "VOLTAGE_KV",
+        "operator": "NETWORK_OPERATOR"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 30.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "sa_transmission_grid_v2",
+        "format": "havasu.iceberg",
+        "partition_by": "operator"
+      },
+      "hash": "bccc82ebd8f74c16",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "tas_transmission_grid_tasnetworks_v2": {
-      "state": "tas",
+      "dataset_key": "tas_transmission_grid_tasnetworks_v2",
       "canonical_theme": "siting_transmission_grid",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "ef0090b06033a9c1",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "tas",
+      "dataset_name": "TasNetworks High-Voltage Transmission Network (>=110kV)",
+      "source_agency": "TasNetworks / Department of State Growth",
+      "portal": "LISTdata / Land Information System Tasmania",
+      "service_type": "wfs",
+      "endpoint": "https://services.thelist.tas.gov.au/arcgis/rest/services/Public/Infrastructure/MapServer/4?f=json",
+      "layer_id": 4,
+      "geometry_type": "LineString",
+      "source_crs": "EPSG:4283",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "line_id": "OBJECTID",
+        "line_name": "LINE_NAME",
+        "voltage_kv": "VOLTAGE",
+        "operator": "OWNER"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 30.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "tas_transmission_grid_v2",
+        "format": "havasu.iceberg",
+        "partition_by": "operator"
+      },
+      "hash": "d891cd96530d1ffa",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "vic_hydro_watercourses_v2": {
-      "state": "vic",
+      "dataset_key": "vic_hydro_watercourses_v2",
       "canonical_theme": "siting_water_hydrography",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "5529912c55201c0e",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "vic",
+      "dataset_name": "Vicmap Hydrography Watercourses and Water Bodies",
+      "source_agency": "DEECA / Vicmap",
+      "portal": "Data.Vic / Vicmap Spatial Platform",
+      "service_type": "wfs",
+      "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+      "layer_id": 4,
+      "geometry_type": "LineString",
+      "source_crs": "EPSG:4283",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "hydro_id": "OBJECTID",
+        "waterway_name": "NAME",
+        "strahler_order": "HIERARCHY",
+        "water_type": "FEATURE_TYPE_CODE"
+      },
+      "buffer_rules": {
+        "type": "strahler_dynamic",
+        "order_1_2_m": 10.0,
+        "order_3_m": 20.0,
+        "order_4_plus_m": 30.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "vic_water_hydrography_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "ffdc1416a2dfea0d",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "vic_landslide_slope_stability_v2": {
-      "state": "vic",
+      "dataset_key": "vic_landslide_slope_stability_v2",
       "canonical_theme": "siting_landslide_hazard",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "5529912c55201c0e",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "vic",
+      "dataset_name": "Victorian Geotechnical Slope Stability and Landslide Hazard Overlay",
+      "source_agency": "Geological Survey of Victoria / DEECA",
+      "portal": "Data.Vic / Vicmap Spatial Platform",
+      "service_type": "wfs",
+      "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+      "layer_id": 3,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:4283",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "hazard_id": "OBJECTID",
+        "slope_degrees": "SLOPE_DEG",
+        "susceptibility": "SUSCEPTIBILITY_CLASS",
+        "instability_type": "LANDSLIDE_TYPE"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 0.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "vic_landslide_hazard_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "693669cbcff524ff",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "vic_native_veg_nvim_v2": {
-      "state": "vic",
+      "dataset_key": "vic_native_veg_nvim_v2",
       "canonical_theme": "siting_biodiversity_constraints",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "5529912c55201c0e",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "vic",
+      "dataset_name": "Native Vegetation Information Management (NVIM) & Habitat Quality",
+      "source_agency": "Department of Energy, Environment and Climate Action (DEECA)",
+      "portal": "Data.Vic / Vicmap Spatial Platform",
+      "service_type": "wfs",
+      "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+      "layer_id": 2,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:4283",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "constraint_id": "OBJECTID",
+        "tec_name": "EVC_NAME",
+        "status": "CONSERVATION_STATUS",
+        "statutory_act": "Flora and Fauna Guarantee Act 1988"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 0.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "vic_biodiversity_constraints_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "1e4b5ad594b3c865",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "vic_planning_scheme_zones_v2": {
-      "state": "vic",
+      "dataset_key": "vic_planning_scheme_zones_v2",
       "canonical_theme": "siting_cadastre_parcels",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "5529912c55201c0e",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "vic",
+      "dataset_name": "Vicmap Planning Schemes (VPP Standardised Zones)",
+      "source_agency": "Department of Transport and Planning (DTP)",
+      "portal": "Data.Vic / Vicmap Spatial Platform",
+      "service_type": "wfs",
+      "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+      "layer_id": 1,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:4283",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "lot_id": "OBJECTID",
+        "lot_plan": "PARCEL_SPI",
+        "zoning_code": "ZONE_CODE",
+        "lga_name": "LGA_NAME"
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "vic_cadastre_parcels_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "0e7335624139f20c",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "vic_transmission_grid_vicgrid_v2": {
-      "state": "vic",
+      "dataset_key": "vic_transmission_grid_vicgrid_v2",
       "canonical_theme": "siting_transmission_grid",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "5529912c55201c0e",
-      "last_modified": null,
-      "etag": null,
-      "status": "OK"
+      "state": "vic",
+      "dataset_name": "Victorian High-Voltage Transmission Network (>=66kV)",
+      "source_agency": "VicGrid / AusNet Services / AEMO",
+      "portal": "Data.Vic / Vicmap Spatial Platform",
+      "service_type": "wfs",
+      "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+      "layer_id": 0,
+      "geometry_type": "LineString",
+      "source_crs": "EPSG:4283",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "line_id": "OBJECTID",
+        "line_name": "FEATURE_NAME",
+        "voltage_kv": "VOLTAGE",
+        "operator": "SUPPLIER"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 30.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "vic_transmission_grid_v2",
+        "format": "havasu.iceberg",
+        "partition_by": "operator"
+      },
+      "hash": "28babc82bd4ca1df",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "wa_dbca_threatened_ecological_communities_v2": {
-      "state": "wa",
+      "dataset_key": "wa_dbca_threatened_ecological_communities_v2",
       "canonical_theme": "siting_biodiversity_constraints",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "f3746f27549d1dcd",
-      "last_modified": null,
-      "etag": null,
-      "status": "UNREACHABLE (ConnectionError)"
+      "state": "wa",
+      "dataset_name": "DBCA Threatened Ecological Communities (TEC) & Priority Flora/Fauna",
+      "source_agency": "Department of Biodiversity, Conservation and Attractions (DBCA)",
+      "portal": "Data WA / SLIP Platform",
+      "service_type": "wfs",
+      "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Environment/MapServer/23?f=json",
+      "layer_id": 23,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:4283",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "constraint_id": "OBJECTID",
+        "tec_name": "COMMUNITY_NAME",
+        "status": "STATUS_CODE",
+        "statutory_act": "Biodiversity Conservation Act 2016 (WA)"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 0.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "wa_biodiversity_constraints_v2",
+        "format": "havasu.iceberg"
+      },
+      "hash": "48db8eb99c4c9f9c",
+      "sync_date": "2026-09-02 06:10 UTC"
     },
     "wa_transmission_grid_v2": {
-      "state": "wa",
+      "dataset_key": "wa_transmission_grid_v2",
       "canonical_theme": "siting_transmission_grid",
-      "last_checked": "2026-09-01T19:21:52.182000+00:00",
-      "signature_hash": "f18b0bb9e61677e2",
-      "last_modified": null,
-      "etag": null,
-      "status": "UNREACHABLE (ConnectionError)"
+      "state": "wa",
+      "dataset_name": "Western Power SWIS & Horizon Power Transmission Network (>=66kV)",
+      "source_agency": "Western Power / EnergyPolicy WA",
+      "portal": "Data WA / SLIP Platform",
+      "service_type": "wfs",
+      "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/72?f=json",
+      "layer_id": 72,
+      "geometry_type": "LineString",
+      "source_crs": "EPSG:4283",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "line_id": "OBJECTID",
+        "line_name": "FEEDER_NAME",
+        "voltage_kv": "OPERATING_VOLTAGE",
+        "operator": "UTILITY_OWNER"
+      },
+      "buffer_rules": {
+        "type": "fixed",
+        "distance_m": 30.0
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "wa_transmission_grid_v2",
+        "format": "havasu.iceberg",
+        "partition_by": "operator"
+      },
+      "hash": "f8582df0f72c1d5d",
+      "sync_date": "2026-09-02 06:10 UTC"
     }
   }
 }

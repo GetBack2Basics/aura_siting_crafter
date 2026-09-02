@@ -60,9 +60,15 @@ def fetch_live_source_count(endpoint: str, layer_id: int = 0, service_type: str 
     if not endpoint:
         return None, "", "NO_ENDPOINT"
 
+    clean_ep = endpoint.split("?")[0].rstrip("/")
     query_url = endpoint
-    if "FeatureServer" in endpoint or "MapServer" in endpoint:
-        query_url = f"{endpoint.rstrip('/')}/query?where=1=1&returnCountOnly=true&f=json"
+
+    if "FeatureServer" in clean_ep or "MapServer" in clean_ep:
+        parts = clean_ep.split("/")
+        if parts[-1].isdigit():
+            query_url = f"{clean_ep}/query?where=1=1&returnCountOnly=true&f=json"
+        else:
+            query_url = f"{clean_ep}/{layer_id}/query?where=1=1&returnCountOnly=true&f=json"
         try:
             resp = requests.get(query_url, timeout=timeout_sec)
             if resp.status_code == 200:
@@ -71,16 +77,24 @@ def fetch_live_source_count(endpoint: str, layer_id: int = 0, service_type: str 
                     return int(data["count"]), query_url, "LIVE_OK"
         except Exception:
             pass
-    elif service_type == "wfs" or "wfs" in endpoint.lower():
-        query_url = f"{endpoint}?service=WFS&version=2.0.0&request=GetCapabilities"
+    elif "wfs" in service_type.lower() or "wfs" in clean_ep.lower():
+        query_url = f"{clean_ep}?service=WFS&version=2.0.0&request=GetCapabilities"
         try:
             resp = requests.get(query_url, timeout=timeout_sec)
             if resp.status_code == 200:
                 return None, query_url, "LIVE_WFS_OK"
         except Exception:
             pass
+    else:
+        query_url = endpoint
+        try:
+            resp = requests.get(query_url, timeout=timeout_sec)
+            if resp.status_code == 200:
+                return None, query_url, "LIVE_API_OK"
+        except Exception:
+            pass
 
-    return None, query_url, "OFFLINE_SNAPSHOT"
+    return None, endpoint, "OFFLINE_SNAPSHOT"
 
 
 def probe_active_compute_runtimes() -> Tuple[int, str]:

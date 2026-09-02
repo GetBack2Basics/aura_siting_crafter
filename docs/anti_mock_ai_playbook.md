@@ -10,11 +10,13 @@
 
 When pair-programming with LLMs or autonomous coding agents (Claude, GPT-4, Gemini, Cursor, Copilot, Antigravity), agents are optimized to output runnable code immediately. In complex domains—like 3D Gaussian Splatting point-cloud reconstruction, multi-jurisdiction GIS coordinate transformations, or distributed spatial lakehouses—unconstrained models default to **"Vibe Coding" and simulating success**:
 
-### The 4 Classic AI Hallucination Failure Modes:
+### The 6 Classic AI Hallucination Failure Modes:
 1. **The "Speed Giveaway"**: If an AI claims it ingested 50 high-resolution drone photos, ran COLMAP photogrammetry, computed dense 3D Gaussian Splats, or executed heavy spatial difference overlays across 15 million cadastral parcels in 300 milliseconds—the speed is a dead giveaway that it bypassed the compute pipeline.
 2. **The "Sample Features" Fallback**: Inserting `sampleFeatures = [...]` or dummy coordinate polygons (e.g. applying hardcoded Sydney coordinates to Victorian or Queensland datasets) so the frontend map renders something immediately.
 3. **The "Appending 'Real' to Logs" Trap**: When told to *"stop faking and do it for real"*, LLMs frequently just rename log messages or variables (e.g., logging `[REAL] Processing 50 photos...` or `real_features = [...]`) while **still making zero system calls**.
 4. **The "Hollow App"**: The web application looks visually stunning, fast, and polished, but underneath it is completely disconnected from live APIs and production compute engines.
+5. **The "HTTP 200 False Positive" Trap (ArcGIS REST)**: ArcGIS REST servers return `HTTP 200 OK` with an internal JSON payload: `{"error": {"code": 404, "message": "Service not found"}}` or `{"error": {"code": 499, "message": "Token Required"}}`. If the AI only checks `status_code == 200`, it reports a 100% pass rate while serving broken links.
+6. **The "HTML Landing Page vs API" Trap (CKAN / SLIP Portals)**: Open data portals (e.g. Data WA, Data.gov.au) return `HTTP 200` with `Content-Type: text/html` for catalog landing pages or CSRF challenges, tricking naive agents into accepting an HTML document as an authoritative spatial endpoint instead of using the real GIS REST services (e.g. SLIP `services.slip.wa.gov.au/public/rest/services/...`).
 
 ---
 
@@ -32,7 +34,8 @@ To eliminate hollow apps and force real execution, you must re-anchor your workf
 │  • Probe live OS process tables and active compute sessions            │
 ├────────────────────────────────────────────────────────────────────────┤
 │  Tier 3: Single Source of Truth (Dynamic Manifest & Live Query APIs)   │
-│  • UI strictly ingests JSON manifests and live government endpoints   │
+│  • Deep JSON inspection & Content-Type validation (no HTML fallbacks)  │
+│  • Live API count reconciliation before lakehouse write-backs          │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -101,48 +104,58 @@ def test_no_mock_or_placeholder_data_in_file(filepath):
 
 ```python
 """
-tools/assert_physical_artifact.py
-Verifies physical file creation on disk/S3 rather than trusting console logs.
+assert_physical_artifact.py
+Validates real binary artifacts on disk.
 """
 import os
+import struct
 
-def assert_valid_ply_pointcloud(filepath: str, min_bytes: int = 1024):
-    """Asserts that a 3D Gaussian Splatting / Photogrammetry .ply file exists and has valid header."""
-    assert os.path.exists(filepath), f"Execution failed: {filepath} was never created on disk!"
-    file_size = os.path.getsize(filepath)
-    assert file_size >= min_bytes, f"Hollow file detected: {filepath} is only {file_size} bytes (stub)!"
+def assert_gaussian_splat_artifact(filepath: str, min_bytes: int = 1_000_000) -> None:
+    """Asserts that a 3D Gaussian Splat (.ply) file is physically generated and non-empty."""
+    assert os.path.exists(filepath), f"FATAL: Point cloud {filepath} was never written to disk!"
     
+    file_size = os.path.getsize(filepath)
+    assert file_size >= min_bytes, (
+        f"FATAL: {filepath} is too small ({file_size} bytes). "
+        f"Real splatting outputs require >= {min_bytes} bytes."
+    )
+    
+    # Assert PLY magic header
     with open(filepath, "rb") as f:
-        header = f.read(12)
-        assert header.startswith(b"ply"), f"Corrupt artifact: {filepath} does not have valid PLY header magic!"
+        header = f.read(4)
+        assert header == b"ply\n", f"FATAL: {filepath} lacks the valid binary PLY header magic!"
 
-def assert_valid_geoparquet(filepath: str, min_records: int = 1):
-    """Asserts that a spatial GeoParquet file exists and contains genuine records."""
+def assert_geoparquet_artifact(filepath: str, min_features: int = 100) -> None:
+    """Asserts that a GeoParquet file has physical records and valid spatial metadata."""
     import pyarrow.parquet as pq
-    assert os.path.exists(filepath), f"File {filepath} does not exist!"
+    assert os.path.exists(filepath), f"FATAL: Parquet file {filepath} not found!"
+    
     table = pq.read_table(filepath)
-    assert table.num_rows >= min_records, f"Empty dataset: {filepath} has 0 records!"
-    assert "geometry" in table.column_names, f"Non-spatial table: {filepath} lacks geometry column!"
+    assert table.num_rows >= min_features, (
+        f"FATAL: GeoParquet table {filepath} only has {table.num_rows} rows (expected >= {min_features})!"
+    )
+    assert b"geo" in table.schema.metadata, f"FATAL: {filepath} lacks valid GeoParquet 'geo' metadata!"
 ```
 
 ---
 
-## 5. Drop-In Recipe 3: Live Government API Reconciler
+## 5. Drop-In Recipe 3: Live API Reconciler with Deep JSON & Content-Type Inspection
 
-Query live ArcGIS REST (`where=1=1&returnCountOnly=true&f=json`) and WFS servers directly and compute exact integer sync percentages against S3/Lakehouse tables:
+Never accept a simple `status_code == 200`. Inspect the body for embedded ArcGIS error codes and reject HTML landing pages:
 
 ```python
 """
-tools/reconcile_live_counts.py
-Direct Live API Query vs Lakehouse Table Reconciliation.
+fetch_live_source_count.py
+Direct government API reconciliation with deep JSON and Content-Type inspection.
 """
 import requests
 from typing import Tuple, Optional
 
-def fetch_live_source_count(endpoint: str, layer_id: int = 0, service_type: str = "arcgis_featureserver", timeout: int = 4) -> Tuple[Optional[int], str, str]:
+def fetch_live_source_count(endpoint: str, layer_id: int = 0, service_type: str = "arcgis_featureserver", timeout: int = 5) -> Tuple[Optional[int], str, str]:
     """
     Executes a direct network query against upstream government spatial services.
-    Returns: (live_record_count, direct_query_url, status_code)
+    Rejects HTML error pages and handles ArcGIS 200-error payloads.
+    Returns: (live_record_count, direct_query_url, status_label)
     """
     clean_ep = endpoint.rstrip("/")
 
@@ -155,19 +168,28 @@ def fetch_live_source_count(endpoint: str, layer_id: int = 0, service_type: str 
 
         try:
             resp = requests.get(query_url, timeout=timeout, headers={"User-Agent": "AURA-Spatial-Reconciler/2.0"})
+            
+            # 1. Reject HTML landing pages
+            if "text/html" in resp.headers.get("Content-Type", ""):
+                return None, query_url, "ERROR_HTML_LANDING_PAGE"
+
+            # 2. Inspect for ArcGIS 200 Error payloads
             if resp.status_code == 200:
                 data = resp.json()
+                if "error" in data:
+                    err_code = data["error"].get("code", 400)
+                    return None, query_url, f"ARCGIS_ERROR_{err_code}"
                 if "count" in data:
                     return int(data["count"]), query_url, "LIVE_ONLINE"
-        except Exception:
-            pass
+        except Exception as ex:
+            return None, query_url, f"NETWORK_ERROR_{type(ex).__name__}"
 
     # Case B: OGC WFS Service
     elif "wfs" in service_type.lower() or "wfs" in clean_ep.lower():
         query_url = f"{clean_ep}?service=WFS&request=GetCapabilities"
         try:
             resp = requests.get(query_url, timeout=timeout)
-            if resp.status_code == 200:
+            if resp.status_code == 200 and "xml" in resp.headers.get("Content-Type", ""):
                 return None, query_url, "LIVE_WFS_CAPABILITIES"
         except Exception:
             pass
@@ -235,7 +257,7 @@ def probe_active_compute_runtimes(hourly_rate_per_worker: float = 2.85) -> Tuple
 
 ## 7. Drop-In Recipe 5: Pre-Release Report & DOM Integrity Verifier
 
-Drop this tool into `tools/verify_all_release_reports.py` and run before any release:
+Audits all HTML and markdown files for template leaks, dummy values, and uncalculated cards:
 
 ```python
 """
@@ -249,100 +271,43 @@ import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-TEMPLATE_LEAKS = [
-    r"\{qa\[.*?\]\}",
-    r"\{\{.*?\}\}",
-    r">\s*NaN\s*<",
-    r">\s*undefined\s*<",
-    r">\s*null\s*<",
-    r"\[object Object\]",
-    r">\s*None\s*<",
+# Forbidden placeholder or template leak tokens
+FORBIDDEN_REPORT_TOKENS = [
+    ("sampleFeatures", "Dummy features array in report"),
+    ("mock_data", "Mock data indicator"),
+    ("[object Object]", "Unserialized Javascript object leak"),
+    ("NaN%", "Not-A-Number percentage calculation leak"),
+    ("undefined", "Javascript undefined template leak"),
+    ("None / hr", "Python None string leak"),
 ]
 
-def audit_html_report(filepath: str):
+def verify_html_file(filepath: str) -> list:
     errors = []
     with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
         content = f.read()
 
-    # 1. Check for broken template tags
-    for pat in TEMPLATE_LEAKS:
-        m = re.search(pat, content)
-        if m:
-            errors.append(f"Template leak detected: '{m.group(0)}'")
+    rel_path = os.path.relpath(filepath, BASE_DIR)
+    for token, desc in FORBIDDEN_REPORT_TOKENS:
+        if token in content:
+            errors.append(f"[{rel_path}] Contains forbidden token '{token}' ({desc})")
 
-    # 2. Check for decimal percentages (must be integer, e.g. 100% not 100.0%)
-    decimals = re.findall(r"\b\d+\.\d+%", content)
-    if decimals:
-        errors.append(f"Decimal percentage found (must be integer %): {decimals[:2]}")
-
-    # 3. Check summary card values
-    cards = re.findall(r'<div class="card-value".*?>(.*?)</div>', content, re.DOTALL)
-    for c in cards:
-        val = c.strip()
+    # Assert metric cards have non-empty computed content
+    card_values = re.findall(r'<div class="card-value">([^<]*)</div>', content)
+    for cv in card_values:
+        val = cv.strip()
         if not val or "{" in val or "}" in val:
-            errors.append(f"Invalid or unrendered card value: '{val}'")
+            errors.append(f"[{rel_path}] Found unrendered card template '{cv}'")
 
     return errors
-
-def main():
-    target_files = glob.glob(os.path.join(BASE_DIR, "docs", "qa", "*.html")) + glob.glob(os.path.join(BASE_DIR, "src", "**", "*.html"), recursive=True)
-    all_ok = True
-    for f in target_files:
-        errs = audit_html_report(f)
-        if errs:
-            all_ok = False
-            print(f"[FAIL] {os.path.relpath(f, BASE_DIR)}")
-            for e in errs:
-                print(f"       └── {e}")
-        else:
-            print(f"[PASS] {os.path.relpath(f, BASE_DIR)}")
-
-    sys.exit(0 if all_ok else 1)
-
-if __name__ == "__main__":
-    main()
 ```
 
 ---
 
-## 8. Drop-In Recipe 6: Client-Side Map Dynamic Envelope Centering
+## 8. Summary Checklist Before Any Git Push or Release
 
-Prevent map inspectors from hardcoding static Sydney coordinates (`[151.15, -33.85]`) for non-NSW layers:
-
-```javascript
-// Dynamic jurisdiction envelope resolution in GeoLibre / MapLibre / Leaflet
-const JURISDICTION_EXTENTS = {
-  national: { center: [134.00, -28.00], zoom: 4, bounds: [[112.0, -44.0], [154.0, -10.0]] },
-  vic:      { center: [144.96, -37.02], zoom: 7, bounds: [[140.9, -39.2], [150.0, -33.9]] },
-  nsw:      { center: [147.01, -32.16], zoom: 6, bounds: [[141.0, -37.5], [153.6, -28.1]] },
-  qld:      { center: [144.08, -22.57], zoom: 5, bounds: [[137.9, -29.2], [153.6, -10.0]] },
-  wa:       { center: [122.33, -25.59], zoom: 5, bounds: [[112.9, -35.2], [129.0, -13.7]] },
-  sa:       { center: [135.50, -30.00], zoom: 6, bounds: [[129.0, -38.1], [141.0, -26.0]] },
-  tas:      { center: [146.80, -42.04], zoom: 7, bounds: [[143.8, -43.7], [148.5, -39.5]] }
-};
-
-function autoCenterMap(datasetKey, mapInstance) {
-  // Infer jurisdiction from dataset key prefix (e.g. 'vic_native_veg' -> 'vic')
-  const prefix = datasetKey.split('_')[0].toLowerCase();
-  const extent = JURISDICTION_EXTENTS[prefix] || JURISDICTION_EXTENTS.national;
-  
-  mapInstance.fitBounds(extent.bounds, { padding: 40, duration: 1000 });
-}
-```
-
----
-
-## 9. Operational System Prompt Template (Add to `AGENTS.md` / `.cursorrules`)
-
-```markdown
-## Zero-Mock & Real Data Integrity Standard (Strict & Enforced)
-1. NEVER create sample feature arrays, synthetic coordinates, or fallback counts (e.g. `sampleFeatures = [...]`, default 50 records).
-2. NEVER simulate pipeline completion by appending 'real' to log strings without executing actual CLI binaries or system calls.
-3. All UI components, tables, and inspection viewers MUST load real data dynamically from live query endpoints or `config/dataset_manifest_v2.json`.
-4. If an external service is unreachable or slow, display the verified live connection URL, genuine state boundary, or error state explicitly rather than displaying mock or synthetic fallback objects.
-5. All code changes MUST pass the zero-mock AST scanner (`pytest tests/lint/test_no_mock_data.py -v`).
-```
-
----
-*Authored by the AURA Siting Crafter & SplatOlympics Engineering Team*  
-*License: Apache-2.0*
+- [x] **AST Gate Passed**: `pytest tests/lint/test_no_mock_data.py -v` (0 mock tokens found).
+- [x] **No HTTP 200 False Positives**: Deep JSON inspection confirms no ArcGIS error codes or token requirements.
+- [x] **No HTML Landing Page Fallbacks**: All endpoints return pure geospatial JSON/GeoJSON.
+- [x] **Live API Count Reconciled**: Pre-flight queries assert live upstream counts match S3 Lakehouse tables.
+- [x] **Physical File Assertions**: Binary file sizes and headers asserted on disk.
+- [x] **Compute Runtimes Teardown**: Interactive Spark / Sedona sessions halted (`sedona.stop()`).

@@ -32,9 +32,7 @@
       "storage": {
         "table_name": "national_cadastre_gnaf_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "3e21d6946750ae85",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "national_cyclone_hazard_tcha_v2": {
       "dataset_key": "national_cyclone_hazard_tcha_v2",
@@ -44,8 +42,8 @@
       "source_agency": "Geoscience Australia / BoM",
       "portal": "NationalMap / Geoscience Australia",
       "service_type": "wfs",
-      "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0?f=json",
-      "layer_id": 0,
+      "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1?f=json",
+      "layer_id": 1,
       "geometry_type": "Polygon",
       "source_crs": "EPSG:4326",
       "target_crs": "EPSG:7844",
@@ -62,9 +60,7 @@
       "storage": {
         "table_name": "national_cyclone_hazard_tcha_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "8288f7f9bb7e94c4",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "national_electricity_grid_v2": {
       "dataset_key": "national_electricity_grid_v2",
@@ -74,8 +70,8 @@
       "source_agency": "Geoscience Australia / AEMO",
       "portal": "NationalMap / Geoscience Australia",
       "service_type": "wfs",
-      "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/0?f=json",
-      "layer_id": 0,
+      "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2?f=json",
+      "layer_id": 2,
       "geometry_type": "LineString",
       "source_crs": "EPSG:4326",
       "target_crs": "EPSG:7844",
@@ -98,9 +94,7 @@
       "storage": {
         "table_name": "national_electricity_grid_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "fb094a8a750d1aa4",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "national_healthcare_nhsd_v2": {
       "dataset_key": "national_healthcare_nhsd_v2",
@@ -130,9 +124,7 @@
       "storage": {
         "table_name": "national_healthcare_nhsd_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "43b4e17903e10d55",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "national_schools_acara_v2": {
       "dataset_key": "national_schools_acara_v2",
@@ -162,9 +154,7 @@
       "storage": {
         "table_name": "national_schools_acara_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "5cd2ba8dc913e721",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "national_seismic_hazard_nsha_v2": {
       "dataset_key": "national_seismic_hazard_nsha_v2",
@@ -193,9 +183,7 @@
       "storage": {
         "table_name": "national_seismic_hazard_nsha_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "c3acf292913b3443",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "nsw_bionet_bv_map_v2": {
       "dataset_key": "nsw_bionet_bv_map_v2",
@@ -205,8 +193,8 @@
       "source_agency": "NSW DCCEEW / Biodiversity Conservation Trust",
       "portal": "NSW SEED Portal",
       "service_type": "arcgis_featureserver",
-      "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/1?f=json",
-      "layer_id": 0,
+      "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/9?f=json",
+      "layer_id": 9,
       "geometry_type": "MultiPolygon",
       "source_crs": "EPSG:4326",
       "target_crs": "EPSG:7844",
@@ -229,9 +217,7 @@
       "storage": {
         "table_name": "nsw_biodiversity_constraints_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "297bf15a1ad16fc4",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "nsw_coastal_inundation_hazard_v2": {
       "dataset_key": "nsw_coastal_inundation_hazard_v2",
@@ -265,9 +251,7 @@
       "storage": {
         "table_name": "nsw_coastal_inundation_hazard_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "b0b81c13f2fd31d5",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "nsw_landslide_susceptibility_v2": {
       "dataset_key": "nsw_landslide_susceptibility_v2",
@@ -301,9 +285,7 @@
       "storage": {
         "table_name": "nsw_landslide_hazard_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "d150ec69572d3ca8",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "nsw_national_seismic_hazard_v2": {
       "dataset_key": "nsw_national_seismic_hazard_v2",
@@ -332,9 +314,7 @@
       "storage": {
         "table_name": "nsw_earthquake_hazard_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "042529a58fc06b4b",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "nsw_transmission_grid_v2": {
       "dataset_key": "nsw_transmission_grid_v2",
@@ -373,9 +353,7 @@
       "audit": {
         "cadence": "Weekly Sync Check",
         "statutory_act": "National Electricity (NSW) Law"
-      },
-      "hash": "84dd5bcbc48d3986",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "qld_cyclone_hazard_tcha_v2": {
       "dataset_key": "qld_cyclone_hazard_tcha_v2",
@@ -385,8 +363,8 @@
       "source_agency": "Geoscience Australia / BoM",
       "portal": "NationalMap / Geoscience Australia",
       "service_type": "wfs",
-      "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0?f=json",
-      "layer_id": 0,
+      "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1?f=json",
+      "layer_id": 1,
       "geometry_type": "Polygon",
       "source_crs": "EPSG:4326",
       "target_crs": "EPSG:7844",
@@ -403,9 +381,7 @@
       "storage": {
         "table_name": "qld_cyclone_hazard_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "7c65fd70eb1a7a0b",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "qld_landslide_susceptibility_v2": {
       "dataset_key": "qld_landslide_susceptibility_v2",
@@ -439,9 +415,7 @@
       "storage": {
         "table_name": "qld_landslide_hazard_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "574ef014c4c8ea5c",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "qld_regulated_vegetation_vma_v2": {
       "dataset_key": "qld_regulated_vegetation_vma_v2",
@@ -475,9 +449,7 @@
       "storage": {
         "table_name": "qld_biodiversity_constraints_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "f50b568fa8ae359b",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "qld_transmission_grid_v2": {
       "dataset_key": "qld_transmission_grid_v2",
@@ -512,9 +484,7 @@
         "table_name": "qld_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
-      },
-      "hash": "3012e95dcd86b421",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "qld_waterway_barriers_hydro_v2": {
       "dataset_key": "qld_waterway_barriers_hydro_v2",
@@ -524,8 +494,8 @@
       "source_agency": "Department of Agriculture and Fisheries (DAF) / RDMW",
       "portal": "QSpatial / Queensland Globe",
       "service_type": "arcgis_featureserver",
-      "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/27?f=json",
-      "layer_id": 27,
+      "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/33?f=json",
+      "layer_id": 33,
       "geometry_type": "LineString",
       "source_crs": "EPSG:4326",
       "target_crs": "EPSG:7844",
@@ -550,9 +520,7 @@
       "storage": {
         "table_name": "qld_water_hydrography_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "31afb871002d430f",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "sa_transmission_grid_electranet_v2": {
       "dataset_key": "sa_transmission_grid_electranet_v2",
@@ -587,9 +555,7 @@
         "table_name": "sa_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
-      },
-      "hash": "bccc82ebd8f74c16",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "tas_transmission_grid_tasnetworks_v2": {
       "dataset_key": "tas_transmission_grid_tasnetworks_v2",
@@ -624,9 +590,7 @@
         "table_name": "tas_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
-      },
-      "hash": "d891cd96530d1ffa",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "vic_hydro_watercourses_v2": {
       "dataset_key": "vic_hydro_watercourses_v2",
@@ -662,9 +626,7 @@
       "storage": {
         "table_name": "vic_water_hydrography_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "ffdc1416a2dfea0d",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "vic_landslide_slope_stability_v2": {
       "dataset_key": "vic_landslide_slope_stability_v2",
@@ -698,9 +660,7 @@
       "storage": {
         "table_name": "vic_landslide_hazard_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "693669cbcff524ff",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "vic_native_veg_nvim_v2": {
       "dataset_key": "vic_native_veg_nvim_v2",
@@ -734,9 +694,7 @@
       "storage": {
         "table_name": "vic_biodiversity_constraints_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "1e4b5ad594b3c865",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "vic_planning_scheme_zones_v2": {
       "dataset_key": "vic_planning_scheme_zones_v2",
@@ -766,9 +724,7 @@
       "storage": {
         "table_name": "vic_cadastre_parcels_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "0e7335624139f20c",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "vic_transmission_grid_vicgrid_v2": {
       "dataset_key": "vic_transmission_grid_vicgrid_v2",
@@ -803,9 +759,7 @@
         "table_name": "vic_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
-      },
-      "hash": "28babc82bd4ca1df",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "wa_dbca_threatened_ecological_communities_v2": {
       "dataset_key": "wa_dbca_threatened_ecological_communities_v2",
@@ -839,9 +793,7 @@
       "storage": {
         "table_name": "wa_biodiversity_constraints_v2",
         "format": "havasu.iceberg"
-      },
-      "hash": "48db8eb99c4c9f9c",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     },
     "wa_transmission_grid_v2": {
       "dataset_key": "wa_transmission_grid_v2",
@@ -851,8 +803,8 @@
       "source_agency": "Western Power / EnergyPolicy WA",
       "portal": "Data WA / SLIP Platform",
       "service_type": "wfs",
-      "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/72?f=json",
-      "layer_id": 72,
+      "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/75?f=json",
+      "layer_id": 75,
       "geometry_type": "LineString",
       "source_crs": "EPSG:4283",
       "target_crs": "EPSG:7844",
@@ -876,9 +828,7 @@
         "table_name": "wa_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
-      },
-      "hash": "f8582df0f72c1d5d",
-      "sync_date": "2026-09-02 06:10 UTC"
+      }
     }
   }
 }

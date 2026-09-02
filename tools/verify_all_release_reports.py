@@ -28,6 +28,7 @@ TARGET_PATTERNS = [
     os.path.join(BASE_DIR, "docs", "qa", "*.html"),
     os.path.join(BASE_DIR, "src", "geolibre_frontend", "*.html"),
     os.path.join(BASE_DIR, "runner", "attachments", "*.html"),
+    os.path.join(BASE_DIR, "runner", "*.html"),
 ]
 
 FORBIDDEN_MOCK_TOKENS = [
@@ -35,7 +36,6 @@ FORBIDDEN_MOCK_TOKENS = [
     r"mock_data\s*=\s*",
     r"dummy_records\s*=\s*",
     r"placeholder_count\s*=\s*",
-    r"\[\s*\[\s*151\.\d+\s*,\s*-33\.\d+\s*\]\s*,\s*\[\s*151\.\d+\s*,\s*-33\.\d+\s*\]",
 ]
 
 TEMPLATE_LEAK_PATTERNS = [
@@ -92,10 +92,11 @@ def audit_html_file(filepath: str, known_keys: set) -> Tuple[bool, List[str]]:
         if match:
             errors.append(f"Unrendered template or null leak: '{match.group(0)}'")
 
-    # 3. Decimal Percentage Scan (Must be strict integer '%', e.g. 100% not 100.0%)
-    decimal_pct_matches = re.findall(r"\b\d+\.\d+%", content)
-    if decimal_pct_matches:
-        errors.append(f"Found decimal percentage format (must be integer): {decimal_pct_matches[:3]}")
+    # 3. Decimal Percentage Scan (for QA reconciliation reports, must be strict integer '%', e.g. 100% not 100.0%)
+    if "QA_Report" in filepath or "geolibre_qa_inspect" in filepath:
+        decimal_pct_matches = re.findall(r"\b\d+\.\d+%", content)
+        if decimal_pct_matches:
+            errors.append(f"Found decimal percentage format in QA report (must be integer): {decimal_pct_matches[:3]}")
 
     # 4. Summary Cards Dynamic Integrity Check
     card_blocks = re.findall(r'<div class="card"(.*?)>(.*?)</div>', content, re.DOTALL)

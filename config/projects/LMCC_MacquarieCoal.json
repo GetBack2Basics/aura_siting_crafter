@@ -1,0 +1,52 @@
+{
+  "$schema": "./schema_project_manifest.json",
+  "project_id": "LMCC_MacquarieCoal",
+  "project_name": "Macquarie Coal Complex Transformation Precinct",
+  "lga": "City of Lake Macquarie",
+  "state": "NSW",
+  "proponent": "NSW Department of Planning, Housing and Infrastructure (DPHI), Lake Macquarie City Council & Glencore",
+  "planning_portal_url": "https://www.planningportal.nsw.gov.au/ppr/post-exhibition/macquarie-coal-complex-transformation-precinct",
+  "national_candidate_id": "AURA-NSW-0001",
+  "coordinates": {
+    "lat": -32.935,
+    "lon": 151.585,
+    "zoom": 13.5
+  },
+  "target_sectors": [
+    "Advanced Clean Manufacturing & Assembly",
+    "Sovereign AI & Hyperscale Digital Infrastructure",
+    "Grid-Scale Battery Energy Storage (BESS) & Pumped Hydro",
+    "Intermodal Rail Freight & Heavy Logistics",
+    "Circular Economy & Material Remanufacturing"
+  ],
+  "spatial_layers": {
+    "precinct_boundary": "data/projects/LMCC_MacquarieCoal/precinct_boundary.geojson",
+    "developable_pads": "data/projects/LMCC_MacquarieCoal/developable_pads_v1.geojson",
+    "staging_phases": "data/projects/LMCC_MacquarieCoal/staging_phases_v1.geojson",
+    "utilities_power_water": "data/projects/LMCC_MacquarieCoal/substation_phes_layout.geojson",
+    "transport_rail_road": "data/projects/LMCC_MacquarieCoal/rail_haulroad_spine.geojson",
+    "geotechnical_subsidence": "data/projects/LMCC_MacquarieCoal/subsidence_zones_g1_g3.geojson",
+    "environmental_biolink": "data/projects/LMCC_MacquarieCoal/koala_biolink_corridor.geojson",
+    "acoustic_buffers_bunds": "data/projects/LMCC_MacquarieCoal/acoustic_bunds_buffers.geojson"
+  },
+  "engineering_metrics": {
+    "gross_area_ha": 1100.0,
+    "net_developable_area_ha": 320.1,
+    "immediate_phase1_ha": 82.7,
+    "power_capacity_mva": 500.0,
+    "water_saving_gl_pa": 1.25,
+    "pumped_hydro_capacity_mwh": 49.0,
+    "rail_freight_capacity_tpa": 350000.0,
+    "direct_jobs_target": 3500.0
+  },
+  "benchmarks": {
+    "transmission_dist_km": 0.35,
+    "national_avg_transmission_km": 4.8,
+    "water_recycled_pct": 100.0,
+    "national_avg_water_recycled_pct": 35.0,
+    "net_to_gross_efficiency_pct": 64.0,
+    "national_avg_net_to_gross_pct": 42.0,
+    "data_depth_tier": "Tier-1 High-Precision (10/10 Micro-Layers)",
+    "indexed_layers_count": 10
+  }
+}

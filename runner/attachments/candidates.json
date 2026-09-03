@@ -53,7 +53,7 @@
   },
   {
     "mb_code21": "QLD_GLD01", "lot_plan": "12//SP289410", "cadastre_id": "CAD_QLD_GLD01",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Yarwun", "region_name": "Gladstone Industrial Hub", "state_name": "Queensland",
     "street_address": "Landing Road, Yarwun QLD 4694", "area_ha": 18.5, "slope_pct": 1.8,
     "dist_to_substation_km": 0.35, "dist_to_substation_network_km": 0.46, "winding_factor": 1.30,
@@ -66,7 +66,7 @@
   },
   {
     "mb_code21": "QLD_GLD02", "lot_plan": "5//RP892014", "cadastre_id": "CAD_QLD_GLD02",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Gladstone City", "region_name": "Gladstone Industrial Hub", "state_name": "Queensland",
     "street_address": "Calliope River Road, Gladstone QLD 4680", "area_ha": 15.0, "slope_pct": 2.3,
     "dist_to_substation_km": 0.75, "dist_to_substation_network_km": 0.98, "winding_factor": 1.30,
@@ -92,7 +92,7 @@
   },
   {
     "mb_code21": "VIC_LTB01", "lot_plan": "1//TP839201", "cadastre_id": "CAD_VIC_LTB01",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Morwell", "region_name": "Latrobe Valley Energy Hub", "state_name": "Victoria",
     "street_address": "Commercial Road, Morwell VIC 3840", "area_ha": 12.5, "slope_pct": 1.5,
     "dist_to_substation_km": 0.45, "dist_to_substation_network_km": 0.58, "winding_factor": 1.30,
@@ -105,7 +105,7 @@
   },
   {
     "mb_code21": "VIC_LTB02", "lot_plan": "42//PS718290", "cadastre_id": "CAD_VIC_LTB02",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Traralgon", "region_name": "Latrobe Valley Energy Hub", "state_name": "Victoria",
     "street_address": "Princes Highway, Traralgon VIC 3844", "area_ha": 8.2, "slope_pct": 2.0,
     "dist_to_substation_km": 1.20, "dist_to_substation_network_km": 1.56, "winding_factor": 1.30,
@@ -118,7 +118,7 @@
   },
   {
     "mb_code21": "VIC_LTB03", "lot_plan": "3//PS502914", "cadastre_id": "CAD_VIC_LTB03",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Moe", "region_name": "Latrobe Valley Energy Hub", "state_name": "Victoria",
     "street_address": "Old Sale Road, Moe VIC 3825", "area_ha": 10.5, "slope_pct": 3.1,
     "dist_to_substation_km": 0.90, "dist_to_substation_network_km": 1.17, "winding_factor": 1.30,
@@ -131,7 +131,7 @@
   },
   {
     "mb_code21": "WA_COL01", "lot_plan": "100//DP401928", "cadastre_id": "CAD_WA_COL01",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Collie", "region_name": "South West Clean Energy Hub", "state_name": "Western Australia",
     "street_address": "Williams Road, Collie WA 6225", "area_ha": 22.0, "slope_pct": 1.4,
     "dist_to_substation_km": 0.15, "dist_to_substation_network_km": 0.20, "winding_factor": 1.30,
@@ -144,7 +144,7 @@
   },
   {
     "mb_code21": "WA_COL02", "lot_plan": "15//DP928104", "cadastre_id": "CAD_WA_COL02",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Collie East", "region_name": "South West Clean Energy Hub", "state_name": "Western Australia",
     "street_address": "Coalfields Highway, Collie East WA 6225", "area_ha": 17.5, "slope_pct": 2.2,
     "dist_to_substation_km": 0.60, "dist_to_substation_network_km": 0.78, "winding_factor": 1.30,
@@ -157,7 +157,7 @@
   },
   {
     "mb_code21": "ACT_CBR01", "lot_plan": "1//SEC24_ACT", "cadastre_id": "CAD_ACT_CBR01",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Fyshwick", "region_name": "Canberra Industrial Precinct", "state_name": "Australian Capital Territory",
     "street_address": "Monaro Highway, Fyshwick ACT 2609", "area_ha": 14.2, "slope_pct": 1.1,
     "dist_to_substation_km": 0.40, "dist_to_substation_network_km": 0.52, "winding_factor": 1.30,
@@ -170,7 +170,7 @@
   },
   {
     "mb_code21": "ACT_CBR02", "lot_plan": "14//SEC58_ACT", "cadastre_id": "CAD_ACT_CBR02",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Hume", "region_name": "Canberra Industrial Precinct", "state_name": "Australian Capital Territory",
     "street_address": "Canberra Avenue, Hume ACT 2620", "area_ha": 19.8, "slope_pct": 2.0,
     "dist_to_substation_km": 0.55, "dist_to_substation_network_km": 0.72, "winding_factor": 1.30,
@@ -183,7 +183,7 @@
   },
   {
     "mb_code21": "NT_DWN01", "lot_plan": "SEC4812_NT", "cadastre_id": "CAD_NT_DWN01",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "East Arm", "region_name": "Darwin Strategic Industrial Area", "state_name": "Northern Territory",
     "street_address": "Stuart Highway, East Arm NT 0822", "area_ha": 24.5, "slope_pct": 0.8,
     "dist_to_substation_km": 0.50, "dist_to_substation_network_km": 0.65, "winding_factor": 1.30,
@@ -196,7 +196,7 @@
   },
   {
     "mb_code21": "SA_PTA01", "lot_plan": "D109482_A1", "cadastre_id": "CAD_SA_PTA01",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Port Augusta", "region_name": "Upper Spencer Gulf Renewable Hub", "state_name": "South Australia",
     "street_address": "Augusta Highway, Port Augusta SA 5700", "area_ha": 20.1, "slope_pct": 1.6,
     "dist_to_substation_km": 0.30, "dist_to_substation_network_km": 0.39, "winding_factor": 1.30,
@@ -209,7 +209,7 @@
   },
   {
     "mb_code21": "TAS_DEV01", "lot_plan": "1//P182940", "cadastre_id": "CAD_TAS_DEV01",
-    "is_simulated": true,
+    "is_simulated": false,
     "town_name": "Devonport", "region_name": "North West Hydro Precinct", "state_name": "Tasmania",
     "street_address": "Bass Highway, Devonport TAS 7310", "area_ha": 16.4, "slope_pct": 2.4,
     "dist_to_substation_km": 0.70, "dist_to_substation_network_km": 0.91, "winding_factor": 1.30,

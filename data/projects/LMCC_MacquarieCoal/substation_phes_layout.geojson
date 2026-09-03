@@ -1,0 +1,112 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "330kV/132kV Multi-User Terminal Substation Reserve",
+        "capacity_mva": 500,
+        "type": "Substation"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.588,
+              -32.92
+            ],
+            [
+              151.594,
+              -32.92
+            ],
+            [
+              151.594,
+              -32.924
+            ],
+            [
+              151.588,
+              -32.924
+            ],
+            [
+              151.588,
+              -32.92
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Upper Ridgeline Storage Reservoir (+145m AHD)",
+        "volume_ml": 500,
+        "type": "PHES Reservoir"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.56,
+              -32.935
+            ],
+            [
+              151.564,
+              -32.935
+            ],
+            [
+              151.564,
+              -32.939
+            ],
+            [
+              151.56,
+              -32.939
+            ],
+            [
+              151.56,
+              -32.935
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "PHES Reversible Penstock (120m Hydraulic Head)",
+        "length_m": 950,
+        "capacity_mwh": 49.0,
+        "type": "Penstock"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            151.562,
+            -32.937
+          ],
+          [
+            151.568,
+            -32.942
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Westside Void Lower Reservoir & Turbine Pit (+25m AHD)",
+        "power_mw": 20,
+        "type": "PHES Powerhouse"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.568,
+          -32.942
+        ]
+      }
+    }
+  ]
+}

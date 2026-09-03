@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project-Specific Siting Architecture Plan | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">🌐 Live Site WebGIS</a>
+    <a href="../projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">📑 Statutory Site Report</a>
+    <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">🗺️ Site Enhancement Plan</a>
+    <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">🏗️ Architecture Plan</a>
+    <a href="geolibre_contribution_proposals.html" class="nav-link">🤝 GeoLibre Proposals</a>
+    <a href="linkedin_aura_siting_evolution.html" class="nav-link">📝 Evolution Odyssey</a>
+    <a href="../national_suitability_report.html" target="_blank" class="nav-link">🇦🇺 National Baseline</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>Project-Specific Siting Architecture &amp; Site Enhancement Plan (_LMCC_MacquarieCoal)</h1>
+<h2>Overview &amp; Context</h2>
+<p>This plan establishes a scalable, modular architecture for generating <strong>Project-Specific Reports and Interactive Apps</strong> (patterned as <code>_{Org/LGA}_{ProjectName}</code>, e.g., <code>_LMCC_MacquarieCoal</code>) from submitted site data. </p>
+<p>Under this architecture:
+1. <strong>The National Products Remain Untouched &amp; Authoritative:</strong> The national siting viewer (<code>index.html</code>) and national statutory report (<code>national_suitability_report.html</code>) remain the macro-level baseline, updated only to provide a direct deep-link (e.g. <code>View Detailed Site Assessment -&gt;</code>) when a user selects a candidate site (e.g. <code>AURA-NSW-0001</code> Teralba / Macquarie Coal).
+2. <strong>Dedicated Project-Specific Products:</strong> Each project receives a self-contained, high-resolution interactive app (<code>index_LMCC_MacquarieCoal.html</code>) and statutory site report (<code>report_LMCC_MacquarieCoal.html</code>), loading localized micro-layers, pad geometry, staging schedules, and comparative benchmarks against the national baseline.
+3. <strong>Repeatable Ingestion Blueprint:</strong> Any proponent, council, or enterprise (e.g., Hunter Water, Latrobe Valley Council, Gladstone Port) can submit site engineering studies, CAD/GIS vectors, or hazard assessments to produce a standardized, audit-ready site package.</p>
+<hr />
+<h2>1. Site-Specific Improvements for Macquarie Coal Complex (<code>_LMCC_MacquarieCoal</code>)</h2>
+<p>Based on our in-depth review of all 15 public exhibition technical studies, the following 9 site-specific features and interactive components will be added to the project-specific app and report:</p>
+<div class="mermaid">
+flowchart TD
+    subgraph National["National Master Products (Untouched)"]
+        N1["National Siting Viewer (index.html)"] -->|Click Candidate Site AURA-NSW-0001| N2["Site Modal & Link"]
+        N3["National Report (national_suitability_report.html)"]
+    end
+
+    subgraph ProjectSpecific["Project-Specific Products (_LMCC_MacquarieCoal)"]
+        N2 -->|Deep Link| P1["Project Interactive WebGIS (index_LMCC_MacquarieCoal.html)"]
+        N2 -->|Deep Link| P2["Site Statutory Report (report_LMCC_MacquarieCoal.html)"]
+        
+        P1 & P2 --> S1["1. 10 Net Developable Pads (NDPs) & 3-Phase Staging"]
+        P1 & P2 --> S2["2. TSF Consolidation & Dams Safety De-Declaration Map"]
+        P1 & P2 --> S3["3. 330kV Substation Reserve + 49 MWh Pit-Void PHES Model"]
+        P1 & P2 --> S4["4. 1.8km Rail Intermodal Loop + 7.8km Haul Road Arterial"]
+        P1 & P2 --> S5["5. Subsidence Advisory NSW Foundation Matrix (G1-G3)"]
+        P1 & P2 --> S6["6. 250m C2 Koala Bio-Link & Fauna Overpasses"]
+        P1 & P2 --> S7["7. 3D Overburden Acoustic Bunds + 500m Buffer Contours"]
+        P1 & P2 --> S8["8. Edgeworth WWTW Dual-Pipe Recycled Cooling Pipeline"]
+        P1 & P2 --> S9["9. Site vs National Comparative Benchmark Matrix"]
+    end
+</div>
+
+<h3>1.1 Specific Data Layers &amp; Features to Implement:</h3>
+<ol>
+<li><strong>10 Certified Net Developable Pads (NDPs) with Staging Geometry:</strong></li>
+<li>Vector polygons for <strong>Pads A1–A4 (48.5 ha hardstand)</strong>, <strong>Pads B1–B3 (72.0 ha void floor)</strong>, <strong>Pads C1–C2 (34.2 ha portal logistics)</strong>, and <strong>Pad D1 (85.0 ha TSF solar/storage plateau)</strong>.</li>
+<li>Interactive time-slider toggling <strong>Phase 1 (Years 0–3: 82.7 ha)</strong>, <strong>Phase 2 (Years 3–7: 125.4 ha)</strong>, and <strong>Phase 3 (Years 7–12+: 112.0 ha)</strong>.</li>
+<li><strong>TSF &amp; Dams Safety NSW De-Declaration Sandbox:</strong></li>
+<li>3D isopach tailings depth contours (up to 18m fine reject).</li>
+<li>Dynamic wick-drain consolidation simulation showing settlement rate and bearing capacity evolution from 25 kPa to &gt;150 kPa.</li>
+<li>Dam Break Inundation Zone overlay and decommissioning safety buffers.</li>
+<li><strong>Sovereign High-Voltage &amp; Micro-Pumped Hydro (PHES) Calculator:</strong></li>
+<li>SP2 Substation pad geometry (4.5 ha) with 330kV/132kV dual-bus layout.</li>
+<li>Interactive hydraulic cross-section: 120m elevation head between the upper reservoir (+145m AHD) and pit void (+25m AHD), calculating daily storage capacity (up to 49.0 MWh) and round-trip efficiency (78%).</li>
+<li><strong>Macquarie Intermodal Rail Terminal (MIRT) &amp; Heavy Haul Road Corridor:</strong></li>
+<li>1.8 km rail loop geometry with 650m siding staging tracks and container reach-stacker hardstand.</li>
+<li>7.8 km gazetted internal haul road arterial route bypassing Barnsley and Teralba residential streets.</li>
+<li><strong>Subsidence Advisory NSW Pre-Approved Foundation Matrix:</strong></li>
+<li>Overlay of underground workings (Great Northern, Fassifern, Young Wallsend seams).</li>
+<li>Interactive structural lookup tool: Select building footprint -&gt; Returns required foundation engineering (Zone G1 shallow spread footings, Zone G2 articulated stiffened raft, Zone G3 pressure-grouted void piles).</li>
+<li><strong>Sugarloaf-to-Awaba C2 Biodiversity Bio-Link:</strong></li>
+<li>250m–300m ecological corridor polygon (~320 ha) with preferred Koala feed tree density targets.</li>
+<li>2 engineered fauna overpass bridge locations along the haul road.</li>
+<li><strong>3D Overburden Acoustic Noise Bunds &amp; 500m Night-Time Buffer Contours:</strong></li>
+<li>Landform topography vectors for 6m–8m sculpted acoustic bunds.</li>
+<li>Sound propagation contours validating compliance with the <strong>35 dBA night-time PNTL</strong> at Barnsley, Teralba, and Wakefield receivers for 24/7 hyperscale data centres and freight logistics.</li>
+<li><strong>Hunter Water Recycled Water Pipeline Route (Zero Potable Cooling):</strong></li>
+<li>4.2 km pipeline alignment connecting Edgeworth WWTW to the precinct boundary.</li>
+<li>Water balance model demonstrating <strong>1.2 GL/year potable water savings</strong> via 100% closed-loop / tertiary recycled cooling.</li>
+<li><strong>Site vs. National Comparative Benchmark Card:</strong></li>
+<li>Radar and bar chart widget comparing the Macquarie site directly against national averages:<ul>
+<li><em>Transmission Distance:</em> 0.35 km (Macquarie) vs. 4.8 km (National Avg) — <strong>Top 5%</strong></li>
+<li><em>Data Depth Tier:</em> 10/10 Tier-1 Micro-Layers (100%) vs. 8/10 Tier-2 (80%)</li>
+<li><em>Water Circularity:</em> 100% Recycled vs. 35% Potable Reliance</li>
+<li><em>NDA Efficiency Ratio:</em> 64% Net-to-Gross vs. 42% Regional Benchmark.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2>2. Generic Architecture for Multi-Project Submission &amp; Report Generator</h2>
+<p>To enable third parties (councils, industrial developers, energy proponents) to submit site data and receive an automated, high-fidelity site package, we establish a standardized 4-part framework:</p>
+<pre><code>+----------------------------------------------------------------------------------------------------+
+|                         MULTI-PROJECT SITING &amp; REPORT GENERATOR ARCHITECTURE                      |
++----------------------------------------------------------------------------------------------------+
+|                                                                                                    |
+| 1. Project Manifest Schema (config/projects/{Project_ID}.json)                                     |
+|    - Project Metadata (Name, LGA, Proponent, Coordinates, Boundary GeoJSON)                        |
+|    - Baseline Engineering Inputs (Power MVA, Water GL/yr, Rail Access, Subsidence Class)          |
+|    - Micro-Layer GeoJSON/GeoParquet References (Pads, Buffers, Bunds, Infrastructure)              |
+|                                                                                                    |
+| 2. Automated Pipeline Generator (tools/build_project_package.py)                                   |
+|    - Reads project manifest and executes spatial geometry validator &amp; zero-mock scanner.          |
+|    - Renders project web app (src/geolibre_frontend/projects/index_{Project_ID}.html).             |
+|    - Renders project statutory report (runner/projects/report_{Project_ID}.html).                  |
+|                                                                                                    |
+| 3. National-to-Site Deep-Linking Bridge                                                            |
+|    - National Viewer (exports_v2/datacenter_candidates_v2.json) includes optional &quot;project_url&quot;.  |
+|    - Clicking a candidate site opens the project app in a seamless transition.                    |
+|                                                                                                    |
+| 4. Client-Side Spatial Engine (DuckDB-WASM)                                                        |
+|    - Runs zero-cost client-side what-if scenario testing and pad yield calculations.              |
++----------------------------------------------------------------------------------------------------+
+</code></pre>
+<hr />
+<h2>3. Proposed File Structure &amp; Changes</h2>
+<h3>New Project Directory Layout:</h3>
+<pre><code>aura_siting_crafter/
+├── config/
+│   └── projects/
+│       ├── schema_project_manifest.json           [NEW: Manifest JSON Schema definition]
+│       └── LMCC_MacquarieCoal.json               [NEW: Macquarie Coal Complex Site Manifest]
+├── data/
+│   └── projects/
+│       └── LMCC_MacquarieCoal/                   [NEW: Site-Specific Spatial GeoJSON/Parquet]
+│           ├── developable_pads_v1.geojson
+│           ├── staging_phases_v1.geojson
+│           ├── substation_phes_layout.geojson
+│           ├── rail_haulroad_spine.geojson
+│           ├── subsidence_zones_g1_g3.geojson
+│           ├── koala_biolink_corridor.geojson
+│           └── acoustic_bunds_buffers.geojson
+├── src/
+│   └── geolibre_frontend/
+│       ├── projects/
+│       │   └── index_LMCC_MacquarieCoal.html      [NEW: Dedicated Site WebGIS Viewer]
+│       └── index.html                             [MODIFY: Add deep-link handler in modal]
+├── runner/
+│   ├── projects/
+│   │   └── report_LMCC_MacquarieCoal.html         [NEW: Dedicated Statutory Site Report]
+│   └── build_project_package.py                   [NEW: CLI builder for new project submissions]
+└── docs/
+    └── macquarie_coal_precinct_site_enhancement_plan.md [COMPLETED]
+</code></pre>
+<hr />
+<h2>4. Verification Plan</h2>
+<h3>Automated Tests</h3>
+<ol>
+<li><strong>Zero-Mock &amp; Lint Scan:</strong>
+   <code>bash
+   pytest tests/lint/ -v</code></li>
+<li><strong>Project Manifest Schema Validation:</strong>
+   <code>bash
+   python -m pytest tests/test_project_manifest_schema.py -v</code></li>
+<li><strong>GeoJSON Geometric Integrity Check:</strong></li>
+<li>Validate that all pad polygons lie within the Macquarie precinct boundary and do not self-intersect or overlap C2 conservation zones.</li>
+</ol>
+<h3>Manual / Browser Verification</h3>
+<ol>
+<li>Open <code>index_LMCC_MacquarieCoal.html</code> in browser:</li>
+<li>Verify all 7 layer toggles (Pads, Staging, PHES/Substation, Rail/Road, Subsidence, Koala Corridor, Acoustic Bunds).</li>
+<li>Verify DuckDB-WASM client-side filtering and real-time pad area re-scoring.</li>
+<li>Open <code>report_LMCC_MacquarieCoal.html</code>:</li>
+<li>Verify high-resolution comparative radar charts, geotechnical foundation matrix table, and statutory recommendations.</li>
+<li>Test Deep-Link from National Viewer:</li>
+<li>Click <code>AURA-NSW-0001</code> (Teralba / Macquarie Coal) in <code>index.html</code> -&gt; Verify modal contains <code>"View Detailed Site Assessment (_LMCC_MacquarieCoal)"</code> linking smoothly to the site app.</li>
+</ol>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
+  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | 202609032037
+</footer>
+
+</body>
+</html>

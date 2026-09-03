@@ -1,0 +1,72 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sugarloaf-to-Awaba Regional Ecological Bio-Link (C2 Zone)",
+        "width_m": 250,
+        "area_ha": 320.0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.555,
+              -32.915
+            ],
+            [
+              151.568,
+              -32.915
+            ],
+            [
+              151.572,
+              -32.935
+            ],
+            [
+              151.562,
+              -32.958
+            ],
+            [
+              151.552,
+              -32.958
+            ],
+            [
+              151.555,
+              -32.915
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Fauna Overpass Bridge 1 (Sugarloaf Link)",
+        "type": "Wildlife Overpass"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.57,
+          -32.928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Fauna Overpass Bridge 2 (Diega Creek Corridor)",
+        "type": "Wildlife Overpass"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.585,
+          -32.94
+        ]
+      }
+    }
+  ]
+}

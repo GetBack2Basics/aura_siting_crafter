@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Spatial Siting Odyssey | AURA Evolutionary Case Study | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">🌐 Live Site WebGIS</a>
+    <a href="../projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">📑 Statutory Site Report</a>
+    <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">🗺️ Site Enhancement Plan</a>
+    <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">🏗️ Architecture Plan</a>
+    <a href="geolibre_contribution_proposals.html" class="nav-link">🤝 GeoLibre Proposals</a>
+    <a href="linkedin_aura_siting_evolution.html" class="nav-link">📝 Evolution Odyssey</a>
+    <a href="../national_suitability_report.html" target="_blank" class="nav-link">🇦🇺 National Baseline</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>The Spatial Siting Odyssey: From Regional Brownfield Scans to Continental AI Compute &amp; High-Precision Statutory Digital Twins</h1>
+<p><em>How we evolved from basic spatial buffers to a continental-scale multi-hazard siting engine — and engineered an automated statutory reporting pipeline for State Significant Projects.</em></p>
+<hr />
+<p><img alt="AURA Siting Crafter Banner" src="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/banner.png" /></p>
+<h2>The Siting Trilemma: Energy, Water &amp; Sovereignty</h2>
+<p>Finding optimal land for next-generation sovereign AI data centres, clean energy firming hubs, and advanced industrial ecosystems is one of the most pressing engineering bottlenecks of the 2020s. </p>
+<p>Traditional site selection relies on coarse static GIS layers, proprietary consulting PDFs, or disjointed spreadsheets. Proponents frequently claim <em>"100% buildable gross site area"</em>, only for infrastructure developers to discover years later that 40% of the parcel is locked by uninsurable 1% AEP floodways, mine subsidence strain zones, or EPA acoustic trigger buffers.</p>
+<p>Over the past engineering sprints, we took <strong>AURA Siting Crafter</strong> through a five-stage evolutionary journey to solve this trilemma — culminating in a repeatable, open-source-first project submission pipeline.</p>
+<p>Here is the story of how we built it, what we learned, and where spatial infrastructure engineering is going next.</p>
+<hr />
+<div class="mermaid">
+graph TD
+    S1["1. Basic Regional GIS<br/>(Hunter Brownfield Exploration)"] --> S2["2. High-Data Micro-Siting<br/>(1m LiDAR, Cadastre & Cooling Loops)"]
+    S2 --> S3["3. Continental Scale-Out<br/>(17 National Candidate Hubs)"]
+    S3 --> S4["4. National Multi-Hazard MCDA<br/>(ARR 2019, Seismic PGA & TCHA Wind)"]
+    S4 --> S5["5. Statutory Forensic Digital Twins<br/>(Automated Multi-Project Pipeline)"]
+    
+    style S1 fill:#1e293b,stroke:#3b82f6,color:#f8fafc
+    style S2 fill:#1e293b,stroke:#06b6d4,color:#f8fafc
+    style S3 fill:#1e293b,stroke:#8b5cf6,color:#f8fafc
+    style S4 fill:#1e293b,stroke:#f59e0b,color:#f8fafc
+    style S5 fill:#0284c7,stroke:#38bdf8,color:#ffffff,stroke-width:2px
+</div>
+
+<hr />
+<h2>The 5-Stage Evolutionary Journey</h2>
+<h3>Stage 1: Basic Regional Spatial Exploration</h3>
+<p>Our journey started with a focused regional question: <em>How can Australia transition retiring coal generation assets and mine void footprints in NSW's Hunter Region into digital infrastructure hubs?</em></p>
+<p>In the earliest prototypes, we applied standard GIS Euclidean buffers around 330kV substations, transmission easements, and major highways. While useful for high-level reconnaissance, Euclidean buffers failed to account for real-world terrain winding factors, steep grade slopes, and local cadastral lot boundaries.</p>
+<h3>Stage 2: High-Data Micro-Siting &amp; Physical Thermodynamic Modeling</h3>
+<p>To move beyond crude approximations, we ingested high-fidelity ground truth:
+* <strong>15.4M+ Cadastral Parcels</strong> (Geoscape CSDM &amp; NSW Cadastre in GDA2020 / EPSG:7844).
+* <strong>1m ELVIS LiDAR DEMs</strong> to enforce strict &lt;5.0% slope foundation filters.
+* <strong>Continuous Sigmoidal Sensitive Decay Curves</strong> ($d_0 = 500\text{m}$) implementing NSW EPA <em>Noise Policy for Industry</em> (NPfI 2017) sleep disturbance thresholds.
+* <strong>Closed-Loop Heat &amp; Cooling Physics</strong>: Modeling thermodynamic pipeline decay for district cooling symbiosis and environmental naturalization distances before river discharge.</p>
+<h3>Stage 3: Continental Simulations &amp; National Scale-Out</h3>
+<p>Once proven in the Hunter, we scaled the spatial architecture across <strong>all 6 Australian states</strong>. Ingesting national GeoParquet spatial partitions into the <strong>Wherobots Cloud</strong> and <strong>Apache Sedona</strong> lakehouse, we benchmarked 17 national candidate clusters (from Latrobe Valley and Portland in Victoria to Collie in WA and Gladstone in Queensland).</p>
+<p>We benchmarked every site on power grid proximity, industrial water access, and net scalable pad footprint.</p>
+<h3>Stage 4: National High-Data Multi-Hazard Synthesis (MCDA)</h3>
+<p>Macro-level proximity alone does not make a site investable. Critical infrastructure requires statutory resilience. We integrated 5 peer-reviewed statutory hazard layers into a unified <strong>6-Factor Multi-Criteria Decision Analysis (MCDA)</strong>:
+1. <strong>1% AEP Dynamic Flood Depth</strong> (<em>ARR 2019 / NCC 2022 Part B1</em>).
+2. <strong>Earthquake Peak Ground Acceleration (PGA)</strong> (<em>AS 1170.4:2007 / GA NSHA 2018</em>).
+3. <strong>Extreme Cyclonic &amp; Regional Wind Loading</strong> (<em>AS/NZS 1170.2:2021 / GA TCHA 2018</em>).
+4. <strong>Landslide Susceptibility &amp; Topographic Instability</strong> (<em>AGS 2007 Guidelines</em>).
+5. <strong>Bushfire Ember Attack &amp; Defensible APZ Buffers</strong> (<em>AS 3959:2018 / NSW RFS PBP 2019</em>).</p>
+<p>Every candidate site was assigned an explicit <strong>Spatial Data Depth Index</strong> (distinguishing between 10/10 Tier-1 micro-surveyed sites and 8/10 regional interpolations) so investors and planning panels never mistake baseline approximations for physical site ground-truth.</p>
+<h3>Stage 5: Deep Forensic Analysis &amp; Automated Project Submission Pipeline</h3>
+<p>In the final phase, we took the ultimate test: downloading and synthesizing <strong>all 15 statutory public exhibition technical documents (&gt;135 MB)</strong> for the <em>Macquarie Coal Complex Transformation Precinct</em> from the NSW Planning Portal.</p>
+<p>Our spatial audit revealed vital strategic insights:
+* <strong>True Net Developable Pad Space</strong>: Subtracting riparian buffers, 20m high-pressure water pipeline easements, &gt;5% slopes, and dam hazard setbacks reduced raw proponent claims to <strong>44.5 ha net immediate buildable pad space</strong> across 10 certified Net Developable Pads (NDPs).
+* <strong>49.0 MWh Void Micro-PHES</strong>: Leveraging the site's 120m hydraulic head drop between the ridge plateau and lower open-cut pit void to create synchronous long-duration green energy firming.
+* <strong>Multi-Modal Connectivity</strong>: 1.8km active heavy rail siding loop (2.5M t/yr) directly connecting to the Main Northern Railway.</p>
+<p>Rather than building a one-off bespoke report, we engineered a <strong>generic, repeatable Multi-Project Submission Pipeline (<code>tools/build_project_package.py</code>)</strong>.</p>
+<hr />
+<h2>How the Multi-Project Pipeline Works</h2>
+<p>Any proponent, local government council, or energy developer can submit a standardized project manifest:</p>
+<pre><code class="language-json">{
+  &quot;project_id&quot;: &quot;LMCC_MacquarieCoal&quot;,
+  &quot;project_name&quot;: &quot;Macquarie Coal Complex Transformation Precinct&quot;,
+  &quot;national_candidate_id&quot;: &quot;AURA-NSW-0001&quot;,
+  &quot;lga&quot;: &quot;City of Lake Macquarie&quot;,
+  &quot;state&quot;: &quot;NSW&quot;,
+  &quot;engineering_metrics&quot;: {
+    &quot;gross_area_ha&quot;: 320.0,
+    &quot;net_developable_area_ha&quot;: 44.5,
+    &quot;power_capacity_mva&quot;: 500.0,
+    &quot;pumped_hydro_capacity_mwh&quot;: 49.0
+  }
+}
+</code></pre>
+<p>Running the pipeline automatically generates:
+1. <strong>Interactive 3D WebGIS Digital Twin</strong> (<code>projects/index_{ProjectID}.html</code>): Zero-network-latency MapLibre GL client with self-contained, inline-embedded GeoJSON micro-layers.
+2. <strong>Statutory Planning &amp; Siting Report</strong> (<code>projects/report_{ProjectID}.html</code>): High-precision comparative benchmark tables, geotechnical subsidence matrices, and environmental staging plans.
+3. <strong>Non-Intrusive National Deep-Linking</strong>: The national report and WebGIS remain untouched, automatically displaying a clickable <code>✨ Enhanced Report ↗</code> badge when users view candidate sites with active project submissions.</p>
+<hr />
+<h2>The Dual Delivery Model: Open Source or Turnkey Service</h2>
+<p>We believe in radical transparency and spatial data integrity:</p>
+<h3>Option A: Open Source &amp; Self-Served (100% Free)</h3>
+<p>The entire codebase, spatial schemas, MCDA scoring engine, and report builders are fully open-source.
+* <strong>Clone the GitHub Repo</strong>: Run <code>pytest tests/ -v</code> (374 passing tests, zero mock data).
+* <strong>Define Your Manifest</strong>: Create <code>config/projects/YOUR_PROJECT.json</code> and drop your GeoJSON layers into <code>data/projects/YOUR_PROJECT/</code>.
+* <strong>Build Instant Packages</strong>: Run <code>python tools/build_project_package.py --manifest config/projects/YOUR_PROJECT.json</code>.</p>
+<h3>Option B: Turnkey Certified Engineering Service (Paid Service)</h3>
+<p>For developers, REITs, energy consortiums, and councils requiring statutory-grade deliverables:
+* Submit raw planning documents, CAD/GIS survey boundaries, and utility manifests to our engineering team.
+* We execute the full spatial ETL pipeline, perform independent zero-mock multi-hazard validation, and deliver hosted, interactive WebGIS digital twins and statutory exhibition response packages for submission to State Planning Authorities and Investment Committees.</p>
+<hr />
+<h2>Explore the Live Suite</h2>
+<p>Experience the complete live suite hosted on Google Cloud:</p>
+<ul>
+<li>🌐 <strong><a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/projects/index_LMCC_MacquarieCoal.html">Interactive Site WebGIS (Macquarie Coal Complex)</a></strong></li>
+<li>📑 <strong><a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/projects/report_LMCC_MacquarieCoal.html">Statutory Site Siting Report (_LMCC_MacquarieCoal)</a></strong></li>
+<li>🗺️ <strong><a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/docs/macquarie_coal_precinct_site_enhancement_plan.html">6-Pillar Site-Level Enhancement Plan (HTML)</a></strong></li>
+<li>🏗️ <strong><a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/docs/project_specific_site_enhancement_architecture_plan.html">Multi-Project Siting Architecture Blueprint (HTML)</a></strong></li>
+<li>🇦🇺 <strong><a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/national_suitability_report.html">National Siting Suitability Report</a></strong></li>
+<li>🏛️ <strong><a href="https://www.planningportal.nsw.gov.au/ppr/post-exhibition/macquarie-coal-complex-transformation-precinct">Official NSW Planning Portal Exhibition Documents</a></strong></li>
+</ul>
+<hr />
+<p><em>Spatial infrastructure decisions must be grounded in physical truth, statutory rigor, and open data. Let's build the sovereign compute and clean energy foundation Australia needs.</em></p>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
+  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | 202609032037
+</footer>
+
+</body>
+</html>

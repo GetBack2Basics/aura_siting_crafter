@@ -1,0 +1,110 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "zone": "Zone G1",
+        "desc": "Intact Bedrock / Shallow Footings",
+        "color": "#2ecc71"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.575,
+              -32.92
+            ],
+            [
+              151.595,
+              -32.92
+            ],
+            [
+              151.595,
+              -32.935
+            ],
+            [
+              151.575,
+              -32.935
+            ],
+            [
+              151.575,
+              -32.92
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "zone": "Zone G2",
+        "desc": "Deep Stable Workings / Articulated Raft Slabs",
+        "color": "#f39c12"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.56,
+              -32.925
+            ],
+            [
+              151.575,
+              -32.925
+            ],
+            [
+              151.575,
+              -32.955
+            ],
+            [
+              151.56,
+              -32.955
+            ],
+            [
+              151.56,
+              -32.925
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "zone": "Zone G3",
+        "desc": "Shallow Workings / Pressure Grout or End-Bearing Piles",
+        "color": "#e74c3c"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.595,
+              -32.935
+            ],
+            [
+              151.61,
+              -32.935
+            ],
+            [
+              151.61,
+              -32.955
+            ],
+            [
+              151.595,
+              -32.955
+            ],
+            [
+              151.595,
+              -32.935
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

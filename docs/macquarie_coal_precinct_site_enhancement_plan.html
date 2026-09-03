@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Macquarie Coal Complex Site-Level Enhancement Plan | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">🌐 Live Site WebGIS</a>
+    <a href="../projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">📑 Statutory Site Report</a>
+    <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">🗺️ Site Enhancement Plan</a>
+    <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">🏗️ Architecture Plan</a>
+    <a href="geolibre_contribution_proposals.html" class="nav-link">🤝 GeoLibre Proposals</a>
+    <a href="linkedin_aura_siting_evolution.html" class="nav-link">📝 Evolution Odyssey</a>
+    <a href="../national_suitability_report.html" target="_blank" class="nav-link">🇦🇺 National Baseline</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>Macquarie Coal Complex Transformation Precinct: Site-Level Enhancement Plan</h1>
+<p><strong>Comprehensive Review of Public Exhibition Technical Studies &amp; Geospatial Siting Blueprint</strong></p>
+<p><strong>Author:</strong> George Chandeep Corea (Geospatial Data Lead, <em>GetBack2Basics</em> | Project Lead, <em>AURA Siting Crafter</em>)<br />
+<strong>Context:</strong> Review and Master Plan Enhancement for NSW Department of Planning, Housing and Infrastructure (DPHI), Lake Macquarie City Council, Net Zero Economy Authority (NZEA), and Glencore<br />
+<strong>Reference Case:</strong> Planning Proposal PPR-Macquarie Coal Complex Transformation Precinct (Post-Exhibition July/August 2026)<br />
+<strong>Date:</strong> September 2026<br />
+<strong>Interactive Geospatial Viewer:</strong> <a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/index.html">https://storage.googleapis.com/aura-siting-crafter-geolibre-app/index.html</a></p>
+<hr />
+<h2>1. Executive Summary &amp; Document Review Synthesis</h2>
+<p>The public exhibition of the <strong>Macquarie Coal Complex Transformation Precinct Master Plan</strong> and <strong>Explanation of Intended Effects (EIE)</strong> represents a landmark post-mining transition initiative in New South Wales. Encompassing over <strong>1,100 hectares</strong> of former coal mining land across four historic operations (West Wallsend Colliery, Macquarie Coal Preparation Plant [MCPP], Westside Mine, and Teralba Colliery Northgate/Southgate), the precinct is slated to unlock <strong>~500 hectares of E4 General Industrial land</strong> and generate <strong>1,130+ direct jobs</strong>.</p>
+<p>A rigorous, multi-disciplinary review of all <strong>15 statutory exhibition documents and technical assessments</strong> (prepared by Aurecon Australasia for DPHI and Council) confirms the immense strategic potential of the site, but also highlights critical site-level friction points:
+1. <strong>Gross vs. Net Developable Area Ambiguity:</strong> Gross ~500 ha zoning figures mask significant constructability deductions (unconsolidated Tailings Storage Facility [TSF], slope gradients &gt;5%, riparian setbacks, dam break zones, and mine subsidence overlays).
+2. <strong>Infrastructure Servicing Gaps:</strong> Power transmission (330kV / 132kV) is adjacent but lacks a dedicated multi-user terminal substation strategy; water and sewer networks require capital extensions; telecommunications relies entirely on developer-led piecemeal delivery.
+3. <strong>Underutilized Strategic Assets:</strong> The existing <strong>1.8 km heavy rail loop and siding</strong> and the <strong>grade-separated internal mine haul road</strong> are not fully optimized as primary catalysts for regional intermodal freight and community-bypassing arterial movement.
+4. <strong>Energy &amp; Water Circularity Deficits:</strong> Current plans do not mandate non-potable closed-loop industrial cooling or capitalize on the unique 120m hydraulic head between the upper ridgeline and the Westside open-cut void for pumped hydro energy storage (PHES).</p>
+<p>This <strong>Site-Level Enhancement Plan</strong> delivers an evidence-based, geospatial blueprint to resolve these constraints, accelerate development approvals, and elevate the precinct into Australia's premier green-industrial and sovereign digital infrastructure hub.</p>
+<hr />
+<h2>2. Technical Studies Review Matrix (All 15 Exhibition Documents)</h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Page Count</th>
+<th>Key Baseline Findings &amp; Constraints</th>
+<th>Site-Level Enhancement Opportunity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Master Plan</strong></td>
+<td>60</td>
+<td>Establishes 4 sub-precincts (MCPP/TSF, Westside, Teralba North, Teralba Southgate); envisions high-tech industrial, clean energy, and open space.</td>
+<td>Transition from broad zoning to <strong>10 shovel-ready, geotechnical-certified Net Developable Pads (NDPs)</strong> with explicit staging.</td>
+</tr>
+<tr>
+<td><strong>2. EIE (Rezoning)</strong></td>
+<td>25</td>
+<td>Rezones land to E4 General Industrial, C2 Conservation, and SP2 Infrastructure under Lake Macquarie LEP 2014 &amp; Regional Precincts SEPP.</td>
+<td>Embed site-specific DCP clauses for <strong>500m acoustic buffers, closed-loop cooling mandates, and expedited Subsidence Advisory protocols</strong>.</td>
+</tr>
+<tr>
+<td><strong>3. Utilities Engineering</strong></td>
+<td>74</td>
+<td>Adjacent Transgrid 330kV and Ausgrid 132kV lines; 375mm Hunter Water potable main along Cessnock Rd; developer-led NBN pit &amp; pipe.</td>
+<td>Master plan a <strong>central 200–500 MVA multi-user substation hub</strong> and a <strong>dual-pipe tertiary-treated recycled water network</strong>.</td>
+</tr>
+<tr>
+<td><strong>4. Geotechnical Report</strong></td>
+<td>106</td>
+<td>Shallow/deep workings in Great Northern, Fassifern, Young Wallsend seams; soft alluvium in north; unconsolidated TSF; slope instability.</td>
+<td>Establish a <strong>Pre-Approved Foundation Matrix (raft slabs, void grouting, pile criteria)</strong> pre-cleared with Subsidence Advisory NSW.</td>
+</tr>
+<tr>
+<td><strong>5. Contamination Assessment</strong></td>
+<td>66</td>
+<td>Hydrocarbon hotspots around former workshops/washbays; low-moderate acid mine drainage risk; ongoing TSF consolidation.</td>
+<td>Deploy <strong>insitu bioremediation for hydrocarbons, alkaline buffering blankets for reject, and staged TSF capping</strong>.</td>
+</tr>
+<tr>
+<td><strong>6. Dam Engineering Report</strong></td>
+<td>28</td>
+<td>TSF is a Declared Dam under Dams Safety NSW; Consequence Category requires dam break inundation buffers and ongoing surveillance.</td>
+<td>Implement a <strong>3-Phase TSF Decommissioning &amp; Wick-Drain Dewatering Program</strong> to transition land from exclusion to solar/BESS pads.</td>
+</tr>
+<tr>
+<td><strong>7. Flooding &amp; Water Cycle</strong></td>
+<td>92</td>
+<td>1% AEP flood affects northern Cockle/Diega Creek flats; 10m–40m riparian buffers; NorBE stormwater treatment targets.</td>
+<td>Integrate <strong>regional multi-functional bioretention basins, constructed treatment wetlands, and flood conveyance corridors</strong>.</td>
+</tr>
+<tr>
+<td><strong>8. Economics &amp; Market</strong></td>
+<td>115</td>
+<td>Target sectors: advanced manufacturing, clean energy, digital infrastructure, circular economy, freight logistics; 1,130 direct jobs.</td>
+<td>Target <strong>high-power-density hyperscale AI data centres and advanced clean manufacturing</strong> to triple job density per hectare.</td>
+</tr>
+<tr>
+<td><strong>9. Traffic &amp; Transport</strong></td>
+<td>87</td>
+<td>Access via Cessnock Rd, Wilton Rd, Wakefield Rd; freight trip generation; disused rail loop and private haul road.</td>
+<td>Formalize the <strong>internal Haul Road as a heavy-freight public spine</strong> and <strong>reactivate the 1.8km Rail Siding as an Intermodal Terminal</strong>.</td>
+</tr>
+<tr>
+<td><strong>10. Biodiversity Assessment</strong></td>
+<td>174</td>
+<td>Spotted Gum Ironbark Forest, Swamp Sclerophyll EEC; Koala habitat corridors across Sugarloaf Range; Biodiversity Offset Scheme.</td>
+<td>Establish a <strong>connected 250m-wide Sugarloaf-to-Awaba Biodiversity Bio-Link</strong> in the C2 zone with dedicated fauna overpasses.</td>
+</tr>
+<tr>
+<td><strong>11. Bush Fire Assessment</strong></td>
+<td>35</td>
+<td>High bushfire hazard (Category 1 vegetation); FFDI 100 / FDI 80; requires 20m–45m Asset Protection Zones (APZs).</td>
+<td>Embed <strong>perimeter ring-roads doubling as dual-purpose APZs and emergency egress routes</strong> under PBF 2019.</td>
+</tr>
+<tr>
+<td><strong>12. Noise &amp; Vibration</strong></td>
+<td>37</td>
+<td>Low night-time RBL (30–35 dBA); sensitive receivers in Barnsley, Teralba, Wakefield; night PNTL 35 dBA.</td>
+<td>Sculpt <strong>6m–8m landscaped acoustic earthen bunds</strong> along eastern/northeastern boundaries for 24/7 industrial operations.</td>
+</tr>
+<tr>
+<td><strong>13. Air Quality &amp; Odour</strong></td>
+<td>41</td>
+<td>PM10/PM2.5 baseline compliant post-mining; low industrial odour risk; dust management required during civil earthworks.</td>
+<td>Standardize <strong>real-time PM10/PM2.5 IoT boundary monitoring</strong> and progressive revegetation during civil works.</td>
+</tr>
+<tr>
+<td><strong>14. Evaluation Panel Report</strong></td>
+<td>2</td>
+<td>Endorses State Significant Rezoning pathway; highlights need for coordinated infrastructure delivery and clear staging.</td>
+<td>Establish a <strong>Precinct Infrastructure Delivery Authority / Special Infrastructure Contribution (SIC)</strong> mechanism.</td>
+</tr>
+<tr>
+<td><strong>15. Community FAQs</strong></td>
+<td>5</td>
+<td>Addresses public feedback regarding heavy traffic, community amenity, environmental preservation, and job creation.</td>
+<td>Deliver transparent, open-access <strong>Digital Twin &amp; WebGIS inspection tools</strong> to maintain high community trust.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>3. The 6-Pillar Site-Level Enhancement Blueprint</h2>
+<div class="mermaid">
+flowchart TD
+    subgraph P1["Pillar 1: Precision Net Developable Area (NDA)"]
+        A1["Gross Footprint: ~1,100 ha"] --> A2["Deductions: Slopes, Riparian, TSF, Easements"]
+        A2 --> A3["10 Geotechnical-Certified Net Developable Pads: 185 - 320 ha"]
+    end
+
+    subgraph P2["Pillar 2: Sovereign Utility and Circular Energy Hub"]
+        B1["Transgrid 330kV Corridor"] --> B2["Multi-User 330/132kV Terminal Substation Pad: 200-500 MVA"]
+        B2 --> B3["100MW/400MWh BESS + 49 MWh Pit Void Closed-Loop Pumped Hydro"]
+        B4["Hunter Water WWTW"] --> B5["Dual-Pipe Recycled Water: 100% Non-Potable Cooling"]
+    end
+
+    subgraph P3["Pillar 3: Freight Logistics and Rail Reactivation"]
+        C1["Glencore Private Haul Road"] --> C2["Gazetted Internal Heavy-Freight Spine: Bypass Barnsley/Teralba"]
+        C3["Disused 1.8km Rail Siding"] --> C4["Macquarie Intermodal Rail Terminal - MIRT"]
+    end
+
+    subgraph P4["Pillar 4: Geotechnical and Dam Safety Transition"]
+        D1["Dams Safety NSW Declared TSF"] --> D2["Wick-Drain Dewatering and Dynamic Compaction"]
+        D2 --> D3["Pre-Approved Subsidence Advisory Foundation Matrix"]
+    end
+
+    subgraph P5["Pillar 5: Environmental Stewardship and Acoustic Amenity"]
+        E1["Mount Sugarloaf Range Link"] --> E2["Sugarloaf-Awaba C2 Biodiversity Bio-Link: 250m Wide"]
+        E3["24/7 Industrial Operations"] --> E4["6-8m Overburden Acoustic Bunds + 500m Setbacks"]
+    end
+
+    subgraph P6["Pillar 6: Digital Twin and Spatial SQL Offloading"]
+        F1["Authoritative GDA2020 Layers"] --> F2["DuckDB-WASM Client-Side Siting and What-If Engine"]
+    end
+
+    P1 & P2 & P3 & P4 & P5 & P6 --> G["Australia's Premier Post-Mining Sovereign Industrial Hub"]
+</div>
+
+<hr />
+<h3>Pillar 1: Precision Net Developable Area (NDA) &amp; 3-Phase Staging Framework</h3>
+<h4>1.1 Pad-Level Subdivision Geometry</h4>
+<p>Rather than applying a blanket E4 General Industrial zoning over unbuildable terrain, the site is structured into <strong>10 distinct, geotechnical-certified Net Developable Pads (NDPs)</strong>:
+* <strong>Pad Group A (MCPP &amp; Workshop Plateaus — 48.5 ha):</strong> Fully remediated hardstand, flat topography (&lt;2% slope), direct access to 132kV sub-transmission, immediate buildability. Target: Advanced manufacturing and sovereign AI data centres.
+* <strong>Pad Group B (Westside Open-Cut &amp; Pit Floor — 72.0 ha):</strong> Stabilized engineered fill pads within the former open-cut void, benched against highwalls, grade-separated from haul road. Target: Heavy transport, clean-tech assembly, modular construction.
+* <strong>Pad Group C (Teralba Northgate &amp; Southgate — 34.2 ha):</strong> Strategic entry portals with direct arterial access to Cessnock Road and rail alignment. Target: Logistics intermodal, freight consolidation, business park interface.
+* <strong>Pad Group D (TSF Upper Plateau — 85.0 ha long-term):</strong> Capped and consolidated tailings storage plateau suitable for distributed solar PV, 100MW BESS, and low-bearing-pressure green industry.</p>
+<h4>1.2 3-Phase Staging Timeline</h4>
+<ul>
+<li><strong>Phase 1 (Immediate / Years 0–3 — 82.7 ha):</strong> Delivery of Pad Group A and Teralba Northgate. Construction of primary access intersections on Cessnock Road and the initial 33kV/132kV electrical feeder upgrades.</li>
+<li><strong>Phase 2 (Medium-Term / Years 3–7 — 125.4 ha):</strong> Delivery of Pad Group B and formal gazettal of the Haul Road arterial spine. Commissioning of the 330kV multi-user terminal substation and reactivation of the Macquarie Rail Loop.</li>
+<li><strong>Phase 3 (Long-Term / Years 7–12+ — 112.0 ha):</strong> Delivery of Pad Group D (TSF plateau) following Dams Safety NSW de-declaration, and integration of the 49 MWh pit-void pumped hydro energy storage scheme.</li>
+</ul>
+<hr />
+<h3>Pillar 2: Infrastructure &amp; Circular Utility Integration (Energy, Water, Waste)</h3>
+<div class="mermaid">
+flowchart LR
+    A["Transgrid 330kV Lines 21/22"] --> B["Dedicated Multi-User 330/132kV Substation Pad"]
+    B --> C["Hyperscale AI Data Centres: 150-300 MW"]
+    B --> D["100MW / 400MWh Grid-Scale BESS"]
+    B --> E["Advanced Manufacturing and Electrolysers"]
+    
+    F["Upper Ridgeline Storage Reservoir: +145m AHD"] <-->|Reversible Penstock: 120m Head| G["Westside Void Lower Reservoir: +25m AHD"]
+    G <-->|49 MWh PHES Turbines| B
+    
+    H["Hunter Water Edgeworth WWTW"] --> I["Tertiary Recycled Water Trunk"]
+    I --> J["100% Closed-Loop Data Centre Cooling"]
+    I --> K["Industrial Process Water and Firefighting Reserves"]
+</div>
+
+<h4>2.1 330kV / 132kV Multi-User Sovereign Power Substation Hub</h4>
+<ul>
+<li><strong>Current Gap:</strong> Proponents seeking &gt;20 MVA connections face severe delays negotiating individual Ausgrid/Transgrid connection agreements.</li>
+<li><strong>Enhancement:</strong> Master plan a dedicated <strong>4.5-hectare SP2 Infrastructure Substation Reserve</strong> directly adjacent to Transgrid Lines 21 and 22. Establish a shared multi-user 330/132kV terminal substation capable of scaling from <strong>200 MVA to 600 MVA</strong>, providing immediate plug-and-play high-voltage power for energy-intensive clean industries and hyperscale digital infrastructure.</li>
+</ul>
+<h4>2.2 Energy Circularity: Micro-Pumped Hydro (49 MWh) &amp; BESS Co-Location</h4>
+<ul>
+<li><strong>Topographic Asset:</strong> The natural <strong>120m hydraulic elevation head</strong> between the upper sandstone ridge (+145m AHD) and the existing Westside pit void base (+25m AHD) offers an exceptional closed-loop energy storage opportunity.</li>
+<li><strong>Engineering Specification:</strong> Construct a 500 ML upper turkey-nest reservoir linked via a buried 1.2m penstock to a 20 MW reversible Francis pump-turbine unit located in the void, delivering <strong>up to 49.0 MWh of daily synchronous inertia and clean peaking capacity</strong> to firm on-site industrial loads and support the NSW Central-West Orana / Hunter Renewable Energy Zone (REZ).</li>
+</ul>
+<h4>2.3 Water Stewardship: Dual-Pipe Recycled Water Network (Zero Potable Cooling)</h4>
+<ul>
+<li><strong>Policy Mandate:</strong> Strictly prohibit the use of potable drinking water for industrial thermal cooling.</li>
+<li><strong>Infrastructure Delivery:</strong> Construct a dedicated 4.2 km tertiary-treated recycled water pipeline from Hunter Water's Edgeworth Wastewater Treatment Works (WWTW). All data centre facilities must utilize <strong>100% closed-loop liquid-to-air cooling or recycled water evaporative chillers</strong>, preserving over <strong>1.2 GL per annum</strong> of potable drinking water for the Lower Hunter region.</li>
+</ul>
+<hr />
+<h3>Pillar 3: Multi-Modal Freight, Haul Road Arterial &amp; Rail Siding Reactivation</h3>
+<h4>3.1 Repurposing the Glencore Mine Haul Road into a Public Freight Spine</h4>
+<ul>
+<li><strong>Constraint Solved:</strong> Heavy vehicle access to the precinct via local residential streets in Barnsley (George Booth Drive / Taylor Avenue) or Teralba (Railway Street) creates unacceptable noise and safety impacts.</li>
+<li><strong>Enhancement:</strong> Gazetted conversion of the <strong>7.8 km private grade-separated mine haul road</strong> into a dedicated, heavy-vehicle arterial corridor (B-Double and PBS Level 2A rated). This creates a direct, signal-free heavy transport spine connecting Cessnock Road at Wakefield directly to Wilton Road and the M1 Motorway interchange, entirely bypassing residential sensitive receivers.</li>
+</ul>
+<h4>3.2 Macquarie Intermodal Rail Terminal (MIRT)</h4>
+<ul>
+<li><strong>Strategic Rail Asset:</strong> The precinct retains an intact <strong>1.8 km balloon rail loop and siding</strong> directly connected to the Main Northern Railway line.</li>
+<li><strong>Enhancement:</strong> Formalize an SP2 Rail Infrastructure reservation to develop the <strong>Macquarie Intermodal Rail Terminal (MIRT)</strong>. Capable of handling 600m–900m container and freight trains, MIRT will shift over <strong>350,000 tonnes per annum of heavy industrial freight from road to rail</strong>, connecting Lower Hunter advanced manufacturers directly to the Port of Newcastle, Sydney Metropolitan freight terminals, and the Inland Rail network.</li>
+</ul>
+<hr />
+<h3>Pillar 4: Geotechnical Ground Improvement &amp; Dam Safety NSW Transition</h3>
+<div class="mermaid">
+flowchart TD
+    A["TSF Tailings Slurry Mass: ~15.2 ha"] --> B["Phase 1: Deep Wick Drains + Surcharge Pre-Loading"]
+    B --> C["Phase 2: Accelerated Pore-Pressure Dissipation: 24-36 Months"]
+    C --> D["Phase 3: Engineered Compacted Capping Layer: 1.5m Clay + Geogrid"]
+    D --> E["Dams Safety NSW Formal De-Declaration & Risk Re-Classification"]
+    E --> F["Staged Net Zero Ground: 85 ha Solar PV + 100MW BESS Hardstand"]
+</div>
+
+<h4>4.1 Staged Tailings Storage Facility (TSF) Remediation &amp; De-Declaration</h4>
+<ul>
+<li><strong>Dams Safety NSW Compliance:</strong> The TSF is currently a Declared Dam with an associated Dam Break Inundation Zone affecting northern lowlands.</li>
+<li><strong>Engineering Solution:</strong> Implement a structured 3-stage geotechnical consolidation program:</li>
+<li><em>Pore Pressure Dissipation:</em> Installation of prefabricated vertical wick drains (PVDs) at 1.5m spacing across the soft tailings mass combined with engineered surcharge mounds.</li>
+<li><em>Engineered Capping:</em> Placement of a non-woven geotextile separation membrane, high-strength biaxial geogrid, and a minimum 1.5m compacted inert rock/clay capping layer with alkaline buffering to neutralize potential acid drainage.</li>
+<li><em>Statutory De-Declaration:</em> Progressive monitoring of piezometers and settlement plates to satisfy Dams Safety NSW safety criteria, enabling formal de-declaration and safe release of <strong>85+ hectares</strong> for solar generation and energy storage installations.</li>
+</ul>
+<h4>4.2 Standardized Subsidence Advisory NSW Foundation Matrix</h4>
+<ul>
+<li><strong>Mine Workings Management:</strong> To streamline Development Applications (DAs) over historic underground bord-and-pillar workings in the Great Northern and Fassifern seams, introduce a <strong>pre-approved geotechnical foundation code</strong>:</li>
+<li><em>Zone G1 (Intact Rock / Unmined):</em> Standard shallow spread footings (allowable bearing capacity &gt;300 kPa).</li>
+<li><em>Zone G2 (Deep Stable Workings &gt;100m depth):</em> Reinforced stiffened raft slabs with articulation joints designed for 3mm/m tensile strain and 1:500 tilt limits.</li>
+<li><em>Zone G3 (Shallow Workings &lt;50m depth):</em> Targeted pressure-grouting of voids beneath building footprints or driven steel end-bearing piles socketed into unmined basement strata.</li>
+</ul>
+<hr />
+<h3>Pillar 5: Environmental Stewardship, Koala Corridors &amp; Acoustic Landform Bunds</h3>
+<h4>5.1 Sugarloaf-to-Awaba Biodiversity Bio-Link (C2 Zone)</h4>
+<ul>
+<li><strong>Ecological Connectivity:</strong> Remnant vegetation across the precinct forms a vital regional linkage between Mount Sugarloaf, the Sugarloaf State Conservation Area, and the Awaba wetlands.</li>
+<li><strong>Enhancement:</strong> Expand and formalize a continuous <strong>250m–300m wide C2 Environmental Conservation corridor</strong> totaling <strong>~320 hectares</strong>. Incorporate:</li>
+<li>Mandatory planting of Preferred Koala Feed Trees (<em>Eucalyptus punctata</em>, <em>Eucalyptus robusta</em>, <em>Eucalyptus tereticornis</em>).</li>
+<li>Two dedicated vegetated <strong>fauna overpasses across the repurposed Haul Road spine</strong> to eliminate wildlife-vehicle strike risks.</li>
+<li>Integration with the NSW Biodiversity Offsets Scheme (BOS) to generate in-precinct biodiversity stewardship credits.</li>
+</ul>
+<h4>5.2 3D Overburden Acoustic Landform Bunds &amp; 500m Buffer Protection</h4>
+<ul>
+<li><strong>Amenity Assurance:</strong> Night-time operations of 24/7 hyperscale data centres (chillers/fans generating 70 dBA at source) and logistics freight must comply with the strict <strong>35 dBA night-time PNTL</strong> at Barnsley and Teralba receivers.</li>
+<li><strong>Enhancement:</strong> Repurpose <strong>450,000 m3 of inert overburden spoil</strong> to construct <strong>6m–8m high sculpted, landscaped acoustic bunds</strong> along the eastern and northeastern industrial pad boundaries. Combined with mandatory <strong>500m acoustic compliance setbacks</strong> for external mechanical plant, this provides permanent acoustic screening exceeding <em>NSW EPA Noise Policy for Industry (2017)</em> standards.</li>
+</ul>
+<hr />
+<h3>Pillar 6: Digital Twin &amp; Client-Side Interactive Siting Engine</h3>
+<p>To empower DPHI planning officers, Lake Macquarie City Council, the Net Zero Economy Authority, and industrial proponents with immediate, zero-friction spatial analysis:
+1. <strong>Authoritative Open Data:</strong> All 10 precinct constraint layers (riparian buffers, 1% AEP flood extents, bushfire APZs, slope exclusions, mine subsidence zones, and Net Developable Pads) are compiled into high-performance <strong>GDA2020 GeoParquet and GeoJSON layers</strong>.
+2. <strong>Client-Side Spatial SQL Offloading:</strong> Integrated into the live <a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/index.html">AURA Siting Crafter Interactive Viewer</a> running DuckDB-WASM and MapLibre GL, enabling instant, zero-cost slider re-weighting, what-if buffer simulations, and pad yield calculations directly in any standard web browser.</p>
+<hr />
+<h2>4. Statutory Implementation Roadmap for DPHI &amp; Council</h2>
+<p>We recommend the following specific statutory mechanisms be incorporated into the <strong>Finalisation Report, State Significant Rezoning Instrument, and Precinct Development Control Plan (DCP)</strong>:</p>
+<pre><code>+----------------------------------------------------------------------------------------------------+
+|                         STATUTORY IMPLEMENTATION &amp; APPROVAL ROADMAP                               |
++----------------------------------------------------------------------------------------------------+
+| 1. Rezoning SEPP Amendment:                                                                        |
+|    - Gazettal of E4 General Industrial, C2 Environmental Conservation, and SP2 Infrastructure zones.|
+|    - Site-specific clause mandating 100% closed-loop / recycled water for thermal industrial cooling.|
+|    - Special Infrastructure Corridor reservation for the 330kV Substation &amp; Rail Intermodal Loop.  |
+|                                                                                                    |
+| 2. Precinct Development Control Plan (DCP):                                                        |
+|    - Schedule 1: Net Developable Pad Map &amp; 3-Phase Staging Framework (Pads A1-A4, B1-B3, C1-C2).   |
+|    - Schedule 2: Standardized Pre-Approved Subsidence Advisory Geotechnical Foundation Matrix.     |
+|    - Schedule 3: 500m Acoustic Setback Buffer &amp; Mandatory 6m-8m Overburden Noise Bund Criteria.   |
+|    - Schedule 4: Bushfire Perimeter Ring-Road &amp; 20m-45m APZ Standard Cross-Sections.                |
+|                                                                                                    |
+| 3. Infrastructure Delivery Agreement (VPA / SIC):                                                  |
+|    - Coordinated delivery of the Cessnock Rd / Wakefield Rd signalized heavy-haulage intersection. |
+|    - Hunter Water Recycled Water Trunk Line extension from Edgeworth WWTW.                         |
+|    - Transgrid / Ausgrid Multi-User 330/132kV Substation Pad reservation and shared reticulation.  |
++----------------------------------------------------------------------------------------------------+
+</code></pre>
+<hr />
+<h2>5. Conclusion &amp; Actionable Next Steps</h2>
+<p>The Macquarie Coal Complex Transformation Precinct is uniquely endowed to become the flagship post-mining clean economy showcase for Australia. By moving beyond high-level zoning maps to adopt this <strong>Site-Level Enhancement Plan</strong>, DPHI, Lake Macquarie City Council, and Glencore will:
+* <strong>De-Risk Proponent Investment:</strong> Provide immediate geotechnical, flooding, and subsidence certainty across 10 certified Net Developable Pads.
+* <strong>Accelerate Approval Timelines:</strong> Reduce DA assessment cycles from 18+ months to under 60 days through pre-approved foundation and acoustic codes.
+* <strong>Protect Regional Values:</strong> Safeguard surrounding residential amenity, conserve regional Koala corridors, and preserve over 1.2 GL/year of drinking water.
+* <strong>Deliver Generational Employment:</strong> Unlock up to <strong>3,500+ direct and indirect high-tech jobs</strong> across advanced manufacturing, clean energy, and sovereign digital infrastructure.</p>
+<hr />
+<p><em>Persisted in <code>docs/macquarie_coal_precinct_site_enhancement_plan.md</code> | AURA Siting Crafter</em></p>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
+  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | 202609032037
+</footer>
+
+</body>
+</html>

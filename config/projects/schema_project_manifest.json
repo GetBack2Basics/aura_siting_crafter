@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AuraProjectManifest",
+  "description": "Standardized schema for project-specific siting submissions and report generation",
+  "type": "object",
+  "required": [
+    "project_id",
+    "project_name",
+    "lga",
+    "state",
+    "proponent",
+    "target_sectors",
+    "national_candidate_id",
+    "coordinates",
+    "spatial_layers",
+    "engineering_metrics",
+    "benchmarks"
+  ],
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]+_[A-Za-z0-9_]+$"
+    },
+    "project_name": {
+      "type": "string"
+    },
+    "lga": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string",
+      "enum": ["NSW", "QLD", "VIC", "WA", "SA", "TAS", "NT", "ACT"]
+    },
+    "proponent": {
+      "type": "string"
+    },
+    "planning_portal_url": {
+      "type": "string"
+    },
+    "national_candidate_id": {
+      "type": "string"
+    },
+    "coordinates": {
+      "type": "object",
+      "required": ["lat", "lon", "zoom"],
+      "properties": {
+        "lat": { "type": "number" },
+        "lon": { "type": "number" },
+        "zoom": { "type": "number" }
+      }
+    },
+    "target_sectors": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "spatial_layers": {
+      "type": "object",
+      "required": [
+        "precinct_boundary",
+        "developable_pads",
+        "staging_phases",
+        "utilities_power_water",
+        "transport_rail_road",
+        "geotechnical_subsidence",
+        "environmental_biolink",
+        "acoustic_buffers_bunds"
+      ],
+      "properties": {
+        "precinct_boundary": { "type": "string" },
+        "developable_pads": { "type": "string" },
+        "staging_phases": { "type": "string" },
+        "utilities_power_water": { "type": "string" },
+        "transport_rail_road": { "type": "string" },
+        "geotechnical_subsidence": { "type": "string" },
+        "environmental_biolink": { "type": "string" },
+        "acoustic_buffers_bunds": { "type": "string" }
+      }
+    },
+    "engineering_metrics": {
+      "type": "object",
+      "required": [
+        "gross_area_ha",
+        "net_developable_area_ha",
+        "immediate_phase1_ha",
+        "power_capacity_mva",
+        "water_saving_gl_pa",
+        "pumped_hydro_capacity_mwh",
+        "rail_freight_capacity_tpa",
+        "direct_jobs_target"
+      ],
+      "properties": {
+        "gross_area_ha": { "type": "number" },
+        "net_developable_area_ha": { "type": "number" },
+        "immediate_phase1_ha": { "type": "number" },
+        "power_capacity_mva": { "type": "number" },
+        "water_saving_gl_pa": { "type": "number" },
+        "pumped_hydro_capacity_mwh": { "type": "number" },
+        "rail_freight_capacity_tpa": { "type": "number" },
+        "direct_jobs_target": { "type": "number" }
+      }
+    },
+    "benchmarks": {
+      "type": "object",
+      "required": [
+        "transmission_dist_km",
+        "national_avg_transmission_km",
+        "water_recycled_pct",
+        "national_avg_water_recycled_pct",
+        "net_to_gross_efficiency_pct",
+        "national_avg_net_to_gross_pct",
+        "data_depth_tier",
+        "indexed_layers_count"
+      ],
+      "properties": {
+        "transmission_dist_km": { "type": "number" },
+        "national_avg_transmission_km": { "type": "number" },
+        "water_recycled_pct": { "type": "number" },
+        "national_avg_water_recycled_pct": { "type": "number" },
+        "net_to_gross_efficiency_pct": { "type": "number" },
+        "national_avg_net_to_gross_pct": { "type": "number" },
+        "data_depth_tier": { "type": "string" },
+        "indexed_layers_count": { "type": "integer" }
+      }
+    }
+  }
+}

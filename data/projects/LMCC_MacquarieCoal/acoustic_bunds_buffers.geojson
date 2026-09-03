@@ -1,0 +1,68 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "6m-8m Sculpted Overburden Acoustic Noise Bund",
+        "height_m": 8,
+        "volume_m3": 450000
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            151.596,
+            -32.922
+          ],
+          [
+            151.597,
+            -32.935
+          ],
+          [
+            151.602,
+            -32.945
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "500m Acoustic Compliance Setback Buffer (35 dBA Night PNTL)",
+        "type": "Acoustic Buffer"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.592,
+              -32.918
+            ],
+            [
+              151.612,
+              -32.918
+            ],
+            [
+              151.618,
+              -32.948
+            ],
+            [
+              151.605,
+              -32.958
+            ],
+            [
+              151.592,
+              -32.948
+            ],
+            [
+              151.592,
+              -32.918
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

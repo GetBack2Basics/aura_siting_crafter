@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoLibre Contribution & Fork Proposals | OpenGeos Collaboration | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">🌐 Live Site WebGIS</a>
+    <a href="../projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">📑 Statutory Site Report</a>
+    <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">🗺️ Site Enhancement Plan</a>
+    <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">🏗️ Architecture Plan</a>
+    <a href="geolibre_contribution_proposals.html" class="nav-link">🤝 GeoLibre Proposals</a>
+    <a href="linkedin_aura_siting_evolution.html" class="nav-link">📝 Evolution Odyssey</a>
+    <a href="../national_suitability_report.html" target="_blank" class="nav-link">🇦🇺 National Baseline</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>GeoLibre Contribution &amp; Fork Proposals</h1>
+<p><strong>Author &amp; Contributor:</strong> GetBack2Basics / AURA Siting Crafter<br />
+<strong>Target Repository:</strong> <a href="https://github.com/opengeos/GeoLibre"><code>opengeos/GeoLibre</code></a><br />
+<strong>Date:</strong> September 2026<br />
+<strong>License:</strong> MIT / Open Source  </p>
+<hr />
+<h2>Executive Summary</h2>
+<p><a href="https://github.com/opengeos/GeoLibre">GeoLibre</a> has established a new benchmark for modern, cloud-native, open-source GIS by combining MapLibre GL, DuckDB-WASM, React, TypeScript, and Tauri. </p>
+<p>Through the development of <strong>AURA Siting Crafter</strong> (Australian Urban &amp; Regional AI Siting Crafter), we have built, field-tested, and validated several spatial architectures, client-side analytical engines, and cloud ETL bridges. </p>
+<p>We would love to contribute these modules back to the <strong>OpenGeos / GeoLibre</strong> ecosystem as plugins, upstream core features, or official ecosystem templates.</p>
+<div class="mermaid">
+flowchart TD
+    subgraph GeoLibre Core Ecosystem
+        GL[GeoLibre Web & Desktop GIS]
+        DD[DuckDB-WASM Spatial SQL]
+        ML[MapLibre GL Rendering Engine]
+    end
+
+    subgraph Proposed Contribution Tracks
+        T1["Track 1: geolibre-siting<br/>(Client-Side Spatial MCDA Plugin)"]
+        T2["Track 2: geolibre-sedona / cloud<br/>(Wherobots & Sedona Remote ETL Bridge)"]
+        T3["Track 3: geolibre-spatial-ai<br/>(FastAPI / LLM Spatial Agent Proxy)"]
+        T4["Track 4: geolibre-catalogs<br/>(National & Regional Open Data Presets)"]
+        T5["Track 5: geolibre-export-report<br/>(Standalone Single-File HTML Exporter)"]
+    end
+
+    T1 --> DD
+    T1 --> ML
+    T2 --> GL
+    T3 --> GL
+    T4 --> GL
+    T5 --> GL
+</div>
+
+<hr />
+<h2>1. Contribution Track 1: <code>geolibre-siting</code> (Zero-Cost Spatial MCDA Plugin)</h2>
+<h3>The Concept</h3>
+<p>A dedicated <strong>Spatial Multi-Criteria Decision Analysis (MCDA)</strong> plugin for GeoLibre that enables interactive suitability modeling for renewable energy, data centers, transmission corridors, and industrial precincts.</p>
+<h3>Key Capabilities</h3>
+<ol>
+<li><strong>Decoupled Heavy Geometry vs. Lightweight Scoring</strong>:</li>
+<li>Heavy topological calculations (multi-distance buffers, spatial intersections, <code>ST_Difference</code> masks) are computed once.</li>
+<li>Parameter tuning (weights $w_{\text{power}}, w_{\text{water}}, w_{\text{transport}}, w_{\text{hazard}}$ and curve parameters) executes <strong>100% in client-side DuckDB-WASM</strong> in sub-10ms queries.</li>
+<li><strong>Flexible Scoring Curve Engine</strong>:</li>
+<li><strong>Sigmoidal Logistic Curves</strong>: $S(d) = \frac{1}{1 + e^{-k(d - d_0)}}$ for gradual distance penalties.</li>
+<li><strong>Inverted Linear Ramps</strong>: Continuous decay over custom distance envelopes.</li>
+<li><strong>Step &amp; Hard Exclusion Buffers</strong>: Strict boolean zoning masks.</li>
+<li><strong>Interactive UI Components</strong>:</li>
+<li>Dynamic weight sliders with automatic normalization ($\sum w_i = 1.0$).</li>
+<li>Interactive radar/spider charts comparing selected parcels across criteria.</li>
+<li>Tiered classification badges (Tier 1 Optimal, Tier 2 Viable, Tier 3 Constrained).</li>
+</ol>
+<hr />
+<h2>2. Contribution Track 2: <code>geolibre-sedona</code> (Apache Sedona / Wherobots Cloud Bridge)</h2>
+<h3>The Concept</h3>
+<p>While GeoLibre runs smoothly in the browser for datasets up to hundreds of megabytes, national-scale workflows (e.g., buffering 15+ million cadastral parcels, polygon-in-polygon overlays across continent-wide layers) require distributed spatial compute.</p>
+<h3>Key Capabilities</h3>
+<ol>
+<li><strong>Asynchronous Remote Spatial Job Submitter</strong>:</li>
+<li>A clean UI and API client within GeoLibre to dispatch heavy Spatial SQL scripts to <strong>Apache Sedona</strong>, <strong>Wherobots Cloud</strong>, or <strong>Cloud Dataproc</strong>.</li>
+<li><strong>Stream-to-Client GeoParquet / FlatGeobuf</strong>:</li>
+<li>Cloud ETL outputs are converted to optimized GeoParquet or PMTiles and streamed straight into GeoLibre's layer manager.</li>
+<li><strong>Cryptographic Fingerprinting &amp; Memoization</strong>:</li>
+<li>Uses ETag and GeoParquet file hashes to skip redundant heavy compute when underlying geometries have not changed.</li>
+</ol>
+<hr />
+<h2>3. Contribution Track 3: <code>geolibre-spatial-ai</code> (FastAPI AI Spatial Agent Proxy)</h2>
+<h3>The Concept</h3>
+<p>A production-ready FastAPI backend and GeoLibre UI extension that connects GeoLibre to Large Language Models (LLMs) with geospatial context awareness.</p>
+<h3>Key Capabilities</h3>
+<ol>
+<li><strong>Natural Language to Spatial SQL</strong>:</li>
+<li>Translates user queries ("Find all industrial zoned parcels over 20 hectares within 5km of a 330kV substation") into valid DuckDB-WASM or Sedona Spatial SQL.</li>
+<li><strong>Viewport-Aware Spatial Context</strong>:</li>
+<li>Streams bounding-box contextual metadata to the AI agent so answers are grounded in what the user is currently viewing.</li>
+<li><strong>Automated Layer Styling</strong>:</li>
+<li>Generates MapLibre GL color expression styles on the fly based on analytical query outputs.</li>
+</ol>
+<hr />
+<h2>4. Contribution Track 4: Open Spatial Catalog Presets (Australia &amp; Regional)</h2>
+<h3>The Concept</h3>
+<p>Pre-configured catalog manifests allowing GeoLibre users to connect to national and state-level open geospatial data endpoints.</p>
+<h3>Key Capabilities</h3>
+<ol>
+<li><strong>Direct Live REST &amp; WFS Integration</strong>:</li>
+<li>Pre-configured catalog definitions for Geoscience Australia (National Electrical Grid, Renewable Energy Zones, Digital Earth Australia), Geoscape Cadastre (DCDB), SEED NSW environmental constraints, and ELVIS LiDAR elevation data.</li>
+<li><strong>Industry Siting Presets</strong>:</li>
+<li>Pre-built schema templates for Data Centers, Clean Hydrogen Hubs, and BESS (Battery Energy Storage Systems).</li>
+</ol>
+<hr />
+<h2>5. Contribution Track 5: Standalone Single-File Interactive HTML Exporter</h2>
+<h3>The Concept</h3>
+<p>An export action in GeoLibre that packages the active map view, DuckDB-WASM engine, and MCDA scoring rules into a single, standalone <code>.html</code> file.</p>
+<h3>Key Capabilities</h3>
+<ul>
+<li><strong>Zero-Server Portability</strong>: Stakeholders, regulators, and non-GIS executives can open the file in standard browsers with full offline interactivity (sliders, filters, tables, and GeoJSON/CSV exports).</li>
+<li><strong>Audit-Proof Decision Records</strong>: Embeds the exact scoring weights, source timestamps, and methodology in the export.</li>
+</ul>
+<hr />
+<h2>6. Upstream Core PRs to <code>opengeos/GeoLibre</code></h2>
+<p>For direct inclusion in the main GeoLibre codebase:
+1. <strong>DuckDB-WASM Spatial SQL Recipe Macros</strong>: Standardized SQL macros for parcel ranking, multi-ring proximity evaluation, and composite score normalization.
+2. <strong>Dynamic MapLibre Continuous Color Ramps</strong>: MapLibre GL JS expression utilities for dynamic multi-stop gradient rendering driven directly by DuckDB query attributes.
+3. <strong>Zero-Mock &amp; Live Health Check Telemetry</strong>: Diagnostic UI components verifying live WFS/ArcGIS REST endpoint health and graceful degradation reporting.</p>
+<hr />
+<h2>Community Feedback &amp; Prioritization Request</h2>
+<p>We would love the GeoLibre core team's input:</p>
+<ol>
+<li><strong>Plugin vs. Monorepo</strong>: Would you prefer <code>geolibre-siting</code> as a standalone plugin repository (<code>opengeos/geolibre-siting</code> / <code>geolibre-plugin-siting</code>) or merged directly into the core GeoLibre plugin directory?</li>
+<li><strong>Backend Preference</strong>: Is there interest in the Apache Sedona / Wherobots remote compute connector for GeoLibre's desktop (Tauri) or web runtime?</li>
+<li><strong>Feature Priority</strong>: Which of the above tracks would deliver the most immediate value to the GeoLibre user community?</li>
+</ol>
+<hr />
+<p><em>Repository Reference:</em> <a href="https://github.com/GetBack2Basics/aura_siting_crafter">AURA Siting Crafter on GitHub</a><br />
+<em>Upstream Project:</em> <a href="https://github.com/opengeos/GeoLibre">GeoLibre on GitHub</a></p>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
+  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | 202609032037
+</footer>
+
+</body>
+</html>

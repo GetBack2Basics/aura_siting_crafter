@@ -1,0 +1,71 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "phase_id": "Phase 1",
+        "name": "Phase 1: Immediate Hardstand & Gateway Logistics",
+        "timeline_years": "0-3",
+        "area_ha": 82.7,
+        "pads": ["Pad A1", "Pad A2", "Pad A3", "Pad A4", "Pad C1", "Pad C2"],
+        "target_sectors": "AI Data Infrastructure, Clean Tech Assembly, Rail Logistics",
+        "grid_connection": "Immediate 33kV/132kV feeder connection"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.572, -32.923],
+          [151.608, -32.923],
+          [151.608, -32.950],
+          [151.572, -32.950],
+          [151.572, -32.923]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "phase_id": "Phase 2",
+        "name": "Phase 2: Westside Void Repurposing & Arterial Spine",
+        "timeline_years": "3-7",
+        "area_ha": 125.4,
+        "pads": ["Pad B1", "Pad B2", "Pad B3"],
+        "target_sectors": "Heavy Transport, Modular Construction, Circular Economy",
+        "grid_connection": "330kV Multi-User Terminal Substation Commissioning"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.565, -32.930],
+          [151.575, -32.930],
+          [151.575, -32.953],
+          [151.565, -32.953],
+          [151.565, -32.930]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "phase_id": "Phase 3",
+        "name": "Phase 3: Tailings Storage Facility (TSF) Solar Plateau & PHES",
+        "timeline_years": "7-12+",
+        "area_ha": 112.0,
+        "pads": ["Pad D1"],
+        "target_sectors": "Solar PV Arrays, 100MW BESS, 49 MWh Micro-PHES",
+        "grid_connection": "Dams Safety NSW De-Declaration & Dynamic Capping Signoff"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [151.578, -32.942],
+          [151.595, -32.942],
+          [151.595, -32.955],
+          [151.578, -32.955],
+          [151.578, -32.942]
+        ]]
+      }
+    }
+  ]
+}

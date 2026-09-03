@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NSW Government Geospatial Value & Strategic Benefits Guide | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">🌐 Live Site WebGIS</a>
+    <a href="../projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">📑 Statutory Site Report</a>
+    <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">🗺️ Site Enhancement Plan</a>
+    <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">🏗️ Architecture Plan</a>
+    <a href="geolibre_contribution_proposals.html" class="nav-link">🤝 GeoLibre Proposals</a>
+    <a href="linkedin_aura_siting_evolution.html" class="nav-link">📝 Evolution Odyssey</a>
+    <a href="../national_suitability_report.html" target="_blank" class="nav-link">🇦🇺 National Baseline</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>Strategic Value &amp; Application Guide: Transferring Cloud Spatial Lakehouse Lessons to NSW Government &amp; Waratah HPC</h1>
+<p><strong>Target Audience:</strong> Senior Geospatial Leadership, Spatial Data Architects, HPC Systems Engineers &amp; Policy Executives (NSW DCCEEW, NSW Spatial Services, Department of Planning, Housing and Infrastructure – DPHI, EnergyCo, Environment &amp; Heritage, and Land Administration)<br />
+<strong>Procurement Reference Context:</strong> <a href="https://buy.nsw.gov.au/notices/C85F11C0-9984-4C2A-AE897364B13F4B7A">NSW Buy Notice C85F11C0-9984-4C2A-AE897364B13F4B7A</a> (NSW DCCEEW Waratah HPC Facility)<br />
+<strong>Reference Portals:</strong> <a href="https://www.spatial.nsw.gov.au/">NSW Spatial Services</a> | <a href="https://www.planningportal.nsw.gov.au/">NSW Planning Portal</a> | <a href="https://www.seed.nsw.gov.au/">NSW SEED Portal</a><br />
+<strong>Document Purpose:</strong> Strategic and technical transfer guide detailing how the architectural patterns, cost optimizations, and distributed spatial ETL lessons developed in <strong>AURA Siting Crafter</strong> (deployed on Wherobots Cloud, AWS, and Google Cloud) can be directly applied to accelerate on-premise government supercomputing—specifically the <strong>NSW DCCEEW Waratah High Performance Computing (HPC) Facility</strong> and enterprise state GIS platforms.</p>
+<hr />
+<blockquote>
+<p>[!IMPORTANT]</p>
+<h3>⚡ Executive Briefing: Cloud-to-HPC Architectural Transfer</h3>
+<ul>
+<li><strong>Cloud-Native Provenance:</strong> AURA Siting Crafter executes natively on <strong>Wherobots Cloud, AWS (S3 / EMR / Sedona), and Google Cloud (BigQuery / GCS)</strong>, processing 15.91M+ national spatial geometries with statutory multi-hazard scoring.</li>
+<li><strong>The Core Objective:</strong> Translating cloud spatial engineering breakthroughs—distributed Apache Sedona memory models, decoupled geometry/scoring engines, and GeoParquet lakehouse structures—into concrete design patterns for NSW Government compute environments, notably <strong>Waratah HPC</strong> (<a href="https://buy.nsw.gov.au/notices/C85F11C0-9984-4C2A-AE897364B13F4B7A">buy.nsw Notice C85F11C0-9984-4C2A-AE897364B13F4B7A</a>).</li>
+<li><strong>Lustre Parallel Storage Unlocking (DDN ExaScaler 7990X):</strong> How replacing single-threaded desktop GIS formats with partitioned GeoParquet unlocks the full multi-gigabyte/sec parallel throughput of Waratah HPC's Lustre storage array during 3.5M+ parcel cadastral joins.</li>
+<li><strong>Spectra Logic T950 Cold-Tier Integration:</strong> How spatial data fingerprinting and incremental memoization prevent re-processing petabytes of static historical baselines (SLATS vegetation, 30m DEMs, multi-decade climate grids), preserving them on archival tape while streaming hot candidate parcels to compute nodes.</li>
+<li><strong>Extreme Cost &amp; Compute Optimization:</strong> How decoupling heavy geometric buffering (<code>ST_Difference</code>, <code>ST_Buffer</code>) from lightweight mathematical scoring reduced cloud pipeline execution to <strong>$0.69 USD</strong> per full national run—a pattern that prevents HPC cluster queue exhaustion during multi-scenario policy sweeps.</li>
+<li><strong>Zero-Cost Client Offloading:</strong> How packaging spatial outputs for client-side <strong>DuckDB-WASM and WebGIS</strong> shields government HPC infrastructure from public interactive queries, delivering instant scenario modeling at zero compute cost.</li>
+</ul>
+</blockquote>
+<hr />
+<h2>Executive Summary</h2>
+<p>State-level geospatial data in New South Wales is growing exponentially in volume, spatial resolution, and statutory complexity. From the 3.5M+ parcels of the NSW Digital Cadastral Data Base (DCDB) and high-resolution LiDAR elevation models, to multi-decade climate projections (NARCLiM) and environmental sensor networks under <strong>NSW DCCEEW</strong>, traditional single-node desktop GIS tools (<code>.mxd</code>, <code>.qgz</code>, Shapefiles) face severe scalability bottlenecks.</p>
+<p>The <strong>AURA Siting Crafter</strong> project was architected on commercial cloud infrastructure (<strong>Wherobots Cloud, AWS, and Google Cloud</strong>) using <strong>Apache Sedona (PySpark)</strong>, <strong>Apache Iceberg</strong>, and <strong>GeoParquet</strong> to solve large-scale spatial siting, multi-hazard constraint analysis, and circular economy modeling.</p>
+<p>This document synthesizes the operational, mathematical, and architectural lessons learned from AURA's cloud implementation into a roadmap for NSW Government agencies. It demonstrates how these patterns can modernize state workflows and maximize return-on-investment for specialized state computing assets such as the <strong>NSW DCCEEW Waratah HPC Facility</strong>.</p>
+<hr />
+<h2>The Reference Environment: NSW DCCEEW Waratah HPC</h2>
+<p>The <strong>Waratah High Performance Computing (HPC) facility</strong> is a government-managed supercomputing cluster operated by the <strong>NSW Department of Climate Change, Energy, the Environment and Water (DCCEEW)</strong> (<a href="https://buy.nsw.gov.au/notices/C85F11C0-9984-4C2A-AE897364B13F4B7A">buy.nsw Notice C85F11C0-9984-4C2A-AE897364B13F4B7A</a>, supported by Xenon Systems).</p>
+<pre><code>+----------------------------------------------------------------------------------------------------+
+|                         NSW DCCEEW WARATAH HPC FACILITY ARCHITECTURE                                |
+|                        (Procurement: buy.nsw Notice C85F11C0-9984-4C2A-AE897364B13F4B7A)           |
++----------------------------------------------------------------------------------------------------+
+|                                                                                                    |
+|  [ PRIMARY STORAGE ]                                           [ ARCHIVAL &amp; BACKUP ]               |
+|  DDN ExaScaler 7990X Lustre Storage Array                      Spectra Logic T950 Tape Library     |
+|  • High-throughput parallel filesystem                         • Petabyte-scale preservation       |
+|  • Optimized for massive concurrent streaming                  • Multi-decade environmental data   |
+|                                                                                                    |
+|  [ COMPUTATIONAL MANDATE ]                                     [ VENDOR &amp; SYSTEM SUPPORT ]         |
+|  Dedicated to NSW DCCEEW Policy &amp; Science                      Maintained by Xenon Systems         |
+|  • Climate Modeling (NARCLiM) &amp; Extreme Projections            • Node reconfiguration &amp; tuning     |
+|  • Environmental Monitoring, SLATS &amp; Biodiversity              • Continuous system maintenance     |
+|  • Renewable Energy Zone (REZ) &amp; Grid Simulations              • High-throughput interconnects     |
+|  • River Basin, Flood &amp; Water Resource Management                                                  |
+|                                                                                                    |
++----------------------------------------------------------------------------------------------------+
+</code></pre>
+<p>Unlike academic compute facilities, Waratah HPC is dedicated to direct public policy, environmental stewardship, and statutory spatial planning. AURA's cloud-proven engineering patterns offer a blueprint for running high-throughput spatial analytics across these portfolios.</p>
+<hr />
+<h2>5 Transferable Spatial Engineering Lessons: Cloud (AURA) to On-Premise HPC</h2>
+<pre><code>+----------------------------------------------------------------------------------------------------+
+|                      AURA CLOUD PIPELINE (Wherobots / AWS / GCP)                                   |
+|   15.91M Geometries | Decoupled Geometry/Scoring | GeoParquet / Iceberg | $0.69 USD Full Run       |
++----------------------------------------------------------------------------------------------------+
+                                               |
+                     ARCHITECTURAL LESSONS &amp; PATTERNS TRANSFERRED
+                                               v
++----------------------------------------------------------------------------------------------------+
+|                        NSW DCCEEW WARATAH HPC FACILITY ADOPTION                                    |
+|  1. GeoParquet Parallel I/O on DDN Lustre Storage Array (ExaScaler 7990X)                          |
+|  2. Memoized Partition Pruning &amp; Cold Data Preservation (Spectra Logic T950 Tape)                  |
+|  3. Decoupled Heavy Geometric Transforms from Rapid Multi-Scenario Scoring                         |
+|  4. Statutory 6-Factor Multi-Hazard Scoring Engine (ARR 2019, AS 1170, AS 3959)                   |
+|  5. Zero-Cost Client-Side Offloading via DuckDB-WASM for Public Planners                           |
++----------------------------------------------------------------------------------------------------+
+</code></pre>
+<hr />
+<h3>Lesson 1: Unlocking Lustre Parallel Storage via Partitioned GeoParquet</h3>
+<ul>
+<li><strong>Cloud Experience (AURA):</strong> Legacy shapefiles and single-file geodatabases created severe I/O bottlenecks in cloud object storage (S3/GCS). Migrating to <strong>GeoParquet</strong> with spatial R-Tree / Hilbert curve partitioning allowed worker nodes to read and process spatial extents independently in parallel without I/O locking.</li>
+<li><strong>HPC Translation (Waratah Lustre Array):</strong></li>
+<li>Waratah HPC's <strong>DDN ExaScaler 7990X Lustre filesystem</strong> is designed for massive concurrent read/write throughput across distributed stripes.</li>
+<li>Storing statewide layers (DCDB parcels, 30m DEM, biodiversity zones) in partitioned GeoParquet allows Spark/Sedona nodes to saturate Lustre striping channels simultaneously.</li>
+<li><strong>Result:</strong> Eliminates the I/O choke point when joining 3.5M+ NSW parcels with multi-hazard layers, completing statewide joins in minutes.</li>
+</ul>
+<hr />
+<h3>Lesson 2: Decoupled Heavy Geometry vs. Lightweight Mathematical Scoring</h3>
+<ul>
+<li><strong>Cloud Experience (AURA):</strong> In early prototypes, adjusting a policy weight (e.g. power grid priority vs. biodiversity buffer weight) re-triggered heavy spatial joins (<code>ST_Buffer</code>, <code>ST_Difference</code>, <code>ST_Intersection</code>), driving up cloud compute costs. By decoupling geometric pre-computations (distance matrices, net developable polygons) from mathematical scoring curves (sigmoidal penalties, weighted MCDA sums), full national runs dropped to <strong>$0.69 USD</strong>.</li>
+<li><strong>HPC Translation (Waratah Cluster Utilization):</strong></li>
+<li>Policy makers often need to run hundreds of "What-If" scenarios with shifting weightings (e.g., varying flood tolerance, sensitive receptor buffers, or grid distance priorities).</li>
+<li>Pre-computing the geometric distance and topology layer once and caching it on Lustre allows subsequent policy scoring runs to execute as pure mathematical array operations in milliseconds.</li>
+<li><strong>Result:</strong> Prevents long cluster queue times and avoids wasting valuable HPC node hours on repetitive geometric recalculations.</li>
+</ul>
+<hr />
+<h3>Lesson 3: Cold-Tier Data Preservation &amp; Memoized Incremental Pipelines</h3>
+<ul>
+<li><strong>Cloud Experience (AURA):</strong> Large baselines (national topographic grids, geological surveys, baseline census data) rarely change between runs. Cryptographic fingerprinting (ETags, snapshot hashes) ensured untouched layers were skipped, computing only active delta updates.</li>
+<li><strong>HPC Translation (Spectra Logic T950 Tape Integration):</strong></li>
+<li>Waratah HPC uses a <strong>Spectra Logic T950 Tape Library</strong> for long-term preservation of massive multi-decade climate (NARCLiM) and environmental time-series datasets.</li>
+<li>Using partition fingerprinting, the Sedona spatial pipeline can pull active candidate layers to high-speed NVMe/Lustre storage while keeping cold, multi-petabyte reference datasets safely referenced in tape archives.</li>
+<li><strong>Result:</strong> Minimizes active primary storage consumption while guaranteeing 100% reproducible baseline provenance.</li>
+</ul>
+<hr />
+<h3>Lesson 4: Standardized Multi-Hazard &amp; Circular Physical Engineering</h3>
+<ul>
+<li><strong>Cloud Experience (AURA):</strong> Integrated statutory Australian standards into programmatic Python/SQL formulas rather than subjective manual GIS overlays:</li>
+<li><strong>Flood:</strong> ARR 2019 / 1% AEP inundation exclusion.</li>
+<li><strong>Bushfire:</strong> AS 3959:2018 BAL (Bushfire Attack Level) &amp; PBF 2019 setbacks.</li>
+<li><strong>Landslide:</strong> AGS 2007 slope susceptibility modeling ($&gt;8.0\%$ exclusion).</li>
+<li><strong>Seismic:</strong> AS 1170.4:2007 (R2018) PGA structural hazard baselines.</li>
+<li><strong>Wind:</strong> AS/NZS 1170.2:2021 regional wind design speeds ($45\text{–}69\text{m/s}$).</li>
+<li><strong>Thermodynamic Decay &amp; Pumped Hydro:</strong> Spatial heat loss modeling ($T_{\text{delivery}} \le 38.5^\circ\text{C}$ within $\le 506.8\text{m}$) and void storage capacity ($E = \rho g H V \eta$).</li>
+<li><strong>HPC Translation (DCCEEW Scientific Portfolios):</strong></li>
+<li>These validated, peer-reviewed formula implementations can be deployed as standard batch modules across DCCEEW portfolios (EnergyCo Renewable Energy Zones, DPHI Growth Areas, WaterNSW catchments).</li>
+<li><strong>Result:</strong> Ensures legal and statutory defensibility across state planning assessments.</li>
+</ul>
+<hr />
+<h3>Lesson 5: Zero-Cost Client-Side Scenario Modeling for Planners</h3>
+<ul>
+<li><strong>Cloud Experience (AURA):</strong> Rather than standing up expensive, always-on spatial servers (GeoServer, ArcGIS Enterprise servers) to handle user queries, AURA exports lightweight spatial tables into client-side <strong>DuckDB-WASM and JavaScript</strong>. Users can dynamically drag weight sliders, apply hazard thresholds, and filter sites directly in the browser with sub-second response times.</li>
+<li><strong>HPC Translation (Protecting Government Infrastructure):</strong></li>
+<li>Government supercomputers (like Waratah HPC) should never be directly exposed to public interactive web traffic or burdened with serving live interactive maps.</li>
+<li>HPC clusters can run heavy overnight distributed batch jobs, export optimized GeoParquet artifacts, and serve interactive decision dashboards via static client-side WASM portals.</li>
+<li><strong>Result:</strong> Delivers sub-second interactive tools to regional council planners and executive stakeholders with zero web-tier server costs and complete cybersecurity isolation for the internal HPC cluster.</li>
+</ul>
+<hr />
+<h2>Domain Capabilities: Applying AURA Lessons Across NSW Portfolios</h2>
+<pre><code>+-----------------------+           +-----------------------+           +-----------------------+
+|  PLANNING &amp; HOUSING   |           |      ENVIRONMENT      |           |     LAND ADMIN &amp;      |
+|     (DPHI &amp; REZs)     |           |    &amp; MULTI-HAZARDS    |           |   SPATIAL SERVICES    |
+| • Net Developable Pad |           | • ARR 2019 Flood 1%   |           | • 3.5M+ DCDB Parcels  |
+| • Statutory Setbacks  |           | • AS 3959 Bushfire    |           | • GDA2020 EPSG:7856   |
+| • Proponent Claim QA  |           | • AGS 2007 Landslide  |           | • Spatial Digital Twin|
+| • 6-Factor MCDA Engine|           | • AS 1170.4 Seismic   |           | • Zero-Copy GeoParquet|
++-----------------------+           +-----------------------+           +-----------------------+
+</code></pre>
+<h3>1. Planning &amp; Precinct Transformation (DPHI &amp; EnergyCo)</h3>
+<ul>
+<li><strong>Automated Net Developable Area (NDA):</strong> Automates topological subtraction of riparian (30m), pipeline (20m), slope (&gt;5%), and infrastructure easements across massive masterplans (e.g. Hunter Transformation, Western Sydney Aerotropolis). For the Macquarie Coal Complex, this verified that a 65.0 ha gross boundary yielded 44.5 ha net developable pad space.</li>
+<li><strong>Proponent Claim QA:</strong> Audits developer planning submissions against ground-truth state spatial layers using automated topological path calculations.</li>
+</ul>
+<h3>2. Environment, Climate &amp; Energy (NSW DCCEEW)</h3>
+<ul>
+<li><strong>Statewide Multi-Hazard Assessment:</strong> Executes ARR 2019, AS 1170, and AS 3959 evaluations across every parcel in NSW.</li>
+<li><strong>Clean Energy &amp; REZ Siting:</strong> Evaluates proximity to 132kV/275kV/330kV transmission lines, substations, and recycled water treatment plants (WWTW).</li>
+<li><strong>Circular Industrial Symbiosis:</strong> Models thermodynamic effluent cooling and mine void micro-pumped hydro potential.</li>
+</ul>
+<h3>3. Cadastre &amp; Land Administration (Spatial Services NSW)</h3>
+<ul>
+<li><strong>DCDB Spatial Enrichment:</strong> Enriches 3.5M+ land parcels with zoning, hazard ratings, and proximity metrics without memory bottlenecks.</li>
+<li><strong>GDA2020 Compliance:</strong> Enforces automated reprojection and geometry validation across EPSG:7856 (MGA 56 metric engineering) and EPSG:7844 / EPSG:4326.</li>
+</ul>
+<hr />
+<h2>Feature Comparison: Traditional Desktop GIS vs. Cloud/HPC Modern Architecture</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature / Dimension</th>
+<th style="text-align: left;">Traditional Desktop GIS (Manual Single-Node)</th>
+<th style="text-align: left;">AURA Cloud Architecture (Wherobots / AWS / GCP)</th>
+<th style="text-align: left;">Recommended Waratah HPC Adoption Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Execution Scale</strong></td>
+<td style="text-align: left;">Single-threaded; crashes on large polygons</td>
+<td style="text-align: left;">Distributed multi-node (Apache Sedona PySpark)</td>
+<td style="text-align: left;">Distributed Sedona on Waratah HPC compute nodes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Storage Subsystem</strong></td>
+<td style="text-align: left;">Local C: drives / SMB network shares</td>
+<td style="text-align: left;">Cloud object storage (S3 / GCS / Iceberg)</td>
+<td style="text-align: left;"><strong>DDN ExaScaler 7990X Lustre Parallel Array</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cold Data Strategy</strong></td>
+<td style="text-align: left;">Manual archiving to detached drives</td>
+<td style="text-align: left;">Cloud lifecycle tiering &amp; snapshot hashing</td>
+<td style="text-align: left;"><strong>Spectra Logic T950 Tape Library integration</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Multi-Hazard Model</strong></td>
+<td style="text-align: left;">Ad-hoc manual layer reclassifications</td>
+<td style="text-align: left;">Statutory AS/NZS &amp; ARR 2019 formula engine</td>
+<td style="text-align: left;">Standardized state-wide automated hazard scoring</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Interactive UX</strong></td>
+<td style="text-align: left;">Requires desktop GIS software install</td>
+<td style="text-align: left;">Zero-cost client-side <strong>DuckDB-WASM</strong></td>
+<td style="text-align: left;">Static WASM web portals (air-gapped from HPC)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Run Economics</strong></td>
+<td style="text-align: left;">Days of manual engineering labor</td>
+<td style="text-align: left;"><strong>$0.69 USD</strong> per full national run (15.91M geoms)</td>
+<td style="text-align: left;">Maximized HPC throughput &amp; zero queue bloat</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Recommended Action Plan for NSW Spatial &amp; HPC Leadership</h2>
+<ol>
+<li><strong>Adopt Partitioned GeoParquet as State Standard:</strong> Transition state spatial distribution from legacy Shapefiles/FileGDBs to cloud-native GeoParquet (EPSG:7844 / EPSG:7856) to unlock parallel I/O on Lustre storage arrays.</li>
+<li><strong>Pilot Apache Sedona on Waratah HPC:</strong> Test distributed Apache Sedona PySpark batch scripts on the Waratah HPC cluster for state-wide Net Developable Area (NDA) generation across the 3.5M+ parcel DCDB.</li>
+<li><strong>Establish a Decoupled Scoring Framework:</strong> Separate heavy geometric spatial joins from multi-criteria decision scoring across DPHI, EnergyCo, and DCCEEW planning workflows to minimize compute redundancy.</li>
+<li><strong>Integrate Output Streams with NSW Spatial Digital Twin:</strong> Connect GeoParquet spatial outputs directly to the NSW Spatial Digital Twin and client-side DuckDB-WASM viewers for secure, zero-cost interactive policy exploration.</li>
+</ol>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
+  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | 202609032037
+</footer>
+
+</body>
+</html>

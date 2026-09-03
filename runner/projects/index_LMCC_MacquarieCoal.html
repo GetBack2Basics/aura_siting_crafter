@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macquarie Coal Complex Transformation Precinct | AURA Site Assessment</title>
+    <!-- MapLibre GL CSS -->
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-panel: rgba(30, 41, 59, 0.94);
+            --border-panel: rgba(255, 255, 255, 0.12);
+            --primary: #38bdf8;
+            --accent: #22c55e;
+            --warning: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+        }
+        #map {
+            flex: 1;
+            height: 100%;
+            background: #090d16;
+        }
+        .sidebar {
+            width: 440px;
+            height: 100%;
+            background: var(--bg-panel);
+            backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border-panel);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            overflow-y: auto;
+        }
+        .header {
+            padding: 24px 20px 20px 20px;
+            border-bottom: 1px solid var(--border-panel);
+            background: rgba(15, 23, 42, 0.7);
+        }
+        h1 {
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+        .subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .section {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-panel);
+        }
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .metric-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-panel);
+            padding: 10px 12px;
+            border-radius: 6px;
+        }
+        .metric-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .metric-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .metric-sub {
+            font-size: 10px;
+            color: var(--accent);
+        }
+        .layer-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--border-panel);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .layer-toggle:hover {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+        .layer-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+        .layer-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+        .benchmark-table th, .benchmark-table td {
+            padding: 6px 8px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .benchmark-table th {
+            color: var(--text-muted);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 9px 12px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background: #0284c7;
+            color: #ffffff;
+            width: 100%;
+            margin-top: 6px;
+        }
+        .btn-primary:hover {
+            background: #0369a1;
+        }
+        .btn-outline {
+            background: rgba(30, 41, 59, 0.6);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            width: 100%;
+            margin-top: 6px;
+        }
+        .btn-outline:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="header">
+        <h1>Macquarie Coal Complex Transformation Precinct</h1>
+        <div class="subtitle">City of Lake Macquarie, NSW | Proponent: DPHI, Lake Macquarie Council & Glencore</div>
+    </div>
+
+    <!-- Core Engineering Metrics -->
+    <div class="section">
+        <div class="section-title">Precinct Yield & Capacity</div>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Net Developable Area (NDA)</div>
+                <div class="metric-value">320.1 ha</div>
+                <div class="metric-sub">82.7 ha Phase 1 Immediate</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">330kV Grid Reserve</div>
+                <div class="metric-value">500 MVA</div>
+                <div class="metric-sub">Lines 21/22 Adjacent</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Pumped Hydro (PHES)</div>
+                <div class="metric-value">49.0 MWh</div>
+                <div class="metric-sub">120m Void Head</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Intermodal Rail Freight</div>
+                <div class="metric-value">350,000 t/yr</div>
+                <div class="metric-sub">1.8km Active Siding</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Layer Controls -->
+    <div class="section">
+        <div class="section-title">Site-Level Micro-Layers</div>
+        <div class="layer-toggle" onclick="toggleLayer('pads')">
+            <div class="layer-info">
+                <div class="layer-dot" style="background: #38bdf8;"></div>
+                <span>10 Certified Developable Pads (NDPs)</span>
+            </div>
+            <input type="checkbox" id="chk-pads" checked>
+        </div>
+        <div class="layer-toggle" onclick="toggleLayer('phes')">
+            <div class="layer-info">
+                <div class="layer-dot" style="background: #eab308;"></div>
+                <span>330kV Substation & 49 MWh PHES</span>
+            </div>
+            <input type="checkbox" id="chk-phes" checked>
+        </div>
+        <div class="layer-toggle" onclick="toggleLayer('railroad')">
+            <div class="layer-info">
+                <div class="layer-dot" style="background: #f97316;"></div>
+                <span>Rail Intermodal Loop & 7.8km Haul Road</span>
+            </div>
+            <input type="checkbox" id="chk-railroad" checked>
+        </div>
+        <div class="layer-toggle" onclick="toggleLayer('subsidence')">
+            <div class="layer-info">
+                <div class="layer-dot" style="background: #ef4444;"></div>
+                <span>Subsidence Advisory G1-G3 Zones</span>
+            </div>
+            <input type="checkbox" id="chk-subsidence" checked>
+        </div>
+        <div class="layer-toggle" onclick="toggleLayer('biolink')">
+            <div class="layer-info">
+                <div class="layer-dot" style="background: #22c55e;"></div>
+                <span>Sugarloaf-Awaba C2 Koala Bio-Link</span>
+            </div>
+            <input type="checkbox" id="chk-biolink" checked>
+        </div>
+        <div class="layer-toggle" onclick="toggleLayer('acoustic')">
+            <div class="layer-info">
+                <div class="layer-dot" style="background: #a855f7;"></div>
+                <span>6m-8m Acoustic Bunds & 500m Buffer</span>
+            </div>
+            <input type="checkbox" id="chk-acoustic" checked>
+        </div>
+    </div>
+
+    <!-- Comparative Benchmark -->
+    <div class="section">
+        <div class="section-title">Benchmark vs National Baseline</div>
+        <table class="benchmark-table">
+            <thead>
+                <tr>
+                    <th>Domain</th>
+                    <th>Site Value</th>
+                    <th>National Avg</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Transmission Dist</td>
+                    <td><b style="color:#22c55e;">0.35 km</b></td>
+                    <td>4.8 km</td>
+                </tr>
+                <tr>
+                    <td>Recycled Water Cooling</td>
+                    <td><b style="color:#22c55e;">100.0%</b></td>
+                    <td>35.0%</td>
+                </tr>
+                <tr>
+                    <td>NDA Net-to-Gross</td>
+                    <td><b style="color:#38bdf8;">64.0%</b></td>
+                    <td>42.0%</td>
+                </tr>
+                <tr>
+                    <td>Data Depth Quality</td>
+                    <td><b style="color:#22c55e;">Tier-1 High-Precision (10/10 Micro-Layers)</b></td>
+                    <td>Tier-2 Regional</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Navigation & Reports Suite -->
+    <div class="section" style="margin-top:auto;">
+        <div class="section-title">Reports & Architecture Suite</div>
+        <a href="report_LMCC_MacquarieCoal.html" target="_blank" class="btn btn-primary">
+            📑 Statutory Site Siting Report ↗
+        </a>
+        <a href="../docs/macquarie_coal_precinct_site_enhancement_plan.html" target="_blank" class="btn btn-outline">
+            🗺️ 6-Pillar Site Enhancement Plan ↗
+        </a>
+        <a href="../docs/project_specific_site_enhancement_architecture_plan.html" target="_blank" class="btn btn-outline">
+            🏗️ Multi-Project Architecture Plan ↗
+        </a>
+        <a href="../national_suitability_report.html" target="_blank" class="btn btn-outline">
+            🇦🇺 National Suitability Report ↗
+        </a>
+        <a href="../index.html" class="btn btn-outline">
+            🌐 National Siting Overview ↗
+        </a>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.72rem; color: #94a3b8; line-height: 1.5; text-align: center;">
+            &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | 202609031525
+        </div>
+    </div>
+</div>
+
+<div id="map"></div>
+
+<!-- Embedded GeoJSON Datasets for Instant, Zero-Network Rendering -->
+<script>
+    const geoBoundary = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"name": "Macquarie Coal Complex Transformation Precinct", "gross_area_ha": 1100.0, "lga": "Lake Macquarie City Council"}, "geometry": {"type": "Polygon", "coordinates": [[[151.565, -32.915], [151.605, -32.915], [151.615, -32.945], [151.595, -32.96], [151.56, -32.955], [151.555, -32.93], [151.565, -32.915]]]}}]};
+    const geoPads = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"pad_id": "Pad A1", "group": "MCPP Plateau", "area_ha": 18.5, "phase": "Phase 1", "target_use": "Advanced Manufacturing", "bearing_capacity_kpa": 350}, "geometry": {"type": "Polygon", "coordinates": [[[151.58, -32.925], [151.588, -32.925], [151.588, -32.932], [151.58, -32.932], [151.58, -32.925]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad A2", "group": "MCPP Workshop", "area_ha": 12.0, "phase": "Phase 1", "target_use": "Hyperscale AI Compute", "bearing_capacity_kpa": 400}, "geometry": {"type": "Polygon", "coordinates": [[[151.589, -32.925], [151.595, -32.925], [151.595, -32.931], [151.589, -32.931], [151.589, -32.925]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad A3", "group": "MCPP South", "area_ha": 10.0, "phase": "Phase 1", "target_use": "Clean Tech Assembly", "bearing_capacity_kpa": 300}, "geometry": {"type": "Polygon", "coordinates": [[[151.58, -32.933], [151.587, -32.933], [151.587, -32.939], [151.58, -32.939], [151.58, -32.933]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad A4", "group": "West Wallsend Entry", "area_ha": 8.0, "phase": "Phase 1", "target_use": "Robotics & Research", "bearing_capacity_kpa": 350}, "geometry": {"type": "Polygon", "coordinates": [[[151.572, -32.923], [151.578, -32.923], [151.578, -32.928], [151.572, -32.928], [151.572, -32.923]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad B1", "group": "Westside Void North", "area_ha": 28.0, "phase": "Phase 2", "target_use": "Modular Prefabrication", "bearing_capacity_kpa": 250}, "geometry": {"type": "Polygon", "coordinates": [[[151.565, -32.93], [151.575, -32.93], [151.575, -32.938], [151.565, -32.938], [151.565, -32.93]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad B2", "group": "Westside Pit Floor", "area_ha": 26.0, "phase": "Phase 2", "target_use": "Heavy Transport & Fleet", "bearing_capacity_kpa": 250}, "geometry": {"type": "Polygon", "coordinates": [[[151.565, -32.939], [151.575, -32.939], [151.575, -32.946], [151.565, -32.946], [151.565, -32.939]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad B3", "group": "Westside Void South", "area_ha": 18.0, "phase": "Phase 2", "target_use": "Remanufacturing & Circular", "bearing_capacity_kpa": 250}, "geometry": {"type": "Polygon", "coordinates": [[[151.565, -32.947], [151.573, -32.947], [151.573, -32.953], [151.565, -32.953], [151.565, -32.947]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad C1", "group": "Teralba Northgate", "area_ha": 19.2, "phase": "Phase 1", "target_use": "Intermodal Rail Logistics", "bearing_capacity_kpa": 380}, "geometry": {"type": "Polygon", "coordinates": [[[151.597, -32.932], [151.606, -32.932], [151.606, -32.94], [151.597, -32.94], [151.597, -32.932]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad C2", "group": "Teralba Southgate", "area_ha": 15.0, "phase": "Phase 1", "target_use": "Business Park & Commercial", "bearing_capacity_kpa": 320}, "geometry": {"type": "Polygon", "coordinates": [[[151.6, -32.943], [151.608, -32.943], [151.608, -32.95], [151.6, -32.95], [151.6, -32.943]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad D1", "group": "TSF Solar Plateau", "area_ha": 85.0, "phase": "Phase 3", "target_use": "Solar PV & 100MW BESS", "bearing_capacity_kpa": 150}, "geometry": {"type": "Polygon", "coordinates": [[[151.578, -32.942], [151.595, -32.942], [151.595, -32.955], [151.578, -32.955], [151.578, -32.942]]]}}]};
+    const geoStaging = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"phase_id": "Phase 1", "name": "Phase 1: Immediate Hardstand & Gateway Logistics", "timeline_years": "0-3", "area_ha": 82.7, "pads": ["Pad A1", "Pad A2", "Pad A3", "Pad A4", "Pad C1", "Pad C2"], "target_sectors": "AI Data Infrastructure, Clean Tech Assembly, Rail Logistics", "grid_connection": "Immediate 33kV/132kV feeder connection"}, "geometry": {"type": "Polygon", "coordinates": [[[151.572, -32.923], [151.608, -32.923], [151.608, -32.95], [151.572, -32.95], [151.572, -32.923]]]}}, {"type": "Feature", "properties": {"phase_id": "Phase 2", "name": "Phase 2: Westside Void Repurposing & Arterial Spine", "timeline_years": "3-7", "area_ha": 125.4, "pads": ["Pad B1", "Pad B2", "Pad B3"], "target_sectors": "Heavy Transport, Modular Construction, Circular Economy", "grid_connection": "330kV Multi-User Terminal Substation Commissioning"}, "geometry": {"type": "Polygon", "coordinates": [[[151.565, -32.93], [151.575, -32.93], [151.575, -32.953], [151.565, -32.953], [151.565, -32.93]]]}}, {"type": "Feature", "properties": {"phase_id": "Phase 3", "name": "Phase 3: Tailings Storage Facility (TSF) Solar Plateau & PHES", "timeline_years": "7-12+", "area_ha": 112.0, "pads": ["Pad D1"], "target_sectors": "Solar PV Arrays, 100MW BESS, 49 MWh Micro-PHES", "grid_connection": "Dams Safety NSW De-Declaration & Dynamic Capping Signoff"}, "geometry": {"type": "Polygon", "coordinates": [[[151.578, -32.942], [151.595, -32.942], [151.595, -32.955], [151.578, -32.955], [151.578, -32.942]]]}}]};
+    const geoPhes = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"name": "330kV/132kV Multi-User Terminal Substation Reserve", "capacity_mva": 500, "type": "Substation"}, "geometry": {"type": "Polygon", "coordinates": [[[151.588, -32.92], [151.594, -32.92], [151.594, -32.924], [151.588, -32.924], [151.588, -32.92]]]}}, {"type": "Feature", "properties": {"name": "Upper Ridgeline Storage Reservoir (+145m AHD)", "volume_ml": 500, "type": "PHES Reservoir"}, "geometry": {"type": "Polygon", "coordinates": [[[151.56, -32.935], [151.564, -32.935], [151.564, -32.939], [151.56, -32.939], [151.56, -32.935]]]}}, {"type": "Feature", "properties": {"name": "PHES Reversible Penstock (120m Hydraulic Head)", "length_m": 950, "capacity_mwh": 49.0, "type": "Penstock"}, "geometry": {"type": "LineString", "coordinates": [[151.562, -32.937], [151.568, -32.942]]}}, {"type": "Feature", "properties": {"name": "Westside Void Lower Reservoir & Turbine Pit (+25m AHD)", "power_mw": 20, "type": "PHES Powerhouse"}, "geometry": {"type": "Point", "coordinates": [151.568, -32.942]}}]};
+    const geoRailroad = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"name": "Macquarie Intermodal Rail Terminal (MIRT) 1.8km Loop", "type": "Heavy Rail Loop", "capacity_tpa": 350000}, "geometry": {"type": "LineString", "coordinates": [[151.608, -32.93], [151.604, -32.935], [151.6, -32.938], [151.602, -32.942], [151.607, -32.938], [151.608, -32.93]]}}, {"type": "Feature", "properties": {"name": "Internal Haul Road Gazetted Heavy Transport Spine (7.8km)", "type": "Arterial Road", "rating": "B-Double / PBS 2A"}, "geometry": {"type": "LineString", "coordinates": [[151.562, -32.92], [151.57, -32.928], [151.578, -32.935], [151.585, -32.94], [151.595, -32.945], [151.605, -32.95]]}}]};
+    const geoSubsidence = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"zone": "Zone G1", "desc": "Intact Bedrock / Shallow Footings", "color": "#2ecc71"}, "geometry": {"type": "Polygon", "coordinates": [[[151.575, -32.92], [151.595, -32.92], [151.595, -32.935], [151.575, -32.935], [151.575, -32.92]]]}}, {"type": "Feature", "properties": {"zone": "Zone G2", "desc": "Deep Stable Workings / Articulated Raft Slabs", "color": "#f39c12"}, "geometry": {"type": "Polygon", "coordinates": [[[151.56, -32.925], [151.575, -32.925], [151.575, -32.955], [151.56, -32.955], [151.56, -32.925]]]}}, {"type": "Feature", "properties": {"zone": "Zone G3", "desc": "Shallow Workings / Pressure Grout or End-Bearing Piles", "color": "#e74c3c"}, "geometry": {"type": "Polygon", "coordinates": [[[151.595, -32.935], [151.61, -32.935], [151.61, -32.955], [151.595, -32.955], [151.595, -32.935]]]}}]};
+    const geoBiolink = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"name": "Sugarloaf-to-Awaba Regional Ecological Bio-Link (C2 Zone)", "width_m": 250, "area_ha": 320.0}, "geometry": {"type": "Polygon", "coordinates": [[[151.555, -32.915], [151.568, -32.915], [151.572, -32.935], [151.562, -32.958], [151.552, -32.958], [151.555, -32.915]]]}}, {"type": "Feature", "properties": {"name": "Fauna Overpass Bridge 1 (Sugarloaf Link)", "type": "Wildlife Overpass"}, "geometry": {"type": "Point", "coordinates": [151.57, -32.928]}}, {"type": "Feature", "properties": {"name": "Fauna Overpass Bridge 2 (Diega Creek Corridor)", "type": "Wildlife Overpass"}, "geometry": {"type": "Point", "coordinates": [151.585, -32.94]}}]};
+    const geoAcoustic = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"name": "6m-8m Sculpted Overburden Acoustic Noise Bund", "height_m": 8, "volume_m3": 450000}, "geometry": {"type": "LineString", "coordinates": [[151.596, -32.922], [151.597, -32.935], [151.602, -32.945]]}}, {"type": "Feature", "properties": {"name": "500m Acoustic Compliance Setback Buffer (35 dBA Night PNTL)", "type": "Acoustic Buffer"}, "geometry": {"type": "Polygon", "coordinates": [[[151.592, -32.918], [151.612, -32.918], [151.618, -32.948], [151.605, -32.958], [151.592, -32.948], [151.592, -32.918]]]}}]};
+</script>
+
+<!-- MapLibre GL JS -->
+<script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+<script>
+    const map = new maplibregl.Map({
+        container: 'map',
+        style: {
+            version: 8,
+            sources: {
+                'osm-raster': {
+                    type: 'raster',
+                    tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                    tileSize: 256,
+                    attribution: '&copy; OpenStreetMap contributors'
+                }
+            },
+            layers: [
+                {
+                    id: 'osm-tiles',
+                    type: 'raster',
+                    source: 'osm-raster',
+                    minzoom: 0,
+                    maxzoom: 19
+                }
+            ]
+        },
+        center: [151.585, -32.935],
+        zoom: 13.5
+    });
+
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+    map.on('load', () => {
+        // Add Boundary
+        map.addSource('boundary', {
+            type: 'geojson',
+            data: geoBoundary
+        });
+        map.addLayer({
+            id: 'layer-boundary',
+            type: 'line',
+            source: 'boundary',
+            paint: {
+                'line-color': '#ffffff',
+                'line-width': 2,
+                'line-dasharray': [4, 2]
+            }
+        });
+
+        // Add Developable Pads
+        map.addSource('pads', {
+            type: 'geojson',
+            data: geoPads
+        });
+        map.addLayer({
+            id: 'layer-pads-fill',
+            type: 'fill',
+            source: 'pads',
+            paint: {
+                'fill-color': '#38bdf8',
+                'fill-opacity': 0.4
+            }
+        });
+        map.addLayer({
+            id: 'layer-pads-line',
+            type: 'line',
+            source: 'pads',
+            paint: {
+                'line-color': '#0284c7',
+                'line-width': 2
+            }
+        });
+
+        // Add PHES & Substation
+        map.addSource('phes', {
+            type: 'geojson',
+            data: geoPhes
+        });
+        map.addLayer({
+            id: 'layer-phes-fill',
+            type: 'fill',
+            source: 'phes',
+            paint: {
+                'fill-color': '#eab308',
+                'fill-opacity': 0.5
+            }
+        });
+        map.addLayer({
+            id: 'layer-phes-line',
+            type: 'line',
+            source: 'phes',
+            paint: {
+                'line-color': '#ca8a04',
+                'line-width': 3
+            }
+        });
+
+        // Add Rail & Road
+        map.addSource('railroad', {
+            type: 'geojson',
+            data: geoRailroad
+        });
+        map.addLayer({
+            id: 'layer-railroad-line',
+            type: 'line',
+            source: 'railroad',
+            paint: {
+                'line-color': '#f97316',
+                'line-width': 4
+            }
+        });
+
+        // Add Subsidence Zones
+        map.addSource('subsidence', {
+            type: 'geojson',
+            data: geoSubsidence
+        });
+        map.addLayer({
+            id: 'layer-subsidence-fill',
+            type: 'fill',
+            source: 'subsidence',
+            paint: {
+                'fill-color': ['get', 'color'],
+                'fill-opacity': 0.25
+            }
+        });
+
+        // Add Koala Bio-Link
+        map.addSource('biolink', {
+            type: 'geojson',
+            data: geoBiolink
+        });
+        map.addLayer({
+            id: 'layer-biolink-fill',
+            type: 'fill',
+            source: 'biolink',
+            paint: {
+                'fill-color': '#22c55e',
+                'fill-opacity': 0.3
+            }
+        });
+
+        // Add Acoustic Buffers
+        map.addSource('acoustic', {
+            type: 'geojson',
+            data: geoAcoustic
+        });
+        map.addLayer({
+            id: 'layer-acoustic-fill',
+            type: 'fill',
+            source: 'acoustic',
+            paint: {
+                'fill-color': '#a855f7',
+                'fill-opacity': 0.2
+            }
+        });
+        map.addLayer({
+            id: 'layer-acoustic-line',
+            type: 'line',
+            source: 'acoustic',
+            paint: {
+                'line-color': '#9333ea',
+                'line-width': 2,
+                'line-dasharray': [2, 2]
+            }
+        });
+
+        // Pad click popup
+        map.on('click', 'layer-pads-fill', (e) => {
+            const props = e.features[0].properties;
+            new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(`
+                    <div style="font-family: sans-serif; font-size: 12px; color: #0f172a;">
+                        <b style="font-size: 14px; color: #0284c7;">${props.pad_id}</b> (${props.group})<br>
+                        <strong>Area:</strong> ${props.area_ha} ha | <strong>Phase:</strong> ${props.phase}<br>
+                        <strong>Target:</strong> ${props.target_use}<br>
+                        <strong>Bearing:</strong> ${props.bearing_capacity_kpa} kPa
+                    </div>
+                `)
+                .addTo(map);
+        });
+    });
+
+    function toggleLayer(layerKey) {
+        const chk = document.getElementById('chk-' + layerKey);
+        const visible = chk.checked ? 'visible' : 'none';
+        
+        const layerMap = {
+            'pads': ['layer-pads-fill', 'layer-pads-line'],
+            'phes': ['layer-phes-fill', 'layer-phes-line'],
+            'railroad': ['layer-railroad-line'],
+            'subsidence': ['layer-subsidence-fill'],
+            'biolink': ['layer-biolink-fill'],
+            'acoustic': ['layer-acoustic-fill', 'layer-acoustic-line']
+        };
+        
+        if (layerMap[layerKey]) {
+            layerMap[layerKey].forEach(lyr => {
+                if (map.getLayer(lyr)) {
+                    map.setLayoutProperty(lyr, 'visibility', visible);
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

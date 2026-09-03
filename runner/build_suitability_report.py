@@ -504,13 +504,13 @@ HTML_PAGE = """<!DOCTYPE html>
       background: rgba(15, 23, 42, 0.94);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(59, 130, 246, 0.35);
-      border-radius: 0.5rem;
-      padding: 0.5rem 0.75rem;
-      width: 295px;
-      max-height: 530px;
+      border-radius: 0.45rem;
+      padding: 0.4rem 0.6rem;
+      width: 260px;
+      max-height: 480px;
       overflow-y: auto;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-      font-size: 0.8rem;
+      font-size: 0.65rem;
     }
 
     .layer-panel-toggle {
@@ -521,7 +521,8 @@ HTML_PAGE = """<!DOCTYPE html>
       color: #60a5fa;
       cursor: pointer;
       user-select: none;
-      padding: 0.25rem 0.2rem;
+      padding: 0.2rem 0.15rem;
+      font-size: 0.65rem;
     }
 
     .layer-panel-toggle:hover {
@@ -530,21 +531,21 @@ HTML_PAGE = """<!DOCTYPE html>
 
     #layer-panel-body {
       display: none; /* Collapsed on load */
-      margin-top: 0.5rem;
+      margin-top: 0.35rem;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 0.5rem;
+      padding-top: 0.35rem;
     }
 
     .layer-item {
-      margin-bottom: 0.45rem;
-      padding-bottom: 0.35rem;
+      margin-bottom: 0.3rem;
+      padding-bottom: 0.25rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     }
 
     .layer-row {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.35rem;
       cursor: pointer;
       user-select: none;
     }
@@ -552,6 +553,7 @@ HTML_PAGE = """<!DOCTYPE html>
     .layer-row input[type="checkbox"] {
       cursor: pointer;
       accent-color: #3b82f6;
+      transform: scale(0.85);
     }
 
     .layer-title {
@@ -561,6 +563,7 @@ HTML_PAGE = """<!DOCTYPE html>
       display: flex;
       align-items: center;
       justify-content: space-between;
+      font-size: 0.65rem;
     }
 
     .layer-title:hover {
@@ -568,20 +571,20 @@ HTML_PAGE = """<!DOCTYPE html>
     }
 
     .layer-chevron {
-      font-size: 0.65rem;
+      font-size: 0.55rem;
       color: #94a3b8;
       transition: transform 0.2s;
     }
 
     .layer-legend-drawer {
       display: none; /* Collapsed by default */
-      margin-top: 0.35rem;
-      padding: 0.45rem 0.65rem;
+      margin-top: 0.25rem;
+      padding: 0.3rem 0.45rem;
       background: rgba(0, 0, 0, 0.45);
-      border-radius: 0.35rem;
+      border-radius: 0.3rem;
       border-left: 2px solid #3b82f6;
-      font-size: 0.75rem;
-      line-height: 1.5;
+      font-size: 0.58rem;
+      line-height: 1.35;
       color: #cbd5e1;
     }
 
@@ -954,82 +957,13 @@ HTML_PAGE = """<!DOCTYPE html>
     </div>
   </div>
 
-  <!-- Real-Time What-If Siting Sandbox Panel -->
-  <div class="card" style="margin-bottom: 1.5rem; border-color: #3b82f6;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-      <h2 style="margin: 0; border: none; padding: 0; color: #60a5fa;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-        Real-Time What-If Siting Sandbox
-      </h2>
-      <div style="display: flex; align-items: center; gap: 0.5rem; background: rgba(0,0,0,0.3); padding: 0.25rem 0.6rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.1);">
-        <span style="font-size: 0.72rem; font-weight: 500;">TSF Tailings Dam Safety:</span>
-        <label style="position: relative; display: inline-block; width: 36px; height: 18px; margin: 0;">
-          <input type="checkbox" id="tsf-toggle" style="opacity: 0; width: 0; height: 0;">
-          <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ef4444; transition: .3s; border-radius: 18px;"></span>
-        </label>
-        <span id="tsf-status-label" style="font-weight: bold; color: #ef4444; font-size: 0.72rem;">DAM DECLARED (Excluded)</span>
-      </div>
-    </div>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; font-size: 0.72rem;">
-      <div style="background: rgba(0,0,0,0.25); padding: 0.55rem 0.75rem; border-radius: 0.4rem; border: 1px solid rgba(255,255,255,0.05);">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-          <label for="power-weight-slider"><strong>Power Grid Weight:</strong></label>
-          <span id="power-weight-val" style="color: #60a5fa; font-weight: bold;">30%</span>
-        </div>
-        <input type="range" id="power-weight-slider" min="0" max="100" value="30" style="width: 100%; cursor: pointer;">
-      </div>
-
-      <div style="background: rgba(0,0,0,0.25); padding: 0.55rem 0.75rem; border-radius: 0.4rem; border: 1px solid rgba(255,255,255,0.05);">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-          <label for="hazard-weight-slider"><strong>Multi-Hazard Resilience (S_haz):</strong></label>
-          <span id="hazard-weight-val" style="color: #f59e0b; font-weight: bold;">25%</span>
-        </div>
-        <input type="range" id="hazard-weight-slider" min="0" max="100" value="25" style="width: 100%; cursor: pointer;">
-      </div>
-
-      <div style="background: rgba(0,0,0,0.25); padding: 0.55rem 0.75rem; border-radius: 0.4rem; border: 1px solid rgba(255,255,255,0.05);">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-          <label for="sensitive-weight-slider"><strong>Sensitive Buffer (S_sens):</strong></label>
-          <span id="sensitive-weight-val" style="color: #c084fc; font-weight: bold;">20%</span>
-        </div>
-        <input type="range" id="sensitive-weight-slider" min="0" max="100" value="20" style="width: 100%; cursor: pointer;">
-      </div>
-
-      <div style="background: rgba(0,0,0,0.25); padding: 0.55rem 0.75rem; border-radius: 0.4rem; border: 1px solid rgba(255,255,255,0.05);">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-          <label for="water-weight-slider"><strong>Recycled Water Weight:</strong></label>
-          <span id="water-weight-val" style="color: #34d399; font-weight: bold;">15%</span>
-        </div>
-        <input type="range" id="water-weight-slider" min="0" max="100" value="15" style="width: 100%; cursor: pointer;">
-      </div>
-
-      <div style="background: rgba(0,0,0,0.25); padding: 0.55rem 0.75rem; border-radius: 0.4rem; border: 1px solid rgba(255,255,255,0.05);">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-          <label for="size-weight-slider"><strong>Parcel Size Weight:</strong></label>
-          <span id="size-weight-val" style="color: #fbbf24; font-weight: bold;">10%</span>
-        </div>
-        <input type="range" id="size-weight-slider" min="0" max="100" value="10" style="width: 100%; cursor: pointer;">
-      </div>
-
-      <div style="background: rgba(0,0,0,0.25); padding: 0.55rem 0.75rem; border-radius: 0.4rem; border: 1px solid rgba(255,255,255,0.05);">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
-          <label for="target-size-slider"><strong>Target Parcel Size:</strong></label>
-          <span id="target-size-val" style="color: #a78bfa; font-weight: bold;">15 ha</span>
-        </div>
-        <input type="range" id="target-size-slider" min="3" max="30" value="15" step="1" style="width: 100%; cursor: pointer;">
-      </div>
-    </div>
-  </div>
-
   <!-- National Siting Map Card -->
-  <div class="card" style="margin-bottom: 1.5rem;">
+  <div class="card" style="margin-bottom: 1.25rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 0.45rem; margin-bottom: 0.75rem;">
       <h2 style="margin: 0; padding: 0; border: none;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
         National Siting Map
       </h2>
-      <div style="font-size: 0.70rem; color: #94a3b8;">Grid View: <span id="grid-zoom-indicator" style="color: #38bdf8; font-weight: 600;">Interstate (≥275kV)</span></div>
     </div>
     
     <div id="map-wrapper">
@@ -1059,7 +993,7 @@ HTML_PAGE = """<!DOCTYPE html>
               <div><span class="legend-circle" style="background: #10b981;"></span> ≥ 0.85 (Optimal Hyperscale)</div>
               <div><span class="legend-circle" style="background: #f59e0b;"></span> 0.70 – 0.85 (Viable / Secondary)</div>
               <div><span class="legend-circle" style="background: #ef4444;"></span> &lt; 0.70 (Constrained / Excluded)</div>
-              <div style="margin-top: 4px; font-size: 0.65rem; color: #94a3b8;">Circle radius scales with composite score</div>
+              <div style="margin-top: 4px; font-size: 0.58rem; color: #94a3b8;">Circle radius scales with composite score</div>
             </div>
           </div>
 
@@ -1108,7 +1042,7 @@ HTML_PAGE = """<!DOCTYPE html>
             </div>
             <div class="layer-legend-drawer" id="legend-netdev">
               <div><span class="legend-bullet" style="background: #14b8a6; opacity: 0.7;"></span> Net Developable Pad Space (44.5 ha)</div>
-              <div style="font-size: 0.65rem; color: #94a3b8;">Deducts slope, riparian, and pipeline setbacks</div>
+              <div style="font-size: 0.58rem; color: #94a3b8;">Deducts slope, riparian, and pipeline setbacks</div>
             </div>
           </div>
 
@@ -1168,6 +1102,74 @@ HTML_PAGE = """<!DOCTYPE html>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Real-Time What-If Siting Sandbox Panel (Positioned Below Map, 30% Compact Fonts) -->
+  <div class="card" style="margin-bottom: 1.25rem; border-color: #3b82f6; padding: 0.75rem 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.35rem;">
+      <h2 style="margin: 0; border: none; padding: 0; color: #60a5fa; font-size: 0.85rem; display: flex; align-items: center; gap: 0.35rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+        Real-Time What-If Siting Sandbox
+      </h2>
+      <div style="display: flex; align-items: center; gap: 0.35rem; background: rgba(0,0,0,0.3); padding: 0.15rem 0.45rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.08);">
+        <span style="font-size: 0.60rem; font-weight: 500;">TSF Tailings Dam Safety:</span>
+        <label style="position: relative; display: inline-block; width: 28px; height: 14px; margin: 0;">
+          <input type="checkbox" id="tsf-toggle" style="opacity: 0; width: 0; height: 0;">
+          <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ef4444; transition: .3s; border-radius: 14px;"></span>
+        </label>
+        <span id="tsf-status-label" style="font-weight: bold; color: #ef4444; font-size: 0.60rem;">DAM DECLARED (Excluded)</span>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.45rem; font-size: 0.58rem;">
+      <div style="background: rgba(0,0,0,0.25); padding: 0.35rem 0.5rem; border-radius: 0.35rem; border: 1px solid rgba(255,255,255,0.05);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.15rem;">
+          <label for="power-weight-slider"><strong>Power Grid Weight:</strong></label>
+          <span id="power-weight-val" style="color: #60a5fa; font-weight: bold;">30%</span>
+        </div>
+        <input type="range" id="power-weight-slider" min="0" max="100" value="30" style="width: 100%; cursor: pointer; height: 4px;">
+      </div>
+
+      <div style="background: rgba(0,0,0,0.25); padding: 0.35rem 0.5rem; border-radius: 0.35rem; border: 1px solid rgba(255,255,255,0.05);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.15rem;">
+          <label for="hazard-weight-slider"><strong>Multi-Hazard Resilience (S_haz):</strong></label>
+          <span id="hazard-weight-val" style="color: #f59e0b; font-weight: bold;">25%</span>
+        </div>
+        <input type="range" id="hazard-weight-slider" min="0" max="100" value="25" style="width: 100%; cursor: pointer; height: 4px;">
+      </div>
+
+      <div style="background: rgba(0,0,0,0.25); padding: 0.35rem 0.5rem; border-radius: 0.35rem; border: 1px solid rgba(255,255,255,0.05);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.15rem;">
+          <label for="sensitive-weight-slider"><strong>Sensitive Buffer (S_sens):</strong></label>
+          <span id="sensitive-weight-val" style="color: #c084fc; font-weight: bold;">20%</span>
+        </div>
+        <input type="range" id="sensitive-weight-slider" min="0" max="100" value="20" style="width: 100%; cursor: pointer; height: 4px;">
+      </div>
+
+      <div style="background: rgba(0,0,0,0.25); padding: 0.35rem 0.5rem; border-radius: 0.35rem; border: 1px solid rgba(255,255,255,0.05);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.15rem;">
+          <label for="water-weight-slider"><strong>Recycled Water Weight:</strong></label>
+          <span id="water-weight-val" style="color: #34d399; font-weight: bold;">15%</span>
+        </div>
+        <input type="range" id="water-weight-slider" min="0" max="100" value="15" style="width: 100%; cursor: pointer; height: 4px;">
+      </div>
+
+      <div style="background: rgba(0,0,0,0.25); padding: 0.35rem 0.5rem; border-radius: 0.35rem; border: 1px solid rgba(255,255,255,0.05);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.15rem;">
+          <label for="size-weight-slider"><strong>Parcel Size Weight:</strong></label>
+          <span id="size-weight-val" style="color: #fbbf24; font-weight: bold;">10%</span>
+        </div>
+        <input type="range" id="size-weight-slider" min="0" max="100" value="10" style="width: 100%; cursor: pointer; height: 4px;">
+      </div>
+
+      <div style="background: rgba(0,0,0,0.25); padding: 0.35rem 0.5rem; border-radius: 0.35rem; border: 1px solid rgba(255,255,255,0.05);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.15rem;">
+          <label for="target-size-slider"><strong>Target Parcel Size:</strong></label>
+          <span id="target-size-val" style="color: #a78bfa; font-weight: bold;">15 ha</span>
+        </div>
+        <input type="range" id="target-size-slider" min="3" max="30" value="15" step="1" style="width: 100%; cursor: pointer; height: 4px;">
       </div>
     </div>
   </div>
@@ -1485,8 +1487,8 @@ HTML_PAGE = """<!DOCTYPE html>
     </div>
   </div>
 
-  <footer style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.8rem; color: var(--text-secondary); text-align: center;">
-    &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for information only and is the authors private opinion | <span id="build-timestamp">__FOOTER_TIMESTAMP__</span>
+  <footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
+    &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | <span id="build-timestamp">__FOOTER_TIMESTAMP__</span>
   </footer>
 </div>
 
@@ -1536,10 +1538,10 @@ const gaSubstationsCluster = L.esri.Cluster.featureLayer({
   url: 'https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/0',
   pointToLayer: function (geojson, latlng) {
     return L.circleMarker(latlng, {
-      radius: 5,
+      radius: 3,
       fillColor: '#06b6d4',
       color: '#ffffff',
-      weight: 1,
+      weight: 0.75,
       opacity: 0.9,
       fillOpacity: 0.85
     });
@@ -1560,10 +1562,10 @@ const gaPowerStationsCluster = L.esri.Cluster.featureLayer({
   url: 'https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/1',
   pointToLayer: function (geojson, latlng) {
     return L.circleMarker(latlng, {
-      radius: 6,
+      radius: 3.5,
       fillColor: '#eab308',
       color: '#ffffff',
-      weight: 1.2,
+      weight: 1,
       opacity: 0.9,
       fillOpacity: 0.9
     });
@@ -1608,16 +1610,12 @@ const markerMap = {};
 // Dynamic Zoom-Based Power Line Voltage Filtering
 function updateGridZoomFilters() {
   const z = map.getZoom();
-  const indicator = document.getElementById('grid-zoom-indicator');
   if (z <= 5) {
     gaPowerLines.setLayerDefs({ 2: "capacity_kv >= 275" });
-    if (indicator) indicator.textContent = "Interstate (≥275kV)";
   } else if (z <= 8) {
     gaPowerLines.setLayerDefs({ 2: "capacity_kv >= 132" });
-    if (indicator) indicator.textContent = "Regional (≥132kV)";
   } else {
     gaPowerLines.setLayerDefs({ 2: "1=1" });
-    if (indicator) indicator.textContent = "All Voltages (Local)";
   }
 }
 map.on('zoomend', updateGridZoomFilters);
@@ -1717,6 +1715,12 @@ function updateAuditPanel(site) {
   const windFactor = site.winding_factor != null ? site.winding_factor : 1.32;
 
   if (isLocal) {
+    const isEnhanced = isEnhancedProject(site);
+    const claimHeader = isEnhanced ? 'Proponent Claim:' : 'Cadastral Lot Boundary:';
+    const claimBody = isEnhanced ?
+      `100% of sub-precinct boundaries are buildable (~${claimedArea.toFixed(1)} ha gross) (<a href="https://www.planningportal.nsw.gov.au/ppr/post-exhibition/macquarie-coal-complex-transformation-precinct" target="_blank" style="color: #fbbf24; text-decoration: underline; font-weight: bold;">NSW Planning Portal Masterplan & Exhibition ↗</a>).` :
+      `Gross cadastral parcel (${site.lot_plan || 'Lot/Plan'}) encompasses ~${claimedArea.toFixed(1)} ha gross.`;
+
     container.innerHTML = `
       <div style="margin-bottom:0.6rem;">${provenanceBadge(site)}</div>
       <div class="audit-grid">
@@ -1728,10 +1732,10 @@ function updateAuditPanel(site) {
               <span class="audit-finger">${site.area_ha >= 15.0 ? '👍' : '👎'}</span>
             </div>
             <div class="audit-detail">
-              <strong>Proponent Claim:</strong> 100% of sub-precinct boundaries are buildable (~${claimedArea.toFixed(1)} ha gross) (<a href="https://www.lakemac.com.au/Projects/Precinct-Coal-Complex-Transformation-Precinct" target="_blank" style="color: #fbbf24; text-decoration: underline; font-weight: bold;">Proponent Masterplan & Action Plan PDF ↗</a>).
+              <strong>${claimHeader}</strong> ${claimBody}
             </div>
             <div class="audit-detail">
-              <strong>Spatial Ground-Truth:</strong> Subtracting Riparian (30m), Pipeline (20m), Slope (>5%), and TSF Dam buffer risks (${lossesHa.toFixed(1)} ha excluded) yields <strong>${site.area_ha.toFixed(1)} ha</strong> net buildable pad space.
+              <strong>Spatial Ground-Truth:</strong> Subtracting Riparian (30m), Pipeline (20m), Slope (>5%), and Environmental setback buffer risks (${lossesHa.toFixed(1)} ha excluded) yields <strong>${site.area_ha.toFixed(1)} ha</strong> net buildable pad space.
             </div>
             <div class="audit-header" style="margin-top:0.5rem; margin-bottom: 0;">
               <span class="audit-percent">${site.area_ha >= 15.0 ? 'High Capacity Hyperscale Site' : 'Constrained Pad Area'}</span>
@@ -1779,12 +1783,24 @@ function updateAuditPanel(site) {
           </div>
         </div>
       </div>
+      ${isEnhanced ? `
+      <div style="margin-top:1rem; padding:1rem; background:rgba(2,132,199,0.1); border:1px solid rgba(56,189,248,0.3); border-radius:8px; display:flex; flex-wrap:wrap; gap:0.6rem; align-items:center; justify-content:space-between;">
+        <div style="font-size:0.82rem; color:#f8fafc; font-weight:600;">
+          ✨ Site-Specific Enhancement Suite Available for this Precinct (_LMCC_MacquarieCoal):
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+          <a href="projects/index_LMCC_MacquarieCoal.html" target="_blank" style="padding:6px 12px; background:#0284c7; color:#ffffff; text-decoration:none; border-radius:4px; font-weight:700; font-size:0.75rem; display:inline-flex; align-items:center; gap:4px;">🌐 Launch Site WebGIS App ↗</a>
+          <a href="projects/report_LMCC_MacquarieCoal.html" target="_blank" style="padding:6px 12px; background:rgba(59,130,246,0.2); color:#93c5fd; text-decoration:none; border:1px solid rgba(59,130,246,0.4); border-radius:4px; font-weight:700; font-size:0.75rem; display:inline-flex; align-items:center; gap:4px;">📑 Detailed Site Report ↗</a>
+          <a href="https://www.planningportal.nsw.gov.au/ppr/post-exhibition/macquarie-coal-complex-transformation-precinct" target="_blank" style="padding:6px 10px; color:#cbd5e1; text-decoration:underline; font-size:0.72rem; display:inline-flex; align-items:center; gap:4px;">🏛️ NSW Planning Portal Exhibition ↗</a>
+        </div>
+      </div>
+      ` : ''}
     `;
   } else {
     container.innerHTML = `
       <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
         <p>${provenanceBadge(site)}</p>
-        <p><strong>This is a simulated regional baseline</strong> (<strong>${site.town_name}</strong> in ${site.state_name}) &mdash; a modeled comparator, not a measured site assessment. Its score is produced from modeled inputs and is not directly comparable with the micro-sited NSW Hunter parcels.</p>
+        <p><strong>This is a simulated regional baseline</strong> (<strong>${site.town_name}</strong> in ${site.state_name}) &mdash; a modeled comparator used for preliminary regional benchmarking where localized state cadastral or high-resolution environmental layers are pending. Its preliminary score is derived from regional infrastructure grids and national topographic models.</p>
         <p>It has a composite suitability score of <strong>${site.suitability_score.toFixed(3)}</strong>, substation distance of ${site.dist_to_substation_km ? site.dist_to_substation_km.toFixed(2) + ' km' : 'N/A'}, elevation head of <strong>${elevHead}m</strong>, and simulated pumped hydro potential of <strong>${hydroMwh} MWh</strong>.</p>
       </div>
     `;
@@ -1809,16 +1825,17 @@ function updateMarkers() {
     const scoreClass = c.suitability_score >= 0.85 ? 'score-high' : (c.suitability_score >= 0.70 ? 'score-med' : 'score-low');
 
     const marker = L.circleMarker([lat, lon], {
-      radius: 8 + (c.suitability_score * 6),
+      radius: 3.2 + (c.suitability_score * 2.4),
       fillColor: getColor(c.suitability_score),
       color: '#ffffff',
-      weight: 1.5,
+      weight: 1,
       opacity: 1,
       fillOpacity: 0.85
     });
 
+    const isEnhanced = isEnhancedProject(c);
     const popupContent = `
-        <div style="font-family: 'Outfit', sans-serif; min-width: 200px;">
+        <div style="font-family: 'Outfit', sans-serif; min-width: 220px;">
         <h3 style="margin: 0 0 0.25rem 0; color: #60a5fa;">${c.town_name}</h3>
         <div style="margin-bottom:0.5rem;">${provenanceBadge(c)}</div>
         <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
@@ -1829,6 +1846,12 @@ function updateMarkers() {
           <tr><td style="padding: 2px 0; color: #94a3b8;">Area Available</td><td style="padding: 2px 0; text-align: right; font-weight: bold;">${c.area_ha.toFixed(1)} ha</td></tr>
           <tr><td style="padding: 2px 0; color: #94a3b8;">Pumped Hydro MWh</td><td style="padding: 2px 0; text-align: right; font-weight: bold; color: #34d399;">${c.pumped_hydro_capacity_mwh ? c.pumped_hydro_capacity_mwh.toFixed(1) : '49.0'} MWh</td></tr>
         </table>
+        ${isEnhanced ? `
+        <div style="margin-top:0.6rem; display:flex; flex-direction:column; gap:0.35rem;">
+          <a href="projects/index_LMCC_MacquarieCoal.html" target="_blank" style="padding:5px 8px; background:#0284c7; color:#ffffff; text-decoration:none; border-radius:4px; font-weight:700; font-size:0.72rem; text-align:center;">🌐 Open Site WebGIS ↗</a>
+          <a href="projects/report_LMCC_MacquarieCoal.html" target="_blank" style="padding:5px 8px; background:rgba(59,130,246,0.15); color:#93c5fd; text-decoration:none; border:1px solid rgba(59,130,246,0.4); border-radius:4px; font-weight:700; font-size:0.72rem; text-align:center;">📑 Statutory Site Report ↗</a>
+        </div>
+        ` : ''}
         <div style="margin-top:0.5rem; text-align:center; font-size:0.75rem; color:#60a5fa; cursor:pointer; font-weight:bold;" onclick="updateAuditPanel(${JSON.stringify(c).replace(/"/g, '&quot;')})">View Audit Report &darr;</div>
       </div>
     `;

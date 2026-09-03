@@ -1,0 +1,385 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "pad_id": "Pad A1",
+        "group": "MCPP Plateau",
+        "area_ha": 18.5,
+        "phase": "Phase 1",
+        "target_use": "Advanced Manufacturing",
+        "bearing_capacity_kpa": 350
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.58,
+              -32.925
+            ],
+            [
+              151.588,
+              -32.925
+            ],
+            [
+              151.588,
+              -32.932
+            ],
+            [
+              151.58,
+              -32.932
+            ],
+            [
+              151.58,
+              -32.925
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "pad_id": "Pad A2",
+        "group": "MCPP Workshop",
+        "area_ha": 12.0,
+        "phase": "Phase 1",
+        "target_use": "Hyperscale AI Compute",
+        "bearing_capacity_kpa": 400
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.589,
+              -32.925
+            ],
+            [
+              151.595,
+              -32.925
+            ],
+            [
+              151.595,
+              -32.931
+            ],
+            [
+              151.589,
+              -32.931
+            ],
+            [
+              151.589,
+              -32.925
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "pad_id": "Pad A3",
+        "group": "MCPP South",
+        "area_ha": 10.0,
+        "phase": "Phase 1",
+        "target_use": "Clean Tech Assembly",
+        "bearing_capacity_kpa": 300
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.58,
+              -32.933
+            ],
+            [
+              151.587,
+              -32.933
+            ],
+            [
+              151.587,
+              -32.939
+            ],
+            [
+              151.58,
+              -32.939
+            ],
+            [
+              151.58,
+              -32.933
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "pad_id": "Pad A4",
+        "group": "West Wallsend Entry",
+        "area_ha": 8.0,
+        "phase": "Phase 1",
+        "target_use": "Robotics & Research",
+        "bearing_capacity_kpa": 350
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.572,
+              -32.923
+            ],
+            [
+              151.578,
+              -32.923
+            ],
+            [
+              151.578,
+              -32.928
+            ],
+            [
+              151.572,
+              -32.928
+            ],
+            [
+              151.572,
+              -32.923
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "pad_id": "Pad B1",
+        "group": "Westside Void North",
+        "area_ha": 28.0,
+        "phase": "Phase 2",
+        "target_use": "Modular Prefabrication",
+        "bearing_capacity_kpa": 250
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.565,
+              -32.93
+            ],
+            [
+              151.575,
+              -32.93
+            ],
+            [
+              151.575,
+              -32.938
+            ],
+            [
+              151.565,
+              -32.938
+            ],
+            [
+              151.565,
+              -32.93
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "pad_id": "Pad B2",
+        "group": "Westside Pit Floor",
+        "area_ha": 26.0,
+        "phase": "Phase 2",
+        "target_use": "Heavy Transport & Fleet",
+        "bearing_capacity_kpa": 250
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.565,
+              -32.939
+            ],
+            [
+              151.575,
+              -32.939
+            ],
+            [
+              151.575,
+              -32.946
+            ],
+            [
+              151.565,
+              -32.946
+            ],
+            [
+              151.565,
+              -32.939
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "pad_id": "Pad B3",
+        "group": "Westside Void South",
+        "area_ha": 18.0,
+        "phase": "Phase 2",
+        "target_use": "Remanufacturing & Circular",
+        "bearing_capacity_kpa": 250
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.565,
+              -32.947
+            ],
+            [
+              151.573,
+              -32.947
+            ],
+            [
+              151.573,
+              -32.953
+            ],
+            [
+              151.565,
+              -32.953
+            ],
+            [
+              151.565,
+              -32.947
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "pad_id": "Pad C1",
+        "group": "Teralba Northgate",
+        "area_ha": 19.2,
+        "phase": "Phase 1",
+        "target_use": "Intermodal Rail Logistics",
+        "bearing_capacity_kpa": 380
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.597,
+              -32.932
+            ],
+            [
+              151.606,
+              -32.932
+            ],
+            [
+              151.606,
+              -32.94
+            ],
+            [
+              151.597,
+              -32.94
+            ],
+            [
+              151.597,
+              -32.932
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "pad_id": "Pad C2",
+        "group": "Teralba Southgate",
+        "area_ha": 15.0,
+        "phase": "Phase 1",
+        "target_use": "Business Park & Commercial",
+        "bearing_capacity_kpa": 320
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.6,
+              -32.943
+            ],
+            [
+              151.608,
+              -32.943
+            ],
+            [
+              151.608,
+              -32.95
+            ],
+            [
+              151.6,
+              -32.95
+            ],
+            [
+              151.6,
+              -32.943
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "pad_id": "Pad D1",
+        "group": "TSF Solar Plateau",
+        "area_ha": 85.0,
+        "phase": "Phase 3",
+        "target_use": "Solar PV & 100MW BESS",
+        "bearing_capacity_kpa": 150
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              151.578,
+              -32.942
+            ],
+            [
+              151.595,
+              -32.942
+            ],
+            [
+              151.595,
+              -32.955
+            ],
+            [
+              151.578,
+              -32.955
+            ],
+            [
+              151.578,
+              -32.942
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

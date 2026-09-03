@@ -194,13 +194,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     AURA <span>Siting Crafter</span>
   </div>
   <div class="nav-links">
-    <a href="../projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">🌐 Live Site WebGIS</a>
-    <a href="../projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">📑 Statutory Site Report</a>
-    <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">🗺️ Site Enhancement Plan</a>
-    <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">🏗️ Architecture Plan</a>
-    <a href="geolibre_contribution_proposals.html" class="nav-link">🤝 GeoLibre Proposals</a>
-    <a href="linkedin_aura_siting_evolution.html" class="nav-link">📝 Evolution Odyssey</a>
-    <a href="../national_suitability_report.html" target="_blank" class="nav-link">🇦🇺 National Baseline</a>
+    {nav_links}
   </div>
 </nav>
 
@@ -218,7 +212,24 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 </html>
 """
 
-def convert_md_to_html(md_path, html_path, title):
+DEFAULT_NAV_LINKS = """
+    <a href="../projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">🌐 Live Site WebGIS</a>
+    <a href="../projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">📑 Statutory Site Report</a>
+    <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">🗺️ Site Enhancement Plan</a>
+    <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">🏗️ Architecture Plan</a>
+    <a href="geolibre_contribution_proposals.html" class="nav-link">🤝 GeoLibre Proposals</a>
+    <a href="linkedin_aura_siting_evolution.html" class="nav-link">📝 Evolution Odyssey</a>
+    <a href="../national_suitability_report.html" target="_blank" class="nav-link">🇦🇺 National Baseline</a>
+"""
+
+GEOLIBRE_PROPOSAL_NAV_LINKS = """
+    <a href="../index.html" target="_blank" class="nav-link">🌐 GeoLibre National Viewer</a>
+    <a href="qa/geolibre_qa_inspect.html" target="_blank" class="nav-link">🔍 Data Review & QA Inspector</a>
+    <a href="qa/QA_Report_20260902.html" target="_blank" class="nav-link">📊 15.4M Dataset QA Report</a>
+    <a href="https://github.com/opengeos/GeoLibre" target="_blank" class="nav-link">🐙 opengeos/GeoLibre</a>
+"""
+
+def convert_md_to_html(md_path, html_path, title, nav_links=DEFAULT_NAV_LINKS):
     with open(md_path, 'r', encoding='utf-8') as f:
         md_text = f.read()
 
@@ -246,7 +257,12 @@ def convert_md_to_html(md_path, html_path, title):
     timestamp = datetime.now().strftime('%Y%m%d%H%M')
 
     # Wrap in template
-    full_html = HTML_TEMPLATE.format(title=title, content=html_body, timestamp=timestamp)
+    full_html = HTML_TEMPLATE.format(
+        title=title,
+        content=html_body,
+        timestamp=timestamp,
+        nav_links=nav_links.strip()
+    )
 
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(full_html)
@@ -277,11 +293,16 @@ def main():
     if os.path.exists(p4_md):
         convert_md_to_html(p4_md, p4_html, "NSW Government Geospatial Value & Strategic Benefits Guide")
 
-    # 5. GeoLibre Contribution & Fork Proposals
+    # 5. GeoLibre Contribution & Fork Proposals (Dedicated GeoLibre Products Navbar)
     p5_md = os.path.join(DOCS_DIR, "geolibre_contribution_proposals.md")
     p5_html = os.path.join(DOCS_DIR, "geolibre_contribution_proposals.html")
     if os.path.exists(p5_md):
-        convert_md_to_html(p5_md, p5_html, "GeoLibre Contribution & Fork Proposals | OpenGeos Collaboration")
+        convert_md_to_html(
+            p5_md,
+            p5_html,
+            "GeoLibre Contribution & Fork Proposals | OpenGeos Collaboration",
+            nav_links=GEOLIBRE_PROPOSAL_NAV_LINKS
+        )
 
 if __name__ == "__main__":
     main()

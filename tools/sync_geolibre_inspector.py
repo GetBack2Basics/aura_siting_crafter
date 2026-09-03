@@ -9,30 +9,30 @@ def sync_inspector():
     catalog = {}
     base_counts = {
         'national_cadastre_gnaf_v2': 15400000,
-        'national_electricity_grid_v2': 1866,
+        'national_electricity_grid_v2': 4820,
+        'national_healthcare_nhsd_v2': 4218,
+        'national_schools_acara_v2': 10842,
         'national_seismic_hazard_nsha_v2': 9,
         'national_cyclone_hazard_tcha_v2': 11,
-        'national_schools_acara_v2': 9600,
-        'national_healthcare_nhsd_v2': 3200,
         'nsw_bionet_bv_map_v2': 7475,
         'nsw_coastal_inundation_hazard_v2': 880,
-        'nsw_landslide_susceptibility_v2': 1240,
+        'nsw_landslide_susceptibility_v2': 4722,
         'nsw_national_seismic_hazard_v2': 9,
         'nsw_transmission_grid_v2': 6575,
-        'qld_transmission_grid_v2': 3147,
-        'qld_waterway_barriers_hydro_v2': 8520,
-        'qld_regulated_vegetation_vma_v2': 14200,
-        'qld_landslide_susceptibility_v2': 3180,
         'qld_cyclone_hazard_tcha_v2': 11,
-        'vic_transmission_grid_vicgrid_v2': 3450,
-        'vic_hydro_watercourses_v2': 12800,
-        'vic_native_veg_nvim_v2': 9400,
-        'vic_landslide_slope_stability_v2': 2600,
-        'vic_planning_scheme_zones_v2': 18500,
-        'wa_transmission_grid_v2': 2890,
-        'wa_dbca_threatened_ecological_communities_v2': 1740,
-        'sa_transmission_grid_electranet_v2': 2150,
-        'tas_transmission_grid_tasnetworks_v2': 1820
+        'qld_landslide_susceptibility_v2': 132621,
+        'qld_regulated_vegetation_vma_v2': 106931,
+        'qld_transmission_grid_v2': 3147,
+        'qld_waterway_barriers_hydro_v2': 55933,
+        'sa_transmission_grid_electranet_v2': 3250,
+        'tas_transmission_grid_tasnetworks_v2': 89841,
+        'vic_hydro_watercourses_v2': 8720,
+        'vic_landslide_slope_stability_v2': 4610,
+        'vic_native_veg_nvim_v2': 12450,
+        'vic_planning_scheme_zones_v2': 5120,
+        'vic_transmission_grid_vicgrid_v2': 3250,
+        'wa_dbca_threatened_ecological_communities_v2': 5120,
+        'wa_transmission_grid_v2': 870
     }
 
     for k, v in datasets.items():
@@ -51,9 +51,6 @@ def sync_inspector():
     with open('docs/qa/geolibre_qa_inspect.html', 'r', encoding='utf-8') as f:
         html = f.read()
 
-    # Clean Leaflet tags
-    html = re.sub(r'<link rel="stylesheet" href="https://unpkg\.com/leaflet[^"]*"[^>]*/>', '<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />', html)
-    html = re.sub(r'<script src="https://unpkg\.com/leaflet[^"]*"[^>]*></script>', '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>', html)
     html = html.replace('QA_Report_20260901.html', 'QA_Report_20260902.html')
 
     # Replace DATASET_CATALOG

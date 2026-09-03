@@ -294,27 +294,61 @@ flowchart TD
 <li><strong>Audit-Proof Decision Records</strong>: Embeds the exact scoring weights, source timestamps, and methodology in the export.</li>
 </ul>
 <hr />
-<h2>6. Upstream Core PRs to <code>opengeos/GeoLibre</code></h2>
-<p>For direct inclusion in the main GeoLibre codebase:
-1. <strong>DuckDB-WASM Spatial SQL Recipe Macros</strong>: Standardized SQL macros for parcel ranking, multi-ring proximity evaluation, and composite score normalization.
-2. <strong>Dynamic MapLibre Continuous Color Ramps</strong>: MapLibre GL JS expression utilities for dynamic multi-stop gradient rendering driven directly by DuckDB query attributes.
-3. <strong>Zero-Mock &amp; Live Health Check Telemetry</strong>: Diagnostic UI components verifying live WFS/ArcGIS REST endpoint health and graceful degradation reporting.</p>
+<h2>6. Upstream Core Rendering Enhancements &amp; Default Standards</h2>
+<p style="color: #38bdf8; font-size: 0.95rem; margin-bottom: 1.2rem;"><em>Cross-ecosystem standard for <a href="https://github.com/opengeos/GeoLibre" target="_blank" style="color: #60a5fa;">opengeos/GeoLibre</a> and <a href="https://github.com/GetBack2Basics/Spatial_Report_Crafter" target="_blank" style="color: #60a5fa;">GetBack2Basics/Spatial_Report_Crafter</a>.</em></p>
+
+<p>To ensure fluid 60fps performance and eliminate viewport clutter when visualizing complex spatial layers in the browser, we propose adopting the following <strong>5 Default Rendering Standards</strong>:</p>
+
+<div style="display: grid; gap: 1rem; margin: 1.5rem 0;">
+  <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #38bdf8;">
+    <h4 style="color: #38bdf8; margin-bottom: 0.4rem;">1. Area-Priority Viewport Feature Limiting (500-Feature Default)</h4>
+    <p style="font-size: 0.9rem; color: #cbd5e1;">When handling massive parcel layers (e.g. 15.4M records), sort polygons by area (<code>ORDER BY ST_Area(geom) DESC</code>) and cap client rendering at 500 features per viewport. This displays primary regional land parcels first without degrading frame rates or cluttering with sub-pixel slivers.</p>
+  </div>
+  <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #22c55e;">
+    <h4 style="color: #22c55e; margin-bottom: 0.4rem;">2. Point Clustering &amp; Density Scaling</h4>
+    <p style="font-size: 0.9rem; color: #cbd5e1;">Dense point infrastructure (substations, transmission towers, monitoring boreholes) uses native MapLibre GL cluster sources with step-based cluster count badges and auto-zoom / spiderfy expansions on click.</p>
+  </div>
+  <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #f59e0b;">
+    <h4 style="color: #f59e0b; margin-bottom: 0.4rem;">3. Dynamic MapLibre Continuous Color Ramps</h4>
+    <p style="font-size: 0.9rem; color: #cbd5e1;">Multi-stop gradient expressions (<code>['interpolate', ['linear'], ['get', attribute], ...]</code>) driven directly by in-memory DuckDB-WASM query attributes, providing zero-lag GPU-accelerated heatmaps and suitability scoring.</p>
+  </div>
+  <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #a855f7;">
+    <h4 style="color: #a855f7; margin-bottom: 0.4rem;">4. Sub-Second Web-Native Vector Streaming</h4>
+    <p style="font-size: 0.9rem; color: #cbd5e1;">Stream geometries directly from cloud storage via HTTP byte-range slicing (PMTiles, FlatGeobuf, GeoParquet) at zoom levels 14–18, completely bypassing monolithic GeoJSON payload bottlenecks.</p>
+  </div>
+  <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: 8px; border-left: 4px solid #ec4899;">
+    <h4 style="color: #ec4899; margin-bottom: 0.4rem;">5. Zero-Latency Standalone Portable Digital Twins</h4>
+    <p style="font-size: 0.9rem; color: #cbd5e1;">Packaging active layers, custom symbology, and scoring logic into single-file portable HTML apps that execute with zero network lag and 100% client-side interactivity for statutory reviews.</p>
+  </div>
+</div>
+
 <hr />
-<h2>Community Feedback &amp; Prioritization Request</h2>
+<h2>7. Ecosystem Synergy: <code>Spatial_Report_Crafter</code> &amp; <code>GeoLibre</code></h2>
+<p>These rendering standards and export capabilities establish the core foundation for <a href="https://github.com/GetBack2Basics/Spatial_Report_Crafter" target="_blank" style="color: #60a5fa; font-weight: 600;">Spatial_Report_Crafter</a>:</p>
+<ul style="margin: 0.8rem 0 1.5rem 1.5rem; color: #cbd5e1;">
+  <li><strong>Automated Package Generator:</strong> Consumes standardized project manifests to produce zero-dependency interactive 3D WebGIS and statutory planning reports.</li>
+  <li><strong>Shared Component Library:</strong> Reusable UI widgets (dynamic weight sliders, radar spider charts, live attribute inspection docks, dual-theme contrast maps).</li>
+  <li><strong>Cross-Repo Template:</strong> Acts as the official reporting &amp; statutory submission template for GeoLibre workflows.</li>
+</ul>
+
+<hr />
+<h2>8. Community Feedback &amp; Prioritization Request</h2>
 <p>We would love the GeoLibre core team's input:</p>
-<ol>
-<li><strong>Plugin vs. Monorepo</strong>: Would you prefer <code>geolibre-siting</code> as a standalone plugin repository (<code>opengeos/geolibre-siting</code> / <code>geolibre-plugin-siting</code>) or merged directly into the core GeoLibre plugin directory?</li>
-<li><strong>Backend Preference</strong>: Is there interest in the Apache Sedona / Wherobots remote compute connector for GeoLibre's desktop (Tauri) or web runtime?</li>
-<li><strong>Feature Priority</strong>: Which of the above tracks would deliver the most immediate value to the GeoLibre user community?</li>
+<ol style="margin: 0.8rem 0 1.5rem 1.5rem; color: #cbd5e1;">
+  <li><strong>Plugin vs. Monorepo:</strong> Would you prefer <code>geolibre-siting</code> as a standalone plugin repository (<code>opengeos/geolibre-siting</code> / <code>geolibre-plugin-siting</code>) or merged directly into the core GeoLibre plugin directory?</li>
+  <li><strong>Backend Preference:</strong> Is there interest in the Apache Sedona / Wherobots remote compute connector for GeoLibre's desktop (Tauri) or web runtime?</li>
+  <li><strong>Rendering Defaults:</strong> Should the Area-Priority 500-feature limiter and dynamic color ramp macros be merged directly into GeoLibre's default vector layer pipeline?</li>
+  <li><strong>Feature Priority:</strong> Which of the above tracks would deliver the most immediate value to the GeoLibre user community?</li>
 </ol>
 <hr />
-<p><em>Repository Reference:</em> <a href="https://github.com/GetBack2Basics/aura_siting_crafter">AURA Siting Crafter on GitHub</a><br />
-<em>Upstream Project:</em> <a href="https://github.com/opengeos/GeoLibre">GeoLibre on GitHub</a></p>
+<p><em>Repository Reference:</em> <a href="https://github.com/GetBack2Basics/aura_siting_crafter" style="color: #60a5fa;">AURA Siting Crafter on GitHub</a><br />
+<em>Spatial Report Engine:</em> <a href="https://github.com/GetBack2Basics/Spatial_Report_Crafter" style="color: #60a5fa;">Spatial_Report_Crafter on GitHub</a><br />
+<em>Upstream Project:</em> <a href="https://github.com/opengeos/GeoLibre" style="color: #60a5fa;">GeoLibre on GitHub</a></p>
   </div>
 </div>
 
 <footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
-  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | 202609032135
+  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | 202609040706
 </footer>
 
 </body>

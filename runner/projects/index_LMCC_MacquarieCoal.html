@@ -468,9 +468,38 @@
             id: 'layer-biolink-fill',
             type: 'fill',
             source: 'biolink',
+            filter: ['==', '$type', 'Polygon'],
             paint: {
                 'fill-color': '#22c55e',
                 'fill-opacity': 0.3
+            }
+        });
+        map.addLayer({
+            id: 'layer-biolink-points',
+            type: 'circle',
+            source: 'biolink',
+            filter: ['==', '$type', 'Point'],
+            paint: {
+                'circle-radius': 7,
+                'circle-color': '#22c55e',
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-width': 2,
+                'circle-opacity': 0.95
+            }
+        });
+
+        // Add PHES Point Layer for Powerhouse
+        map.addLayer({
+            id: 'layer-phes-points',
+            type: 'circle',
+            source: 'phes',
+            filter: ['==', '$type', 'Point'],
+            paint: {
+                'circle-radius': 8,
+                'circle-color': '#eab308',
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-width': 2,
+                'circle-opacity': 0.95
             }
         });
 
@@ -514,6 +543,32 @@
                 `)
                 .addTo(map);
         });
+
+        map.on('click', 'layer-biolink-points', (e) => {
+            const props = e.features[0].properties;
+            new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(`
+                    <div style="font-family: sans-serif; font-size: 12px; color: #0f172a;">
+                        <b style="font-size: 14px; color: #16a34a;">🐾 ${props.name}</b><br>
+                        <strong>Type:</strong> ${props.type || 'Fauna Wildlife Corridor Overpass'}
+                    </div>
+                `)
+                .addTo(map);
+        });
+
+        map.on('click', 'layer-phes-points', (e) => {
+            const props = e.features[0].properties;
+            new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(`
+                    <div style="font-family: sans-serif; font-size: 12px; color: #0f172a;">
+                        <b style="font-size: 14px; color: #d97706;">⚡ ${props.name}</b><br>
+                        <strong>Power:</strong> ${props.power_mw || 20} MW | <strong>Type:</strong> ${props.type || 'PHES Powerhouse'}
+                    </div>
+                `)
+                .addTo(map);
+        });
     });
 
     function toggleLayer(layerKey) {
@@ -522,10 +577,10 @@
         
         const layerMap = {
             'pads': ['layer-pads-fill', 'layer-pads-line'],
-            'phes': ['layer-phes-fill', 'layer-phes-line'],
+            'phes': ['layer-phes-fill', 'layer-phes-line', 'layer-phes-points'],
             'railroad': ['layer-railroad-line'],
             'subsidence': ['layer-subsidence-fill'],
-            'biolink': ['layer-biolink-fill'],
+            'biolink': ['layer-biolink-fill', 'layer-biolink-points'],
             'acoustic': ['layer-acoustic-fill', 'layer-acoustic-line']
         };
         

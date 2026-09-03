@@ -119,24 +119,53 @@ An export action in GeoLibre that packages the active map view, DuckDB-WASM engi
 
 ---
 
-## 6. Upstream Core PRs to `opengeos/GeoLibre`
+## 6. Upstream Core Rendering Enhancements & Default Standards
+*Cross-ecosystem standard for [`opengeos/GeoLibre`](https://github.com/opengeos/GeoLibre) and [`GetBack2Basics/Spatial_Report_Crafter`](https://github.com/GetBack2Basics/Spatial_Report_Crafter).*
 
-For direct inclusion in the main GeoLibre codebase:
-1. **DuckDB-WASM Spatial SQL Recipe Macros**: Standardized SQL macros for parcel ranking, multi-ring proximity evaluation, and composite score normalization.
-2. **Dynamic MapLibre Continuous Color Ramps**: MapLibre GL JS expression utilities for dynamic multi-stop gradient rendering driven directly by DuckDB query attributes.
-3. **Zero-Mock & Live Health Check Telemetry**: Diagnostic UI components verifying live WFS/ArcGIS REST endpoint health and graceful degradation reporting.
+To ensure fluid 60fps performance and avoid canvas clutter when rendering complex spatial layers in the browser, we propose adopting the following **5 Default Rendering Standards**:
+
+### 1. Area-Priority Viewport Feature Limiting
+* **Problem**: Ingesting raw national datasets (e.g., 15.4M parcels or state-wide zoning overlays) can flood the browser DOM and WebGL canvas with tens of thousands of micro-slivers and sub-pixel geometries.
+* **Default Standard**: Apply an intelligent feature limit (default: **500 features** per active viewport). Sort polygon geometries by area (`ORDER BY ST_Area(geom) DESC` or bounding box magnitude) so that the largest, most significant parcels/assets are prioritized and rendered first, preventing visual clutter while maintaining full frame rates.
+
+### 2. Point Clustering & Density Scaling
+* **Problem**: Dense point datasets (e.g., electrical substations, transmission towers, monitoring boreholes, turbine locations) overlap into unreadable blobs at macro zoom levels.
+* **Default Standard**: Enable native MapLibre GL cluster sources (`cluster: true`, `clusterRadius: 50`, `clusterMaxZoom: 14`) with step-based cluster count badges and auto-zoom / spiderfy expansions on click.
+
+### 3. Dynamic MapLibre Continuous Color Ramps
+* **Problem**: Re-styling layers during interactive What-If slider adjustments traditionally causes laggy layer re-instantiation.
+* **Default Standard**: Leverage MapLibre GL JS data-driven expressions (`['interpolate', ['linear'], ['get', attribute], ...]`) driven directly by in-memory DuckDB-WASM query attributes for instant, GPU-accelerated continuous heatmaps and suitability grading.
+
+### 4. Sub-Second Web-Native Vector Streaming (HTTP Byte-Range Requests)
+* **Problem**: Loading entire monolithic GeoJSON files creates network latency bottlenecks and spikes browser memory.
+* **Default Standard**: Stream geometries directly from S3/GCS via HTTP byte-range slicing using **PMTiles**, **FlatGeobuf**, and **GeoParquet**, enabling sub-second tile rendering and smooth 60fps pan/zoom across intricate cadastral boundaries.
+
+### 5. Zero-Latency Standalone Digital Twins & Embedded Micro-Layers
+* **Problem**: Regulators, stakeholders, and field inspectors need to access reports and interactive maps without active cloud infrastructure or authenticated backend APIs.
+* **Default Standard**: Package active layers, custom symbology, and scoring logic into single-file portable HTML apps that execute with zero network lag and 100% client-side interactivity.
 
 ---
 
-## Community Feedback & Prioritization Request
+## 7. Ecosystem Synergy: `Spatial_Report_Crafter` & `GeoLibre`
+
+These rendering standards and export capabilities establish the core foundation for **[Spatial_Report_Crafter](https://github.com/GetBack2Basics/Spatial_Report_Crafter)**:
+* **Automated Package Generator**: Consumes standardized project manifests to produce zero-dependency interactive 3D WebGIS and statutory planning reports.
+* **Shared Component Library**: Reusable UI widgets (dynamic weight sliders, radar spider charts, live attribute inspection docks, dual-theme contrast maps).
+* **Cross-Repo Template**: Acts as the official reporting & statutory submission template for GeoLibre workflows.
+
+---
+
+## 8. Community Feedback & Prioritization Request
 
 We would love the GeoLibre core team's input:
 
 1. **Plugin vs. Monorepo**: Would you prefer `geolibre-siting` as a standalone plugin repository (`opengeos/geolibre-siting` / `geolibre-plugin-siting`) or merged directly into the core GeoLibre plugin directory?
 2. **Backend Preference**: Is there interest in the Apache Sedona / Wherobots remote compute connector for GeoLibre's desktop (Tauri) or web runtime?
-3. **Feature Priority**: Which of the above tracks would deliver the most immediate value to the GeoLibre user community?
+3. **Rendering Defaults**: Should the Area-Priority 500-feature limiter and dynamic color ramp macros be merged directly into GeoLibre's default vector layer pipeline?
+4. **Feature Priority**: Which of the above tracks would deliver the most immediate value to the GeoLibre user community?
 
 ---
 
 *Repository Reference:* [AURA Siting Crafter on GitHub](https://github.com/GetBack2Basics/aura_siting_crafter)  
+*Spatial Report Engine:* [Spatial_Report_Crafter on GitHub](https://github.com/GetBack2Basics/Spatial_Report_Crafter)  
 *Upstream Project:* [GeoLibre on GitHub](https://github.com/opengeos/GeoLibre)

@@ -579,9 +579,9 @@ def build_qa_html_report(qa: Dict[str, Any]) -> str:
         <p>Pre-Release Spatial QA Verification &bull; Timestamp: {timestamp}</p>
       </div>
       <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-        <a href="national_suitability_report.html" target="_blank" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #93c5fd; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">📑 Siting Report</a>
+        <a href="../../national_suitability_report.html" target="_blank" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #93c5fd; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">📑 Siting Report</a>
         <a href="geolibre_qa_inspect.html" target="_blank" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #67e8f9; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🗺️ Map Inspector</a>
-        <a href="index.html" target="_blank" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🌐 GeoLibre App</a>
+        <a href="../../index.html" target="_blank" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🌐 GeoLibre App</a>
         <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: {status_badge_color}; border: 1px solid {status_badge_color};">
           {qa['overall_status']}
         </span>

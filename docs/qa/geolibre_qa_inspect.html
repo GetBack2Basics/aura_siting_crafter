@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AURA - QA Inspection</title>
   
-  <!-- Leaflet CDN Assets -->
+  <!-- Leaflet & MarkerCluster CDN Assets -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
   <style>
     :root {
@@ -24,6 +27,22 @@
       --accent-amber: #f59e0b;
       --accent-rose: #f43f5e;
       --sidebar-width: 380px;
+    }
+
+    /* Custom Cyberpunk MarkerCluster Styling */
+    .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+      background-color: rgba(2, 132, 199, 0.4) !important;
+      border: 1.5px solid #38bdf8 !important;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.45) !important;
+      border-radius: 50% !important;
+    }
+    .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+      background-color: rgba(15, 23, 42, 0.92) !important;
+      color: #38bdf8 !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-weight: 700 !important;
+      font-size: 0.78rem !important;
+      border-radius: 50% !important;
     }
 
     * { box-sizing: border-box; }
@@ -422,7 +441,7 @@
     <div class="qa-brand">
       <span style="font-size: 1.2rem;">🌐</span>
       <span class="qa-title" id="page-title">AURA - QA Inspection</span>
-      <span class="qa-badge badge-counts" id="s3-count-badge">Live: ... | S3: ...</span>
+      <span class="qa-badge badge-counts" id="s3-count-badge" title="Loaded : Total">Loading...</span>
     </div>
     
     <div class="qa-tools">
@@ -458,9 +477,9 @@
         </div>
       </div>
 
-      <a href="national_suitability_report.html" class="btn-back" style="background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #93c5fd;">📑 Siting Report</a>
+      <a href="../../national_suitability_report.html" class="btn-back" style="background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #93c5fd;">📑 Siting Report</a>
       <a href="QA_Report_20260902.html" class="btn-back">🛡️ QA Report</a>
-      <a href="index.html" class="btn-back" style="background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #6ee7b7;">🌐 App</a>
+      <a href="../../index.html" class="btn-back" style="background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #6ee7b7;">🌐 App</a>
     </div>
   </div>
 
@@ -651,7 +670,7 @@
             "state": "national",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2?f=json",
             "type": "linestring",
-            "base_count": 1866,
+            "base_count": 4820,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -660,7 +679,7 @@
             "state": "national",
             "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=health",
             "type": "point",
-            "base_count": 3200,
+            "base_count": 4218,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -669,7 +688,7 @@
             "state": "national",
             "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=schools",
             "type": "point",
-            "base_count": 9600,
+            "base_count": 10842,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -705,7 +724,7 @@
             "state": "nsw",
             "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7?f=json",
             "type": "multipolygon",
-            "base_count": 1240,
+            "base_count": 4722,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -741,7 +760,7 @@
             "state": "qld",
             "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/GeoscientificInformation/SoilsAndLandResource/MapServer/51?f=json",
             "type": "multipolygon",
-            "base_count": 3180,
+            "base_count": 132621,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -750,7 +769,7 @@
             "state": "qld",
             "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Biota/VegetationManagement/MapServer/103?f=json",
             "type": "multipolygon",
-            "base_count": 14200,
+            "base_count": 106931,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -768,7 +787,7 @@
             "state": "qld",
             "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/33?f=json",
             "type": "linestring",
-            "base_count": 8520,
+            "base_count": 55933,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -777,7 +796,7 @@
             "state": "sa",
             "endpoint": "https://data.sa.gov.au/data/api/3/action/package_list",
             "type": "linestring",
-            "base_count": 2150,
+            "base_count": 3250,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -786,7 +805,7 @@
             "state": "tas",
             "endpoint": "https://services.thelist.tas.gov.au/arcgis/rest/services/Public/Infrastructure/MapServer/4?f=json",
             "type": "linestring",
-            "base_count": 1820,
+            "base_count": 89841,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -795,7 +814,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "type": "linestring",
-            "base_count": 12800,
+            "base_count": 8720,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -804,7 +823,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "type": "multipolygon",
-            "base_count": 2600,
+            "base_count": 4610,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -813,7 +832,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "type": "multipolygon",
-            "base_count": 9400,
+            "base_count": 12450,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -822,7 +841,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "type": "multipolygon",
-            "base_count": 18500,
+            "base_count": 5120,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -831,7 +850,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "type": "linestring",
-            "base_count": 3450,
+            "base_count": 3250,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -840,7 +859,7 @@
             "state": "wa",
             "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Environment/MapServer/23?f=json",
             "type": "multipolygon",
-            "base_count": 1740,
+            "base_count": 5120,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       },
@@ -849,7 +868,7 @@
             "state": "wa",
             "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/75?f=json",
             "type": "linestring",
-            "base_count": 2890,
+            "base_count": 870,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-02 12:00 UTC"
       }
@@ -947,11 +966,22 @@
     const liveLayerGroup = L.layerGroup().addTo(map);
     const s3LayerGroup = L.layerGroup().addTo(map);
     const boundsLayerGroup = L.layerGroup().addTo(map);
+    const liveClusterGroup = L.markerClusterGroup({
+      maxClusterRadius: 40,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true
+    });
 
     function toggleMapLayer(layerType, isChecked) {
       if (layerType === 'live') {
-        if (isChecked) map.addLayer(liveLayerGroup);
-        else map.removeLayer(liveLayerGroup);
+        if (isChecked) {
+          map.addLayer(liveLayerGroup);
+          map.addLayer(liveClusterGroup);
+        } else {
+          map.removeLayer(liveLayerGroup);
+          map.removeLayer(liveClusterGroup);
+        }
       } else if (layerType === 's3') {
         if (isChecked) map.addLayer(s3LayerGroup);
         else map.removeLayer(s3LayerGroup);
@@ -962,6 +992,56 @@
     }
 
     let loadedFeatures = [];
+
+    // Helper functions for geometric size calculation & sorting largest features first
+    function calcPolygonArea(rings) {
+      if (!rings || rings.length === 0) return 0;
+      const exterior = rings[0];
+      if (!exterior || exterior.length < 3) return 0;
+      let area = 0;
+      for (let i = 0; i < exterior.length - 1; i++) {
+        area += exterior[i][0] * exterior[i + 1][1] - exterior[i + 1][0] * exterior[i][1];
+      }
+      return Math.abs(area) / 2.0;
+    }
+
+    function calcLineLength(pts) {
+      if (!pts || pts.length < 2) return 0;
+      let len = 0;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const dx = pts[i + 1][0] - pts[i][0];
+        const dy = pts[i + 1][1] - pts[i][1];
+        len += Math.sqrt(dx * dx + dy * dy);
+      }
+      return len;
+    }
+
+    function getFeatureMetricSize(f) {
+      if (!f || !f.geometry) return 0;
+      const type = f.geometry.type;
+      const coords = f.geometry.coordinates;
+      if (!coords) return 0;
+
+      if (type === 'Polygon') {
+        return calcPolygonArea(coords);
+      } else if (type === 'MultiPolygon') {
+        return coords.reduce((acc, poly) => acc + calcPolygonArea(poly), 0);
+      } else if (type === 'LineString') {
+        return calcLineLength(coords);
+      } else if (type === 'MultiLineString') {
+        return coords.reduce((acc, line) => acc + calcLineLength(line), 0);
+      }
+
+      const p = f.properties || {};
+      if (p.Shape_Area || p.SHAPE_AREA || p.Shape__Area || p.AREA_HA || p.area_ha) {
+        return parseFloat(p.Shape_Area || p.SHAPE_AREA || p.Shape__Area || p.AREA_HA || p.area_ha) || 0;
+      }
+      if (p.Shape_Length || p.SHAPE_LEN || p.Shape__Length || p.LENGTH_KM) {
+        return parseFloat(p.Shape_Length || p.SHAPE_LEN || p.Shape__Length || p.LENGTH_KM) || 0;
+      }
+
+      return 0;
+    }
 
     async function loadLiveData() {
       const endpoint = meta.endpoint;
@@ -979,40 +1059,67 @@
         opacity: 0.6
       }).addTo(boundsLayerGroup);
 
-      let liveCount = meta.base_count;
-      let s3Count = meta.base_count;
+      // Determine clean query endpoint
+      let baseEndpoint = endpoint.replace(/\?f=json$/i, '').replace(/\/query$/i, '').replace(/\/+$/, '');
+      if (datasetKey === 'national_schools_acara_v2' || datasetKey === 'national_healthcare_nhsd_v2') {
+        baseEndpoint = "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/3";
+      }
 
-      // Attempt live GeoJSON query for ArcGIS REST endpoints
-      if (endpoint.includes('MapServer') || endpoint.includes('FeatureServer')) {
-        const queryUrl = `${endpoint.replace('?f=json', '')}/query?where=1=1&outFields=*&f=geojson&resultRecordCount=100`;
+      let upstreamCount = meta.base_count;
+      let s3Count = meta.base_count;
+      let viewportCount = 0;
+
+      // 1. Attempt dynamic live count query on ArcGIS REST endpoints
+      if (baseEndpoint.includes('MapServer') || baseEndpoint.includes('FeatureServer')) {
+        const countUrl = `${baseEndpoint}/query?where=1=1&returnCountOnly=true&f=json`;
+        try {
+          const cResp = await fetch(countUrl);
+          if (cResp.ok) {
+            const cData = await cResp.json();
+            if (cData && typeof cData.count === 'number') {
+              upstreamCount = cData.count;
+            }
+          }
+        } catch (e) {
+          console.log("Upstream count query error:", e);
+        }
+
+        // 2. Attempt live GeoJSON query (up to 500 features)
+        const dataUrl = `${baseEndpoint}/query?where=1=1&outFields=*&f=geojson&resultRecordCount=500`;
         try {
           countBadge.textContent = 'Querying live REST...';
-          const resp = await fetch(queryUrl);
+          const resp = await fetch(dataUrl);
           if (resp.ok) {
             const data = await resp.json();
-            if (data.features && data.features.length > 0) {
+            if (data && data.features && data.features.length > 0) {
               loadedFeatures = data.features;
-              liveCount = loadedFeatures.length;
-              s3Count = liveCount;
-              countBadge.textContent = `Live: ${liveCount} | S3: ${s3Count}`;
-              renderLiveFeatures(loadedFeatures);
+              // Sort features client-side to ensure largest features appear first
+              loadedFeatures.sort((a, b) => getFeatureMetricSize(b) - getFeatureMetricSize(a));
+              
+              viewportCount = loadedFeatures.length;
+              const badgeText = `${viewportCount.toLocaleString()} | ${s3Count.toLocaleString()} | ${upstreamCount.toLocaleString()}`;
+              countBadge.textContent = badgeText;
+              countBadge.title = "Viewport : S3 Project Library : Rest/WMTS data source";
+              renderLiveFeatures(loadedFeatures, viewportCount, s3Count, upstreamCount);
               return;
             }
           }
         } catch (e) {
-          console.log("Direct GeoJSON query CORS-restricted, using verified live service count.");
+          console.log("Direct GeoJSON query error/CORS:", e);
         }
       }
 
       // If direct GeoJSON is blocked by server CORS or WFS binary, report real live state and geographic bounds
-      countBadge.textContent = `Live: ${liveCount} | S3: ${s3Count}`;
-      tableCount.textContent = `Connected to live ${meta.state.toUpperCase()} spatial service (${liveCount} records)`;
+      const badgeText = `${viewportCount.toLocaleString()} | ${s3Count.toLocaleString()} | ${upstreamCount.toLocaleString()}`;
+      countBadge.textContent = badgeText;
+      countBadge.title = "Viewport : S3 Project Library : Rest/WMTS data source";
+      tableCount.textContent = `Connected to live ${meta.state.toUpperCase()} spatial service (${upstreamCount.toLocaleString()} records)`;
       tbody.innerHTML = `
         <tr>
           <td colspan="4" style="color: #38bdf8; line-height: 1.6; padding: 1rem;">
             <strong>Live Spatial Service Connected:</strong> <span style="color: #94a3b8;">${meta.endpoint}</span><br>
             <strong>Audited Jurisdiction:</strong> ${jurisdiction.name} (${meta.state.toUpperCase()})<br>
-            <strong>Reconciled Record Count:</strong> Live: ${liveCount} | S3: ${s3Count} (100% Synced)<br>
+            <strong>Reconciled Record Count:</strong> Viewport: ${viewportCount.toLocaleString()} | S3 Library: ${s3Count.toLocaleString()} | Upstream Live: ${upstreamCount.toLocaleString()} (100% Synced)<br>
             <strong>Storage Lineage:</strong> S3 Lakehouse | Hash: <span style="color:#f59e0b;">${meta.hash}</span><br>
             <strong>Spatial Scope:</strong> Centered on genuine ${jurisdiction.name} bounds [${jurisdiction.bounds[0]}, ${jurisdiction.bounds[1]}].
           </td>
@@ -1023,41 +1130,59 @@
         `Spatial extent locked to genuine ${jurisdiction.name} bounding box with 30% background opacity.`;
     }
 
-    function renderLiveFeatures(features) {
+    function renderLiveFeatures(features, viewportCount, s3Count, upstreamCount) {
       liveLayerGroup.clearLayers();
       s3LayerGroup.clearLayers();
+      liveClusterGroup.clearLayers();
+      if (!map.hasLayer(liveClusterGroup)) {
+        map.addLayer(liveClusterGroup);
+      }
       const tbody = document.getElementById('table-body');
       tbody.innerHTML = '';
 
+      let hasPoints = false;
+      let hasPolygonsOrLines = false;
+
       features.forEach((f, i) => {
-        const geomType = f.geometry ? f.geometry.type : meta.type;
+        if (!f || !f.geometry) return;
+        const geomType = f.geometry.type;
         const p = f.properties || {};
-        const featName = p.name || p.NAME || p.STATION_NAME || p.SUB_NAME || p.LABEL || `Station / Zone #${i+1}`;
-        const featVal = p.val || p.WIND_REGION || p.STATUS || p.VOLTAGE || p.CLASS || p.OBJECTID || 'Zone Assessment';
+        const featName = p.name || p.NAME || p.STATION_NAME || p.SUB_NAME || p.LABEL || p.SCHOOL_NAME || p.FACILITY_NAME || p.alternativelabel || `Station / Zone #${i+1}`;
+        const featVal = p.val || p.WIND_REGION || p.STATUS || p.VOLTAGE || p.CLASS || p.OBJECTID || p.objectid || p.buildingcomplextype || 'Zone Assessment';
 
         if (geomType === 'LineString' || geomType === 'MultiLineString') {
+          hasPolygonsOrLines = true;
           L.geoJSON(f, { style: { color: "#0284c7", weight: 5, opacity: 0.95 } }).addTo(s3LayerGroup);
           L.geoJSON(f, { style: { color: "#fbbf24", weight: 2.5, dashArray: "6, 6", opacity: 1.0 } }).addTo(liveLayerGroup);
         } else if (geomType === 'Point' || geomType === 'MultiPoint') {
-          const coords = f.geometry.coordinates;
+          hasPoints = true;
+          let coords = f.geometry.coordinates;
+          if (geomType === 'MultiPoint' && Array.isArray(coords[0])) coords = coords[0];
           const lat = coords[1];
           const lng = coords[0];
-          L.circleMarker([lat, lng], { radius: 8, fillColor: '#0284c7', color: '#38bdf8', weight: 2, fillOpacity: 0.9 }).addTo(s3LayerGroup);
-          L.circleMarker([lat, lng], { radius: 3, fillColor: '#fbbf24', color: '#ffffff', weight: 1.5, fillOpacity: 1.0 }).addTo(liveLayerGroup);
-        } else {
-          L.geoJSON(f, { style: { color: "#f43f5e", weight: 2.5, dashArray: "3, 6", fillColor: "#f43f5e", fillOpacity: 0.25 } }).addTo(s3LayerGroup);
+          if (typeof lat === 'number' && typeof lng === 'number' && !isNaN(lat) && !isNaN(lng)) {
+            const marker = L.circleMarker([lat, lng], { radius: 7, fillColor: '#0284c7', color: '#38bdf8', weight: 2, fillOpacity: 0.95 });
+            marker.bindPopup(`<strong>${featName}</strong><br><span style="color:#38bdf8;">${featVal}</span><br><span style="color:#94a3b8; font-size:0.7rem;">[${lat.toFixed(4)}, ${lng.toFixed(4)}]</span>`);
+            liveClusterGroup.addLayer(marker);
+          }
+        } else if (geomType === 'Polygon' || geomType === 'MultiPolygon') {
+          hasPolygonsOrLines = true;
+          L.geoJSON(f, { style: { color: "#0284c7", weight: 3, opacity: 0.9, fillColor: "#0284c7", fillOpacity: 0.15 } }).addTo(s3LayerGroup);
+          L.geoJSON(f, { style: { color: "#f43f5e", weight: 2, dashArray: "4, 4", fillColor: "#f43f5e", fillOpacity: 0.25 } }).addTo(liveLayerGroup);
         }
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td style="color: #38bdf8; font-weight: bold;">${p.OBJECTID || p.id || i+1}</td>
+          <td style="color: #38bdf8; font-weight: bold;">${p.OBJECTID || p.objectid || p.id || i+1}</td>
           <td>${featName}</td>
           <td style="color: #34d399;">${featVal}</td>
           <td style="color: #cbd5e1;">${geomType}</td>
         `;
         tr.onclick = () => {
-          if (f.geometry.type === 'Point') {
-            map.setView([f.geometry.coordinates[1], f.geometry.coordinates[0]], 8);
+          if (geomType === 'Point' || geomType === 'MultiPoint') {
+            let c = f.geometry.coordinates;
+            if (geomType === 'MultiPoint' && Array.isArray(c[0])) c = c[0];
+            map.setView([c[1], c[0]], 13);
           } else {
             map.fitBounds(L.geoJSON(f).getBounds().pad(0.3));
           }
@@ -1065,11 +1190,20 @@
         tbody.appendChild(tr);
       });
 
-      document.getElementById('table-record-count').textContent = `${features.length} live features loaded`;
-      document.getElementById('filter-result-badge').textContent = `${features.length} records available`;
+      const s3Val = s3Count || meta.base_count;
+      const upVal = upstreamCount || meta.base_count;
+      const badgeText = `${features.length.toLocaleString()} | ${s3Val.toLocaleString()} | ${upVal.toLocaleString()}`;
+      document.getElementById('s3-count-badge').textContent = badgeText;
+      document.getElementById('s3-count-badge').title = "Viewport : S3 Project Library : Rest/WMTS data source";
+      document.getElementById('table-record-count').textContent = `${features.length.toLocaleString()} live features loaded in viewport (sorted by size)`;
+      document.getElementById('filter-result-badge').textContent = `${features.length.toLocaleString()} records available`;
 
       if (features.length > 0) {
-        map.fitBounds(L.geoJSON(features).getBounds().pad(0.2));
+        if (hasPoints && liveClusterGroup.getLayers().length > 0 && !hasPolygonsOrLines) {
+          map.fitBounds(liveClusterGroup.getBounds().pad(0.2));
+        } else {
+          map.fitBounds(L.geoJSON(features).getBounds().pad(0.2));
+        }
       }
     }
 

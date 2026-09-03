@@ -75,18 +75,23 @@ While GeoLibre runs smoothly in the browser for datasets up to hundreds of megab
 
 ---
 
-## 3. Contribution Track 3: `geolibre-spatial-ai` (FastAPI AI Spatial Agent Proxy)
+## 3. Contribution Track 3: `geolibre-spatial-ai` (Ask AI: Natural Language to Spatial SQL & GeoAgent Integration)
 
-### The Concept
-A production-ready FastAPI backend and GeoLibre UI extension that connects GeoLibre to Large Language Models (LLMs) with geospatial context awareness.
+### The Concept & GeoAgent Synergy
+OpenGeos maintains **GeoAgent** (`opengeos/GeoAgent`), which provides multimodal AI assistance across GeoLibre and QGIS. 
+
+Our contribution provides a **specialized Spatial SQL compilation & viewport-grounded analytics engine** that can either integrate directly as tool skills within **GeoAgent** or run as a standalone FastAPI proxy (`geolibre-spatial-ai-proxy`).
 
 ### Key Capabilities
-1. **Natural Language to Spatial SQL**:
-   * Translates user queries ("Find all industrial zoned parcels over 20 hectares within 5km of a 330kV substation") into valid DuckDB-WASM or Sedona Spatial SQL.
-2. **Viewport-Aware Spatial Context**:
-   * Streams bounding-box contextual metadata to the AI agent so answers are grounded in what the user is currently viewing.
-3. **Automated Layer Styling**:
-   * Generates MapLibre GL color expression styles on the fly based on analytical query outputs.
+1. **Natural Language to Validated Spatial SQL (DuckDB-WASM & Sedona)**:
+   * Translates complex multi-criteria user prompts into syntactically valid Spatial SQL (e.g. *"Find all industrial zoned parcels over 20 hectares within 5km of a 330kV substation outside 1-in-100 year flood zones"* -> `SELECT ... WHERE ST_DWithin(...) AND NOT ST_Intersects(...)`).
+   * Handles dialect differences between client-side DuckDB-WASM and cloud-side Apache Sedona.
+2. **Viewport-Aware Spatial Context & Grounding**:
+   * Streams current map viewport bounding boxes (`bbox: [minX, minY, maxX, maxY]`), zoom levels, and active layer schemas into the LLM context so responses are strictly grounded in what the user is currently viewing.
+3. **Automated MapLibre Layer Styling & Filter Expressions**:
+   * Returns programmatic MapLibre GL JS filter expressions and dynamic continuous color ramps directly from the AI agent response to highlight matching polygons immediately on the map canvas.
+4. **Interactive What-If Siting Formulation**:
+   * Translates domain requirements into structured weighting vectors and sensitivity ranges for the client-side MCDA scoring engine.
 
 ---
 

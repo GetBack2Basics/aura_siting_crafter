@@ -257,17 +257,21 @@ flowchart TD
 <li>Uses ETag and GeoParquet file hashes to skip redundant heavy compute when underlying geometries have not changed.</li>
 </ol>
 <hr />
-<h2>3. Contribution Track 3: <code>geolibre-spatial-ai</code> (FastAPI AI Spatial Agent Proxy)</h2>
-<h3>The Concept</h3>
-<p>A production-ready FastAPI backend and GeoLibre UI extension that connects GeoLibre to Large Language Models (LLMs) with geospatial context awareness.</p>
+<h2>3. Contribution Track 3: <code>geolibre-spatial-ai</code> (Ask AI: Natural Language to Spatial SQL &amp; GeoAgent Integration)</h2>
+<h3>The Concept &amp; GeoAgent Synergy</h3>
+<p>OpenGeos maintains <strong>GeoAgent</strong> (<code>opengeos/GeoAgent</code>), which provides multimodal AI assistance across GeoLibre and QGIS. </p>
+<p>Our contribution provides a <strong>specialized Spatial SQL compilation &amp; viewport-grounded analytics engine</strong> that can either integrate directly as tool skills within <strong>GeoAgent</strong> or run as a standalone FastAPI proxy (<code>geolibre-spatial-ai-proxy</code>).</p>
 <h3>Key Capabilities</h3>
 <ol>
-<li><strong>Natural Language to Spatial SQL</strong>:</li>
-<li>Translates user queries ("Find all industrial zoned parcels over 20 hectares within 5km of a 330kV substation") into valid DuckDB-WASM or Sedona Spatial SQL.</li>
-<li><strong>Viewport-Aware Spatial Context</strong>:</li>
-<li>Streams bounding-box contextual metadata to the AI agent so answers are grounded in what the user is currently viewing.</li>
-<li><strong>Automated Layer Styling</strong>:</li>
-<li>Generates MapLibre GL color expression styles on the fly based on analytical query outputs.</li>
+<li><strong>Natural Language to Validated Spatial SQL (DuckDB-WASM &amp; Sedona)</strong>:</li>
+<li>Translates complex multi-criteria user prompts into syntactically valid Spatial SQL (e.g. <em>"Find all industrial zoned parcels over 20 hectares within 5km of a 330kV substation outside 1-in-100 year flood zones"</em> -&gt; <code>SELECT ... WHERE ST_DWithin(...) AND NOT ST_Intersects(...)</code>).</li>
+<li>Handles dialect differences between client-side DuckDB-WASM and cloud-side Apache Sedona.</li>
+<li><strong>Viewport-Aware Spatial Context &amp; Grounding</strong>:</li>
+<li>Streams current map viewport bounding boxes (<code>bbox: [minX, minY, maxX, maxY]</code>), zoom levels, and active layer schemas into the LLM context so responses are strictly grounded in what the user is currently viewing.</li>
+<li><strong>Automated MapLibre Layer Styling &amp; Filter Expressions</strong>:</li>
+<li>Returns programmatic MapLibre GL JS filter expressions and dynamic continuous color ramps directly from the AI agent response to highlight matching polygons immediately on the map canvas.</li>
+<li><strong>Interactive What-If Siting Formulation</strong>:</li>
+<li>Translates domain requirements into structured weighting vectors and sensitivity ranges for the client-side MCDA scoring engine.</li>
 </ol>
 <hr />
 <h2>4. Contribution Track 4: Open Spatial Catalog Presets (Australia &amp; Regional)</h2>
@@ -310,7 +314,7 @@ flowchart TD
 </div>
 
 <footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
-  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | 202609032107
+  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | 202609032135
 </footer>
 
 </body>

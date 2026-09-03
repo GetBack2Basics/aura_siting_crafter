@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public Planning Submission — Macquarie Coal Complex Transformation Precinct Master Plan &amp; Rezoning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-secondary: #111827;
+      --bg-card: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      padding: 32px 20px;
+      font-size: 15px;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    /* Header & Badges */
+    .header-panel {
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(17, 24, 39, 0.95) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 28px;
+      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .header-panel::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .meta-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+    .badge-blue { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-amber { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.3;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      color: #93c5fd;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 16px 20px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      font-size: 0.85rem;
+    }
+    .meta-item strong { color: #e5e7eb; }
+    .meta-item span { color: var(--text-muted); }
+
+    /* Action Links Bar */
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+    .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: #e5e7eb;
+      border: 1px solid var(--border-color);
+    }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.2); }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 30px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(12px);
+    }
+    .section-card h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    /* Stat Cards Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid var(--accent-blue);
+    }
+    .stat-card.green { border-left-color: var(--accent-green); }
+    .stat-card.amber { border-left-color: var(--accent-amber); }
+    .stat-card.purple { border-left-color: var(--accent-purple); }
+    .stat-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .stat-val {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      margin-bottom: 4px;
+    }
+    .stat-desc {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    /* Key Findings Grid */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .finding-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 18px 22px;
+    }
+    .finding-item h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #60a5fa;
+      margin-bottom: 8px;
+    }
+    .finding-item p {
+      color: #cbd5e1;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* Table Styles */
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+    th {
+      background: rgba(0, 0, 0, 0.4);
+      color: #94a3b8;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: #e2e8f0;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+    .tag-blue { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+    .tag-green { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+    .tag-amber { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 24px 0;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 32px;
+    }
+    footer a { color: #60a5fa; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Top Header -->
+    <header class="header-panel">
+      <div class="meta-badges">
+        <span class="badge badge-blue">🏛️ NSW Planning Submission</span>
+        <span class="badge badge-green">⚡ State Significant Rezoning</span>
+        <span class="badge badge-amber">📊 Evidence-Based Planning</span>
+      </div>
+      <h1>Macquarie Coal Complex Transformation Precinct</h1>
+      <div class="subtitle">Public Planning Submission on Master Plan &amp; Explanation of Intended Effects (EIE)</div>
+      
+      <div class="meta-grid">
+        <div class="meta-item"><strong>To:</strong> <span>Post Mining Assessment Team, DPHI</span></div>
+        <div class="meta-item"><strong>Email:</strong> <span>post.mining@dphi.nsw.gov.au</span></div>
+        <div class="meta-item"><strong>CC:</strong> <span>Lake Macquarie City Council, NZEA, NSW EPA</span></div>
+        <div class="meta-item"><strong>Submitter:</strong> <span>George Chandeep Corea (GetBack2Basics)</span></div>
+        <div class="meta-item"><strong>Date:</strong> <span>September 2026</span></div>
+        <div class="meta-item"><strong>Contact:</strong> <span>coreagc@gmail.com</span></div>
+      </div>
+
+      <div class="action-bar">
+        <a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/index.html" target="_blank" class="btn-action btn-primary">
+          🌐 Launch Interactive WebGIS Viewer
+        </a>
+        <a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/national_suitability_report.html" target="_blank" class="btn-action btn-secondary">
+          📑 Siting &amp; Resilience Report
+        </a>
+        <a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/geolibre_qa_inspect.html" target="_blank" class="btn-action btn-secondary">
+          🛡️ Data Depth Inspector
+        </a>
+      </div>
+    </header>
+
+    <!-- Key Metrics -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-title">Gross Masterplan Area</div>
+        <div class="stat-val">~45.0 ha</div>
+        <div class="stat-desc">Entire post-mining complex boundary</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-title">Net Developable Area (NDA)</div>
+        <div class="stat-val">15.2 – 28.5 ha</div>
+        <div class="stat-desc">Deducting riparian, slopes &gt;5%, easements &amp; TSF</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-title">Grid Capacity</div>
+        <div class="stat-val">330 kV</div>
+        <div class="stat-desc">Grandfathered connection to Awaba corridor</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-title">Data Depth Index</div>
+        <div class="stat-val">Tier 1 (10/10)</div>
+        <div class="stat-desc">100% authoritative local spatial layers</div>
+      </div>
+    </div>
+
+    <!-- Section 1: Executive Purpose -->
+    <section class="section-card">
+      <h2>📌 1. Purpose of Planning Submission</h2>
+      <p style="color: #cbd5e1; font-size: 0.95rem; margin-bottom: 14px;">
+        The Macquarie Coal Complex represents one of the most strategically compelling industrial transition opportunities in regional NSW. With direct access to high-capacity <strong>330kV transmission infrastructure</strong>, regional rail, arterial transport routes, and Hunter Water recycled effluent networks, the precinct is an ideal candidate for advanced manufacturing, clean energy industries, and sovereign AI compute infrastructure.
+      </p>
+      <p style="color: #cbd5e1; font-size: 0.95rem;">
+        This submission provides planning officers with evidence-based recommendations to ensure that the <strong>Finalisation Report, State Significant Rezoning instrument, and Precinct DCP</strong> provide commercial development certainty while safeguarding surrounding communities (Teralba, Barnsley, Awaba) and regional environmental catchments.
+      </p>
+    </section>
+
+    <!-- Section 2: Key Planning Considerations -->
+    <section class="section-card">
+      <h2>🗺️ 2. Key Planning Considerations &amp; Land Budget</h2>
+      <div class="findings-grid">
+        
+        <div class="finding-item">
+          <h3>A. Realizing True Net Developable Area (NDA) vs. Gross Footprint</h3>
+          <p>
+            While initial masterplans present gross precinct figures (~45 ha), statutory constraints on post-mining terrain reduce buildable pad space:
+            <strong>-3.8 ha</strong> for 30m riparian creek corridors, <strong>-2.1 ha</strong> for utility easements, <strong>-4.6 ha</strong> for slopes &gt;5% requiring major civil works, and <strong>-15.2 ha</strong> for the declared Tailings Storage Facility (TSF) safety zone. The true <strong>Net Developable Area is 15.2 ha (immediate) to 28.5 ha (post-remediation)</strong>. Statutory zoning maps should explicitly delineate these buildable pads.
+          </p>
+        </div>
+
+        <div class="finding-item">
+          <h3>B. Proactive Acoustic Protection for Adjacent Communities</h3>
+          <p>
+            Under the <em>NSW EPA Noise Policy for Industry (2017)</em> and <em>AS 1055:2018</em>, 24/7 industrial activities (such as cooling plant and backup power) must protect night-time residential amenity in Teralba, Barnsley, and Awaba. A <strong>500m acoustic compliance setback</strong> combined with mandatory perimeter acoustic bunding and low-noise mechanical equipment should be embedded in the Precinct DCP.
+          </p>
+        </div>
+
+        <div class="finding-item">
+          <h3>C. Water Stewardship: Mandating 100% Recycled Water Cooling</h3>
+          <p>
+            High-tech computing and heavy industry require significant thermal cooling. The Macquarie Precinct is well-situated to connect to Hunter Water's recycled wastewater networks. Mandating <strong>100% closed-loop liquid cooling or tertiary-treated recycled water</strong> preserves potable drinking water supplies across the Lake Macquarie catchment.
+          </p>
+        </div>
+
+        <div class="finding-item">
+          <h3>D. Multi-Hazard Resilience &amp; Climate Adaptation</h3>
+          <p>
+            The precinct complies fully with national statutory standards: <em>AS/NZS 1170.2</em> (Region A4 wind engineering), <em>AS 1170.4</em> (Seismic Hazard Ground Motion), complete exclusion from 1% AEP floodways (<em>NCC 2022 Part B1</em>), and geotechnical zoning compliant with Australian Geomechanics Society (<em>AGS 2007</em>) landslide guidelines.
+          </p>
+        </div>
+
+        <div class="finding-item">
+          <h3>E. Clean Energy Circularity &amp; Pumped Hydro Storage</h3>
+          <p>
+            The natural ~120m hydraulic head between the upper ridge and the existing pit void offers up to <strong>49.0 MWh of potential pumped hydro energy storage</strong>, providing on-site 24/7 renewable firming directly aligned with the Federal Net Zero Economy Authority's objectives.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Statutory Recommendations -->
+    <section class="section-card">
+      <h2>⚖️ 3. Five Specific Planning Recommendations</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 5%;">#</th>
+              <th style="width: 20%;">Planning Domain</th>
+              <th style="width: 25%;">Recommended Statutory Mechanism</th>
+              <th>Intended Planning Outcome</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1</strong></td>
+              <td><span class="tag tag-blue">Net Developable Area</span></td>
+              <td><strong>DCP Structure Plan Map</strong></td>
+              <td>Delineate clear <strong>Net Developable Pad Boundaries (15.2–28.5 ha)</strong> separate from riparian corridors, steep slopes (&gt;5%), and TSF buffers to provide commercial certainty for incoming proponents.</td>
+            </tr>
+            <tr>
+              <td><strong>2</strong></td>
+              <td><span class="tag tag-green">Acoustic Protection</span></td>
+              <td><strong>Precinct DCP Clause</strong></td>
+              <td>Establish a <strong>mandatory 500m acoustic compliance buffer</strong> from heavy mechanical cooling plant to sensitive residential receivers (Teralba, Barnsley, Awaba) under the <em>NSW EPA Noise Policy for Industry (2017)</em>.</td>
+            </tr>
+            <tr>
+              <td><strong>3</strong></td>
+              <td><span class="tag tag-blue">Water Preservation</span></td>
+              <td><strong>Rezoning Instrument Clause</strong></td>
+              <td>Insert a requirement that any high-demand thermal cooling use <strong>100% closed-loop or non-potable recycled water</strong> from regional WWTWs, strictly prohibiting raw potable water extraction.</td>
+            </tr>
+            <tr>
+              <td><strong>4</strong></td>
+              <td><span class="tag tag-amber">Energy Circularity</span></td>
+              <td><strong>Special Infrastructure Corridor</strong></td>
+              <td>Designate the pit void and hydraulic easement as a <strong>Protected Clean Energy &amp; Storage Corridor</strong> to enable future pumped hydro or battery storage integration.</td>
+            </tr>
+            <tr>
+              <td><strong>5</strong></td>
+              <td><span class="tag tag-blue">Digital Open Access</span></td>
+              <td><strong>NSW Spatial Digital Twin</strong></td>
+              <td>Integrate all final precinct masterplan layers and environmental constraint vectors directly into the <strong>NSW Spatial Digital Twin</strong> and SEED portals in open GDA2020 format.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 4: Contact & Briefing Offer -->
+    <section class="section-card" style="border-color: rgba(59, 130, 246, 0.4); background: rgba(30, 58, 138, 0.15);">
+      <h2>🤝 4. Technical Briefing &amp; Data Sharing Offer</h2>
+      <p style="color: #cbd5e1; font-size: 0.95rem; margin-bottom: 14px;">
+        All spatial data layers, Net Developable Area polygons, and multi-criteria evaluation matrices compiled for this assessment are available to DPHI and Council officers in open GDA2020 format.
+      </p>
+      <p style="color: #cbd5e1; font-size: 0.95rem; margin-bottom: 20px;">
+        I would welcome the opportunity to provide a <strong>15-minute digital briefing</strong> or interactive demonstration for the DPHI Post Mining Assessment Team or Lake Macquarie City Council planning staff.
+      </p>
+      
+      <div style="background: rgba(0, 0, 0, 0.4); padding: 18px 24px; border-radius: 10px; border: 1px solid var(--border-color); display: inline-block;">
+        <div style="font-weight: 700; color: #ffffff; margin-bottom: 4px;">George Chandeep Corea</div>
+        <div style="color: #93c5fd; font-size: 0.88rem; margin-bottom: 8px;">Founder / Geospatial Data Lead, <em>GetBack2Basics</em> | Project Lead, <em>AURA Siting Crafter</em></div>
+        <div style="color: var(--text-muted); font-size: 0.85rem;">
+          📧 <a href="mailto:coreagc@gmail.com" style="color: #60a5fa;">coreagc@gmail.com</a> &nbsp;|&nbsp; 
+          🔗 <a href="https://www.linkedin.com/in/coreagc/" target="_blank" style="color: #60a5fa;">LinkedIn Profile</a> &nbsp;|&nbsp; 
+          📁 <a href="https://github.com/GetBack2Basics/aura_siting_crafter" target="_blank" style="color: #60a5fa;">GitHub Project</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      &copy;&reg; 2026 GetBack2Basics &bull; <a href="https://github.com/GetBack2Basics" target="_blank">github.com/getback2basics</a> &bull; All material is for planning information and public consultation purposes &bull; EPSG:7844 GDA2020
+    </footer>
+
+  </div>
+
+</body>
+</html>

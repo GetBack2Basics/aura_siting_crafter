@@ -204,8 +204,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   </div>
 </div>
 
-<footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
-  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | {timestamp}
+<footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+  <div style="text-align: left;">
+    &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+  </div>
+  <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+    Built {timestamp} UTC
+  </div>
 </footer>
 
 </body>
@@ -215,6 +220,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 DEFAULT_NAV_LINKS = """
     <a href="../projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">🌐 Live Site WebGIS</a>
     <a href="../projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">📑 Statutory Site Report</a>
+    <a href="aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">⚡ Asymmetric Compute & AI Safety</a>
     <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">🗺️ Site Enhancement Plan</a>
     <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">🏗️ Architecture Plan</a>
     <a href="geolibre_contribution_proposals.html" class="nav-link">🤝 GeoLibre Proposals</a>
@@ -253,8 +259,8 @@ def convert_md_to_html(md_path, html_path, title, nav_links=DEFAULT_NAV_LINKS):
             f'<div class="mermaid">\n{clean_block}\n</div>'
         )
 
-    from datetime import datetime
-    timestamp = datetime.now().strftime('%Y%m%d%H%M')
+    from datetime import datetime, timezone
+    timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')
 
     # Wrap in template
     full_html = HTML_TEMPLATE.format(
@@ -269,6 +275,12 @@ def convert_md_to_html(md_path, html_path, title, nav_links=DEFAULT_NAV_LINKS):
     print(f"Generated: {html_path}")
 
 def main():
+    # 0. Asymmetric Compute & AI Safety Whitepaper
+    p0_md = os.path.join(DOCS_DIR, "aura_enterprise_asymmetric_compute_and_ai_safety.md")
+    p0_html = os.path.join(DOCS_DIR, "aura_enterprise_asymmetric_compute_and_ai_safety.html")
+    if os.path.exists(p0_md):
+        convert_md_to_html(p0_md, p0_html, "AURA Enterprise: Asymmetric Compute Architecture & Deterministic AI Safety")
+
     # 1. Site Enhancement Plan
     p1_md = os.path.join(DOCS_DIR, "macquarie_coal_precinct_site_enhancement_plan.md")
     p1_html = os.path.join(DOCS_DIR, "macquarie_coal_precinct_site_enhancement_plan.html")

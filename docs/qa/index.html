@@ -1506,10 +1506,13 @@
         <!-- Dynamically loaded layers with hover-only action menus -->
       </div>
       <div class="sidebar-footer"
-        style="padding: 0.45rem 0.65rem; font-size: 0.62rem; color: #94a3b8; border-top: 1px solid var(--border-color); background: rgba(10, 15, 29, 0.9); text-align: center; flex-shrink: 0; line-height: 1.35;">
-        &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank"
-          style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for
-        information only and is the authors private opinion | <span class="dynamic-build-ts"></span>
+        style="padding: 0.45rem 0.65rem; font-size: 0.65rem; color: #94a3b8; border-top: 1px solid var(--border-color); background: rgba(10, 15, 29, 0.9); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; flex-shrink: 0; line-height: 1.35;">
+        <div style="text-align: left;">
+          &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+        </div>
+        <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;">
+          Built <span class="dynamic-build-ts"></span> UTC
+        </div>
       </div>
     </aside>
 
@@ -1889,18 +1892,22 @@
   </div>
 
   <!-- Footer with Report Build Identifier and National Status -->
-  <footer class="app-footer">
-    <span>&copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank"
-        style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | <span class="dynamic-build-ts"></span></span>
+  <footer class="app-footer" style="padding: 0.6rem 1.25rem; background: rgba(10, 15, 29, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.78rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; z-index: 10; position: relative;">
+    <div style="text-align: left;">
+      &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+    </div>
+    <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;">
+      Built <span class="dynamic-build-ts"></span> UTC
+    </div>
   </footer>
 
   <script>
     const PROXY_URL = 'https://geolibre-spatial-ai-proxy-390270537834.australia-southeast1.run.app';
 
-    // Canonical build timestamp (Local/AEST YYYYMMDDHHMM)
+    // Canonical build timestamp (UTC YYYY-MM-DD HH:MM)
     const now = new Date();
     const pad = n => String(n).padStart(2, '0');
-    const currentBuildTs = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}`;
+    const currentBuildTs = `${now.getUTCFullYear()}-${pad(now.getUTCMonth() + 1)}-${pad(now.getUTCDate())} ${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}`;
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.dynamic-build-ts').forEach(el => el.textContent = currentBuildTs);
     });

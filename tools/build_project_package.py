@@ -9,7 +9,7 @@ import os
 import sys
 import json
 import argparse
-from datetime import datetime
+from datetime import datetime, timezone
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,6 +37,7 @@ def build_project_html_app(manifest, output_path):
     sectors = manifest['target_sectors']
     layers = manifest['spatial_layers']
     timestamp = datetime.now().strftime('%Y%m%d%H%M')
+    doc_prefix = "../" if ("docs" + os.sep in output_path or "docs/" in output_path) else "../docs/"
 
     # Load GeoJSON data directly to embed inline
     geo_boundary = load_geojson_layer(layers.get('precinct_boundary', ''))
@@ -351,10 +352,10 @@ def build_project_html_app(manifest, output_path):
         <a href="report_{project_id}.html" target="_blank" class="btn btn-primary">
             📑 Statutory Site Siting Report ↗
         </a>
-        <a href="../docs/macquarie_coal_precinct_site_enhancement_plan.html" target="_blank" class="btn btn-outline">
+        <a href="{doc_prefix}macquarie_coal_precinct_site_enhancement_plan.html" target="_blank" class="btn btn-outline">
             🗺️ 6-Pillar Site Enhancement Plan ↗
         </a>
-        <a href="../docs/project_specific_site_enhancement_architecture_plan.html" target="_blank" class="btn btn-outline">
+        <a href="{doc_prefix}project_specific_site_enhancement_architecture_plan.html" target="_blank" class="btn btn-outline">
             🏗️ Multi-Project Architecture Plan ↗
         </a>
         <a href="../national_suitability_report.html" target="_blank" class="btn btn-outline">
@@ -364,7 +365,7 @@ def build_project_html_app(manifest, output_path):
             🌐 National Siting Overview ↗
         </a>
         <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.72rem; color: #94a3b8; line-height: 1.5; text-align: center;">
-            &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | {timestamp}
+            &copy;&reg; 2026 GetBack2Basics &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; Open-source first commercial initiative by <a href="https://getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> | {timestamp}
         </div>
     </div>
 </div>
@@ -603,7 +604,8 @@ def build_project_statutory_report(manifest, output_path):
     metrics = manifest['engineering_metrics']
     benchmarks = manifest['benchmarks']
     sectors = manifest['target_sectors']
-    timestamp = datetime.now().strftime('%Y%m%d%H%M')
+    timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')
+    doc_prefix = "../" if ("docs" + os.sep in output_path or "docs/" in output_path) else "../docs/"
 
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -827,8 +829,8 @@ def build_project_statutory_report(manifest, output_path):
     </div>
     <div class="top-nav-links">
         <a href="index_{project_id}.html" target="_blank" class="top-nav-link">🌐 Interactive Site WebGIS</a>
-        <a href="../docs/macquarie_coal_precinct_site_enhancement_plan.html" target="_blank" class="top-nav-link">🗺️ Site Enhancement Plan</a>
-        <a href="../docs/project_specific_site_enhancement_architecture_plan.html" target="_blank" class="top-nav-link">🏗️ Architecture Plan</a>
+        <a href="{doc_prefix}macquarie_coal_precinct_site_enhancement_plan.html" target="_blank" class="top-nav-link">🗺️ Site Enhancement Plan</a>
+        <a href="{doc_prefix}project_specific_site_enhancement_architecture_plan.html" target="_blank" class="top-nav-link">🏗️ Architecture Plan</a>
         <a href="../national_suitability_report.html" target="_blank" class="top-nav-link">🇦🇺 National Baseline</a>
         <a href="https://www.planningportal.nsw.gov.au/ppr/post-exhibition/macquarie-coal-complex-transformation-precinct" target="_blank" class="top-nav-link">🏛️ NSW Planning Portal ↗</a>
     </div>
@@ -981,14 +983,14 @@ def build_project_statutory_report(manifest, output_path):
                 <h4>🗺️ 6-Pillar Site Enhancement Plan</h4>
                 <p>Complete statutory analysis covering 10 Net Developable Pads, 330kV substation pad, 49 MWh PHES, Koala bio-link corridor, and Hunter Water recycled cooling pipeline.</p>
             </div>
-            <a href="../docs/macquarie_coal_precinct_site_enhancement_plan.html" target="_blank" class="btn-card">Read Site Enhancement Plan ↗</a>
+            <a href="{doc_prefix}macquarie_coal_precinct_site_enhancement_plan.html" target="_blank" class="btn-card">Read Site Enhancement Plan ↗</a>
         </div>
         <div class="suite-card">
             <div>
                 <h4>🏗️ Multi-Project Siting Architecture</h4>
                 <p>Engineering blueprint for project submission manifests, automated packaging pipelines, zero-mock spatial layers, and non-intrusive national deep linking.</p>
             </div>
-            <a href="../docs/project_specific_site_enhancement_architecture_plan.html" target="_blank" class="btn-card">Read Architecture Plan ↗</a>
+            <a href="{doc_prefix}project_specific_site_enhancement_architecture_plan.html" target="_blank" class="btn-card">Read Architecture Plan ↗</a>
         </div>
         <div class="suite-card">
             <div>
@@ -1009,8 +1011,13 @@ def build_project_statutory_report(manifest, output_path):
 </div>
 
 <!-- Standardized Universal Footer -->
-<footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
-  &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | {timestamp}
+<footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+  <div style="text-align: left;">
+    &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+  </div>
+  <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+    Built {timestamp} UTC
+  </div>
 </footer>
 
 </body>
@@ -1028,22 +1035,15 @@ def main():
     manifest = load_manifest(args.manifest)
     project_id = manifest["project_id"]
 
-    # Generate inside both src/geolibre_frontend/projects AND runner/projects for direct web hosting
+    # Generate exclusively inside single canonical location: src/geolibre_frontend/projects/
     app_out_frontend = os.path.join("src", "geolibre_frontend", "projects", f"index_{project_id}.html")
-    report_out_runner = os.path.join("runner", "projects", f"report_{project_id}.html")
-
-    # Also make a matching report in geolibre_frontend/projects and app in runner/projects so all links resolve relative
-    app_out_runner = os.path.join("runner", "projects", f"index_{project_id}.html")
     report_out_frontend = os.path.join("src", "geolibre_frontend", "projects", f"report_{project_id}.html")
 
     os.makedirs(os.path.dirname(app_out_frontend), exist_ok=True)
-    os.makedirs(os.path.dirname(report_out_runner), exist_ok=True)
 
     build_project_html_app(manifest, app_out_frontend)
-    build_project_html_app(manifest, app_out_runner)
-    build_project_statutory_report(manifest, report_out_runner)
     build_project_statutory_report(manifest, report_out_frontend)
-    print(f"Project package for '{project_id}' built successfully in both frontend and runner suites.")
+    print(f"Project package for '{project_id}' built successfully in {os.path.dirname(app_out_frontend)}.")
 
 if __name__ == "__main__":
     main()

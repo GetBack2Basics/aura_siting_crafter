@@ -13,8 +13,6 @@ DEPLOY_MAPPINGS = [
     ("src/geolibre_frontend/projects", "projects"),
     ("docs", "docs"),
     ("docs/qa", "docs/qa"),
-    ("runner", ""),
-    ("runner/projects", "projects"),
 ]
 
 def find_html_files():
@@ -105,10 +103,19 @@ def test_html_internal_links_valid(html_file):
                 break
 
             # Handle root-level and cross-directory report aliases
-            if deployed_web_path.endswith('national_suitability_report.html') and (BASE_DIR / 'runner' / 'national_suitability_report.html').exists():
+            if deployed_web_path.endswith('national_suitability_report.html') and (BASE_DIR / 'src' / 'geolibre_frontend' / 'national_suitability_report.html').exists():
+                found_in_deployment = True
+                break
+            if deployed_web_path.endswith('data_lineage_audit.html') and (BASE_DIR / 'src' / 'geolibre_frontend' / 'data_lineage_audit.html').exists():
+                found_in_deployment = True
+                break
+            if deployed_web_path.endswith('index.html') and (BASE_DIR / 'src' / 'geolibre_frontend' / 'index.html').exists():
                 found_in_deployment = True
                 break
             if deployed_web_path.endswith('QA_Report_20260902.html') and (BASE_DIR / 'docs' / 'qa' / 'QA_Report_20260902.html').exists():
+                found_in_deployment = True
+                break
+            if 'projects/' in deployed_web_path and (BASE_DIR / 'src' / 'geolibre_frontend' / 'projects' / deployed_web_path.split('projects/')[-1]).exists():
                 found_in_deployment = True
                 break
 

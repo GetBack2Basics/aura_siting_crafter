@@ -1434,11 +1434,17 @@
         <span>📑 Siting Report</span>
       </a>
 
-      <!-- QA & Reconciliation Report Link -->
-      <a class="nav-btn" href="QA_Report_20260902.html" target="_blank"
-        title="View Automated QA & Live Reconciliation Report">
-        <span>🛡️ QA Report</span>
+      <!-- Data Lineage & Provenance Audit Link -->
+      <a class="nav-btn" href="data_lineage_audit.html" target="_blank"
+        title="Data Lineage, Statutory Standards & Provenance Audit: 25 Feeds • 14 Evidence Dimensions • Statutory Math">
+        <span>🛡️ Data Lineage Audit</span>
       </a>
+
+      <!-- Open Evidence & Calculations Hub Modal Link -->
+      <button class="nav-btn" onclick="openQaCalculationsModal()"
+        title="Open Evidence Hub: Inspect 25 live data feeds, statutory MCDA formulas, and AST validation tests">
+        <span>🔬 Evidence Hub</span>
+      </button>
 
       <!-- GeoLibre JSON Spec & Desktop GIS Integration -->
       <button class="nav-btn" onclick="openGeolibreModal()" title="GeoLibre Open GIS Spec & Desktop GIS Access">
@@ -1506,10 +1512,13 @@
         <!-- Dynamically loaded layers with hover-only action menus -->
       </div>
       <div class="sidebar-footer"
-        style="padding: 0.45rem 0.65rem; font-size: 0.62rem; color: #94a3b8; border-top: 1px solid var(--border-color); background: rgba(10, 15, 29, 0.9); text-align: center; flex-shrink: 0; line-height: 1.35;">
-        &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank"
-          style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | All material is for
-        information only and is the authors private opinion | <span class="dynamic-build-ts"></span>
+        style="padding: 0.45rem 0.65rem; font-size: 0.65rem; color: #94a3b8; border-top: 1px solid var(--border-color); background: rgba(10, 15, 29, 0.9); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; flex-shrink: 0; line-height: 1.35;">
+        <div style="text-align: left;">
+          &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+        </div>
+        <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;">
+          Built <span class="dynamic-build-ts"></span> UTC
+        </div>
       </div>
     </aside>
 
@@ -1576,13 +1585,22 @@
     <!-- Right AI Spatial Drawer -->
     <div class="ai-drawer" id="ai-drawer">
       <div class="ai-drawer-header">
-        <div class="ai-drawer-title">
+        <div class="ai-drawer-title" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
           <span>⚡ Conversational Spatial AI</span>
+          <span style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #34d399; font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 4px; letter-spacing: 0.2px;">🛡️ AST Schema Firewall Active</span>
         </div>
         <button class="close-btn" onclick="toggleAiDrawer()">&times;</button>
       </div>
 
       <div class="ai-drawer-body">
+        <!-- Security Assurance Microcopy Notice -->
+        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 6px; padding: 0.45rem 0.65rem; font-size: 0.70rem; color: #94a3b8; line-height: 1.45; margin-bottom: 0.65rem; display: flex; align-items: flex-start; gap: 6px;">
+          <span style="font-size: 0.85rem; line-height: 1;">🔒</span>
+          <div>
+            <strong style="color: #cbd5e1;">Deterministic Spatial Security:</strong> Natural language queries compile directly to standard SQL via a read-only AST schema firewall. AI cannot invent, modify, or hallucinate spatial coordinates. <a href="data_lineage_audit.html#section-ai-sandbox" target="_blank" style="color: #38bdf8; text-decoration: underline;">Learn more ↗</a>
+          </div>
+        </div>
+
         <!-- Saved Queries & Benchmark Presets Dropdown -->
         <div>
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem;">
@@ -1619,8 +1637,11 @@
 
         <!-- Output & Editable SQL Editor Card -->
         <div id="sql-output" class="sql-output-card">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
-            <span style="color: #60a5fa; font-weight: 700; font-size: 0.78rem;">Editable DuckDB Spatial SQL:</span>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 4px;">
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <span style="color: #60a5fa; font-weight: 700; font-size: 0.78rem;">Editable DuckDB Spatial SQL:</span>
+              <span style="color: #34d399; font-size: 0.64rem; font-weight: 600; background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); padding: 0.1rem 0.35rem; border-radius: 3px;">✅ AST Schema Validated</span>
+            </div>
             <span id="ai-result-count-badge" class="badge-count" style="font-size: 0.65rem;">0 matches</span>
           </div>
 
@@ -1704,12 +1725,9 @@
           <div class="help-card">
             <div class="help-card-title">⚡ Conversational Spatial AI</div>
             <div class="help-card-text">
-              • <strong>Natural Language to SQL</strong>: Ask questions like <em>"Show sites in NSW within 1.5km of
-                330kV lines"</em>.<br>
-              • <strong>Zero-Cost Client Execution</strong>: DuckDB-WASM executes queries directly inside your browser
-              against authentic GeoParquet candidate records ($0.00 cloud compute).<br>
-              • <strong>Direct SQL Editor</strong>: Edit spatial SQL conditions and press Ctrl+Enter to re-filter
-              markers in real time.
+              • <strong>Deterministic Text-to-SQL</strong>: Translates plain language questions (e.g. <em>"Show sites in NSW within 1.5km of 330kV lines"</em>) through an AST schema firewall.<br>
+              • <strong>Zero-Cost Client Execution</strong>: DuckDB-WASM executes compiled queries directly inside your browser against authentic GeoParquet candidate records ($0.00 marginal cloud compute).<br>
+              • <strong>Direct SQL Editor</strong>: Edit spatial SQL conditions directly and press Ctrl+Enter to re-filter markers in real time.
             </div>
           </div>
           <div class="help-card">
@@ -1726,23 +1744,23 @@
         <!-- Technical Architecture Deep Dive -->
         <div style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.85rem;">
           <div style="font-size: 0.88rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
-            <span>🛠️ How the Tech Works (Under the Hood)</span>
+            <span>🛠️ Asymmetric Compute Architecture & Data Flow</span>
           </div>
           
           <div style="display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.76rem; color: #cbd5e1; line-height: 1.45;">
             <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #38bdf8;">
-              <strong style="color: #f8fafc;">1. Streaming Data Straight from the Cloud:</strong>
-              Instead of downloading huge files or running heavy servers, the map grabs only the exact slices of data it needs from cloud storage as you pan and zoom.
+              <strong style="color: #f8fafc;">1. Upstream Cloud Lakehouse Ingestion (~$0.69 / Batch Run):</strong>
+              Heavy geometric transformations, CRS re-projections (GDA2020 / EPSG:7844), and national cadastral joins across 15.4M+ parcels are processed upstream on Wherobots Cloud / Apache Sedona lakehouse at predictable, right-sized batch cost (~$0.69 per full national run).
             </div>
             
             <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #10b981;">
-              <strong style="color: #f8fafc;">2. Instant Scoring in Your Browser ($0 Server Cost):</strong>
-              When you adjust weights for power, water, or environment, your browser does all the math locally with DuckDB. You get instant updates without paying for cloud servers.
+              <strong style="color: #f8fafc;">2. Asymmetric Compute: Client-Side Scoring ($0.00 Marginal Server Cost):</strong>
+              Downstream interactive What-If scenario modeling, sigmoidal sensitive decay calculations, and slider re-weighting execute 100% in-browser via DuckDB-WASM. Millions of client interactions incur zero ongoing cloud server compute overhead.
             </div>
             
             <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #a855f7;">
-              <strong style="color: #f8fafc;">3. Ask Questions in Plain English:</strong>
-              Type everyday questions like <em>"Show sites in NSW within 1.5km of 330kV lines"</em> and the system automatically turns your words into database queries.
+              <strong style="color: #f8fafc;">3. Deterministic Spatial AI with AST Schema Firewall:</strong>
+              Natural language queries are compiled to standard SQL with zero hallucinated coordinates. The AI is structurally constrained by an Abstract Syntax Tree (AST) schema firewall that validates every column and table against certified GeoParquet schemas.
             </div>
             
             <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #f59e0b;">
@@ -1751,8 +1769,8 @@
             </div>
             
             <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #ec4899;">
-              <strong style="color: #f8fafc;">5. Official Australian Public Data:</strong>
-              All property boundaries, power lines, water corridors, and protected areas are pulled straight from official government and industry sources (AEMO, Geoscience Australia, BoM, and NSW Spatial Services).
+              <strong style="color: #f8fafc;">5. Authoritative Australian Public Data (Zero-Mock Standard):</strong>
+              All cadastral boundaries, transmission lines, water assets, and statutory hazard zones (ARR 2019, AS 1170.4, AS/NZS 1170.2, AGS 2007, AS 3959) are sourced live from Geoscience Australia, AEMO, BoM, and State Planning Portals.
             </div>
           </div>
         </div>
@@ -1851,7 +1869,302 @@
       </div>
     </div>
   </div>
+  <!-- Data Lineage, Statutory Standards & Spatial Provenance Hub Modal -->
+  <div class="modal-overlay" id="qa-calculations-modal" onclick="closeQaCalculationsModal(event)">
+    <div class="modal-card" style="max-width: 880px; width: 95%; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🛡️ Data Lineage, Statutory Standards &amp; Provenance Hub</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <a href="data_lineage_audit.html" target="_blank" class="nav-btn" style="padding: 0.25rem 0.6rem; font-size: 0.72rem; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">
+            Full Audit Page ↗
+          </a>
+          <button class="close-btn" onclick="closeQaCalculationsModalDirect()">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body" style="padding: 0; max-height: calc(90vh - 60px); display: flex; flex-direction: column; overflow: hidden;">
+        <!-- Tab Navigation Bar -->
+        <div style="display: flex; background: rgba(10, 15, 29, 0.95); border-bottom: 1px solid var(--border-color); padding: 0.45rem 0.8rem; gap: 0.35rem; flex-wrap: wrap; flex-shrink: 0;">
+          <button class="nav-btn nav-btn-primary qa-tab-btn active" onclick="switchQaTab('tab-sources', this)">📊 1. Data &amp; Hazards</button>
+          <button class="nav-btn qa-tab-btn" onclick="switchQaTab('tab-asymmetric', this)">⚡ 2. Compute &amp; Costs</button>
+          <button class="nav-btn qa-tab-btn" onclick="switchQaTab('tab-ai-sandbox', this)">🤖 3. What-If &amp; Ask AI</button>
+          <button class="nav-btn qa-tab-btn" onclick="switchQaTab('tab-formulas', this)">📐 4. Statutory Math</button>
+          <button class="nav-btn qa-tab-btn" onclick="switchQaTab('tab-whitepapers', this)">📜 5. Whitepapers</button>
+          <button class="nav-btn qa-tab-btn" onclick="switchQaTab('tab-commercial', this)">🏛️ 6. Site-Specific Demo</button>
+          <button class="nav-btn qa-tab-btn" onclick="switchQaTab('tab-qa-tests', this)">🛡️ 7. Zero-Mock Gates</button>
+        </div>
 
+        <!-- Scrollable Tab Content Container -->
+        <div style="padding: 1.1rem; overflow-y: auto; flex: 1; font-size: 0.78rem; line-height: 1.55; color: #cbd5e1;">
+          <!-- Tab 1: Data Sources & Multi-Hazard Resilience -->
+          <div id="tab-sources" class="qa-tab-content" style="display: block;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <div style="font-size: 0.86rem; font-weight: 700; color: #60a5fa;">
+                📊 25 Statutory Spatial Feeds &amp; Tier-IV Multi-Hazard Baseline
+              </div>
+              <a href="data_lineage_audit.html#section-data" target="_blank" style="color: #38bdf8; font-size: 0.72rem; text-decoration: underline;">Audit Section ↗</a>
+            </div>
+            <p style="margin-bottom: 0.75rem; color: #94a3b8;">
+              All parcel boundaries, transmission infrastructure, elevation models, and statutory hazard zones are standardized to <code>EPSG:7844 (GDA2020)</code>.
+            </p>
+            <div style="overflow-x: auto; margin-bottom: 0.85rem;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.74rem;">
+                <thead>
+                  <tr style="background: rgba(15, 23, 42, 0.9); color: #93c5fd; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">
+                    <th style="padding: 0.4rem 0.6rem; text-align: left;">Hazard / Theme</th>
+                    <th style="padding: 0.4rem 0.6rem; text-align: left;">Standard &amp; Authority</th>
+                    <th style="padding: 0.4rem 0.6rem; text-align: left;">Baseline Metric</th>
+                    <th style="padding: 0.4rem 0.6rem; text-align: left;">Cut-Off Exclusion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.35rem 0.6rem; font-weight: 600; color: #f8fafc;">🌊 1% AEP Flood</td>
+                    <td style="padding: 0.35rem 0.6rem;">ARR 2019 / NCC 2022 Part B1</td>
+                    <td style="padding: 0.35rem 0.6rem; color: #34d399;">0.0m (Outside 1% AEP)</td>
+                    <td style="padding: 0.35rem 0.6rem; color: #ef4444;">&gt;0.8m Peak Depth or Floodway</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.35rem 0.6rem; font-weight: 600; color: #f8fafc;">⚡ Seismic PGA</td>
+                    <td style="padding: 0.35rem 0.6rem;">AS 1170.4:2007 / GA NSHA 2018</td>
+                    <td style="padding: 0.35rem 0.6rem; color: #34d399;">PGA &le; 0.04g (Class A/B)</td>
+                    <td style="padding: 0.35rem 0.6rem; color: #ef4444;">Class E Liquefaction Soil</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.35rem 0.6rem; font-weight: 600; color: #f8fafc;">🌪️ Extreme Wind</td>
+                    <td style="padding: 0.35rem 0.6rem;">AS/NZS 1170.2:2021 / GA TCHA</td>
+                    <td style="padding: 0.35rem 0.6rem; color: #34d399;">Region A (&le;45 m/s)</td>
+                    <td style="padding: 0.35rem 0.6rem; color: #ef4444;">Region D Unreinforced</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 0.35rem 0.6rem; font-weight: 600; color: #f8fafc;">⛰️ Landslide &amp; Slope</td>
+                    <td style="padding: 0.35rem 0.6rem;">AGS 2007 / GA ELVIS DEM</td>
+                    <td style="padding: 0.35rem 0.6rem; color: #34d399;">Slope &le; 3.0% (Solid Pad)</td>
+                    <td style="padding: 0.35rem 0.6rem; color: #ef4444;">Slope &gt; 8% or Slip Zone</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.35rem 0.6rem; font-weight: 600; color: #f8fafc;">🔥 Bushfire APZ</td>
+                    <td style="padding: 0.35rem 0.6rem;">AS 3959:2018 / NSW RFS PBP</td>
+                    <td style="padding: 0.35rem 0.6rem; color: #34d399;">BAL-LOW (Buffer &ge; 100m)</td>
+                    <td style="padding: 0.35rem 0.6rem; color: #ef4444;">BAL-FZ (Canopy &lt; 20m)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="text-align: right;">
+              <a href="data_lineage_audit.html#section-data" target="_blank" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">Inspect Full 25-Source Data Matrix &amp; Volumes ↗</a>
+            </div>
+          </div>
+
+          <!-- Tab 2: Asymmetric Compute & Costs -->
+          <div id="tab-asymmetric" class="qa-tab-content" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <div style="font-size: 0.86rem; font-weight: 700; color: #60a5fa;">
+                ⚡ Asymmetric Compute Model &amp; Storage Architecture
+              </div>
+              <a href="data_lineage_audit.html#section-compute" target="_blank" style="color: #38bdf8; font-size: 0.72rem; text-decoration: underline;">Audit Section ↗</a>
+            </div>
+            <p style="margin-bottom: 0.75rem; color: #94a3b8;">
+              Instead of incurring database query costs every time an analyst adjusts a slider or recalculates a buffer, AURA separates heavy batch ETL from interactive client modeling.
+            </p>
+
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.74rem; margin-bottom: 0.75rem;">
+              <thead>
+                <tr style="background: rgba(15, 23, 42, 0.9); color: #93c5fd; border-bottom: 1px solid rgba(59, 130, 246, 0.3);">
+                  <th style="padding: 0.4rem 0.6rem; text-align: left;">Architecture Tier</th>
+                  <th style="padding: 0.4rem 0.6rem; text-align: left;">Engine &amp; Hardware</th>
+                  <th style="padding: 0.4rem 0.6rem; text-align: left;">Operation Cost</th>
+                  <th style="padding: 0.4rem 0.6rem; text-align: left;">Execution Speed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                  <td style="padding: 0.35rem 0.6rem; font-weight: 600; color: #f8fafc;">Upstream Batch Lakehouse</td>
+                  <td style="padding: 0.35rem 0.6rem;">Apache Sedona / Wherobots Cloud (8 vCPU, 32GB)</td>
+                  <td style="padding: 0.35rem 0.6rem; color: #38bdf8; font-family: 'JetBrains Mono', monospace;">~$0.69 USD / run</td>
+                  <td style="padding: 0.35rem 0.6rem;">&lt;4 mins for 15.91M geoms</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.35rem 0.6rem; font-weight: 600; color: #f8fafc;">Downstream Interactive Siting</td>
+                  <td style="padding: 0.35rem 0.6rem;">DuckDB-WASM &amp; MapLibre (Browser RAM/CPU)</td>
+                  <td style="padding: 0.35rem 0.6rem; color: #34d399; font-family: 'JetBrains Mono', monospace;">$0.00 incremental cloud cost</td>
+                  <td style="padding: 0.35rem 0.6rem;">&lt;15ms in-memory query</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="text-align: right;">
+              <a href="aura_enterprise_asymmetric_compute_and_ai_safety.html" target="_blank" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">Read Full Asymmetric Compute Whitepaper ↗</a>
+            </div>
+          </div>
+
+          <!-- Tab 3: What-If & Ask AI Mechanics -->
+          <div id="tab-ai-sandbox" class="qa-tab-content" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <div style="font-size: 0.86rem; font-weight: 700; color: #60a5fa;">
+                🤖 Conversational Spatial AI &amp; Deterministic Sandbox
+              </div>
+              <a href="data_lineage_audit.html#section-ai-sandbox" target="_blank" style="color: #38bdf8; font-size: 0.72rem; text-decoration: underline;">Audit Section ↗</a>
+            </div>
+            <p style="margin-bottom: 0.75rem; color: #94a3b8;">
+              AURA eliminates LLM hallucination risks by implementing a <strong>Deterministic Text-to-Spatial-SQL Sandbox</strong>. Natural language prompts compile into standard SQL and execute locally inside DuckDB-WASM at $0.00 cloud compute cost.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 0.75rem;">
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #38bdf8;">
+                <strong style="color: #f8fafc;">1. Read-Only Schema Trapping:</strong>
+                <div style="font-size: 0.72rem; color: #94a3b8;">Zero mutating or write permissions; strictly scoped to certified parcel and hazard schemas.</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #10b981;">
+                <strong style="color: #f8fafc;">2. 100% In-Browser Execution:</strong>
+                <div style="font-size: 0.72rem; color: #94a3b8;">Instant queries running in milliseconds with zero recurring API or cloud server costs.</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 0.55rem 0.75rem; border-radius: 6px; border-left: 3px solid #f59e0b;">
+                <strong style="color: #f8fafc;">3. Inspectable &amp; Reproducible SQL:</strong>
+                <div style="font-size: 0.72rem; color: #94a3b8;">All queries reveal their exact SQL WHERE clauses for complete institutional auditability.</div>
+              </div>
+            </div>
+
+            <div style="text-align: right;">
+              <a href="data_lineage_audit.html#section-ai-sandbox" target="_blank" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">View Conversational AI Architecture &amp; Query Specs ↗</a>
+            </div>
+          </div>
+
+          <!-- Tab 4: Statutory Formulas & MCDA -->
+          <div id="tab-formulas" class="qa-tab-content" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <div style="font-size: 0.86rem; font-weight: 700; color: #60a5fa;">
+                📐 Open Statutory Formulas &amp; MCDA Mathematical Trail
+              </div>
+              <a href="data_lineage_audit.html#section-calculations" target="_blank" style="color: #38bdf8; font-size: 0.72rem; text-decoration: underline;">Audit Section ↗</a>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 0.75rem;">
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 0.65rem; border-radius: 6px; border-left: 3px solid #38bdf8;">
+                <strong style="color: #f8fafc;">1. Composite 6-Factor Siting Suitability Score:</strong>
+                <pre style="margin: 0.2rem 0; font-size: 0.70rem; color: #34d399;">S_composite = (w_pwr * S_power) + (w_wtr * S_water) + (w_sens * S_sensitive) + (w_hzd * S_hazard) + (w_slp * S_slope) + (w_sz * S_size)</pre>
+                <div style="font-size: 0.68rem; color: #94a3b8;">Default weights: Power 25%, Water 20%, Sensitive 20%, Hazard 15%, Slope 10%, Size 10%.</div>
+              </div>
+
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 0.65rem; border-radius: 6px; border-left: 3px solid #10b981;">
+                <strong style="color: #f8fafc;">2. Continuous Sigmoidal Acoustic Decay (NSW EPA NPfI 2017):</strong>
+                <pre style="margin: 0.2rem 0; font-size: 0.70rem; color: #34d399;">S_sensitive(d) = 1.0 / (1.0 + exp(-0.005 * (d - 500.0)))</pre>
+                <div style="font-size: 0.68rem; color: #94a3b8;">Eliminates step-cliffs; smoothly penalizes industrial footprints within 500m of sensitive receivers.</div>
+              </div>
+
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 0.65rem; border-radius: 6px; border-left: 3px solid #f59e0b;">
+                <strong style="color: #f8fafc;">3. 1% AEP Flood Inundation Model (ARR 2019 / NCC 2022 Part B1):</strong>
+                <pre style="margin: 0.2rem 0; font-size: 0.70rem; color: #34d399;">S_flood = if(h_flood > 0.8m OR is_floodway, 0.0, if(h_flood == 0.0m, 1.0, 1.0 - (h_flood / 0.8) * 0.70))</pre>
+                <div style="font-size: 0.68rem; color: #94a3b8;">Excludes high-velocity floodways and penalizes 1-in-100 year inundation depths.</div>
+              </div>
+            </div>
+
+            <div style="text-align: right;">
+              <a href="data_lineage_audit.html#section-calculations" target="_blank" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">Inspect All 12 Physical Formulas &amp; DOI Citations ↗</a>
+            </div>
+          </div>
+
+          <!-- Tab 5: Whitepapers & Specifications -->
+          <div id="tab-whitepapers" class="qa-tab-content" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <div style="font-size: 0.86rem; font-weight: 700; color: #60a5fa;">
+                📜 Enterprise Whitepapers &amp; Open Architecture Specifications
+              </div>
+              <a href="data_lineage_audit.html#section-whitepapers" target="_blank" style="color: #38bdf8; font-size: 0.72rem; text-decoration: underline;">Audit Section ↗</a>
+            </div>
+            <p style="margin-bottom: 0.75rem; color: #94a3b8;">
+              AURA Siting Crafter eliminates GIS vendor lock-in by implementing open, cloud-native spatial architectures that cut infrastructure computing overhead by &gt;90%.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 0.75rem;">
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.65rem;">
+                <strong style="color: #38bdf8;">1. Enterprise Asymmetric Compute &amp; AI Safety Whitepaper:</strong>
+                <div style="font-size: 0.72rem; color: #cbd5e1; margin-top: 0.2rem;">Full architectural analysis of decoupled geometry vs scoring and deterministic AI safety containment.</div>
+                <div style="margin-top: 0.35rem;"><a href="aura_enterprise_asymmetric_compute_and_ai_safety.html" target="_blank" style="color: #60a5fa; text-decoration: underline;">Open Whitepaper ↗</a></div>
+              </div>
+
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.65rem;">
+                <strong style="color: #34d399;">2. GeoLibre Open GIS Project Specification:</strong>
+                <div style="font-size: 0.72rem; color: #cbd5e1; margin-top: 0.2rem;">Standardized open JSON schema for streaming cloud GeoParquet directly into QGIS, ArcGIS, or GeoLibre.</div>
+                <div style="margin-top: 0.35rem;"><a href="geolibre_contribution_proposals.html" target="_blank" style="color: #60a5fa; text-decoration: underline;">Open Specification ↗</a></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 6: National vs State vs Site-Specific Commercial -->
+          <div id="tab-commercial" class="qa-tab-content" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <div style="font-size: 0.86rem; font-weight: 700; color: #60a5fa;">
+                🏛️ National vs State vs Site-Specific Commercial Offering
+              </div>
+              <a href="data_lineage_audit.html#section-commercial" target="_blank" style="color: #38bdf8; font-size: 0.72rem; text-decoration: underline;">Audit Section ↗</a>
+            </div>
+            <p style="margin-bottom: 0.75rem; color: #94a3b8;">
+              Three-tier progression from continental macro-screening down to millimeter-accurate engineering site packages developed by <strong>GetBack2Basics</strong>:
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.65rem; margin-bottom: 0.85rem;">
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 6px; padding: 0.65rem;">
+                <strong style="color: #60a5fa;">1. National Screening</strong>
+                <div style="font-size: 0.70rem; color: #cbd5e1; margin-top: 0.2rem;">15.4M parcels screened across NEM &amp; SWIS energy grids.</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; padding: 0.65rem;">
+                <strong style="color: #34d399;">2. Regional Clusters</strong>
+                <div style="font-size: 0.70rem; color: #cbd5e1; margin-top: 0.2rem;">Hunter, Latrobe, CW Orana, Collie, Gladstone regional benchmarks.</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 0.65rem;">
+                <strong style="color: #fbbf24;">3. Site Engineering</strong>
+                <div style="font-size: 0.70rem; color: #cbd5e1; margin-top: 0.2rem;">High-precision 1m LiDAR DEM &amp; Net Developable Area pad modeling.</div>
+              </div>
+            </div>
+
+            <!-- Open Working Example -->
+            <div style="background: rgba(10, 15, 29, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; padding: 0.75rem;">
+              <strong style="color: #38bdf8;">✨ Open Working Example: Macquarie Coal Transformation Precinct</strong>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.45rem; flex-wrap: wrap;">
+                <a href="projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-btn nav-btn-primary" style="padding: 0.35rem 0.7rem; font-size: 0.72rem;">🌐 Launch Site WebGIS ↗</a>
+                <a href="projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-btn" style="padding: 0.35rem 0.7rem; font-size: 0.72rem;">📑 Statutory Site Report ↗</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 7: Zero-Mock QA & AST Tests -->
+          <div id="tab-qa-tests" class="qa-tab-content" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <div style="font-size: 0.86rem; font-weight: 700; color: #60a5fa;">
+                🛡️ Zero-Mock Data Integrity Standard &amp; AST Test Gate
+              </div>
+              <a href="data_lineage_audit.html#section-governance" target="_blank" style="color: #38bdf8; font-size: 0.72rem; text-decoration: underline;">Audit Section ↗</a>
+            </div>
+            <p style="margin-bottom: 0.75rem; color: #94a3b8;">
+              AURA enforces a strict zero-mock policy across all pipelines. Synthetic coordinates, placeholder arrays, and sample feature fallbacks are blocked by automated Abstract Syntax Tree (AST) scanners before deployment.
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.65rem; margin-bottom: 0.85rem;">
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.65rem;">
+                <div style="font-weight: 700; color: #34d399; font-size: 0.74rem;">✓ AST Code Scanner</div>
+                <div style="font-size: 0.68rem; color: #cbd5e1; margin-top: 0.2rem;"><code>pytest tests/lint/test_no_mock_data.py</code> verifies zero synthetic injections.</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.65rem;">
+                <div style="font-weight: 700; color: #34d399; font-size: 0.74rem;">✓ 100% GDA2020 Standard</div>
+                <div style="font-size: 0.68rem; color: #cbd5e1; margin-top: 0.2rem;">All 15.4M geometries reprojected to <code>EPSG:7844</code> / <code>EPSG:7856</code>.</div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.65rem;">
+                <div style="font-weight: 700; color: #34d399; font-size: 0.74rem;">✓ Live Schema Contracts</div>
+                <div style="font-size: 0.68rem; color: #cbd5e1; margin-top: 0.2rem;">Dynamic verification of column definitions and coordinate bounds.</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <a href="qa/geolibre_qa_inspect.html" target="_blank" class="nav-btn" style="padding: 0.35rem 0.7rem; font-size: 0.72rem;">🔍 Launch Live QA Inspector ↗</a>
+              <a href="data_lineage_audit.html" target="_blank" class="nav-btn" style="padding: 0.35rem 0.7rem; font-size: 0.72rem;">📑 Open Full Data Lineage Audit ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Metadata Modal -->
   <div class="modal-overlay" id="meta-modal" onclick="closeMetaModal(event)">
     <div class="modal-card">
@@ -1889,18 +2202,22 @@
   </div>
 
   <!-- Footer with Report Build Identifier and National Status -->
-  <footer class="app-footer">
-    <span>&copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank"
-        style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | <span class="dynamic-build-ts"></span></span>
+  <footer class="app-footer" style="padding: 0.6rem 1.25rem; background: rgba(10, 15, 29, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.78rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; z-index: 10; position: relative;">
+    <div style="text-align: left;">
+      &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+    </div>
+    <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;">
+      Built <span class="dynamic-build-ts"></span> UTC
+    </div>
   </footer>
 
   <script>
     const PROXY_URL = 'https://geolibre-spatial-ai-proxy-390270537834.australia-southeast1.run.app';
 
-    // Canonical build timestamp (Local/AEST YYYYMMDDHHMM)
+    // Canonical build timestamp (UTC YYYY-MM-DD HH:MM)
     const now = new Date();
     const pad = n => String(n).padStart(2, '0');
-    const currentBuildTs = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}`;
+    const currentBuildTs = `${now.getUTCFullYear()}-${pad(now.getUTCMonth() + 1)}-${pad(now.getUTCDate())} ${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}`;
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.dynamic-build-ts').forEach(el => el.textContent = currentBuildTs);
     });
@@ -3778,6 +4095,28 @@
       const resizer = document.getElementById('ai-drawer-resizer');
       if (resizer) resizer.style.display = isOpen ? 'block' : 'none';
       setTimeout(() => map.resize(), 320);
+    }
+
+    // Open QA & Calculations Hub Modal
+    function openQaCalculationsModal() {
+      const modal = document.getElementById('qa-calculations-modal');
+      if (modal) modal.classList.add('open');
+    }
+    function closeQaCalculationsModal(e) {
+      if (e.target && e.target.id === 'qa-calculations-modal') closeQaCalculationsModalDirect();
+    }
+    function closeQaCalculationsModalDirect() {
+      const modal = document.getElementById('qa-calculations-modal');
+      if (modal) modal.classList.remove('open');
+    }
+    function switchQaTab(tabId, btn) {
+      document.querySelectorAll('.qa-tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.qa-tab-btn').forEach(b => {
+        b.classList.remove('nav-btn-primary', 'active');
+      });
+      const activeTab = document.getElementById(tabId);
+      if (activeTab) activeTab.style.display = 'block';
+      if (btn) btn.classList.add('nav-btn-primary', 'active');
     }
 
     // Help Modal

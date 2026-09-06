@@ -638,8 +638,14 @@ def build_qa_html_report(qa: Dict[str, Any]) -> str:
         <input type="text" id="operator_name" placeholder="Operator Name / ID" value="QA_OPERATOR_LEAD" style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; padding: 0.6rem 1rem; border-radius: 0.35rem; font-size: 0.9rem;">
         <button class="btn-approve" onclick="approveSignoff()">Approve &amp; Sign-Off Release</button>
         <span id="signoff_status" style="color: #10b981; font-weight: bold; font-size: 0.9rem;"></span>
+    <footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+      <div style="text-align: left;">
+        &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
       </div>
-    </div>
+      <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+        Built {timestamp} UTC
+      </div>
+    </footer>
   </div>
 
   <script>

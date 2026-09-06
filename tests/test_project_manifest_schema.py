@@ -42,7 +42,7 @@ def test_project_spatial_layers_exist_and_valid():
 
 def test_generated_project_products_exist():
     app_path = os.path.join(ROOT_DIR, "src", "geolibre_frontend", "projects", "index_LMCC_MacquarieCoal.html")
-    report_path = os.path.join(ROOT_DIR, "runner", "projects", "report_LMCC_MacquarieCoal.html")
+    report_path = os.path.join(ROOT_DIR, "src", "geolibre_frontend", "projects", "report_LMCC_MacquarieCoal.html")
 
     assert os.path.exists(app_path), "Site interactive app index_LMCC_MacquarieCoal.html missing"
     assert os.path.exists(report_path), "Site statutory report report_LMCC_MacquarieCoal.html missing"

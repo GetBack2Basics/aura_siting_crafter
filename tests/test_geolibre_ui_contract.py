@@ -12,7 +12,7 @@ import pytest
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_INDEX_PATH = os.path.join(BASE_DIR, "src", "geolibre_frontend", "index.html")
-REPORT_HTML_PATH = os.path.join(BASE_DIR, "runner", "national_suitability_report.html")
+REPORT_HTML_PATH = os.path.join(BASE_DIR, "src", "geolibre_frontend", "national_suitability_report.html")
 
 
 def test_frontend_table_sync_contract():

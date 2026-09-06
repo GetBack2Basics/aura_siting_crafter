@@ -944,15 +944,16 @@ HTML_PAGE = """<!DOCTYPE html>
 
     <div class="stat-card">
       <div class="stat-card-header">
-        <span class="stat-title">Last Full Run Compute</span>
+        <span class="stat-title">Asymmetric Compute</span>
         <span class="stat-info-icon" title="View details">ℹ</span>
       </div>
       <span class="stat-val" style="color: #38bdf8;">$0.69 USD</span>
       <span class="stat-desc">Per Full National Run (15.91M Geometries)</span>
       <div class="stat-tooltip">
-        <strong>Last Full Pipeline Run: $0.69 USD</strong><br>
-        <strong>Total Cumulative Batch Spend: $24.13 USD</strong> across ~35 automated headless batch runs on Wherobots Cloud.<br>
-        Achieved by right-sizing Sedona medium runtimes, decoupling heavy spatial geometry joins from lightweight MCDA scoring, Iceberg delta partitions, and offloading interactive What-If re-scoring 100% to client-side DuckDB-WASM/JS ($0.00 cloud compute).
+        <strong>Asymmetric Compute Model:</strong><br>
+        &bull; <strong>Upstream Lakehouse Batch ETL:</strong> $0.69 USD per full run ($24.13 USD cumulative across 35 headless batch runs on Wherobots Cloud / Apache Sedona).<br>
+        &bull; <strong>Google Cloud Serving &amp; AI:</strong> &lt;$0.50 USD / month (GCS bucket hosting, Cloud Run proxy &amp; Vertex AI Gemini 2.5 Flash in Sydney).<br>
+        &bull; <strong>Downstream Interactive Consumption:</strong> 100% offloaded to client hardware (in-browser DuckDB-WASM &amp; JavaScript) at <strong>$0.00 incremental server compute cost</strong>.
       </div>
     </div>
   </div>
@@ -1487,8 +1488,13 @@ HTML_PAGE = """<!DOCTYPE html>
     </div>
   </div>
 
-  <footer style="margin-top: 3rem; padding: 1.5rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; text-align: center; line-height: 1.6;">
-    &copy;&reg; 2026 GetBack2Basics - <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/getback2basics</a> | This is an independent, personal research project exploring open data and modern cloud-native architectures. All (perceived) opinions are my own. The data tells the story, no matter what your driver is or isn't | <span id="build-timestamp">__FOOTER_TIMESTAMP__</span>
+  <footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+    <div style="text-align: left;">
+      &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+    </div>
+    <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+      Built <span id="build-timestamp">__FOOTER_TIMESTAMP__</span> UTC
+    </div>
   </footer>
 </div>
 
@@ -2212,6 +2218,49 @@ if (calcContainer && calcReferences) {
     `;
     calcContainer.appendChild(card);
   });
+// Hash navigation & automatic tab switching for direct URL anchors (#data-sources, #calculations, etc.)
+function handleHashNavigation() {
+  const hash = window.location.hash.replace('#', '').trim();
+  if (!hash) return;
+  
+  const aliasMap = {
+    'multi-hazard': 'multi-hazard-matrix',
+    'multi-hazards': 'multi-hazard-matrix',
+    'hazard': 'multi-hazard-matrix',
+    'hazards': 'multi-hazard-matrix',
+    'personas': 'strategic-personas',
+    'persona': 'strategic-personas',
+    'whitepapers': 'whitepapers-specs',
+    'whitepaper': 'whitepapers-specs',
+    'specs': 'whitepapers-specs',
+    'sandbox': 'simulation-sandbox',
+    'what-if': 'simulation-sandbox',
+    'simulation': 'simulation-sandbox',
+    'sql': 'calculations',
+    'sql-trail': 'calculations',
+    'cost-reduction': 'cost-reduction-tips',
+    'cost-tips': 'cost-reduction-tips',
+    'data': 'data-sources',
+    'sources': 'data-sources'
+  };
+  
+  const targetId = aliasMap[hash] || hash;
+  const targetTab = document.getElementById(targetId);
+  if (targetTab && targetTab.classList.contains('tab-content')) {
+    switchTab(null, targetId);
+    setTimeout(() => {
+      const tabsCard = document.getElementById('benchmarking-tabs-card');
+      if (tabsCard) {
+        tabsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 150);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', handleHashNavigation);
+window.addEventListener('hashchange', handleHashNavigation);
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  handleHashNavigation();
 }
 </script>
 </body>
@@ -2249,12 +2298,14 @@ html_final = html_final.replace("__SPEED_MECHANICS_HTML__", load_attachment("spe
 html_final = html_final.replace("__SIMULATION_SANDBOX_HTML__", load_attachment("simulation_sandbox.html"))
 html_final = html_final.replace("__WHITEPAPERS_HTML__", load_attachment("whitepapers.html"))
 
-# Dynamic build timestamp
-build_ts = datetime.datetime.now().strftime("%Y%m%d%H%M")
+# Dynamic build timestamp in UTC
+build_ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M")
 html_final = html_final.replace("__FOOTER_TIMESTAMP__", build_ts)
 
-output_path = "runner/national_suitability_report.html"
+output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "geolibre_frontend", "national_suitability_report.html")
+os.makedirs(os.path.dirname(output_path), exist_ok=True)
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(html_final)
+print(f"Generated single canonical report: {output_path} ({os.path.getsize(output_path):,} bytes).")
 
-print(f"Generated {output_path} successfully (Build timestamp: {build_ts}). Written size: {os.path.getsize(output_path):,} bytes.")
+print(f"Build complete (Timestamp: {build_ts}).")

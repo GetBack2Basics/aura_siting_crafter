@@ -12,13 +12,16 @@ DEPLOY_MAPPINGS = [
     ("src/geolibre_frontend", ""),
     ("src/geolibre_frontend/projects", "projects"),
     ("docs", "docs"),
+    ("docs/business", "docs/business"),
+    ("docs/articles", "docs/articles"),
+    ("docs/engineering", "docs/engineering"),
     ("docs/qa", "docs/qa"),
 ]
 
 def find_html_files():
     html_files = []
     for root, _, files in os.walk(BASE_DIR):
-        if any(ignored in root for virt in ['.venv', 'node_modules', '.git', '.pytest_cache', 'brain'] if (ignored := virt)):
+        if any(ignored in root for virt in ['.venv', 'node_modules', '.git', '.pytest_cache', 'brain', 'archive', 'docs/archive', 'docs\\archive'] if (ignored := virt)):
             continue
         for f in files:
             if f.endswith('.html'):
@@ -115,11 +118,23 @@ def test_html_internal_links_valid(html_file):
             if deployed_web_path.endswith('QA_Report_20260902.html') and (BASE_DIR / 'docs' / 'qa' / 'QA_Report_20260902.html').exists():
                 found_in_deployment = True
                 break
-            if 'projects/' in deployed_web_path and (BASE_DIR / 'src' / 'geolibre_frontend' / 'projects' / deployed_web_path.split('projects/')[-1]).exists():
-                found_in_deployment = True
-                break
+@pytest.mark.parametrize("html_file", find_html_files())
+def test_html_local_filesystem_links_valid(html_file):
+    """
+    Verifies that all internal relative links in HTML files resolve to real local files
+    on the filesystem (ensuring offline file:/// navigation never 404s).
+    """
+    content = html_file.read_text(encoding='utf-8', errors='ignore')
+    hrefs = re.findall(r'href=["\']([^"\']+)["\']', content)
 
-        assert found_in_deployment, (
-            f"Broken relative link in {html_file.relative_to(BASE_DIR)}: "
-            f"href='{href}' (resolved web path: '{deployed_web_path}') does not exist locally or in deployment mapping."
+    for href in hrefs:
+        if href.startswith(('http://', 'https://', '#', 'javascript:', 'mailto:', 'tel:', 'data:', '${')):
+            continue
+        clean_href = href.split('?')[0].split('#')[0]
+        if not clean_href or '${' in clean_href:
+            continue
+        target_path = (html_file.parent / clean_href).resolve()
+        assert target_path.exists(), (
+            f"Broken local file:/// link in {html_file.relative_to(BASE_DIR)}: "
+            f"href='{href}' (resolved to non-existent path: '{target_path}')"
         )

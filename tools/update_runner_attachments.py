@@ -122,7 +122,7 @@ def generate_cdn_assets_html() -> str:
 
   <!-- Client-Side Zero-Cost Spatial Compute (Turf.js & DuckDB-WASM) -->
   <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"
-    integrity="sha384-xrhf0o71KkL96s1pZ/0iH1F2s8t5M1z+3aW4aCq6e7p7bQ5y0kL8z6d3r0k8s4a2"
+    integrity="sha384-82q0nm29xZzIo5BMtDYnh2/NxeO6FoaK1S/0nF84w3cEsqbBfun3JdMyDVYWfVY5"
     crossorigin="anonymous"></script>
 '''
     out_path = os.path.join(RUNNER_ATTACHMENTS_DIR, "cdn_assets.html")

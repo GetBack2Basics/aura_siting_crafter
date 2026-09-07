@@ -40,7 +40,7 @@
 
   <!-- Client-Side Zero-Cost Spatial Compute (Turf.js & DuckDB-WASM) -->
   <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"
-    integrity="sha384-xrhf0o71KkL96s1pZ/0iH1F2s8t5M1z+3aW4aCq6e7p7bQ5y0kL8z6d3r0k8s4a2"
+    integrity="sha384-82q0nm29xZzIo5BMtDYnh2/NxeO6FoaK1S/0nF84w3cEsqbBfun3JdMyDVYWfVY5"
     crossorigin="anonymous"></script>
 
 
@@ -572,7 +572,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
         GeoLibre App ↗
       </a>
-      <a href="docs/qa/QA_Report_20260902.html" class="metadata-pill" target="_blank" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #34d399; text-decoration: none;">
+      <a href="data_lineage_audit.html" class="metadata-pill" target="_blank" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #34d399; text-decoration: none;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Data Provenance & Lineage Audit
       </a>
@@ -1118,6 +1118,22 @@
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+  <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('investor')">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.35rem;">🛡️</span>
+        <h4 style="margin: 0; color: #10b981; font-size: 0.95rem;">Institutional Allocator / CRO</h4>
+      </div>
+      <span class="metadata-pill" style="border-color: #10b981; color: #10b981; font-size: 0.7rem; padding: 0.15rem 0.45rem;">Yield &amp; Risk Shield</span>
+    </div>
+    <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Power 35%, Sensitive 25%, Water 20%, Size 20%</p>
+    <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
+      <li><strong>64% Developable Yield:</strong> Targets high net-to-gross efficiency ratios with geotechnical pad certification.</li>
+      <li><strong>The 4 Bank Vault Guarantees:</strong> 0 AI hallucinations, 100% sovereign browser RAM privacy, 0 exhibition outages, and &lt;15ms recalculation.</li>
+      <li><strong>Capex &amp; OpEx Optimization:</strong> Prioritizes &le;0.5km 330kV transmission corridors and 100% recycled industrial cooling.</li>
+    </ul>
+  </div>
+
   <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 0.75rem; padding: 1.15rem; cursor: pointer;" onclick="selectPersona('general-public')">
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
       <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -1191,7 +1207,7 @@
     </div>
     <p style="font-size: 0.8rem; color: #94a3b8; margin: 0 0 0.5rem;"><strong>Preset Weights:</strong> Sensitive 40%, Water 25%, Power 25%, Size 10%</p>
     <ul style="padding-left: 1.25rem; font-size: 0.825rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.35rem; margin: 0;">
-      <li><strong>Acoustic & Sensitive Buffers:</strong> Enforces continuous sigmoidal setbacks (&ge;500m) safeguarding homes, schools, and hospitals from industrial noise.</li>
+      <li><strong>Acoustic &amp; Sensitive Buffers:</strong> Enforces continuous sigmoidal setbacks (&ge;500m) safeguarding homes, schools, and hospitals from industrial noise.</li>
       <li><strong>Just Transition:</strong> Repurposes legacy industrial and rail infrastructure for high-tech digital jobs.</li>
       <li><strong>Public Trust:</strong> 100% open-data spatial evidence replaces speculative developer marketing with auditable facts.</li>
     </ul>
@@ -1352,6 +1368,12 @@
           <tr><td>NHSD National Healthcare Directory</td><td>Australian Digital Health Agency</td><td>REST / GeoJSON</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">4,218</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Sensitive Receptors (EPSG:7844)</td></tr>
           <tr><td>GA National Seismic Hazard Assessment (NSHA)</td><td>Geoscience Australia</td><td>WFS / GeoParquet</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">14,200</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Earthquake Ground Motion PGA (EPSG:7844)</td></tr>
           <tr><td>GA Tropical Cyclone Hazard Assessment (TCHA)</td><td>Geoscience Australia / BoM</td><td>WFS / GeoParquet</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">8,950</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">AS/NZS 1170.2 Wind Regions C & D (EPSG:7844)</td></tr>
+          <tr><td>Geoscape National Cadastre & G-NAF Parcel Fabric</td><td>Geoscape Australia / ICSM (NationalMap / Geoscape)</td><td>GeoParquet / Iceberg</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">5,000+</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Siting Cadastre Parcels (EPSG:7844)</td></tr>
+          <tr><td>Tropical Cyclone Hazard Assessment (TCHA) & AS/NZS 1170.2 Wind Regions</td><td>Geoscience Australia / BoM (NationalMap / Geoscience Australia)</td><td>GeoParquet / Iceberg</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">4,600</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Siting Cyclone Hazard (EPSG:7844)</td></tr>
+          <tr><td>Geoscience Australia National Electricity Transmission Grid (>=66kV)</td><td>Geoscience Australia / AEMO (NationalMap / Geoscience Australia)</td><td>GeoParquet / Iceberg</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">5,000+</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Siting Transmission Grid (EPSG:7844)</td></tr>
+          <tr><td>National Health Services Directory (NHSD) Hospitals & Health Facilities</td><td>Australian Digital Health Agency / Healthdirect (NationalMap / NHSD)</td><td>GeoParquet / Iceberg</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">5,000+</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Siting Sensitive Receptors (EPSG:7844)</td></tr>
+          <tr><td>ACARA National Schools Directory</td><td>Australian Curriculum, Assessment and Reporting Authority (ACARA) (NationalMap / ACARA)</td><td>GeoParquet / Iceberg</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">5,000+</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Siting Sensitive Receptors (EPSG:7844)</td></tr>
+          <tr><td>National Seismic Hazard Assessment (NSHA) Ground Motion PGA (National)</td><td>Geoscience Australia (NationalMap / Geoscience Australia)</td><td>GeoParquet / Iceberg</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">4,600</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Siting Earthquake Hazard (EPSG:7844)</td></tr>
           <tr><td>Biodiversity Values Map (Biodiversity Conservation Act 2016)</td><td>NSW DCCEEW / Biodiversity Conservation Trust (NSW SEED Portal)</td><td>GeoParquet / Iceberg</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">12,450</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Siting Biodiversity Constraints (EPSG:7844)</td></tr>
           <tr><td>NSW Coastal Inundation, Storm Surge and Tidal Extent</td><td>NSW DCCEEW Coastal Branch (NSW SEED Portal)</td><td>GeoParquet / Iceberg</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">4,600</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Siting Coastal Inundation Hazard (EPSG:7844)</td></tr>
           <tr><td>NSW Slope Instability and Landslide Hazard Susceptibility</td><td>Geological Survey of NSW / DPHI (NSW MinView / SEED Portal)</td><td>GeoParquet / Iceberg</td><td style="font-family: 'JetBrains Mono', monospace; font-weight: bold;">4,600</td><td style="font-family: 'JetBrains Mono', monospace; color: #60a5fa;">Siting Landslide Hazard (EPSG:7844)</td></tr>
@@ -1427,11 +1449,13 @@
     <div id="whitepapers-specs" class="tab-content" style="max-height: 450px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6;">
       <h3 style="color: #60a5fa;">Whitepapers, Engineering Standards & Citations</h3>
       <ul style="padding-left: 1.5rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.6rem;">
-        <li><strong>AS 1055:2018:</strong> Acoustics — Description and measurement of environmental noise for sensitive receptor buffers.</li>
-        <li><strong>NSW EPA Noise Policy for Industry (2017):</strong> Industrial noise trigger levels and sleep disturbance criteria (d<sub>0</sub> = 500m).</li>
-        <li><strong>ICSM Cadastral Spatial Data Model (CSDM 2020):</strong> National and State Cadastral Lot/Plan standardization standard.</li>
+        <li><strong>AURA Enterprise Commercial Siting Prospectus:</strong> Commercial yield, 64% Net-to-Gross developable area, and the 4 Bank Vault statutory guarantees (<a href="../../docs/business/aura_enterprise_asymmetric_compute_and_ai_safety.html" target="_blank" style="color: #60a5fa; text-decoration: underline;">Enterprise Prospectus ↗</a>).</li>
+        <li><strong>Macquarie Coal Precinct Site-Level Enhancement Plan:</strong> Forensic review of 15 statutory studies, 10 Net Developable Pads, and 1.2 GL/yr water savings (<a href="../../docs/business/macquarie_coal_precinct_site_enhancement_plan.html" target="_blank" style="color: #60a5fa; text-decoration: underline;">Site Enhancement Plan ↗</a>).</li>
+        <li><strong>AS 1055:2018 &amp; NSW EPA NPfI 2017:</strong> Environmental acoustics, 3D overburden bund modeling, and sensitive receptor sleep disturbance criteria (d<sub>0</sub> = 500m).</li>
+        <li><strong>ARR 2019 / NCC 2022 Part B1:</strong> Australian Rainfall &amp; Runoff 1% AEP flood depth and overland flow resilience.</li>
+        <li><strong>ICSM Cadastral Spatial Data Model (CSDM 2020):</strong> National and State Cadastral Lot/Plan standardization standard in GDA2020.</li>
         <li><strong>Geoscience Australia ELVIS Elevation Framework:</strong> High-resolution DEM slope filtering (<a href="https://elevation.fsdf.org.au/" target="_blank" style="color: #60a5fa; text-decoration: underline;">ELVIS FSDF ↗</a>).</li>
-        <li><strong>Lake Macquarie City Council Economic Development Action Plan:</strong> Masterplan clean energy transition strategy (<a href="https://www.planningportal.nsw.gov.au/ppr/post-exhibition/macquarie-coal-complex-transformation-precinct" target="_blank" style="color: #60a5fa; text-decoration: underline;">Official Planning Portal Exhibition ↗</a>).</li>
+        <li><strong>Lake Macquarie City Council Master Plan:</strong> Clean energy transformation and multi-modal freight logistics (<a href="https://www.planningportal.nsw.gov.au/ppr/post-exhibition/macquarie-coal-complex-transformation-precinct" target="_blank" style="color: #60a5fa; text-decoration: underline;">NSW Planning Portal Exhibition ↗</a>).</li>
         <li><strong>Wherobots &amp; Antigravity Engineering Playbook:</strong> Enterprise spatial compute, incremental ETL and cost optimization guide (<a href="https://github.com/GetBack2Basics/CheatSheets/blob/main/wherobots_antigravity_playbook.md" target="_blank" style="color: #60a5fa; text-decoration: underline;">CheatSheets Playbook ↗</a>).</li>
 
       </ul>
@@ -1771,7 +1795,7 @@ function executeCustomAiQuery() {
       &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
     </div>
     <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
-      Built <span id="build-timestamp">202609070914</span> UTC
+      Built <span id="build-timestamp">202609071644</span> UTC
     </div>
   </footer>
 </div>
@@ -2346,6 +2370,12 @@ const PERSONA_CONFIGS = {
     "weights": { "power": 40, "sensitive": 25, "water": 20, "size": 15, "targetSize": 15 },
     "tsfExcluded": true
   },
+  "investor": {
+    "name": "Institutional Investor / CRO",
+    "badgeColor": "#10b981",
+    "weights": { "power": 35, "sensitive": 25, "water": 20, "size": 20, "targetSize": 25 },
+    "tsfExcluded": true
+  },
   "planner": {
     "name": "Planner",
     "badgeColor": "#38bdf8",
@@ -2597,6 +2627,7 @@ if (calcContainer && calcReferences) {
     `;
     calcContainer.appendChild(card);
   });
+}
 // Hash navigation & automatic tab switching for direct URL anchors (#data-sources, #calculations, etc.)
 function handleHashNavigation() {
   const hash = window.location.hash.replace('#', '').trim();

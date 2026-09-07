@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA Engineering | Spatial Qa And Telemetry Standards | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../business/aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
+    <a href="geolibre_webgis_rendering_spec.html" class="nav-link">Rendering Spec</a>
+    <a href="multi_project_pipeline_and_schemas.html" class="nav-link">Pipeline & Schemas</a>
+    <a href="upstream_geolibre_contributions.html" class="nav-link">GeoLibre Upstream</a>
+    <a href="spatial_qa_and_telemetry_standards.html" class="nav-link">QA & Telemetry</a>
+    <a href="../../src/geolibre_frontend/index.html" target="_blank" class="nav-link">National Viewer</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>Spatial Quality Assurance, Telemetry &amp; Zero-Mock Standards</h1>
+<p><strong>Standard:</strong> AURA Quality Assurance &amp; Zero-Mock Integrity<br />
+<strong>Organization:</strong> GetBack2Basics Spatial AI Engineering<br />
+<strong>Enforcement:</strong> Mandatory Pre-Commit &amp; CI Test Gates  </p>
+<hr />
+<h2>1. Zero-Mock Data Integrity Protocol</h2>
+<p>In mission-critical geospatial engineering, synthetic coordinates or fake mock arrays (<code>sampleFeatures = [...]</code>) corrupt spatial analysis and introduce catastrophic legal liability.</p>
+<h3>Strict Enforcement Rules</h3>
+<ol>
+<li><strong>AST Scanner Gate</strong>: All pull requests must pass the Python AST scanner (<code>tests/lint/test_no_mock_data.py</code>), which traverses the abstract syntax tree to detect mock dictionaries, synthetic coordinate lists, and placeholder bounding boxes.</li>
+<li><strong>Dynamic Manifest Loading</strong>: UI viewers and inspection docks must load genuine data from live endpoints or verified JSON/GeoParquet assets (<code>config/dataset_manifest_v2.json</code>).</li>
+<li><strong>Explicit Connection Failure Handling</strong>: If an external data source is offline, the interface must display genuine connection status or error boundaries—never synthetic fallback records.</li>
+</ol>
+<hr />
+<h2>2. Compute Lifecycle &amp; Resource Teardown</h2>
+<p>To protect against cloud resource leaks and billing blowouts:
+1. <strong>Apache Sedona Session Teardown</strong>: Every SedonaContext script must explicitly execute <code>sedona.stop()</code> in <code>finally:</code> blocks.
+2. <strong>Headless Cluster Lifecycle</strong>: Headless Wherobots Cloud runtimes are spawned per batch and terminated immediately upon GeoParquet asset compilation.
+3. <strong>Automated Verification</strong>:
+   <code>bash
+   pytest tests/lint/ -v
+   pytest tests/test_hazard_scoring.py -v</code></p>
+<hr />
+<h2>3. Spatial ETL Telemetry &amp; Performance Benchmarks</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Target Standard</th>
+<th style="text-align: left;">Production Benchmark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Cadastre Ingestion Throughput</strong></td>
+<td style="text-align: left;">&gt; 200,000 parcels/sec</td>
+<td style="text-align: left;">~310,000 parcels/sec (Sedona medium runtime)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>GDA2020 CRS Projection Precision</strong></td>
+<td style="text-align: left;">Sub-millimetre ($\le 0.001\text{m}$)</td>
+<td style="text-align: left;">Exact EPSG:7844 ellipsoidal transformation</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DuckDB-WASM In-Memory Scoring Latency</strong></td>
+<td style="text-align: left;">&lt; 50ms</td>
+<td style="text-align: left;">12–15ms (10,000 parcels)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>WebGL Render Frame Rate</strong></td>
+<td style="text-align: left;">60 fps continuous</td>
+<td style="text-align: left;">60 fps (Area-Priority Limiter enabled)</td>
+</tr>
+</tbody>
+</table>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+  <div style="text-align: left;">
+    &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+  </div>
+  <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+    Built 2026-09-07 06:46 UTC
+  </div>
+</footer>
+
+</body>
+</html>

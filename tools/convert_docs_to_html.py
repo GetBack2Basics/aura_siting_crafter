@@ -217,25 +217,36 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 </html>
 """
 
-DEFAULT_NAV_LINKS = """
-    <a href="../projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">🌐 Live Site WebGIS</a>
-    <a href="../projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">📑 Statutory Site Report</a>
-    <a href="aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">⚡ Asymmetric Compute & AI Safety</a>
-    <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">🗺️ Site Enhancement Plan</a>
-    <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">🏗️ Architecture Plan</a>
-    <a href="geolibre_contribution_proposals.html" class="nav-link">🤝 GeoLibre Proposals</a>
-    <a href="linkedin_aura_siting_evolution.html" class="nav-link">📝 Evolution Odyssey</a>
-    <a href="../national_suitability_report.html" target="_blank" class="nav-link">🇦🇺 National Baseline</a>
+BUSINESS_NAV_LINKS = """
+    <a href="../../src/geolibre_frontend/projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">Live Site WebGIS</a>
+    <a href="../../src/geolibre_frontend/projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">Statutory Site Report</a>
+    <a href="aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
+    <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">Site Enhancement Plan</a>
+    <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">Architecture Plan</a>
+    <a href="nsw_govt_geospatial_benefits.html" class="nav-link">NSW Govt Guide</a>
+    <a href="../articles/linkedin_aura_siting_evolution.html" class="nav-link">Evolution Odyssey</a>
+    <a href="../engineering/upstream_geolibre_contributions.html" class="nav-link">Engineering Specs</a>
+    <a href="../../src/geolibre_frontend/national_suitability_report.html" target="_blank" class="nav-link">National Baseline</a>
 """
 
-GEOLIBRE_PROPOSAL_NAV_LINKS = """
-    <a href="../index.html" target="_blank" class="nav-link">🌐 GeoLibre National Viewer</a>
-    <a href="qa/geolibre_qa_inspect.html" target="_blank" class="nav-link">🔍 Data Review & QA Inspector</a>
-    <a href="qa/QA_Report_20260902.html" target="_blank" class="nav-link">📊 15.4M Dataset QA Report</a>
-    <a href="https://github.com/opengeos/GeoLibre" target="_blank" class="nav-link">🐙 opengeos/GeoLibre</a>
+ARTICLES_NAV_LINKS = """
+    <a href="../business/aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
+    <a href="linkedin_aura_siting_evolution.html" class="nav-link">Evolution Odyssey</a>
+    <a href="../engineering/upstream_geolibre_contributions.html" class="nav-link">Engineering Specs</a>
+    <a href="../../src/geolibre_frontend/index.html" target="_blank" class="nav-link">National Viewer</a>
+    <a href="../../src/geolibre_frontend/national_suitability_report.html" target="_blank" class="nav-link">National Baseline</a>
 """
 
-def convert_md_to_html(md_path, html_path, title, nav_links=DEFAULT_NAV_LINKS):
+ENGINEERING_NAV_LINKS = """
+    <a href="../business/aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
+    <a href="geolibre_webgis_rendering_spec.html" class="nav-link">Rendering Spec</a>
+    <a href="multi_project_pipeline_and_schemas.html" class="nav-link">Pipeline & Schemas</a>
+    <a href="upstream_geolibre_contributions.html" class="nav-link">GeoLibre Upstream</a>
+    <a href="spatial_qa_and_telemetry_standards.html" class="nav-link">QA & Telemetry</a>
+    <a href="../../src/geolibre_frontend/index.html" target="_blank" class="nav-link">National Viewer</a>
+"""
+
+def convert_md_to_html(md_path, html_path, title, nav_links=BUSINESS_NAV_LINKS):
     with open(md_path, 'r', encoding='utf-8') as f:
         md_text = f.read()
 
@@ -275,46 +286,35 @@ def convert_md_to_html(md_path, html_path, title, nav_links=DEFAULT_NAV_LINKS):
     print(f"Generated: {html_path}")
 
 def main():
-    # 0. Asymmetric Compute & AI Safety Whitepaper
-    p0_md = os.path.join(DOCS_DIR, "aura_enterprise_asymmetric_compute_and_ai_safety.md")
-    p0_html = os.path.join(DOCS_DIR, "aura_enterprise_asymmetric_compute_and_ai_safety.html")
-    if os.path.exists(p0_md):
-        convert_md_to_html(p0_md, p0_html, "AURA Enterprise: Asymmetric Compute Architecture & Deterministic AI Safety")
+    # 1. Business Stream HTML conversions
+    biz_dir = os.path.join(DOCS_DIR, "business")
+    if os.path.exists(biz_dir):
+        for f in os.listdir(biz_dir):
+            if f.endswith(".md"):
+                src_md = os.path.join(biz_dir, f)
+                dst_html = os.path.join(biz_dir, f.replace(".md", ".html"))
+                page_title = f.replace(".md", "").replace("_", " ").title()
+                convert_md_to_html(src_md, dst_html, f"AURA Business | {page_title}", nav_links=BUSINESS_NAV_LINKS)
 
-    # 1. Site Enhancement Plan
-    p1_md = os.path.join(DOCS_DIR, "macquarie_coal_precinct_site_enhancement_plan.md")
-    p1_html = os.path.join(DOCS_DIR, "macquarie_coal_precinct_site_enhancement_plan.html")
-    if os.path.exists(p1_md):
-        convert_md_to_html(p1_md, p1_html, "Macquarie Coal Complex Site-Level Enhancement Plan")
+    # 2. Articles Stream HTML conversions
+    art_dir = os.path.join(DOCS_DIR, "articles")
+    if os.path.exists(art_dir):
+        for f in os.listdir(art_dir):
+            if f.endswith(".md"):
+                src_md = os.path.join(art_dir, f)
+                dst_html = os.path.join(art_dir, f.replace(".md", ".html"))
+                page_title = f.replace(".md", "").replace("_", " ").title()
+                convert_md_to_html(src_md, dst_html, f"AURA Articles | {page_title}", nav_links=ARTICLES_NAV_LINKS)
 
-    # 2. Architecture Plan
-    p2_md = os.path.join(DOCS_DIR, "project_specific_site_enhancement_architecture_plan.md")
-    p2_html = os.path.join(DOCS_DIR, "project_specific_site_enhancement_architecture_plan.html")
-    if os.path.exists(p2_md):
-        convert_md_to_html(p2_md, p2_html, "Project-Specific Siting Architecture Plan")
-
-    # 3. LinkedIn Evolutionary Article
-    p3_md = os.path.join(DOCS_DIR, "linkedin_aura_siting_evolution.md")
-    p3_html = os.path.join(DOCS_DIR, "linkedin_aura_siting_evolution.html")
-    if os.path.exists(p3_md):
-        convert_md_to_html(p3_md, p3_html, "The Spatial Siting Odyssey | AURA Evolutionary Case Study")
-
-    # 4. NSW Government Geospatial Benefits Guide
-    p4_md = os.path.join(DOCS_DIR, "nsw_govt_geospatial_benefits.md")
-    p4_html = os.path.join(DOCS_DIR, "nsw_govt_geospatial_benefits.html")
-    if os.path.exists(p4_md):
-        convert_md_to_html(p4_md, p4_html, "NSW Government Geospatial Value & Strategic Benefits Guide")
-
-    # 5. GeoLibre Contribution & Fork Proposals (Dedicated GeoLibre Products Navbar)
-    p5_md = os.path.join(DOCS_DIR, "geolibre_contribution_proposals.md")
-    p5_html = os.path.join(DOCS_DIR, "geolibre_contribution_proposals.html")
-    if os.path.exists(p5_md):
-        convert_md_to_html(
-            p5_md,
-            p5_html,
-            "GeoLibre Contribution & Fork Proposals | OpenGeos Collaboration",
-            nav_links=GEOLIBRE_PROPOSAL_NAV_LINKS
-        )
+    # 3. Engineering Hub HTML conversions
+    eng_dir = os.path.join(DOCS_DIR, "engineering")
+    if os.path.exists(eng_dir):
+        for f in os.listdir(eng_dir):
+            if f.endswith(".md"):
+                src_md = os.path.join(eng_dir, f)
+                dst_html = os.path.join(eng_dir, f.replace(".md", ".html"))
+                page_title = f.replace(".md", "").replace("_", " ").title()
+                convert_md_to_html(src_md, dst_html, f"AURA Engineering | {page_title}", nav_links=ENGINEERING_NAV_LINKS)
 
 if __name__ == "__main__":
     main()

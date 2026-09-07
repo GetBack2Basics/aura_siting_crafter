@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoLibre Contribution & Fork Proposals | OpenGeos Collaboration | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../index.html" target="_blank" class="nav-link">GeoLibre National Viewer</a>
+    <a href="qa/geolibre_qa_inspect.html" target="_blank" class="nav-link">Data Review & QA Inspector</a>
+    <a href="qa/QA_Report_20260902.html" target="_blank" class="nav-link">15.4M Dataset QA Report</a>
+    <a href="https://github.com/opengeos/GeoLibre" target="_blank" class="nav-link">opengeos/GeoLibre</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>GeoLibre Upstream Contribution Proposals &amp; Architecture</h1>
+<p><strong>Target Upstream Repository:</strong> <a href="https://github.com/opengeos/GeoLibre"><code>opengeos/GeoLibre</code></a><br />
+<strong>Contributing Organization:</strong> GetBack2Basics Spatial AI Engineering<br />
+<strong>Status:</strong> Structured RFC &amp; Upstream Integration Proposals  </p>
+<hr />
+<h2>Executive Summary</h2>
+<p>This specification outlines five modular Pull Request (PR) proposals designed to contribute high-performance WebGIS features developed in AURA Siting Crafter directly to the upstream <code>opengeos/GeoLibre</code> open-source ecosystem.</p>
+<div class="mermaid">
+flowchart TD
+    subgraph GeoLibreUpstream["opengeos/GeoLibre Core Architecture"]
+        Core["GeoLibre Core Map Engine (MapLibre GL Wrapper)"]
+    end
+
+    subgraph Proposals["5 Modular Contribution Proposals"]
+        PR1["PR 1: DuckDB-WASM In-Memory Spatial SQL Engine"]
+        PR2["PR 2: Area-Priority Viewport Polygon Limiter"]
+        PR3["PR 3: Dynamic Expression Continuous Color Ramps"]
+        PR4["PR 4: Standalone Zero-Latency Digital Twin Exporter"]
+        PR5["PR 5: Cryptographic Data Lineage & Provenance Auditor"]
+    end
+
+    PR1 --> Core
+    PR2 --> Core
+    PR3 --> Core
+    PR4 --> Core
+    PR5 --> Core
+
+    style GeoLibreUpstream fill:#0f172a,stroke:#38bdf8,color:#ffffff,stroke-width:2px
+    style Proposals fill:#1e293b,stroke:#818cf8,color:#f8fafc
+</div>
+
+<hr />
+<h2>1. Modular PR Specifications</h2>
+<h3>Proposal 1: In-Memory DuckDB-WASM Siting Plugin (<code>geolibre-plugin-duckdb</code>)</h3>
+<ul>
+<li><strong>Objective</strong>: Embed DuckDB-WASM directly into GeoLibre map instances to execute high-throughput spatial joins, multi-criteria weighted scoring, and polygon area calculations locally in browser memory (&lt;15ms latency).</li>
+<li><strong>API Surface</strong>:
+  <code>typescript
+  map.use(new DuckDBSpatialPlugin({
+    parquetUrl: 'https://cdn.example.com/parcels.parquet',
+    initialQuery: 'SELECT * FROM parcels WHERE suitability_score &gt;= 0.7'
+  }));</code></li>
+</ul>
+<h3>Proposal 2: Area-Priority Viewport Feature Limiter (<code>geolibre-layer-limiter</code>)</h3>
+<ul>
+<li><strong>Objective</strong>: Prevent WebGL draw call bottlenecks when panning large cadastre layers (&gt;50k features) by ordering by descending bounding box / polygon area and capping rendering to top $N$ features.</li>
+<li><strong>API Surface</strong>:
+  <code>typescript
+  layer.setRenderOptimizer({
+    maxFeatures: 500,
+    sortProperty: 'area_ha',
+    sortOrder: 'desc'
+  });</code></li>
+</ul>
+<h3>Proposal 3: Dynamic Expression Continuous Color Ramps</h3>
+<ul>
+<li><strong>Objective</strong>: Provide a high-level JS helper that dynamically generates MapLibre GL interpolation expressions from arbitrary numeric data columns without rebuilding GL style sheets.</li>
+</ul>
+<h3>Proposal 4: Single-File HTML Digital Twin Exporter</h3>
+<ul>
+<li><strong>Objective</strong>: Export the current map view, active vector micro-layers, and embedded DuckDB-WASM engine into a self-contained, air-gapped HTML file for offline stakeholder distribution.</li>
+</ul>
+<h3>Proposal 5: Cryptographic Lineage &amp; Audit Inspector</h3>
+<ul>
+<li><strong>Objective</strong>: Embed SHA-256 layer checksums and Apache Sedona transform recipes into the map metadata UI, providing instant provenance verification.</li>
+</ul>
+<hr />
+<h2>2. Upstream Submission Workflow</h2>
+<ol>
+<li>Fork <code>opengeos/GeoLibre</code>.</li>
+<li>Create dedicated feature branches (<code>feature/duckdb-wasm-core</code>, <code>feature/viewport-limiter</code>).</li>
+<li>Implement unit tests using Vitest and Playwright.</li>
+<li>Submit PRs with reference benchmarks demonstrating 60fps rendering under 15M parcel loads.</li>
+</ol>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+  <div style="text-align: left;">
+    &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+  </div>
+  <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+    Built 2026-09-07 03:42 UTC
+  </div>
+</footer>
+
+</body>
+</html>

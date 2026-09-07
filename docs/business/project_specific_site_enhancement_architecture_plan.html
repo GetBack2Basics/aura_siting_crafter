@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA Business | Project Specific Site Enhancement Architecture Plan | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../../src/geolibre_frontend/projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">Live Site WebGIS</a>
+    <a href="../../src/geolibre_frontend/projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">Statutory Site Report</a>
+    <a href="aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
+    <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">Site Enhancement Plan</a>
+    <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">Architecture Plan</a>
+    <a href="nsw_govt_geospatial_benefits.html" class="nav-link">NSW Govt Guide</a>
+    <a href="../articles/linkedin_aura_siting_evolution.html" class="nav-link">Evolution Odyssey</a>
+    <a href="../engineering/upstream_geolibre_contributions.html" class="nav-link">Engineering Specs</a>
+    <a href="../../src/geolibre_frontend/national_suitability_report.html" target="_blank" class="nav-link">National Baseline</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>Project-Specific Siting Architecture &amp; Site Enhancement Plan (_LMCC_MacquarieCoal)</h1>
+<h2>Executive Summary &amp; Commercial Yield Framework</h2>
+<p>This architecture plan formalizes the methodology for delivering <strong>Project-Specific Siting Deliverables &amp; High-Resolution Interactive Applications</strong> (patterned as <code>_{Org/LGA}_{ProjectName}</code>, e.g., <code>_LMCC_MacquarieCoal</code>).</p>
+<p>By bridging national-scale candidate screening with micro-level statutory synthesis, AURA extracts maximum net developable land yield while insulating institutional buyers and planning authorities from developmental liability.</p>
+<div class="mermaid">
+graph LR
+    subgraph National["1. Continental Macro Baseline"]
+        N1["15.4M Cadastral Parcels<br/>(National Siting Viewer: index.html)"]
+        N2["Synchronized Statutory Hazard Grids<br/>(ARR 2019, Seismic, Wind, Bushfire)"]
+    end
+
+    subgraph DeepBridge["2. Authenticated Bridge"]
+        B1["Candidate Deep-Link<br/>(AURA-NSW-0001)"]
+    end
+
+    subgraph ProjectSpecific["3. Micro-Level Precision Yield"]
+        P1["10 Certified Net Developable Pads<br/>(64.0% Net-to-Gross vs. 42.0% Baseline)"]
+        P2["3D Topographic Land Reclamation<br/>(Acoustic Bunds & 1% AEP Flood Cuts)"]
+        P3["Sovereign Utility Synthesis<br/>(330kV Grid & 1.2 GL/yr Recycled Cooling)"]
+    end
+
+    National --> DeepBridge --> ProjectSpecific
+
+    style National fill:#1e293b,stroke:#3b82f6,color:#f8fafc
+    style DeepBridge fill:#1e1b4b,stroke:#818cf8,color:#ffffff,stroke-width:2px
+    style ProjectSpecific fill:#0f2942,stroke:#38bdf8,color:#ffffff,stroke-width:2px
+</div>
+
+<hr />
+<h2>1. Flagship Implementation: Macquarie Coal Complex (<code>_LMCC_MacquarieCoal</code>)</h2>
+<p>Synthesizing all 15 public exhibition technical studies (&gt;135 MB of engineering, geotechnical, and environmental data), AURA resolves critical site friction points into <strong>9 certified commercial components</strong>:</p>
+<div class="mermaid">
+flowchart TD
+    subgraph NationalMaster["National Master Baseline (Untouched)"]
+        N1["National Siting Viewer (index.html)"] -->|Click Candidate Site AURA-NSW-0001| N2["Site Modal & Link"]
+        N3["National Report (national_suitability_report.html)"]
+    end
+
+    subgraph ProjectProducts["Project-Specific Deliverables (_LMCC_MacquarieCoal)"]
+        N2 -->|Authenticated Deep-Link| P1["Project Interactive WebGIS (index_LMCC_MacquarieCoal.html)"]
+        N2 -->|Authenticated Deep-Link| P2["Site Statutory Report (report_LMCC_MacquarieCoal.html)"]
+        
+        P1 & P2 --> S1["1. 10 Net Developable Pads (NDPs) & 3-Phase Staging (320.1 ha)"]
+        P1 & P2 --> S2["2. TSF Consolidation & Bearing Capacity (25 kPa -> >150 kPa)"]
+        P1 & P2 --> S3["3. 330kV Substation Reserve + 49 MWh Pit-Void PHES Model"]
+        P1 & P2 --> S4["4. 1.8km Rail Intermodal Loop + 7.8km Haul Road Arterial Spine"]
+        P1 & P2 --> S5["5. Subsidence Advisory NSW Foundation Matrix (Zones G1-G3)"]
+        P1 & P2 --> S6["6. 250m C2 Koala Bio-Link & Engineered Fauna Overpasses"]
+        P1 & P2 --> S7["7. 3D Overburden Acoustic Bunds (35 dBA Nighttime Criteria)"]
+        P1 & P2 --> S8["8. Edgeworth WWTW Recycled Cooling Pipeline (1.2 GL/yr Savings)"]
+        P1 & P2 --> S9["9. Site vs. National Comparative Benchmark Card (64% Yield)"]
+    end
+
+    style NationalMaster fill:#1e293b,stroke:#f59e0b,color:#f8fafc
+    style ProjectProducts fill:#0f2942,stroke:#38bdf8,color:#ffffff,stroke-width:2px
+</div>
+
+<h3>1.1 Specific Engineering Layers &amp; Commercial Deliverables:</h3>
+<ol>
+<li><strong>10 Certified Net Developable Pads (NDPs) with Staging Geometry:</strong></li>
+<li><strong>Pads A1–A4 (48.5 ha hardstand):</strong> Fully remediated plateaus for hyperscale sovereign AI data centres.</li>
+<li><strong>Pads B1–B3 (72.0 ha void floor):</strong> Engineered benched pads for heavy clean-tech manufacturing.</li>
+<li><strong>Pads C1–C2 (34.2 ha portal logistics):</strong> Direct arterial connection to Cessnock Road and rail siding.</li>
+<li><strong>Pad D1 (85.0 ha TSF solar/storage plateau):</strong> Consolidated tailings land for solar PV and 100MW BESS.</li>
+<li><strong>3-Phase Staging Schedule:</strong> Phase 1 Immediate (Years 0–3: 82.7 ha), Phase 2 Medium-Term (Years 3–7: 125.4 ha), Phase 3 Long-Term (Years 7–12+: 112.0 ha).</li>
+<li><strong>TSF &amp; Dams Safety NSW De-Declaration Sandbox:</strong></li>
+<li>3D isopach tailings contours (up to 18m fine reject).</li>
+<li>Dynamic wick-drain consolidation simulation showing settlement rate and bearing capacity evolution from 25 kPa to &gt;150 kPa.</li>
+<li><strong>Sovereign High-Voltage &amp; Micro-Pumped Hydro (PHES) Scheme:</strong></li>
+<li>SP2 Substation pad geometry (4.5 ha) with 330kV/132kV dual-bus layout.</li>
+<li>Hydraulic cross-section: 120m elevation head between upper reservoir (+145m AHD) and pit void (+25m AHD), delivering up to 49.0 MWh daily storage capacity at 78% round-trip efficiency.</li>
+<li><strong>Macquarie Intermodal Rail Terminal (MIRT) &amp; Heavy Haul Road Corridor:</strong></li>
+<li>1.8 km rail loop geometry with 650m siding staging tracks and reach-stacker hardstand.</li>
+<li>7.8 km gazetted internal haul road arterial bypassing Barnsley and Teralba residential streets.</li>
+<li><strong>Subsidence Advisory NSW Pre-Approved Foundation Matrix:</strong></li>
+<li>Overlay of underground workings across Great Northern, Fassifern, and Young Wallsend seams.</li>
+<li>Foundation engineering lookup: Zone G1 shallow spread footings, Zone G2 articulated stiffened rafts, Zone G3 pressure-grouted void piles.</li>
+<li><strong>Sugarloaf-to-Awaba C2 Biodiversity Bio-Link:</strong></li>
+<li>250m–300m ecological corridor (~320 ha) with preferred Koala feed tree density targets and 2 engineered fauna overpasses along the haul road.</li>
+<li><strong>3D Overburden Acoustic Bunds &amp; Topographical Sound Shield:</strong></li>
+<li>6m–8m sculpted earthen bunds reclaiming 45 ha of land that naive 2D buffer circles would exclude.</li>
+<li>Validates strict compliance with NSW EPA <strong>35 dBA night-time criteria</strong> at Barnsley, Teralba, and Wakefield residential receivers.</li>
+<li><strong>Edgeworth WWTW Recycled Water Pipeline (Zero Potable Cooling):</strong></li>
+<li>4.2 km dual-pipe alignment connecting Edgeworth WWTW to the precinct boundary, delivering <strong>1.2 GL/year potable water savings</strong>.</li>
+<li><strong>Site vs. National Comparative Benchmark Card:</strong></li>
+<li><em>Transmission Offset:</em> 0.35 km (Macquarie) vs. 4.8 km (National Avg) — <strong>Top 5%</strong></li>
+<li><em>Net-to-Gross Yield:</em> 64% (Macquarie) vs. 42% Regional Benchmark.</li>
+<li><em>Water Circularity:</em> 100% Recycled vs. 35% Potable Reliance.</li>
+</ol>
+<hr />
+<h2>2. Standardized Multi-Project Ingestion &amp; Report Generation Blueprint</h2>
+<p>To enable third parties (councils, industrial developers, energy consortiums) to submit site data and receive an automated, audit-ready site package, AURA establishes a repeatable 4-part framework:</p>
+<div class="mermaid">
+flowchart TD
+    subgraph Submission["1. Proponent Data Submission"]
+        P1["Proponent Engineering Studies & Vectors<br/>(CAD / GIS / Boreholes / EIS Reports)"] --> P2["Structured Project Manifest<br/>(Standardized Spatial Configuration)"]
+    end
+
+    subgraph Verification["2. Automated Statutory & Geometric Gate"]
+        P2 --> V1["Schema & Topology Validation<br/>(GDA2020 CRS & Boundary Checks)"]
+        V1 --> V2["Topological Net Developable Area Audit<br/>(Multi-Hazard Constraint Subtraction)"]
+    end
+
+    subgraph Deliverables["3. Certified Decision Packages"]
+        V2 --> D1["Interactive Project WebGIS Portal<br/>(Pad Staging & Localized Spatial Engine)"]
+        V2 --> D2["Statutory Site Assessment Report<br/>(Audit-Ready Planning Panel Dossier)"]
+        V2 --> D3["National-to-Site Deep-Link Bridge<br/>(Macro Baseline to Micro Inspection)"]
+    end
+
+    style Submission fill:#1e293b,stroke:#3b82f6,color:#f8fafc
+    style Verification fill:#1e1b4b,stroke:#818cf8,color:#ffffff,stroke-width:2px
+    style Deliverables fill:#065f46,stroke:#34d399,color:#ffffff,stroke-width:2px
+</div>
+
+<hr />
+<h2>3. Executive Delivery Architecture &amp; Asset Integration</h2>
+<ol>
+<li><strong>Structured Manifest Specifications</strong>: Standardizes proponent metadata, engineering capacity targets (power MVA, recycled water GL/yr), and localized micro-layer geometries into a unified, version-controlled format.</li>
+<li><strong>Dedicated Project Spatial Portals</strong>: Each project receives a self-contained, high-performance WebGIS application featuring pad staging timelines, infrastructure overlays, and real-time DuckDB-WASM analytical filtering.</li>
+<li><strong>Statutory Decision Dossiers</strong>: Automated generation of publication-grade assessment reports containing comparative benchmark radar matrices, geotechnical foundation engineering schedules, and environmental bio-link allocations.</li>
+<li><strong>National Macro-to-Micro Continuity</strong>: Seamless transition from Australia-wide candidate identification to deep site-level forensic due diligence via authenticated deep-linking.</li>
+</ol>
+<hr />
+<h2>4. Statutory Verification &amp; Quality Assurance Protocol</h2>
+<p>Every submitted project package undergoes rigorous automated and statutory quality assurance prior to certification:</p>
+<ol>
+<li><strong>Automated Schema &amp; Quality Gate Enforcement</strong>: Ingested datasets are scanned against strict schema definitions to verify structural integrity and data provenance before pipeline processing.</li>
+<li><strong>Geometric &amp; Topological Integrity Audits</strong>: Automated spatial validation verifies that all developable pad polygons sit strictly within precinct boundaries, contain zero self-intersections, and maintain statutory clearance from ecological conservation corridors.</li>
+<li><strong>Statutory Benchmark Verification</strong>: Geotechnical, acoustic, and hydraulic metrics are benchmarked against NSW EPA, ARR 2019, and Subsidence Advisory guidelines to ensure full compliance before planning panel exhibition.</li>
+<li><strong>Interactive Digital Twin Audit</strong>: Visual inspection confirms pad staging schedules, multi-layer toggling, and client-side analytical calculations operate with sub-second responsiveness across all target stakeholder devices.</li>
+</ol>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+  <div style="text-align: left;">
+    &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+  </div>
+  <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+    Built 2026-09-07 06:46 UTC
+  </div>
+</footer>
+
+</body>
+</html>

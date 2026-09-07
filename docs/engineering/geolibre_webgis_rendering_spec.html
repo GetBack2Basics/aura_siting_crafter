@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA Engineering | Geolibre Webgis Rendering Spec | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../business/aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
+    <a href="geolibre_webgis_rendering_spec.html" class="nav-link">Rendering Spec</a>
+    <a href="multi_project_pipeline_and_schemas.html" class="nav-link">Pipeline & Schemas</a>
+    <a href="upstream_geolibre_contributions.html" class="nav-link">GeoLibre Upstream</a>
+    <a href="spatial_qa_and_telemetry_standards.html" class="nav-link">QA & Telemetry</a>
+    <a href="../../src/geolibre_frontend/index.html" target="_blank" class="nav-link">National Viewer</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>GeoLibre WebGIS Rendering Enhancements Specification</h1>
+<p><strong>Ecosystem Standard for:</strong> <a href="https://github.com/opengeos/GeoLibre"><code>opengeos/GeoLibre</code></a> &amp; <a href="https://github.com/GetBack2Basics/Spatial_Report_Crafter"><code>GetBack2Basics/Spatial_Report_Crafter</code></a><br />
+<strong>Author:</strong> GetBack2Basics / AURA Siting Crafter<br />
+<strong>Status:</strong> Adopted Default Standard (September 2026)  </p>
+<hr />
+<h2>1. Overview &amp; Objective</h2>
+<p>When rendering large-scale spatial layers (such as 15.4M+ national cadastral parcels, multi-hazard envelopes, and electrical transmission grids) inside browser WebGIS applications, client-side rendering bottlenecks can lead to:
+- Excessive WebGL draw calls and dropped frames (&lt; 30 fps).
+- Viewport clutter caused by tens of thousands of sub-pixel polygon slivers.
+- DOM and memory pressure resulting from bloated GeoJSON transfers.</p>
+<p>This specification defines <strong>5 Core Rendering Standards</strong> to serve as the default behavior across <strong>GeoLibre</strong> client plugins and <strong>Spatial_Report_Crafter</strong> digital twins.</p>
+<div class="mermaid">
+flowchart TD
+    subgraph DataLayer["Cloud / Native Stream"]
+        GPQ["GeoParquet / PMTiles / FlatGeobuf"]
+    end
+
+    subgraph ClientProcessing["DuckDB-WASM Engine"]
+        SQL["Area Sort: ORDER BY ST_Area(geom) DESC<br/>Viewport Limit: LIMIT 500"]
+        ATTR["Dynamic Continuous Attribute Normalization"]
+    end
+
+    subgraph MapLibreRendering["MapLibre GL JS Rendering"]
+        CLUST["Point Clustering Source (cluster: true)"]
+        RAMP["Dynamic Interpolate Continuous Color Ramps"]
+        STREAM["HTTP Byte-Range Sub-Second Streaming"]
+        EXPORT["Single-File Zero-Latency Standalone Twin"]
+    end
+
+    GPQ --> STREAM
+    STREAM --> SQL
+    SQL --> RAMP
+    ATTR --> RAMP
+    GPQ --> CLUST
+</div>
+
+<hr />
+<h2>2. The 5 Core Rendering Standards</h2>
+<h3>Standard 1: Area-Priority Viewport Feature Limiting</h3>
+<ul>
+<li><strong>Default Setting:</strong> <code>FEATURE_RENDER_LIMIT = 500</code></li>
+<li><strong>Behavior:</strong> When the total matching polygon/multipolygon count within an active viewport bounding box exceeds the limit, query and sort features by descending surface area (<code>ORDER BY ST_Area(geom) DESC</code> or bounding box magnitude).</li>
+<li><strong>Benefit:</strong> Ensures primary regional land parcels and candidate pads are rendered cleanly without visual occlusion from micro-slivers, while maintaining consistent 60fps frame rates.</li>
+</ul>
+<h3>Standard 2: Point Clustering &amp; Density Scaling</h3>
+<ul>
+<li><strong>Default Setting:</strong> <code>cluster: true</code>, <code>clusterRadius: 50</code>, <code>clusterMaxZoom: 14</code></li>
+<li><strong>Behavior:</strong> For dense point layers (electrical substations, transmission towers, water boreholes, monitoring points), instantiate MapLibre GL cluster sources.</li>
+<li><strong>Cluster Badges:</strong> Tiered circle radii and color steps (e.g., <code>&lt; 10</code> points: <code>#3b82f6</code>, <code>10–50</code> points: <code>#f59e0b</code>, <code>&gt; 50</code> points: <code>#ef4444</code>). Clicking a cluster executes bounding-box zoom expansion or spiderfying.</li>
+</ul>
+<h3>Standard 3: Dynamic MapLibre Continuous Color Ramps</h3>
+<ul>
+<li><strong>Default Setting:</strong> GPU-driven continuous expression interpolation</li>
+<li><strong>Syntax:</strong>
+  <code>javascript
+  'fill-color': [
+    'interpolate',
+    ['linear'],
+    ['get', 'suitability_score'],
+    0.0, '#3b82f6',   // Blue (Low / Moderate)
+    0.5, '#f59e0b',   // Amber (Viable)
+    0.8, '#10b981',   // Emerald (High)
+    1.0, '#06b6d4'    // Cyan (Optimal Tier-1)
+  ]</code></li>
+<li><strong>Benefit:</strong> Parameter adjustments in client-side DuckDB-WASM immediately recolor map polygons via WebGL shaders without re-allocating layers or textures.</li>
+</ul>
+<h3>Standard 4: Sub-Second Web-Native Vector Streaming</h3>
+<ul>
+<li><strong>Default Formats:</strong> <strong>PMTiles</strong>, <strong>FlatGeobuf</strong>, <strong>GeoParquet</strong></li>
+<li><strong>Behavior:</strong> Client requests only the required spatial partitions or tile bytes using HTTP Range headers (<code>Range: bytes=start-end</code>), eliminating multi-megabyte GeoJSON payload downloads.</li>
+</ul>
+<h3>Standard 5: Zero-Latency Standalone Digital Twins</h3>
+<ul>
+<li><strong>Default Output:</strong> Self-contained, single-file HTML apps</li>
+<li><strong>Behavior:</strong> <code>Spatial_Report_Crafter</code> and GeoLibre exporters embed essential micro-layers (e.g. project boundaries, Net Developable Pads, infrastructure corridors) directly into the HTML document, allowing stakeholders to execute full spatial queries and slider re-scoring completely offline.</li>
+</ul>
+<hr />
+<h2>3. Integration Matrix</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">GeoLibre (<code>opengeos/GeoLibre</code>)</th>
+<th style="text-align: left;">Spatial Report Crafter (<code>Spatial_Report_Crafter</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Area-Priority Limiter</strong></td>
+<td style="text-align: left;">Core Layer Rendering Pipeline</td>
+<td style="text-align: left;">Default Project Map Template</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Point Clustering</strong></td>
+<td style="text-align: left;">Default on Point Ingestion</td>
+<td style="text-align: left;">Infrastructure Layer Presets</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Continuous Color Ramps</strong></td>
+<td style="text-align: left;"><code>geolibre-siting</code> Plugin</td>
+<td style="text-align: left;">Live Suitability Explorer</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Byte-Range Streaming</strong></td>
+<td style="text-align: left;">Cloud Catalog Connectors</td>
+<td style="text-align: left;">Remote Lakehouse Layer Bridge</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Standalone HTML Export</strong></td>
+<td style="text-align: left;"><code>geolibre-export-report</code> Action</td>
+<td style="text-align: left;"><code>tools/build_project_package.py</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>4. Cross-Repository References</h2>
+<ul>
+<li><strong>Spatial Report Crafter:</strong> <a href="https://github.com/GetBack2Basics/Spatial_Report_Crafter">https://github.com/GetBack2Basics/Spatial_Report_Crafter</a></li>
+<li><strong>GeoLibre Upstream:</strong> <a href="https://github.com/opengeos/GeoLibre">https://github.com/opengeos/GeoLibre</a></li>
+<li><strong>AURA Siting Crafter:</strong> <a href="https://github.com/GetBack2Basics/aura_siting_crafter">https://github.com/GetBack2Basics/aura_siting_crafter</a></li>
+</ul>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+  <div style="text-align: left;">
+    &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+  </div>
+  <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+    Built 2026-09-07 06:46 UTC
+  </div>
+</footer>
+
+</body>
+</html>

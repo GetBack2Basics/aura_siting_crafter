@@ -5,6 +5,12 @@
     "weights": { "power": 40, "sensitive": 25, "water": 20, "size": 15, "targetSize": 15 },
     "tsfExcluded": true
   },
+  "investor": {
+    "name": "Institutional Investor / CRO",
+    "badgeColor": "#10b981",
+    "weights": { "power": 35, "sensitive": 25, "water": 20, "size": 20, "targetSize": 25 },
+    "tsfExcluded": true
+  },
   "planner": {
     "name": "Planner",
     "badgeColor": "#38bdf8",

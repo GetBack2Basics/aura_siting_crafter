@@ -8,6 +8,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <title>AURA Siting Crafter — GeoLibre WebGIS</title>
+  <link rel="icon" type="image/png" href="assets/aura_logo.png">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -97,6 +98,23 @@
       z-index: 100;
       flex-shrink: 0;
       gap: 0.75rem;
+    }
+
+    .nav-brand-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      user-select: none;
+    }
+
+    .nav-logo-img {
+      height: 34px;
+      width: 34px;
+      border-radius: 7px;
+      object-fit: cover;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      flex-shrink: 0;
     }
 
     .nav-brand-container {
@@ -1414,11 +1432,14 @@
 
   <!-- Top Application Bar -->
   <header class="top-navbar">
-    <div class="nav-brand-container">
-      <div class="nav-brand-title">🌐 AURA Siting Crafter</div>
-      <div class="nav-brand-subtitle"><span class="aura-highlight">A</span>ustralian <span
-          class="aura-highlight">U</span>rban and <span class="aura-highlight">R</span>egional <span
-          class="aura-highlight">A</span>I Datacenter Siting</div>
+    <div class="nav-brand-wrapper">
+      <img src="assets/aura_logo.png" alt="AURA Siting Crafter Logo" class="nav-logo-img">
+      <div class="nav-brand-container">
+        <div class="nav-brand-title">AURA Siting Crafter</div>
+        <div class="nav-brand-subtitle"><span class="aura-highlight">A</span>ustralian <span
+            class="aura-highlight">U</span>rban and <span class="aura-highlight">R</span>egional <span
+            class="aura-highlight">A</span>I Datacenter Siting</div>
+      </div>
     </div>
 
     <div class="nav-actions">
@@ -1698,7 +1719,10 @@
   <div class="modal-overlay" id="help-modal" onclick="closeHelpModal(event)">
     <div class="modal-card" style="max-width: 740px;">
       <div class="modal-header">
-        <div class="modal-title">❔ AURA Siting Crafter — System Guide & Architecture</div>
+        <div class="modal-title" style="display: flex; align-items: center; gap: 0.6rem;">
+          <img src="assets/aura_logo.png" alt="AURA Logo" style="height: 26px; width: 26px; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.4); flex-shrink: 0;">
+          <span>AURA Siting Crafter — System Guide &amp; Architecture</span>
+        </div>
         <button class="close-btn" onclick="closeHelpModalDirect()">&times;</button>
       </div>
       <div class="modal-body" id="help-modal-body">
@@ -1806,7 +1830,10 @@
   <div class="modal-overlay" id="geolibre-modal" onclick="closeGeolibreModal(event)">
     <div class="modal-card" style="max-width: 660px;">
       <div class="modal-header">
-        <div class="modal-title">🌐 GeoLibre Open GIS Project Spec</div>
+        <div class="modal-title" style="display: flex; align-items: center; gap: 0.6rem;">
+          <img src="assets/aura_logo.png" alt="AURA Logo" style="height: 26px; width: 26px; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.4); flex-shrink: 0;">
+          <span>GeoLibre Open GIS Project Spec</span>
+        </div>
         <button class="close-btn" onclick="closeGeolibreModalDirect()">&times;</button>
       </div>
       <div class="modal-body" id="geolibre-modal-body">

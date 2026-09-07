@@ -1,28 +1,31 @@
 # The Spatial Siting Odyssey: From Regional Brownfield Scans to Continental AI Compute & High-Precision Statutory Digital Twins
 
-*How GetBack2Basics built AURA Siting Crafter as an open-source first commercial solution — synthesizing engineering lessons, multi-modal project inputs, an asymmetric compute architecture, deterministic AI safety sandboxes, and certified statutory due diligence services.*
+How **GetBack2Basics** built **AURA Siting Crafter** as an open-source first commercial solution. This platform synthesizes engineering lessons, multi-modal project inputs, an asymmetric compute architecture, deterministic AI safety sandboxes, and certified statutory due diligence services.
 
-**Cloud Root:** [https://aura.getback2basics.net](https://aura.getback2basics.net) • **Organization:** [GetBack2Basics](https://getback2basics.net)
+{INSERT LINK: AURA Cloud Platform - https://aura.getback2basics.net}
+{INSERT LINK: GetBack2Basics Organization - https://getback2basics.net}
+
+{INSERT IMAGE: docs/articles/aura_siting_evolution_assets/01_hero_banner.jpg - Hero Banner: AURA Siting Crafter 3D Precision Digital Twin}
 
 ---
 
-![AURA Siting Crafter Banner](https://storage.googleapis.com/aura-siting-crafter-geolibre-app/banner.png)
-
-## The Siting Trilemma: Commercial Yield, Statutory Rigor & Sovereignty
+## The Siting Trilemma: Commercial Yield, Statutory Rigor, and Sovereignty
 
 Finding optimal land for next-generation sovereign AI data centres, clean energy firming hubs, and advanced industrial ecosystems is one of the most pressing engineering bottlenecks of the 2020s.
 
-Traditional site selection relies on coarse static GIS layers, proprietary consulting PDFs, or disjointed spreadsheets. Proponents frequently claim *"100% buildable gross site area"*, only for infrastructure developers and institutional funds to discover years later that 40% of the parcel is locked by uninsurable 1% AEP floodways, mine subsidence strain zones, or EPA acoustic trigger buffers.
+Traditional site selection relies on coarse static GIS layers, proprietary consulting PDFs, or disjointed spreadsheets. Proponents frequently claim 100% buildable gross site area. Infrastructure developers and institutional funds often discover years later that 40% of the parcel is locked by uninsurable floodways, mine subsidence strain zones, or acoustic trigger buffers.
 
-To de-risk capital allocations, **GetBack2Basics** engineered **AURA Siting Crafter** to deliver **64.0% net-to-gross developable yield** (vs. 42.0% regional benchmark) backed by **four unbreakable statutory guarantees (The Titanium Bank Vault)**:
-1. **Zero Spatial Hallucinations**: Deterministic, read-only AST query execution against pre-certified assets.
-2. **100% Sovereign Data Privacy**: Client-side RAM execution (DuckDB-WASM); proprietary scenarios never leave the user's browser.
-3. **Zero Statutory Exhibition Outage Risk**: Stateless edge vector delivery guaranteeing uninterrupted service for 10,000+ concurrent stakeholders.
-4. **Instant <15ms Due Diligence Recalculation**: In-memory sensitivity re-weighting during executive boardroom and planning panel reviews.
+To de-risk capital allocations, **GetBack2Basics** engineered **AURA Siting Crafter** to deliver **64.0% net-to-gross developable yield** compared to the **42.0% regional benchmark**. This performance is backed by four unbreakable statutory guarantees:
+* **Zero Spatial Hallucinations**: Deterministic, read-only AST query execution against pre-certified assets.
+* **100% Sovereign Data Privacy**: Client-side RAM execution using DuckDB-WASM ensures proprietary scenarios never leave the user's browser.
+* **Zero Statutory Exhibition Outage Risk**: Stateless edge vector delivery guarantees uninterrupted service for 10,000+ concurrent stakeholders.
+* **Instant Sub-15ms Due Diligence Recalculation**: In-memory sensitivity re-weighting during executive boardroom and planning panel reviews.
 
-Built as an **open-source first commercial platform**, AURA combines a transparent, peer-reviewed open geospatial engine with certified statutory-grade site assessment services. Here is the full synthesis of how we built it, the hard engineering lessons learned, the asymmetric cloud economics, the deterministic AI safety sandbox, and how developers can leverage custom project-specific reports.
+Built as an **open-source first commercial platform**, AURA combines a transparent open geospatial engine with certified statutory-grade site assessment services. Here is the full synthesis of how we built it, the engineering lessons learned, the asymmetric cloud economics, the deterministic AI safety sandbox, and the custom project pipeline.
 
 ---
+
+{INSERT IMAGE: docs/articles/aura_siting_evolution_assets/02_five_stage_evolution.jpg - Infographic: 5-Stage Spatial Siting Engineering Evolution}
 
 ```mermaid
 graph TD
@@ -40,50 +43,58 @@ graph TD
 
 ---
 
-## The 5-Stage Evolutionary Journey
+## The Five-Stage Evolutionary Journey
 
 ### Stage 1: Basic Regional Spatial Exploration
-Our journey started with a focused regional inquiry: *How can Australia transition retiring coal generation assets and mine void footprints in NSW's Hunter Region into digital infrastructure hubs?*
+Our journey started with a focused regional inquiry in New South Wales. We investigated how to transition retiring coal generation assets and mine void footprints in the Hunter Region into digital infrastructure hubs.
 
 In the earliest prototypes, we applied standard GIS Euclidean buffers around 330kV substations, transmission easements, and major highways. While useful for initial reconnaissance, Euclidean buffers failed to account for real-world terrain winding factors, steep grade slopes, and local cadastral boundaries.
 
-### Stage 2: High-Data Micro-Siting & Physical Thermodynamic Modeling
+### Stage 2: High-Data Micro-Siting and Physical Thermodynamic Modeling
 To move beyond crude approximations, we ingested high-fidelity ground truth:
-* **15.4M+ Cadastral Parcels** (Geoscape CSDM & NSW Cadastre in GDA2020 / EPSG:7844 / EPSG:7856).
-* **1m ELVIS LiDAR DEMs** to enforce strict <5.0% slope foundation filters.
-* **Continuous Sigmoidal Sensitive Decay Curves** ($d_0 = 500\text{m}$) implementing NSW EPA *Noise Policy for Industry* (NPfI 2017) sleep disturbance thresholds.
-* **Closed-Loop Heat & Cooling Physics**: Modeling thermodynamic pipeline decay for district cooling symbiosis and environmental naturalization distances before river discharge.
+* **15.4M+ Cadastral Parcels**: Ingested Geoscape CSDM and NSW Cadastre in GDA2020 (EPSG:7844 / EPSG:7856).
+* **1m ELVIS LiDAR DEMs**: Applied strict sub-5% slope foundation filters.
+* **Continuous Sigmoidal Sensitive Decay Curves**: Implemented NSW EPA Noise Policy for Industry (NPfI 2017) sleep disturbance thresholds.
+* **Closed-Loop Heat and Cooling Physics**: Modeled thermodynamic pipeline decay for district cooling symbiosis and environmental naturalization distances before river discharge.
 
-### Stage 3: Continental Simulations & National Scale-Out
-Once proven in the Hunter, we scaled the spatial architecture across **all 6 Australian states**. Ingesting national GeoParquet spatial partitions into the **Wherobots Cloud** and **Apache Sedona** lakehouse, we benchmarked 17 national candidate clusters (from Latrobe Valley and Portland in Victoria to Collie in WA and Gladstone in Queensland).
+### Stage 3: Continental Simulations and National Scale-Out
+Once proven in the Hunter Region, we scaled the spatial architecture across all six Australian states. We ingested national GeoParquet spatial partitions into the **Wherobots Cloud** and **Apache Sedona** lakehouse.
 
-We benchmarked every site on power grid proximity, industrial water access, and net scalable pad footprint.
+We benchmarked 17 national candidate clusters, ranging from the Latrobe Valley and Portland in Victoria to Collie in WA and Gladstone in Queensland. Every site was evaluated on power grid proximity, industrial water access, and net scalable pad footprint.
 
 ### Stage 4: National High-Data Multi-Hazard Synthesis (MCDA)
-Macro-level proximity alone does not make a site investable. Critical infrastructure requires statutory resilience. We integrated 5 peer-reviewed statutory hazard layers into a unified **6-Factor Multi-Criteria Decision Analysis (MCDA)**:
-1. **1% AEP Dynamic Flood Depth** (*ARR 2019 / NCC 2022 Part B1*).
-2. **Earthquake Peak Ground Acceleration (PGA)** (*AS 1170.4:2007 / GA NSHA 2018*).
-3. **Extreme Cyclonic & Regional Wind Loading** (*AS/NZS 1170.2:2021 / GA TCHA 2018*).
-4. **Landslide Susceptibility & Topographic Instability** (*AGS 2007 Guidelines*).
-5. **Bushfire Ember Attack & Defensible APZ Buffers** (*AS 3959:2018 / NSW RFS PBP 2019*).
+Macro-level proximity alone does not make a site investable. Critical infrastructure requires statutory resilience across extreme environmental factors.
 
-Every candidate site was assigned an explicit **Spatial Data Depth Index** (distinguishing between 10/10 Tier-1 micro-surveyed sites and 8/10 regional interpolations) so investors and planning panels never mistake baseline approximations for physical site ground-truth.
+We integrated five peer-reviewed statutory hazard layers into a unified **6-Factor Multi-Criteria Decision Analysis (MCDA)**:
+* **1% AEP Dynamic Flood Depth** (ARR 2019 / NCC 2022 Part B1).
+* **Earthquake Peak Ground Acceleration (PGA)** (AS 1170.4:2007 / GA NSHA 2018).
+* **Extreme Cyclonic and Regional Wind Loading** (AS/NZS 1170.2:2021 / GA TCHA 2018).
+* **Landslide Susceptibility and Topographic Instability** (AGS 2007 Guidelines).
+* **Bushfire Ember Attack and Defensible APZ Buffers** (AS 3959:2018 / NSW RFS PBP 2019).
 
-### Stage 5: Deep Forensic Analysis & Automated Project Submission Pipeline
-In the final phase, we undertook the ultimate stress test: downloading and synthesizing **all 15 statutory public exhibition technical documents (>135 MB)** for the *Macquarie Coal Complex Transformation Precinct* from the NSW Planning Portal.
+Every candidate site was assigned an explicit **Spatial Data Depth Index**. This metric distinguishes between 10/10 micro-surveyed sites and 8/10 regional interpolations, ensuring investors never mistake baseline approximations for physical ground truth.
 
-Our spatial audit revealed vital strategic insights:
-* **True Net Developable Pad Space**: Subtracting riparian buffers, 20m high-pressure water pipeline easements, >5% slopes, and dam hazard setbacks reduced raw proponent claims to **44.5 ha net immediate buildable pad space** across 10 certified Net Developable Pads (NDPs).
-* **49.0 MWh Void Micro-PHES**: Leveraging the site's 120m hydraulic head drop between the ridge plateau and lower open-cut pit void to create synchronous long-duration green energy firming.
-* **Multi-Modal Connectivity**: 1.8km active heavy rail siding loop (2.5M t/yr) directly connecting to the Main Northern Railway.
+### Stage 5: Deep Forensic Analysis and Automated Project Submission Pipeline
+In the final phase, we undertook a forensic stress test on the Macquarie Coal Complex Transformation Precinct. We downloaded and synthesized all 15 statutory public exhibition technical documents exceeding 135 MB from the NSW Planning Portal.
 
-Rather than building a one-off bespoke report, we engineered a **generic, repeatable Multi-Project Submission Pipeline (`tools/build_project_package.py`)**.
+Our spatial audit revealed three vital strategic insights:
+* **True Net Developable Pad Space**: Subtracting riparian buffers, 20m high-pressure water pipeline easements, slopes over 5%, and dam hazard setbacks reduced raw claims to **44.5 ha net immediate buildable pad space** across 10 certified Net Developable Pads (NDPs).
+* **49.0 MWh Void Micro-PHES**: Leveraged the site's 120m hydraulic head drop between the ridge plateau and lower open-cut pit void to create synchronous long-duration green energy firming.
+* **Multi-Modal Connectivity**: Verified an active 1.8km heavy rail siding loop (2.5M t/yr capacity) directly connecting to the Main Northern Railway.
+
+Rather than building a one-off bespoke report, we engineered a generic, repeatable **Multi-Project Submission Pipeline**.
+
+{INSERT IMAGE: docs/articles/aura_siting_evolution_assets/05_forensic_digital_twin_pads.jpg - 3D Forensic Digital Twin: 10 Net Developable Pads, Exclusions, Micro-PHES, and Rail Loop}
 
 ---
 
 ## The Asymmetric Compute Paradigm: Cloud Lakehouse vs. Infinite-Scale Client Execution
 
-A common pitfall in cloud-native spatial marketing is claiming "free compute." In enterprise infrastructure, heavy geospatial computation carries real cost. AURA operates under an **Asymmetric Compute Model**:
+A common pitfall in cloud-native spatial marketing is claiming free compute. In enterprise infrastructure, heavy geospatial computation carries substantial cost.
+
+AURA operates under an **Asymmetric Compute Model** that divides workload between batch cloud processing and client-side execution.
+
+{INSERT IMAGE: docs/articles/aura_siting_evolution_assets/03_asymmetric_compute_architecture.jpg - Architecture: Asymmetric Spatial Compute Paradigm}
 
 ```mermaid
 flowchart TD
@@ -104,8 +115,8 @@ flowchart TD
     style Downstream fill:#0a2540,stroke:#22c55e,color:#ffffff,stroke-width:2px
 ```
 
-* **Upstream Heavy Ingestion (Cloud Lakehouse)**: Ingesting 15.4M cadastral parcels, running 15 statutory hazard grids, and processing continuous decay curves is executed in distributed batch runs on **Apache Sedona and Wherobots Cloud**. By right-sizing medium runtimes (8 vCPU, 32 GB RAM) and using Iceberg snapshot partition caching, full national batch pipeline runs execute for **~$0.69 USD per full run** ($24.13 USD cumulative spend across 35 headless production passes).
-* **Downstream Interactive Consumption (Client-Side WASM)**: Instead of incurring server database query costs every time an analyst adjusts a slider or recalculates a buffer, the entire analytical scoring engine compiles to **DuckDB WebAssembly** directly in the user's browser. Thousands of concurrent stakeholders can explore scenarios simultaneously at **$0.00 incremental cloud compute cost**.
+* **Upstream Heavy Ingestion (Cloud Lakehouse)**: Ingestion of 15.4M cadastral parcels, 15 statutory hazard grids, and continuous decay curves executes in distributed batch runs on **Apache Sedona and Wherobots Cloud**. By right-sizing medium runtimes (8 vCPU, 32 GB RAM) and using Iceberg snapshot partition caching, full national batch runs execute for **~$0.69 USD per full run**.
+* **Downstream Interactive Consumption (Client-Side WASM)**: The analytical scoring engine compiles to **DuckDB WebAssembly** directly in the user's browser. Thousands of concurrent stakeholders can explore scenarios simultaneously at **$0.00 incremental cloud compute cost**.
 
 ### Architectural Cost Breakdown
 
@@ -122,7 +133,9 @@ flowchart TD
 
 In national energy and industrial siting, an AI hallucination is fatal. A single invented parcel coordinate or hallucinated transmission easement could trigger a catastrophic multi-million-dollar misallocation.
 
-AURA addresses this by establishing a **Deterministic AI Sandbox**:
+AURA addresses this risk by establishing a **Deterministic AI Sandbox**.
+
+{INSERT IMAGE: docs/articles/aura_siting_evolution_assets/04_deterministic_ai_safety_sandbox.jpg - Deterministic AI Text-to-SQL Safety Sandbox Architecture}
 
 ```mermaid
 flowchart TD
@@ -145,25 +158,27 @@ flowchart TD
     style DeterministicResult fill:#0284c7,stroke:#38bdf8,color:#ffffff
 ```
 
-### Safety Rules & Zero-Hallucination Guarantees
-1. **The 'Librarian' Isolation Principle**: The conversational agent acts strictly as a query assistant querying a pre-certified library. It has **zero administrative permission** to create, modify, or reproject spatial geometries.
-2. **Zero Coordinate Invention**: The AI does not generate latitude/longitude points or draw boundaries. It strictly emits standard SQL filter predicates (`WHERE area_ha >= 50 AND dist_to_substation_km <= 2.0`).
-3. **AST Schema Firewall**: Generated SQL queries pass through an Abstract Syntax Tree (AST) validation layer. Mutation statements (`INSERT`, `UPDATE`, `DROP`, `DELETE`) or invalid table joins are blocked before reaching the query engine.
-4. **Pre-Certified Data Grounding**: Queries execute exclusively against verified GeoParquet/Iceberg partitions audited by our automated zero-mock test harness (`pytest tests/lint/test_no_mock_data.py`).
+### Safety Rules and Zero-Hallucination Guarantees
+* **The Librarian Isolation Principle**: The conversational agent acts strictly as a query assistant over a pre-certified library. It has zero administrative permission to create, modify, or reproject spatial geometries.
+* **Zero Coordinate Invention**: The AI never generates raw coordinates or draws polygons. It strictly emits standard SQL filter predicates.
+* **AST Schema Firewall**: Generated SQL queries pass through an Abstract Syntax Tree (AST) validation layer. Mutation statements such as INSERT, UPDATE, DROP, or DELETE are blocked before execution.
+* **Pre-Certified Data Grounding**: Queries execute exclusively against verified GeoParquet and Iceberg partitions audited by automated test suites.
 
 ---
 
 ## Top Engineering Lessons Learned
 
-1. **🛡️ Zero-Mock Data Integrity Standard**: Synthetic coordinates and mock sample arrays create fatal blindspots in spatial infrastructure. We instituted a strict zero-mock AST scanner (`pytest tests/lint/test_no_mock_data.py`). All UI components, tables, and inspection docks must load 100% verified live datasets or explicit error boundaries.
-2. **⚡ Decoupled Heavy Geometry vs. Scoring**: Running heavy spatial joins (`ST_Difference`, Voronoi buffering, CRS projections) on every slider adjustment causes prohibitive cloud bills. Pre-computing spatial topology once and evaluating mathematical scoring curves in client-side DuckDB-WASM dropped full national runs to **$0.69 USD**.
-3. **🚀 Viewport-Aware Area-Priority Limiting**: Attempting to render 15.4M cadastral parcels crashes the browser DOM. We introduced an **Area-Priority 500-Feature Viewport Limiter** (`ORDER BY ST_Area(geom) DESC`). This ensures fluid 60fps rendering while guaranteeing macro situational awareness of major parcels.
-4. **📦 Single-File Standalone Portability**: Planning authorities and investment committees cannot navigate complex GIS logins or broken tile servers. Packaging complete MapLibre digital twins, embedded GeoJSON micro-layers, and DuckDB-WASM into self-contained single-file HTML reports provides zero-latency offline auditing.
-5. **🔍 The Statutory Ground-Truth Lesson**: Proponents frequently advertise *"100% buildable gross site area"*. Topological subtraction of statutory easements (high-pressure water mains, 30m riparian zones, >5% slopes, and Dams Safety NSW de-declaration buffers) often reduces developable yield by 30% to 55%. Real-world siting must be grounded in physical and legal constraints, not unverified marketing boundaries.
+* **Zero-Mock Data Integrity Standard**: Synthetic coordinates and mock sample arrays create fatal blindspots in spatial infrastructure. We instituted an AST scanner to ensure all UI components load 100% verified live datasets or explicit error boundaries.
+* **Decoupled Heavy Geometry vs. Scoring**: Running heavy spatial joins on every slider adjustment causes prohibitive cloud bills. Pre-computing spatial topology once and evaluating mathematical scoring curves in client-side DuckDB-WASM dropped full national runs to **$0.69 USD**.
+* **Viewport-Aware Area-Priority Limiting**: Attempting to render 15.4M cadastral parcels crashes browser memory. We introduced an **Area-Priority 500-Feature Viewport Limiter** to ensure fluid 60fps rendering while guaranteeing macro situational awareness.
+* **Single-File Standalone Portability**: Planning authorities and investment committees cannot navigate complex GIS logins or broken tile servers. Packaging complete MapLibre digital twins and DuckDB-WASM into self-contained single-file HTML reports provides zero-latency offline auditing.
+* **The Statutory Ground-Truth Lesson**: Proponents frequently advertise 100% buildable gross site area. Topological subtraction of statutory easements often reduces developable yield by 30% to 55%. Real-world siting must be grounded in physical and legal constraints.
 
 ---
 
 ## Multi-Modal Input Spectrum: What Inputs Power the Pipeline?
+
+The AURA pipeline ingests diverse statutory, topographic, and engineering data streams to generate certified digital twins.
 
 | Input Data Stream | Source & Format | Ingestion Role in AURA Pipeline | Resolution / Standard |
 | :--- | :--- | :--- | :--- |
@@ -177,26 +192,28 @@ flowchart TD
 
 ---
 
-## Open-Source Contributions & Ecosystem Integration
+## Open-Source Contributions and Ecosystem Integration
 
-### 🤝 opengeos/GeoLibre Contributions
+### opengeos / GeoLibre Contributions
 * `geolibre-siting`: Client-side MCDA scoring plugin.
-* `geolibre-sedona`: Cloud ETL & Wherobots connector.
+* `geolibre-sedona`: Cloud ETL and Wherobots connector.
 * `geolibre-spatial-ai`: Natural language to Spatial SQL proxy.
 * `geolibre-catalogs`: Australian open data presets.
 * `geolibre-export-report`: Standalone single-file HTML exporter.
-* **5 Upstream Core Rendering Standards**: Area-Priority Limiting, Point Clustering, Continuous Dynamic Ramps, Byte-Range Vector Streaming, and Single-File Standalone Twins.
+* **Five Core Rendering Standards**: Area-Priority Limiting, Point Clustering, Continuous Dynamic Ramps, Byte-Range Vector Streaming, and Single-File Standalone Twins.
 
-### 🏛️ NSW Government & Waratah HPC
-* Unlocking **DDN ExaScaler 7990X Lustre** parallel I/O with GeoParquet.
-* Cold data preservation with **Spectra Logic T950 tape** integration.
-* Air-gapped client-side DuckDB-WASM execution to protect state HPC clusters from public query loads.
+### NSW Government and Waratah HPC
+* Unlocking parallel I/O with GeoParquet on state high-performance computing clusters.
+* Integrating long-term cold data preservation workflows.
+* Deploying air-gapped client-side DuckDB-WASM execution to protect state HPC clusters from public query loads.
 
 ---
 
 ## How the Multi-Project Pipeline Works
 
 Any proponent, local government council, or energy developer can submit a standardized project manifest:
+
+{INSERT CODE / CONFIG: Sample Project Manifest JSON}
 
 ```json
 {
@@ -214,46 +231,50 @@ Any proponent, local government council, or energy developer can submit a standa
 }
 ```
 
-Running the pipeline automatically generates:
-1. **Interactive 3D WebGIS Digital Twin** (`projects/index_{ProjectID}.html`): Zero-network-latency MapLibre GL client with self-contained, inline-embedded GeoJSON micro-layers.
-2. **Statutory Planning & Siting Report** (`projects/report_{ProjectID}.html`): High-precision comparative benchmark tables, geotechnical subsidence matrices, and environmental staging plans.
-3. **Non-Intrusive National Deep-Linking**: The national report and WebGIS remain untouched, automatically displaying a clickable `✨ Enhanced Report ↗` badge when users view candidate sites with active project submissions.
+Running the pipeline automatically generates three synchronized deliverables:
+* **Interactive 3D WebGIS Digital Twin**: Zero-latency MapLibre GL client with self-contained, inline-embedded GeoJSON micro-layers.
+* **Statutory Planning and Siting Report**: High-precision comparative benchmark tables, geotechnical subsidence matrices, and environmental staging plans.
+* **Non-Intrusive National Deep-Linking**: The national report automatically displays a clickable enhanced report badge for candidate sites with active project submissions.
 
 ---
 
-## The Delivery Model: Open Source Core vs. Certified Commercial Turnkey
+## The Commercial Delivery Model: Open Source Core vs. Certified Turnkey
 
-### 1. AURA Open Spatial Core (100% Free & Open Source)
-The entire foundational codebase, spatial schemas, MCDA scoring engine, and report builders are fully open-source.
-* Clone the GitHub repository and run `pytest tests/ -v`.
-* Define your project manifest in `config/projects/YOUR_PROJECT.json`.
-* Drop your site vectors into `data/projects/YOUR_PROJECT/`.
-* Build instant packages with `python tools/build_project_package.py`.
+{INSERT IMAGE: docs/articles/aura_siting_evolution_assets/06_open_source_vs_commercial_tier.jpg - Solution Comparison: Open Spatial Core vs Enterprise Statutory Due Diligence}
+
+### 1. AURA Open Spatial Core (100% Free and Open Source)
+The entire foundational codebase, spatial schemas, MCDA scoring engine, and report builders are fully open source.
+* Clone the repository and run automated test suites.
+* Define your project manifest in the configuration directory.
+* Supply your site vectors in GeoJSON or GeoParquet format.
+* Build complete site packages using the automated build script.
 
 ### 2. AURA Enterprise Statutory Siting (Certified Commercial Turnkey)
-For developers, REITs, clean energy consortiums, utility operators, and local councils requiring statutory-grade due diligence, investment-committee deliverables, and planning exhibition response packages:
+For developers, REITs, clean energy consortiums, utility operators, and local councils requiring statutory-grade due diligence:
 * **Full Planning Document Synthesis**: Ingestion of all EIS reports, acoustic assessments, geotechnical boreholes, and hydrological flood studies.
-* **Certified Net Developable Area (NDA) Audit**: Topological subtraction of 1% AEP floodways, mine subsidence strain classes (G1–G3), high-pressure pipeline easements, and riparian buffers.
-* **Custom 3D Interactive WebGIS Digital Twin**: Hosted, zero-latency MapLibre GL digital twin featuring pad staging time-sliders, infrastructure corridors, and thermodynamic heat loops.
-* **Statutory Planning & Siting Report**: Comprehensive HTML & PDF deliverable ready for submission to State Planning Authorities (e.g. NSW DPHI, IPC, EPBC Act) and Investment Committees.
-* **Independent Multi-Hazard Verification**: Peer-reviewed analysis against ARR 2019, AS 1170.4 (Seismic PGA), AS/NZS 1170.2 (Wind), AS 3959 (Bushfire), and AGS 2007 (Landslide).
-* **National Benchmark Positioning**: Direct radar comparison against all 17 national candidate clusters on power, water circularity, and land efficiency.
+* **Certified Net Developable Area (NDA) Audit**: Topological subtraction of 1% AEP floodways, mine subsidence strain classes, high-pressure pipeline easements, and riparian buffers.
+* **Custom 3D Interactive WebGIS Digital Twin**: Hosted MapLibre GL digital twin featuring pad staging time-sliders, infrastructure corridors, and thermodynamic heat loops.
+* **Statutory Planning and Siting Report**: Comprehensive HTML and PDF deliverables ready for submission to state planning authorities and investment committees.
+* **Independent Multi-Hazard Verification**: Peer-reviewed analysis against national flood, seismic, wind, bushfire, and landslide standards.
+* **National Benchmark Positioning**: Direct comparison against all 17 national candidate clusters on power, water circularity, and land efficiency.
 
 ---
 
 ## Explore the Live Suite
 
-* 🌐 **[AURA Cloud Platform Root](https://aura.getback2basics.net)** — Live national spatial intelligence gateway.
-* ⚡ **[Asymmetric Compute & AI Safety Whitepaper](../business/aura_enterprise_asymmetric_compute_and_ai_safety.html)** — Comprehensive architecture and deterministic safety reference.
-* 🌐 **[Interactive Site WebGIS (Macquarie Coal Complex)](../../src/geolibre_frontend/projects/index_LMCC_MacquarieCoal.html)** — High-resolution 3D MapLibre digital twin with 10 developable pads and staging controls.
-* 📑 **[Statutory Site Siting Report (_LMCC_MacquarieCoal)](../../src/geolibre_frontend/projects/report_LMCC_MacquarieCoal.html)** — Forensic statutory planning document and geotechnical subsidence matrix.
-* 🗺️ **[6-Pillar Site-Level Enhancement Plan (HTML)](../business/macquarie_coal_precinct_site_enhancement_plan.html)** — Detailed breakdown of the 9 interactive components and engineering studies.
-* 🏗️ **[Multi-Project Siting Architecture Blueprint (HTML)](../business/project_specific_site_enhancement_architecture_plan.html)** — Reusable manifest schema and generic packaging engine.
-* 🤝 **[GeoLibre Upstream Engineering Specs](../engineering/upstream_geolibre_contributions.html)** — Upstream plugin designs and 5 core rendering standards.
-* 🏛️ **[NSW Government & Waratah HPC Strategic Guide](../business/nsw_govt_geospatial_benefits.html)** — Transferring cloud spatial lakehouse patterns to state supercomputing.
-* 🇦🇺 **[National Siting Suitability Report](../../src/geolibre_frontend/national_suitability_report.html)** — Macro-level multi-hazard benchmark across 17 Australian hubs.
-* 🏛️ **[Official NSW Planning Portal Exhibition Documents](https://www.planningportal.nsw.gov.au/ppr/post-exhibition/macquarie-coal-complex-transformation-precinct)** — Reference planning portal records for Macquarie Coal Complex.
+{INSERT LINK: AURA Cloud Platform Root - https://aura.getback2basics.net}
+{INSERT LINK: Asymmetric Compute and AI Safety Whitepaper}
+{INSERT LINK: Interactive Site WebGIS - Macquarie Coal Complex Digital Twin}
+{INSERT LINK: Statutory Site Siting Report - Macquarie Coal Complex}
+{INSERT LINK: 6-Pillar Site-Level Enhancement Plan}
+{INSERT LINK: Multi-Project Siting Architecture Blueprint}
+{INSERT LINK: GeoLibre Upstream Engineering Specs}
+{INSERT LINK: NSW Government and Waratah HPC Strategic Guide}
+{INSERT LINK: National Siting Suitability Report}
+{INSERT LINK: Official NSW Planning Portal Exhibition Documents}
 
 ---
 
-*Spatial infrastructure decisions must be grounded in physical truth, statutory rigor, and open data. Let's build the sovereign compute and clean energy foundation Australia needs.*
+Spatial infrastructure decisions must be grounded in physical truth, statutory rigor, and open data.
+
+Let's build the sovereign compute and clean energy foundation Australia needs.

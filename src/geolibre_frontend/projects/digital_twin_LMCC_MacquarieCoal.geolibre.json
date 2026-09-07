@@ -1,0 +1,90 @@
+{
+  "version": "0.3.0",
+  "name": "Macquarie Coal Complex Transformation Precinct \u2014 3D Forensic Digital Twin",
+  "mapView": {
+    "center": [
+      151.585,
+      -32.935
+    ],
+    "zoom": 14.1,
+    "bearing": 28,
+    "pitch": 60,
+    "terrain": {
+      "source": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "exaggeration": 1.5
+    }
+  },
+  "basemapStyleUrl": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  "basemapVisible": true,
+  "basemapOpacity": 1.0,
+  "layers": [
+    {
+      "id": "developable_pads_glow",
+      "name": "10 Certified Developable Pads (NDPs)",
+      "type": "geojson",
+      "source": "data/projects/LMCC_MacquarieCoal/developable_pads_v1.geojson",
+      "style": {
+        "fillColor": "#00f0ff",
+        "fillOpacity": 0.25,
+        "strokeColor": "#00f0ff",
+        "strokeWidth": 3
+      }
+    },
+    {
+      "id": "flood_1pct_aep",
+      "name": "1% AEP Flood Inundation Zone",
+      "type": "geojson",
+      "style": {
+        "fillColor": "#ff3366",
+        "fillOpacity": 0.3,
+        "strokeColor": "#ff3366",
+        "strokeWidth": 4
+      }
+    },
+    {
+      "id": "steep_slope_20pct",
+      "name": "Steep Slope (>20%) Area",
+      "type": "geojson",
+      "style": {
+        "fillColor": "#ef4444",
+        "fillOpacity": 0.35,
+        "strokeColor": "#ef4444",
+        "strokeWidth": 3
+      }
+    },
+    {
+      "id": "mine_subsidence_g3",
+      "name": "Mine Subsidence Exclusion Zone",
+      "type": "geojson",
+      "source": "data/projects/LMCC_MacquarieCoal/subsidence_zones_g1_g3.geojson",
+      "style": {
+        "fillColor": "#f43f5e",
+        "fillOpacity": 0.35,
+        "strokeColor": "#f43f5e",
+        "strokeWidth": 2
+      }
+    },
+    {
+      "id": "phes_330kv_grid",
+      "name": "330kV Substation & 49 MWh Micro-PHES",
+      "type": "geojson",
+      "source": "data/projects/LMCC_MacquarieCoal/substation_phes_layout.geojson",
+      "style": {
+        "fillColor": "#0ea5e9",
+        "fillOpacity": 0.6,
+        "strokeColor": "#00f0ff",
+        "strokeWidth": 3
+      }
+    },
+    {
+      "id": "rail_freight_loop",
+      "name": "Active Heavy Rail Siding Loop",
+      "type": "geojson",
+      "source": "data/projects/LMCC_MacquarieCoal/rail_haulroad_spine.geojson",
+      "style": {
+        "strokeColor": "#f97316",
+        "strokeWidth": 4
+      }
+    }
+  ]
+}

@@ -90,6 +90,7 @@ def generate_audit_html(rel_prefix=""):
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Lineage, Statutory Standards &amp; Spatial Provenance Audit | AURA Siting Crafter</title>
+  <link rel="icon" type="image/png" href="{rel_prefix}assets/aura_logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -324,12 +325,15 @@ def generate_audit_html(rel_prefix=""):
 
   <!-- Sticky Top Header -->
   <header class="audit-header">
-    <div class="audit-brand">
-      <div class="audit-title">
-        <span>🛡️ AURA Data Lineage &amp; Statutory Provenance Audit</span>
-      </div>
-      <div class="audit-subtitle">
-        Official Open Evidence Trail &bull; 25 Statutory Feeds &bull; Multi-Hazard Baseline &bull; EPSG:7844 GDA2020 &bull; Built {timestamp}
+    <div class="audit-brand" style="display: flex; flex-direction: row; align-items: center; gap: 0.85rem;">
+      <img src="{rel_prefix}assets/aura_logo.png" alt="AURA Logo" style="height: 44px; width: 44px; border-radius: 9px; object-fit: cover; box-shadow: 0 0 12px rgba(56, 189, 248, 0.4); border: 1px solid rgba(56, 189, 248, 0.5); flex-shrink: 0;" />
+      <div style="display: flex; flex-direction: column;">
+        <div class="audit-title">
+          <span>AURA Data Lineage &amp; Statutory Provenance Audit</span>
+        </div>
+        <div class="audit-subtitle">
+          Official Open Evidence Trail &bull; 25 Statutory Feeds &bull; Multi-Hazard Baseline &bull; EPSG:7844 GDA2020 &bull; Built {timestamp}
+        </div>
       </div>
     </div>
     <div class="nav-pills">

@@ -353,6 +353,7 @@ HTML_PAGE = """<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AURA Siting Crafter | Australian Urban and Regional AI Datacenter Siting</title>
+  <link rel="icon" type="image/png" href="assets/aura_logo.png">
   
   <!-- Fonts & Leaflet & Esri-Leaflet & MarkerCluster -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -880,9 +881,12 @@ HTML_PAGE = """<!DOCTYPE html>
 <body>
 <div class="container">
   <header>
-    <div>
-      <h1>AURA Siting Crafter</h1>
-      <p class="subtitle"><span style="color: #38bdf8; font-weight: 800;">A</span>ustralian <span style="color: #38bdf8; font-weight: 800;">U</span>rban and <span style="color: #38bdf8; font-weight: 800;">R</span>egional <span style="color: #38bdf8; font-weight: 800;">A</span>I Datacenter Siting &bull; Multi-Criteria Decision Analysis (MCDA) Siting Report</p>
+    <div style="display: flex; align-items: center; gap: 0.95rem;">
+      <img src="assets/aura_logo.png" alt="AURA Logo" style="height: 52px; width: 52px; border-radius: 10px; object-fit: cover; box-shadow: 0 0 14px rgba(56, 189, 248, 0.4); border: 1px solid rgba(56, 189, 248, 0.5); flex-shrink: 0;" />
+      <div>
+        <h1>AURA Siting Crafter</h1>
+        <p class="subtitle"><span style="color: #38bdf8; font-weight: 800;">A</span>ustralian <span style="color: #38bdf8; font-weight: 800;">U</span>rban and <span style="color: #38bdf8; font-weight: 800;">R</span>egional <span style="color: #38bdf8; font-weight: 800;">A</span>I Datacenter Siting &bull; Multi-Criteria Decision Analysis (MCDA) Siting Report</p>
+      </div>
     </div>
     <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
       <a href="https://geolibre-spatial-ai-proxy-390270537834.australia-southeast1.run.app/" class="metadata-pill" target="_blank" style="background: rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.5); color: #38bdf8; text-decoration: none; font-weight: 700;">

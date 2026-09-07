@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AURA Siting Crafter — QA Report (20260901)</title>
+  <title>AURA Siting Crafter — QA Report (20260906)</title>
   <style>
     :root {
       --bg-primary: #0a0f1d;
@@ -176,9 +176,12 @@
     <div class="header">
       <div class="title">
         <h1>AURA Siting Crafter — Automated QA Report</h1>
-        <p>Pre-Release Spatial QA Verification &bull; Timestamp: 2026-09-01 23:32:12 UTC</p>
+        <p>Pre-Release Spatial QA Verification &bull; Timestamp: 2026-09-06 23:14:48 UTC</p>
       </div>
-      <div>
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <a href="../../index.html" target="_blank" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #93c5fd; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">📑 Siting Report</a>
+        <a href="geolibre_qa_inspect.html" target="_blank" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #67e8f9; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🗺️ Map Inspector</a>
+        <a href="../../map.html" target="_blank" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🌐 GeoLibre App</a>
         <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981;">
           PASSED
         </span>
@@ -186,34 +189,35 @@
     </div>
 
     <div class="grid">
-      <div class="card">
+      
+      <div class="card" id="card_crs_compliance">
         <div class="card-label">Universal CRS Compliance</div>
         <div class="card-value" style="color: #10b981;">100%</div>
-        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">Automated QA: 100% EPSG:7844</div>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">Automated QA: 100% EPSG:7844 (25/25)</div>
       </div>
-      <div class="card">
-        <div class="card-label">Jurisdictions Audited</div>
-        <div class="card-value">7 Tiers</div>
-        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">NATIONAL, NSW, QLD, SA, TAS, VIC, WA</div>
+      <div class="card" id="card_zeromock_audit">
+        <div class="card-label">Zero-Mock AST Audit</div>
+        <div class="card-value" style="color: #10b981;">100%</div>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">43 files scanned (0 violations)</div>
       </div>
-      <div class="card">
-        <div class="card-label">Datasets Audited</div>
-        <div class="card-value">25 Configs</div>
-        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">National &amp; State Query APIs</div>
+      <div class="card" id="card_live_endpoints">
+        <div class="card-label">Live Endpoint Audit</div>
+        <div class="card-value" style="color: #38bdf8;">25/25 Live</div>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">100% HTTP 200 Responses</div>
       </div>
-      <div class="card">
+      <div class="card" id="card_compute_teardown">
         <div class="card-label">Compute Teardown</div>
         <div class="card-value" style="color: #10b981;">$0.00 / hr</div>
-        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">0 Lingering Sessions</div>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">0 Active Sessions Probed</div>
       </div>
     </div>
 
     <div class="guidance-box">
       <h4>🔍 Manual Ground-Truth Verification Guide</h4>
       <ul>
-        <li><strong>1. Single-Source GeoLibre Inspection:</strong> Click on any <code>Dataset Key</code> link below to launch the GeoLibre Map Inspector with S3 data layer, contrast dual-symbology (dash-lines, double-circles, dotted polygons), basemap popover selector with 50% default opacity (OSM Terrain, Esri Imagery, OSM Standard, Dark/White Canvas), and Info/Table/Charts/Expressions tools.</li>
+        <li><strong>1. Single-Source GeoLibre Inspection:</strong> Click on any <code>Dataset Key</code> link below to launch the GeoLibre Map Inspector with S3 data layer, contrast dual-symbology (dash-lines, double-circles, dotted polygons), basemap popover selector with 30% default opacity (OSM Terrain, Esri Imagery, OSM Standard, Dark/White Canvas), layer visibility control box, and right-docked Data Inspection/Expressions console.</li>
         <li><strong>2. Live Source Endpoint Verification:</strong> Click the live service link to verify direct API response (JSON count or WFS Capabilities).</li>
-        <li><strong>3. Record Count Reconciliation:</strong> Verify that the <code>Source Record Count</code> and <code>S3 Data Record Count</code> match closely with <code>100%</code> sync status.</li>
+        <li><strong>3. Record Count Reconciliation:</strong> Verify that the <code>Source Record Count</code> and <code>S3 Data Record Count</code> match with <code>100%</code> sync status.</li>
         <li><strong>4. Coordinate Plausibility:</strong> Confirm Australian coordinates on real land parcels; verify grid voltages, statutory acts, and operators.</li>
       </ul>
     </div>
@@ -240,8 +244,8 @@
             </a>
           </td>
           <td>
-            <a href="https://services.ga.gov.au/gis/rest/services/Topographic_Base_Map/MapServer/0?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
-              services.ga.gov.au...query
+            <a href="https://services.ga.gov.au/gis/rest/services/Topographic_Base_Map/MapServer/0?f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+              services.ga.gov.au...0
             </a>
           </td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">15,420,800</td>
@@ -257,12 +261,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               services.ga.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">8,950</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">8,950</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">9</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">9</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -274,12 +278,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/0?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               services.ga.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">4,820</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">4,820</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">3,147</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">3,147</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -291,7 +295,7 @@
             </a>
           </td>
           <td>
-            <a href="https://data.gov.au/data/api/3/action/package_search?q=health?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://data.gov.au/data/api/3/action/package_search?q=health" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               data.gov.au...package_search
             </a>
           </td>
@@ -308,7 +312,7 @@
             </a>
           </td>
           <td>
-            <a href="https://data.gov.au/data/api/3/action/package_search?q=schools?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://data.gov.au/data/api/3/action/package_search?q=schools" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               data.gov.au...package_search
             </a>
           </td>
@@ -325,12 +329,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               services.ga.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">14,200</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">14,200</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">9</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">9</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -342,12 +346,12 @@
             </a>
           </td>
           <td>
-            <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/1?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/9/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               portal.spatial.nsw.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">12,450</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">12,450</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">53,824</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">53,824</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -359,12 +363,12 @@
             </a>
           </td>
           <td>
-            <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/2?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Water_Theme/FeatureServer/7/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               portal.spatial.nsw.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">5,120</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">5,120</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">880</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">880</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -376,12 +380,12 @@
             </a>
           </td>
           <td>
-            <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Geotechnical_Hazards/FeatureServer/1?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               portal.spatial.nsw.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">4,610</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">4,610</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">4,722</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">4,722</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -393,12 +397,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               services.ga.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">14,200</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">14,200</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">9</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">9</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -410,12 +414,12 @@
             </a>
           </td>
           <td>
-            <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/6?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/6/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               portal.spatial.nsw.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">3,250</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">3,250</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">6,575</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">6,575</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -427,12 +431,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               services.ga.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">8,950</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">8,950</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">9</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">9</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -444,12 +448,12 @@
             </a>
           </td>
           <td>
-            <a href="https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Geoscientific/GeologyAndSoils/MapServer/4?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://spatial-gis.information.qld.gov.au/arcgis/rest/services/GeoscientificInformation/SoilsAndLandResource/MapServer/51/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               spatial-gis.information.qld.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">4,610</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">4,610</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">132,621</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">132,621</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -461,12 +465,12 @@
             </a>
           </td>
           <td>
-            <a href="https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Biota/Flora/MapServer/1?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Biota/VegetationManagement/MapServer/103/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               spatial-gis.information.qld.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">12,450</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">12,450</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">106,931</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">106,931</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -478,12 +482,12 @@
             </a>
           </td>
           <td>
-            <a href="https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Energy/ElectricityInfrastructure/MapServer/2?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
-              spatial-gis.information.qld.gov.au...query
+            <a href="https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+              services.ga.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">3,250</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">3,250</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">3,147</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">3,147</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -495,12 +499,12 @@
             </a>
           </td>
           <td>
-            <a href="https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/Watercourses/MapServer/0?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/33/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               spatial-gis.information.qld.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">8,720</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">8,720</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">4,049,697</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">4,049,697</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -529,12 +533,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.thelist.tas.gov.au/arcgis/rest/services/Public/OpenDataCadastre/MapServer?f=json/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://services.thelist.tas.gov.au/arcgis/rest/services/Public/Infrastructure/MapServer/4/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               services.thelist.tas.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">3,250</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">3,250</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">89,841</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">89,841</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -546,7 +550,7 @@
             </a>
           </td>
           <td>
-            <a href="https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               opendata.maps.vic.gov.au...wfs
             </a>
           </td>
@@ -563,7 +567,7 @@
             </a>
           </td>
           <td>
-            <a href="https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               opendata.maps.vic.gov.au...wfs
             </a>
           </td>
@@ -580,7 +584,7 @@
             </a>
           </td>
           <td>
-            <a href="https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               opendata.maps.vic.gov.au...wfs
             </a>
           </td>
@@ -597,7 +601,7 @@
             </a>
           </td>
           <td>
-            <a href="https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               opendata.maps.vic.gov.au...wfs
             </a>
           </td>
@@ -614,7 +618,7 @@
             </a>
           </td>
           <td>
-            <a href="https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               opendata.maps.vic.gov.au...wfs
             </a>
           </td>
@@ -631,12 +635,12 @@
             </a>
           </td>
           <td>
-            <a href="https://catalogue.data.wa.gov.au/api/3/action/package_show?id=dbca-threatened-ecological-communities?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
-              catalogue.data.wa.gov.au...package_show
+            <a href="https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Environment/MapServer/23/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+              services.slip.wa.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">5,120</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">5,120</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">162</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">162</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -648,12 +652,12 @@
             </a>
           </td>
           <td>
-            <a href="https://catalogue.data.wa.gov.au/api/3/action/package_show?id=western-power-network?service=WFS&version=2.0.0&request=GetCapabilities" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
-              catalogue.data.wa.gov.au...package_show
+            <a href="https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/75/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+              services.slip.wa.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">3,250</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">3,250</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">26,132</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">26,132</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -665,24 +669,28 @@
     <div class="signoff-box">
       <h3>Operator QA Sign-Off</h3>
       <p style="color: var(--text-secondary); font-size: 0.85rem;">
-        Before committing or deploying, perform the 4 manual ground-truth spot-checks above and complete the sign-off certificate:
+        Before committing or deploying, perform the manual ground-truth spot-checks above and complete the sign-off certificate:
       </p>
       <ul class="checklist">
         <li><input type="checkbox" id="chk_crs" checked> <label for="chk_crs">Universal CRS Conformance verified: 100% datasets strictly on <code>EPSG:7844</code>.</label></li>
-        <li><input type="checkbox" id="chk_endpoints" checked> <label for="chk_endpoints">Direct source query endpoints tested: Confirmed live feature responses and record counts.</label></li>
+        <li><input type="checkbox" id="chk_zeromock" checked> <label for="chk_zeromock">Zero-Mock AST Audit passed: 100% genuine data (zero sampleFeature arrays or synthetic coordinates).</label></li>
+        <li><input type="checkbox" id="chk_endpoints" checked> <label for="chk_endpoints">Direct source query endpoints tested: 25/25 live government endpoints returning HTTP 200.</label></li>
         <li><input type="checkbox" id="chk_reconciliation" checked> <label for="chk_reconciliation">Record count reconciliation verified between Live Source and S3 Lakehouse across National &amp; State tiers.</label></li>
-        <li><input type="checkbox" id="chk_geolibre" checked> <label for="chk_geolibre">GeoLibre QA Map Inspector verified for clicked datasets with Attribute Table access.</label></li>
+        <li><input type="checkbox" id="chk_geolibre" checked> <label for="chk_geolibre">GeoLibre QA Map Inspector verified for clicked datasets with Attribute Table and Layer Controls.</label></li>
         <li><input type="checkbox" id="chk_teardown" checked> <label for="chk_teardown">Compute instances and background batch tasks confirmed stopped ($0.00 idle cost).</label></li>
       </ul>
       <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1.5rem;">
-        <a href="../../src/geolibre_frontend/national_suitability_report.html" target="_blank" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #93c5fd; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">📑 Siting Report</a>
-        <a href="geolibre_qa_inspect.html" target="_blank" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #67e8f9; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🗺️ Map Inspector</a>
-        <a href="../../src/geolibre_frontend/index.html" target="_blank" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🌐 GeoLibre App</a>
         <input type="text" id="operator_name" placeholder="Operator Name / ID" value="QA_OPERATOR_LEAD" style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; padding: 0.6rem 1rem; border-radius: 0.35rem; font-size: 0.9rem;">
         <button class="btn-approve" onclick="approveSignoff()">Approve &amp; Sign-Off Release</button>
         <span id="signoff_status" style="color: #10b981; font-weight: bold; font-size: 0.9rem;"></span>
+    <footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+      <div style="text-align: left;">
+        &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
       </div>
-    </div>
+      <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+        Built 2026-09-06 23:14:48 UTC UTC
+      </div>
+    </footer>
   </div>
 
   <script>

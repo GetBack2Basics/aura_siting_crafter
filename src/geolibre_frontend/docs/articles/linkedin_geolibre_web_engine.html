@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AURA Engineering | Spatial Qa And Telemetry Standards | AURA Siting Crafter</title>
+  <title>AURA Articles | Linkedin Geolibre Web Engine | AURA Siting Crafter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -183,71 +183,48 @@
   </div>
   <div class="nav-links">
     <a href="../business/aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
-    <a href="geolibre_webgis_rendering_spec.html" class="nav-link">Rendering Spec</a>
-    <a href="multi_project_pipeline_and_schemas.html" class="nav-link">Pipeline & Schemas</a>
-    <a href="upstream_geolibre_contributions.html" class="nav-link">GeoLibre Upstream</a>
-    <a href="spatial_qa_and_telemetry_standards.html" class="nav-link">QA & Telemetry</a>
-    <a href="../../src/geolibre_frontend/index.html" target="_blank" class="nav-link">National Viewer</a>
+    <a href="linkedin_aura_siting_evolution.html" class="nav-link">Evolution Odyssey</a>
+    <a href="../engineering/upstream_geolibre_contributions.html" class="nav-link">Engineering Specs</a>
+    <a href="../../index.html" target="_blank" class="nav-link">National Report</a>
+    <a href="../../map.html" target="_blank" class="nav-link">National Map</a>
   </div>
 </nav>
 
 <div class="container">
   <div class="content-card">
-    <h1>Spatial Quality Assurance, Telemetry &amp; Zero-Mock Standards</h1>
-<p><strong>Standard:</strong> AURA Quality Assurance &amp; Zero-Mock Integrity<br />
-<strong>Organization:</strong> GetBack2Basics Spatial AI Engineering<br />
-<strong>Enforcement:</strong> Mandatory Pre-Commit &amp; CI Test Gates  </p>
+    <h1>LinkedIn Post: GeoLibre — Desktop Power in a Customizable Web Engine (Final Published Version)</h1>
+<p><strong>Target Platform:</strong> LinkedIn<br />
+<strong>Audience:</strong> Geospatial Engineers, Cloud &amp; Data Architects, Open Source GIS Community<br />
+<strong>Status:</strong> Published  </p>
 <hr />
-<h2>1. Zero-Mock Data Integrity Protocol</h2>
-<p>In mission-critical geospatial engineering, synthetic coordinates or fake mock arrays (<code>sampleFeatures = [...]</code>) corrupt spatial analysis and introduce catastrophic legal liability.</p>
-<h3>Strict Enforcement Rules</h3>
-<ol>
-<li><strong>AST Scanner Gate</strong>: All pull requests must pass the Python AST scanner (<code>tests/lint/test_no_mock_data.py</code>), which traverses the abstract syntax tree to detect mock dictionaries, synthetic coordinate lists, and placeholder bounding boxes.</li>
-<li><strong>Dynamic Manifest Loading</strong>: UI viewers and inspection docks must load genuine data from live endpoints or verified JSON/GeoParquet assets (<code>config/dataset_manifest_v2.json</code>).</li>
-<li><strong>Explicit Connection Failure Handling</strong>: If an external data source is offline, the interface must display genuine connection status or error boundaries—never synthetic fallback records.</li>
-</ol>
-<hr />
-<h2>2. Compute Lifecycle &amp; Resource Teardown</h2>
-<p>To protect against cloud resource leaks and billing blowouts:
-1. <strong>Apache Sedona Session Teardown</strong>: Every SedonaContext script must explicitly execute <code>sedona.stop()</code> in <code>finally:</code> blocks.
-2. <strong>Headless Cluster Lifecycle</strong>: Headless Wherobots Cloud runtimes are spawned per batch and terminated immediately upon GeoParquet asset compilation.
-3. <strong>Automated Verification</strong>:
-   <code>bash
-   pytest tests/lint/ -v
-   pytest tests/test_hazard_scoring.py -v</code></p>
-<hr />
-<h2>3. Spatial ETL Telemetry &amp; Performance Benchmarks</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Metric</th>
-<th style="text-align: left;">Target Standard</th>
-<th style="text-align: left;">Production Benchmark</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Cadastre Ingestion Throughput</strong></td>
-<td style="text-align: left;">&gt; 200,000 parcels/sec</td>
-<td style="text-align: left;">~310,000 parcels/sec (Sedona medium runtime)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>GDA2020 CRS Projection Precision</strong></td>
-<td style="text-align: left;">Sub-millimetre ($\le 0.001\text{m}$)</td>
-<td style="text-align: left;">Exact EPSG:7844 ellipsoidal transformation</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>DuckDB-WASM In-Memory Scoring Latency</strong></td>
-<td style="text-align: left;">&lt; 50ms</td>
-<td style="text-align: left;">12–15ms (10,000 parcels)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>WebGL Render Frame Rate</strong></td>
-<td style="text-align: left;">60 fps continuous</td>
-<td style="text-align: left;">60 fps (Area-Priority Limiter enabled)</td>
-</tr>
-</tbody>
-</table>
+<h3>Post Text</h3>
+<p>Can your browser-based GIS handle desktop-grade spatial analysis without spinning up costly cloud servers or locking you into desktop installs?</p>
+<p>For years, GIS required a trade-off: heavyweight desktop tools (powerful, but siloed) vs. traditional WebGIS (accessible, but restricted to static tiles and sluggish server roundtrips).</p>
+<p>Modern web-native data formats have eliminated that compromise.</p>
+<p>Building AURA Siting Crafter with GeoLibre (opengeos/GeoLibre <a href="https://www.linkedin.com/in/giswqs/">Qiusheng Wu</a>) demonstrated the unmatched agility of combining MapLibre GL, DuckDB-WASM, and cloud-native spatial data into a fully customizable web engine.</p>
+<p>⚡ Desktop Power via Web-Native Data
+Instead of moving massive files or relying on backend database compute for every slider change:
+• Stream directly from cloud storage via byte-range HTTP requests (GeoParquet, PMTiles, FlatGeobuf).
+• Run complex Spatial SQL in-browser using DuckDB-WASM with sub-10ms query speeds.
+• Fully customize UI, layers, and analytical workflows without server infrastructure bottlenecks.</p>
+<p>🎨 Rendering Innovations We Engineered
+To maximize performance and visualization, we implemented key rendering upgrades:
+1. Given a 500-feature rendering limit (for efficiency) we display the largest features first so as not to clutter the viewport. We use clustering for points.
+2. Dynamic MapLibre Color Ramps: Multi-stop gradient expressions driven directly by in-memory DuckDB query attributes for instant continuous heatmaps.
+3. Sub-Second Vector Streaming: Smooth 60fps pan/zoom across intricate parcel boundaries, bypassing GeoJSON payload overhead.
+4. Zero-Latency Standalone Twins: Packaging layers, custom symbology, and scoring logic into single-file portable HTML apps that execute with zero network lag.</p>
+<p>🤝 Upstream Contributions
+We are planning on contributing these modular components back to OpenGeos / GeoLibre as thats why Opensource exists:
+• geolibre-siting: Client-side spatial MCDA suitability scoring plugin.
+• geolibre-sedona: Cloud lakehouse ETL connector (Apache Sedona / Wherobots).
+• geolibre-spatial-ai: Viewport-grounded LLM Spatial SQL translation skills.
+• geolibre-catalogs &amp; geolibre-export-report: National data presets and one-click standalone HTML report packaging.</p>
+<p>🌐 Experience the Live Outputs:
+• #QA check: https://storage.googleapis.com/aura-siting-crafter-geolibre-app/docs/qa/geolibre_qa_inspect.html (Shortlink: https://lnkd.in/gph4ibi5)
+• #Live Siting App: https://storage.googleapis.com/aura-siting-crafter-geolibre-app/index.html (Shortlink: https://lnkd.in/g_UP-dSj)
+• #Precinct detail: https://storage.googleapis.com/aura-siting-crafter-geolibre-app/projects/index_LMCC_MacquarieCoal.html (Shortlink: https://lnkd.in/gU2RHs6y)
+• #GitHub: https://github.com/GetBack2Basics/aura_siting_crafter (Shortlink: https://lnkd.in/g4CqRR-h)</p>
+<h1>GeoLibre #OpenGeos #GIS #DuckDB #MapLibre #SpatialSQL #WebGIS #CloudNative #OpenSource</h1>
   </div>
 </div>
 
@@ -256,7 +233,7 @@
     &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
   </div>
   <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
-    Built 2026-09-07 06:46 UTC
+    Built 2026-09-07 23:49 UTC
   </div>
 </footer>
 

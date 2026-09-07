@@ -679,6 +679,9 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
                 📑 Statutory Report ↗
             </a>
             <a href="../index.html" class="hud-btn">
+                📑 National Report
+            </a>
+            <a href="../map.html" class="hud-btn">
                 🌐 National Map
             </a>
         </div>

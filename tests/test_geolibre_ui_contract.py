@@ -12,13 +12,13 @@ import pytest
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_INDEX_PATH = os.path.join(BASE_DIR, "src", "geolibre_frontend", "index.html")
-REPORT_HTML_PATH = os.path.join(BASE_DIR, "src", "geolibre_frontend", "national_suitability_report.html")
+FRONTEND_MAP_PATH = os.path.join(BASE_DIR, "src", "geolibre_frontend", "map.html")
 
 
 def test_frontend_table_sync_contract():
     """Asserts that updateViewportStreams invokes populateTableFromData when the table dock is open."""
-    assert os.path.exists(FRONTEND_INDEX_PATH)
-    with open(FRONTEND_INDEX_PATH, "r", encoding="utf-8") as f:
+    assert os.path.exists(FRONTEND_MAP_PATH)
+    with open(FRONTEND_MAP_PATH, "r", encoding="utf-8") as f:
         html = f.read()
 
     # Assert that populateTableFromData is defined and invoked in updateViewportStreams
@@ -30,8 +30,9 @@ def test_frontend_table_sync_contract():
 
 
 def test_frontend_hazard_layer_types():
-    """Asserts that statutory hazard overlays in index.html have the correct layer type (fill for polygon)."""
-    with open(FRONTEND_INDEX_PATH, "r", encoding="utf-8") as f:
+    """Asserts that statutory hazard overlays in map.html have the correct layer type (fill for polygon)."""
+    assert os.path.exists(FRONTEND_MAP_PATH)
+    with open(FRONTEND_MAP_PATH, "r", encoding="utf-8") as f:
         html = f.read()
 
     # Look for nsw_coastal_inundation_hazard in THEMATIC_LAYERS
@@ -45,11 +46,11 @@ def test_frontend_hazard_layer_types():
 
 
 def test_national_suitability_report_integrity():
-    """Asserts that the built national suitability report has dynamic timestamps, candidate tables, and methodology."""
-    if os.path.exists(REPORT_HTML_PATH):
-        with open(REPORT_HTML_PATH, "r", encoding="utf-8") as f:
-            report_html = f.read()
+    """Asserts that the built national suitability report (index.html) has dynamic timestamps, candidate tables, and methodology."""
+    assert os.path.exists(FRONTEND_INDEX_PATH), "src/geolibre_frontend/index.html is missing"
+    with open(FRONTEND_INDEX_PATH, "r", encoding="utf-8") as f:
+        report_html = f.read()
 
-        assert "__FOOTER_TIMESTAMP__" not in report_html, "Unrendered template token __FOOTER_TIMESTAMP__ found in report"
-        assert "Multi-Hazard" in report_html, "Missing Multi-Hazard section in report"
-        assert "S_hazard" in report_html, "Missing statutory hazard formula in report"
+    assert "__FOOTER_TIMESTAMP__" not in report_html, "Unrendered template token __FOOTER_TIMESTAMP__ found in report"
+    assert "Multi-Hazard" in report_html, "Missing Multi-Hazard section in report"
+    assert "S_hazard" in report_html, "Missing statutory hazard formula in report"

@@ -15,7 +15,7 @@ CONFIG_DATASETS_V2 = os.path.join(BASE_DIR, "config", "datasets_v2")
 MANIFEST_PATH = os.path.join(BASE_DIR, "config", "dataset_manifest_v2.json")
 GEOLIBRE_PROJECT_PATH = os.path.join(BASE_DIR, "config", "geolibre_aura_project.json")
 PROXY_MAIN_PATH = os.path.join(BASE_DIR, "src", "geolibre_proxy", "main.py")
-FRONTEND_INDEX_PATH = os.path.join(BASE_DIR, "src", "geolibre_frontend", "index.html")
+FRONTEND_MAP_PATH = os.path.join(BASE_DIR, "src", "geolibre_frontend", "map.html")
 
 
 def test_manifest_synchronization():
@@ -77,9 +77,9 @@ def test_proxy_streams_synchronization():
 
 
 def test_frontend_layers_and_direct_fallback_synchronization():
-    """Asserts that all streamable layers in index.html have DIRECT_STREAM_URLS entries and clean placeholders."""
-    assert os.path.exists(FRONTEND_INDEX_PATH), "src/geolibre_frontend/index.html is missing"
-    with open(FRONTEND_INDEX_PATH, "r", encoding="utf-8") as f:
+    """Asserts that all streamable layers in map.html have DIRECT_STREAM_URLS entries and clean placeholders."""
+    assert os.path.exists(FRONTEND_MAP_PATH), "src/geolibre_frontend/map.html is missing"
+    with open(FRONTEND_MAP_PATH, "r", encoding="utf-8") as f:
         html_code = f.read()
 
     # Assert search placeholder cleanliness

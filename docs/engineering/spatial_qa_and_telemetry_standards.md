@@ -8,7 +8,7 @@
 
 ## 1. Zero-Mock Data Integrity Protocol
 
-In mission-critical geospatial engineering, synthetic coordinates or fake mock arrays (`sampleFeatures = [...]`) corrupt spatial analysis and introduce catastrophic legal liability.
+In mission-critical geospatial engineering, synthetic coordinates or fake mock arrays (`sample_features = [...]`) corrupt spatial analysis and introduce catastrophic legal liability.
 
 ### Strict Enforcement Rules
 1. **AST Scanner Gate**: All pull requests must pass the Python AST scanner (`tests/lint/test_no_mock_data.py`), which traverses the abstract syntax tree to detect mock dictionaries, synthetic coordinate lists, and placeholder bounding boxes.

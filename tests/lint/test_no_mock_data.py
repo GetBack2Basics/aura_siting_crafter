@@ -34,7 +34,7 @@ def get_files_to_audit():
     for pattern in AUDIT_DIRS:
         for f in glob.glob(pattern, recursive=True):
             # Exclude compiled monolithic HTML reports that embed genuine spatial GeoJSON datasets
-            if os.path.basename(f) in ("national_suitability_report.html",):
+            if os.path.basename(f) in ("national_suitability_report.html", "index.html"):
                 continue
             files.append(f)
     return sorted(list(set(files)))

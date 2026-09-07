@@ -889,9 +889,12 @@ HTML_PAGE = """<!DOCTYPE html>
       </div>
     </div>
     <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-      <a href="https://geolibre-spatial-ai-proxy-390270537834.australia-southeast1.run.app/" class="metadata-pill" target="_blank" style="background: rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.5); color: #38bdf8; text-decoration: none; font-weight: 700;">
+      <a href="map.html" class="metadata-pill" target="_blank" style="background: rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.5); color: #38bdf8; text-decoration: none; font-weight: 700;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
-        GeoLibre App ↗
+        GeoLibre WebGIS Map ↗
+      </a>
+      <a href="projects/digital_twin_LMCC_MacquarieCoal.html" class="metadata-pill" target="_blank" style="background: rgba(56, 189, 248, 0.2); border-color: rgba(56, 189, 248, 0.5); color: #93c5fd; text-decoration: none; font-weight: 700;">
+        🕶️ 3D Digital Twin ↗
       </a>
       <a href="data_lineage_audit.html" class="metadata-pill" target="_blank" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #34d399; text-decoration: none;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -2307,7 +2310,7 @@ html_final = html_final.replace("__WHITEPAPERS_HTML__", load_attachment("whitepa
 build_ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M")
 html_final = html_final.replace("__FOOTER_TIMESTAMP__", build_ts)
 
-output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "geolibre_frontend", "national_suitability_report.html")
+output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "geolibre_frontend", "index.html")
 os.makedirs(os.path.dirname(output_path), exist_ok=True)
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(html_final)

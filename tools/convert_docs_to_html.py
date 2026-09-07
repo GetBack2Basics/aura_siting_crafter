@@ -218,23 +218,25 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 BUSINESS_NAV_LINKS = """
-    <a href="../../src/geolibre_frontend/projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">Live Site WebGIS</a>
-    <a href="../../src/geolibre_frontend/projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">Statutory Site Report</a>
+    <a href="../../projects/digital_twin_LMCC_MacquarieCoal.html" target="_blank" class="nav-link" style="background: #0284c7; color: white;">🕶️ 3D Digital Twin</a>
+    <a href="../../projects/index_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">Live Site WebGIS</a>
+    <a href="../../projects/report_LMCC_MacquarieCoal.html" target="_blank" class="nav-link">Statutory Site Report</a>
     <a href="aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
     <a href="macquarie_coal_precinct_site_enhancement_plan.html" class="nav-link">Site Enhancement Plan</a>
     <a href="project_specific_site_enhancement_architecture_plan.html" class="nav-link">Architecture Plan</a>
     <a href="nsw_govt_geospatial_benefits.html" class="nav-link">NSW Govt Guide</a>
     <a href="../articles/linkedin_aura_siting_evolution.html" class="nav-link">Evolution Odyssey</a>
     <a href="../engineering/upstream_geolibre_contributions.html" class="nav-link">Engineering Specs</a>
-    <a href="../../src/geolibre_frontend/national_suitability_report.html" target="_blank" class="nav-link">National Baseline</a>
+    <a href="../../index.html" target="_blank" class="nav-link">National Report</a>
+    <a href="../../map.html" target="_blank" class="nav-link">National Map</a>
 """
 
 ARTICLES_NAV_LINKS = """
     <a href="../business/aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
     <a href="linkedin_aura_siting_evolution.html" class="nav-link">Evolution Odyssey</a>
     <a href="../engineering/upstream_geolibre_contributions.html" class="nav-link">Engineering Specs</a>
-    <a href="../../src/geolibre_frontend/index.html" target="_blank" class="nav-link">National Viewer</a>
-    <a href="../../src/geolibre_frontend/national_suitability_report.html" target="_blank" class="nav-link">National Baseline</a>
+    <a href="../../index.html" target="_blank" class="nav-link">National Report</a>
+    <a href="../../map.html" target="_blank" class="nav-link">National Map</a>
 """
 
 ENGINEERING_NAV_LINKS = """
@@ -243,8 +245,11 @@ ENGINEERING_NAV_LINKS = """
     <a href="multi_project_pipeline_and_schemas.html" class="nav-link">Pipeline & Schemas</a>
     <a href="upstream_geolibre_contributions.html" class="nav-link">GeoLibre Upstream</a>
     <a href="spatial_qa_and_telemetry_standards.html" class="nav-link">QA & Telemetry</a>
-    <a href="../../src/geolibre_frontend/index.html" target="_blank" class="nav-link">National Viewer</a>
+    <a href="../../index.html" target="_blank" class="nav-link">National Report</a>
+    <a href="../../map.html" target="_blank" class="nav-link">National Map</a>
 """
+
+FRONTEND_DOCS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src", "geolibre_frontend", "docs")
 
 def convert_md_to_html(md_path, html_path, title, nav_links=BUSINESS_NAV_LINKS):
     with open(md_path, 'r', encoding='utf-8') as f:
@@ -281,6 +286,7 @@ def convert_md_to_html(md_path, html_path, title, nav_links=BUSINESS_NAV_LINKS):
         nav_links=nav_links.strip()
     )
 
+    os.makedirs(os.path.dirname(html_path), exist_ok=True)
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(full_html)
     print(f"Generated: {html_path}")
@@ -288,33 +294,49 @@ def convert_md_to_html(md_path, html_path, title, nav_links=BUSINESS_NAV_LINKS):
 def main():
     # 1. Business Stream HTML conversions
     biz_dir = os.path.join(DOCS_DIR, "business")
+    out_biz_dir = os.path.join(FRONTEND_DOCS_DIR, "business")
     if os.path.exists(biz_dir):
         for f in os.listdir(biz_dir):
             if f.endswith(".md"):
                 src_md = os.path.join(biz_dir, f)
-                dst_html = os.path.join(biz_dir, f.replace(".md", ".html"))
+                dst_html = os.path.join(out_biz_dir, f.replace(".md", ".html"))
                 page_title = f.replace(".md", "").replace("_", " ").title()
                 convert_md_to_html(src_md, dst_html, f"AURA Business | {page_title}", nav_links=BUSINESS_NAV_LINKS)
 
     # 2. Articles Stream HTML conversions
     art_dir = os.path.join(DOCS_DIR, "articles")
+    out_art_dir = os.path.join(FRONTEND_DOCS_DIR, "articles")
     if os.path.exists(art_dir):
         for f in os.listdir(art_dir):
             if f.endswith(".md"):
                 src_md = os.path.join(art_dir, f)
-                dst_html = os.path.join(art_dir, f.replace(".md", ".html"))
+                dst_html = os.path.join(out_art_dir, f.replace(".md", ".html"))
                 page_title = f.replace(".md", "").replace("_", " ").title()
                 convert_md_to_html(src_md, dst_html, f"AURA Articles | {page_title}", nav_links=ARTICLES_NAV_LINKS)
 
     # 3. Engineering Hub HTML conversions
     eng_dir = os.path.join(DOCS_DIR, "engineering")
+    out_eng_dir = os.path.join(FRONTEND_DOCS_DIR, "engineering")
     if os.path.exists(eng_dir):
         for f in os.listdir(eng_dir):
             if f.endswith(".md"):
                 src_md = os.path.join(eng_dir, f)
-                dst_html = os.path.join(eng_dir, f.replace(".md", ".html"))
+                dst_html = os.path.join(out_eng_dir, f.replace(".md", ".html"))
                 page_title = f.replace(".md", "").replace("_", " ").title()
                 convert_md_to_html(src_md, dst_html, f"AURA Engineering | {page_title}", nav_links=ENGINEERING_NAV_LINKS)
+
+    # 4. Sync QA HTML reports to frontend docs
+    qa_dir = os.path.join(DOCS_DIR, "qa")
+    out_qa_dir = os.path.join(FRONTEND_DOCS_DIR, "qa")
+    if os.path.exists(qa_dir):
+        os.makedirs(out_qa_dir, exist_ok=True)
+        for f in os.listdir(qa_dir):
+            if f.endswith(".html"):
+                with open(os.path.join(qa_dir, f), "r", encoding="utf-8") as rf:
+                    content = rf.read()
+                with open(os.path.join(out_qa_dir, f), "w", encoding="utf-8") as wf:
+                    wf.write(content)
+                print(f"Synced QA report to frontend: {os.path.join(out_qa_dir, f)}")
 
 if __name__ == "__main__":
     main()

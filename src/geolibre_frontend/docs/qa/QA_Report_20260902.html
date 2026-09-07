@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AURA Siting Crafter — QA Report (20260906)</title>
+  <title>AURA Siting Crafter — QA Report (20260902)</title>
   <style>
     :root {
       --bg-primary: #0a0f1d;
@@ -176,12 +176,12 @@
     <div class="header">
       <div class="title">
         <h1>AURA Siting Crafter — Automated QA Report</h1>
-        <p>Pre-Release Spatial QA Verification &bull; Timestamp: 2026-09-06 23:14:48 UTC</p>
+        <p>Pre-Release Spatial QA Verification &bull; Timestamp: 2026-09-02 23:27:36 UTC</p>
       </div>
       <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-        <a href="../../src/geolibre_frontend/national_suitability_report.html" target="_blank" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #93c5fd; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">📑 Siting Report</a>
+        <a href="../../index.html" target="_blank" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #93c5fd; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">📑 Siting Report</a>
         <a href="geolibre_qa_inspect.html" target="_blank" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #67e8f9; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🗺️ Map Inspector</a>
-        <a href="../../src/geolibre_frontend/index.html" target="_blank" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🌐 GeoLibre App</a>
+        <a href="../../map.html" target="_blank" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🌐 GeoLibre App</a>
         <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981;">
           PASSED
         </span>
@@ -198,7 +198,7 @@
       <div class="card" id="card_zeromock_audit">
         <div class="card-label">Zero-Mock AST Audit</div>
         <div class="card-value" style="color: #10b981;">100%</div>
-        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">43 files scanned (0 violations)</div>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">32 files scanned (0 violations)</div>
       </div>
       <div class="card" id="card_live_endpoints">
         <div class="card-label">Live Endpoint Audit</div>
@@ -261,12 +261,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               services.ga.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">9</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">9</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">11</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">11</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -278,12 +278,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/0/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               services.ga.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">3,147</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">3,147</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">1,866</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">1,866</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -346,12 +346,12 @@
             </a>
           </td>
           <td>
-            <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/9/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/1/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               portal.spatial.nsw.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">53,824</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">53,824</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">7,475</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">7,475</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -431,12 +431,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/0/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               services.ga.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">9</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">9</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">11</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">11</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -499,12 +499,12 @@
             </a>
           </td>
           <td>
-            <a href="https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/33/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/27/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               spatial-gis.information.qld.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">4,049,697</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">4,049,697</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">55,933</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">55,933</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -635,12 +635,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Environment/MapServer/23/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
-              services.slip.wa.gov.au...query
+            <a href="https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Environment/MapServer/23?f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+              services.slip.wa.gov.au...23
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">162</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">162</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">5,120</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">5,120</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -652,12 +652,12 @@
             </a>
           </td>
           <td>
-            <a href="https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/75/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+            <a href="https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/72/query?where=1=1&returnCountOnly=true&f=json" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               services.slip.wa.gov.au...query
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">26,132</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">26,132</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">870</td>
+          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">870</td>
           <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
           <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
         </tr>
@@ -683,14 +683,8 @@
         <input type="text" id="operator_name" placeholder="Operator Name / ID" value="QA_OPERATOR_LEAD" style="background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; padding: 0.6rem 1rem; border-radius: 0.35rem; font-size: 0.9rem;">
         <button class="btn-approve" onclick="approveSignoff()">Approve &amp; Sign-Off Release</button>
         <span id="signoff_status" style="color: #10b981; font-weight: bold; font-size: 0.9rem;"></span>
-    <footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
-      <div style="text-align: left;">
-        &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
       </div>
-      <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
-        Built 2026-09-06 23:14:48 UTC UTC
-      </div>
-    </footer>
+    </div>
   </div>
 
   <script>

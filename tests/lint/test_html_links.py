@@ -21,7 +21,7 @@ DEPLOY_MAPPINGS = [
 def find_html_files():
     html_files = []
     for root, _, files in os.walk(BASE_DIR):
-        if any(ignored in root for virt in ['.venv', 'node_modules', '.git', '.pytest_cache', 'brain', 'archive', 'docs/archive', 'docs\\archive'] if (ignored := virt)):
+        if any(ignored in root for virt in ['.venv', 'node_modules', '.git', '.pytest_cache', 'brain', 'archive', 'docs/archive', 'docs\\archive', 'runner/attachments', 'runner\\attachments'] if (ignored := virt)):
             continue
         for f in files:
             if f.endswith('.html'):
@@ -106,18 +106,28 @@ def test_html_internal_links_valid(html_file):
                 break
 
             # Handle root-level and cross-directory report aliases
-            if deployed_web_path.endswith('national_suitability_report.html') and (BASE_DIR / 'src' / 'geolibre_frontend' / 'national_suitability_report.html').exists():
+            if (deployed_web_path.endswith('national_suitability_report.html') or deployed_web_path.endswith('index.html')) and (BASE_DIR / 'src' / 'geolibre_frontend' / 'index.html').exists():
+                found_in_deployment = True
+                break
+            if deployed_web_path.endswith('map.html') and (BASE_DIR / 'src' / 'geolibre_frontend' / 'map.html').exists():
                 found_in_deployment = True
                 break
             if deployed_web_path.endswith('data_lineage_audit.html') and (BASE_DIR / 'src' / 'geolibre_frontend' / 'data_lineage_audit.html').exists():
                 found_in_deployment = True
                 break
-            if deployed_web_path.endswith('index.html') and (BASE_DIR / 'src' / 'geolibre_frontend' / 'index.html').exists():
-                found_in_deployment = True
-                break
             if deployed_web_path.endswith('QA_Report_20260902.html') and (BASE_DIR / 'docs' / 'qa' / 'QA_Report_20260902.html').exists():
                 found_in_deployment = True
                 break
+            if deployed_web_path.endswith('QA_Report_20260906.html') and (BASE_DIR / 'docs' / 'qa' / 'QA_Report_20260906.html').exists():
+                found_in_deployment = True
+                break
+
+        assert found_in_deployment, (
+            f"Broken deployed GCS link in {html_file.relative_to(BASE_DIR)}: "
+            f"href='{href}' (resolved to web path: '{deployed_web_path}')"
+        )
+
+
 @pytest.mark.parametrize("html_file", find_html_files())
 def test_html_local_filesystem_links_valid(html_file):
     """
@@ -134,6 +144,15 @@ def test_html_local_filesystem_links_valid(html_file):
         if not clean_href or '${' in clean_href:
             continue
         target_path = (html_file.parent / clean_href).resolve()
+        if target_path.exists():
+            continue
+        
+        # Support canonical report alias (national_suitability_report.html -> index.html)
+        if clean_href.endswith('national_suitability_report.html'):
+            alt_path = (html_file.parent / clean_href.replace('national_suitability_report.html', 'index.html')).resolve()
+            if alt_path.exists():
+                continue
+
         assert target_path.exists(), (
             f"Broken local file:/// link in {html_file.relative_to(BASE_DIR)}: "
             f"href='{href}' (resolved to non-existent path: '{target_path}')"

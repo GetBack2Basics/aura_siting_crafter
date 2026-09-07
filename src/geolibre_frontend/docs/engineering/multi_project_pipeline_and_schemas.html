@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA Engineering | Multi Project Pipeline And Schemas | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../business/aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
+    <a href="geolibre_webgis_rendering_spec.html" class="nav-link">Rendering Spec</a>
+    <a href="multi_project_pipeline_and_schemas.html" class="nav-link">Pipeline & Schemas</a>
+    <a href="upstream_geolibre_contributions.html" class="nav-link">GeoLibre Upstream</a>
+    <a href="spatial_qa_and_telemetry_standards.html" class="nav-link">QA & Telemetry</a>
+    <a href="../../index.html" target="_blank" class="nav-link">National Report</a>
+    <a href="../../map.html" target="_blank" class="nav-link">National Map</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>Multi-Project Ingestion Pipeline &amp; Schema Specifications</h1>
+<p><strong>Module:</strong> Multi-Project Siting &amp; Package Generator<br />
+<strong>Maintainer:</strong> GetBack2Basics Spatial AI Engineering<br />
+<strong>Version:</strong> 2.0 (September 2026)  </p>
+<hr />
+<h2>1. System Architecture &amp; Technical Data Flow</h2>
+<p>The Multi-Project Ingestion Pipeline establishes a repeatable, schema-validated workflow for compiling localized proponent spatial studies into standalone, high-performance web artifacts and statutory assessment reports.</p>
+<div class="mermaid">
+flowchart TD
+    subgraph Ingestion["1. Proponent Ingestion & Schema Gate"]
+        M1["Project Manifest (config/projects/{Project_ID}.json)"] --> V1["Schema Validator (schema_project_manifest.json)"]
+        G1["Spatial Layers (data/projects/{Project_ID}/*.geojson)"] --> V2["Zero-Mock & Coordinate Precision Scanner"]
+    end
+
+    subgraph Pipeline["2. Package Generator (tools/build_project_package.py)"]
+        V1 & V2 --> B1["Spatial Ingest & Topology Calculator"]
+        B1 --> B2["Client HTML Bundle Compiler"]
+        B1 --> B3["Statutory Report HTML Generator"]
+    end
+
+    subgraph Output["3. Production Artifacts"]
+        B2 --> P1["Project WebGIS Viewer (src/geolibre_frontend/projects/index_{Project_ID}.html)"]
+        B3 --> P2["Statutory Site Assessment (runner/projects/report_{Project_ID}.html)"]
+        P1 & P2 --> D1["DuckDB-WASM In-Memory Siting Engine"]
+    end
+
+    style Ingestion fill:#1e293b,stroke:#3b82f6,color:#f8fafc
+    style Pipeline fill:#1e1b4b,stroke:#818cf8,color:#ffffff,stroke-width:2px
+    style Output fill:#065f46,stroke:#34d399,color:#ffffff,stroke-width:2px
+</div>
+
+<hr />
+<h2>2. Project Directory Structure</h2>
+<pre><code>aura_siting_crafter/
+├── config/
+│   └── projects/
+│       ├── schema_project_manifest.json           [Manifest JSON Schema specification]
+│       └── LMCC_MacquarieCoal.json               [Site-specific project manifest]
+├── data/
+│   └── projects/
+│       └── LMCC_MacquarieCoal/                   [Site-specific spatial layers]
+│           ├── developable_pads_v1.geojson
+│           ├── staging_phases_v1.geojson
+│           ├── substation_phes_layout.geojson
+│           ├── rail_haulroad_spine.geojson
+│           ├── subsidence_zones_g1_g3.geojson
+│           ├── koala_biolink_corridor.geojson
+│           └── acoustic_bunds_buffers.geojson
+├── src/
+│   └── geolibre_frontend/
+│       ├── projects/
+│       │   └── index_LMCC_MacquarieCoal.html      [Interactive site WebGIS viewer]
+│       └── index.html                             [National viewer with project deep-links]
+├── runner/
+│   ├── projects/
+│   │   └── report_LMCC_MacquarieCoal.html         [Dedicated statutory site report]
+│   └── build_project_package.py                   [CLI package compilation tool]
+└── docs/
+    ├── business/                                  [Executive &amp; Institutional Dossiers]
+    └── engineering/                               [Developer Specifications &amp; Schemas]
+</code></pre>
+<hr />
+<h2>3. Project Manifest JSON Schema (<code>schema_project_manifest.json</code>)</h2>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;http://json-schema.org/draft-07/schema#&quot;,
+  &quot;title&quot;: &quot;AURA Project Manifest Schema&quot;,
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;project_id&quot;, &quot;project_name&quot;, &quot;proponent&quot;, &quot;lga&quot;, &quot;coordinates&quot;, &quot;layers&quot;],
+  &quot;properties&quot;: {
+    &quot;project_id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;pattern&quot;: &quot;^[A-Za-z0-9_]+$&quot; },
+    &quot;project_name&quot;: { &quot;type&quot;: &quot;string&quot; },
+    &quot;proponent&quot;: { &quot;type&quot;: &quot;string&quot; },
+    &quot;lga&quot;: { &quot;type&quot;: &quot;string&quot; },
+    &quot;coordinates&quot;: {
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;required&quot;: [&quot;lat&quot;, &quot;lng&quot;, &quot;zoom&quot;],
+      &quot;properties&quot;: {
+        &quot;lat&quot;: { &quot;type&quot;: &quot;number&quot; },
+        &quot;lng&quot;: { &quot;type&quot;: &quot;number&quot; },
+        &quot;zoom&quot;: { &quot;type&quot;: &quot;number&quot; }
+      }
+    },
+    &quot;engineering_baseline&quot;: {
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;properties&quot;: {
+        &quot;gross_site_area_ha&quot;: { &quot;type&quot;: &quot;number&quot; },
+        &quot;target_nda_ha&quot;: { &quot;type&quot;: &quot;number&quot; },
+        &quot;power_capacity_mva&quot;: { &quot;type&quot;: &quot;number&quot; },
+        &quot;water_savings_gl_yr&quot;: { &quot;type&quot;: &quot;number&quot; }
+      }
+    },
+    &quot;layers&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;id&quot;, &quot;name&quot;, &quot;file&quot;, &quot;type&quot;],
+        &quot;properties&quot;: {
+          &quot;id&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;name&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;file&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;type&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;enum&quot;: [&quot;polygon&quot;, &quot;line&quot;, &quot;point&quot;] },
+          &quot;color&quot;: { &quot;type&quot;: &quot;string&quot; }
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h2>4. Execution &amp; Testing Commands</h2>
+<h3>Build Project Package CLI</h3>
+<pre><code class="language-bash">python tools/build_project_package.py --project LMCC_MacquarieCoal
+</code></pre>
+<h3>Automated Validation Suite</h3>
+<pre><code class="language-bash"># Run all lint checks and zero-mock AST scanning
+pytest tests/lint/ -v
+
+# Validate project manifest schema compliance
+pytest tests/test_project_manifest_schema.py -v
+
+# Run full project package integration tests
+pytest tests/test_project_package_builder.py -v
+</code></pre>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+  <div style="text-align: left;">
+    &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+  </div>
+  <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+    Built 2026-09-07 23:49 UTC
+  </div>
+</footer>
+
+</body>
+</html>

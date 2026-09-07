@@ -48,7 +48,8 @@ def sync_inspector():
 
     catalog_json = json.dumps(catalog, indent=6)
 
-    with open('docs/qa/geolibre_qa_inspect.html', 'r', encoding='utf-8') as f:
+    target_path = 'src/geolibre_frontend/docs/qa/geolibre_qa_inspect.html'
+    with open(target_path, 'r', encoding='utf-8') as f:
         html = f.read()
 
     html = html.replace('QA_Report_20260901.html', 'QA_Report_20260902.html')
@@ -56,7 +57,7 @@ def sync_inspector():
     # Replace DATASET_CATALOG
     html = re.sub(r'const DATASET_CATALOG = \{.*?\};', f'const DATASET_CATALOG = {catalog_json};', html, flags=re.DOTALL)
 
-    with open('docs/qa/geolibre_qa_inspect.html', 'w', encoding='utf-8') as f:
+    with open(target_path, 'w', encoding='utf-8') as f:
         f.write(html)
 
     print('Successfully synchronized geolibre_qa_inspect.html with dataset_manifest_v2.json')

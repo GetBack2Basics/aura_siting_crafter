@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeoLibre Contribution & Fork Proposals | OpenGeos Collaboration | AURA Siting Crafter</title>
+  <title>AURA Engineering | Spatial Qa And Telemetry Standards | AURA Siting Crafter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -182,89 +182,73 @@
     AURA <span>Siting Crafter</span>
   </div>
   <div class="nav-links">
-    <a href="../index.html" target="_blank" class="nav-link">GeoLibre National Viewer</a>
-    <a href="qa/geolibre_qa_inspect.html" target="_blank" class="nav-link">Data Review & QA Inspector</a>
-    <a href="qa/QA_Report_20260902.html" target="_blank" class="nav-link">15.4M Dataset QA Report</a>
-    <a href="https://github.com/opengeos/GeoLibre" target="_blank" class="nav-link">opengeos/GeoLibre</a>
+    <a href="../business/aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
+    <a href="geolibre_webgis_rendering_spec.html" class="nav-link">Rendering Spec</a>
+    <a href="multi_project_pipeline_and_schemas.html" class="nav-link">Pipeline & Schemas</a>
+    <a href="upstream_geolibre_contributions.html" class="nav-link">GeoLibre Upstream</a>
+    <a href="spatial_qa_and_telemetry_standards.html" class="nav-link">QA & Telemetry</a>
+    <a href="../../index.html" target="_blank" class="nav-link">National Report</a>
+    <a href="../../map.html" target="_blank" class="nav-link">National Map</a>
   </div>
 </nav>
 
 <div class="container">
   <div class="content-card">
-    <h1>GeoLibre Upstream Contribution Proposals &amp; Architecture</h1>
-<p><strong>Target Upstream Repository:</strong> <a href="https://github.com/opengeos/GeoLibre"><code>opengeos/GeoLibre</code></a><br />
-<strong>Contributing Organization:</strong> GetBack2Basics Spatial AI Engineering<br />
-<strong>Status:</strong> Structured RFC &amp; Upstream Integration Proposals  </p>
+    <h1>Spatial Quality Assurance, Telemetry &amp; Zero-Mock Standards</h1>
+<p><strong>Standard:</strong> AURA Quality Assurance &amp; Zero-Mock Integrity<br />
+<strong>Organization:</strong> GetBack2Basics Spatial AI Engineering<br />
+<strong>Enforcement:</strong> Mandatory Pre-Commit &amp; CI Test Gates  </p>
 <hr />
-<h2>Executive Summary</h2>
-<p>This specification outlines five modular Pull Request (PR) proposals designed to contribute high-performance WebGIS features developed in AURA Siting Crafter directly to the upstream <code>opengeos/GeoLibre</code> open-source ecosystem.</p>
-<div class="mermaid">
-flowchart TD
-    subgraph GeoLibreUpstream["opengeos/GeoLibre Core Architecture"]
-        Core["GeoLibre Core Map Engine (MapLibre GL Wrapper)"]
-    end
-
-    subgraph Proposals["5 Modular Contribution Proposals"]
-        PR1["PR 1: DuckDB-WASM In-Memory Spatial SQL Engine"]
-        PR2["PR 2: Area-Priority Viewport Polygon Limiter"]
-        PR3["PR 3: Dynamic Expression Continuous Color Ramps"]
-        PR4["PR 4: Standalone Zero-Latency Digital Twin Exporter"]
-        PR5["PR 5: Cryptographic Data Lineage & Provenance Auditor"]
-    end
-
-    PR1 --> Core
-    PR2 --> Core
-    PR3 --> Core
-    PR4 --> Core
-    PR5 --> Core
-
-    style GeoLibreUpstream fill:#0f172a,stroke:#38bdf8,color:#ffffff,stroke-width:2px
-    style Proposals fill:#1e293b,stroke:#818cf8,color:#f8fafc
-</div>
-
-<hr />
-<h2>1. Modular PR Specifications</h2>
-<h3>Proposal 1: In-Memory DuckDB-WASM Siting Plugin (<code>geolibre-plugin-duckdb</code>)</h3>
-<ul>
-<li><strong>Objective</strong>: Embed DuckDB-WASM directly into GeoLibre map instances to execute high-throughput spatial joins, multi-criteria weighted scoring, and polygon area calculations locally in browser memory (&lt;15ms latency).</li>
-<li><strong>API Surface</strong>:
-  <code>typescript
-  map.use(new DuckDBSpatialPlugin({
-    parquetUrl: 'https://cdn.example.com/parcels.parquet',
-    initialQuery: 'SELECT * FROM parcels WHERE suitability_score &gt;= 0.7'
-  }));</code></li>
-</ul>
-<h3>Proposal 2: Area-Priority Viewport Feature Limiter (<code>geolibre-layer-limiter</code>)</h3>
-<ul>
-<li><strong>Objective</strong>: Prevent WebGL draw call bottlenecks when panning large cadastre layers (&gt;50k features) by ordering by descending bounding box / polygon area and capping rendering to top $N$ features.</li>
-<li><strong>API Surface</strong>:
-  <code>typescript
-  layer.setRenderOptimizer({
-    maxFeatures: 500,
-    sortProperty: 'area_ha',
-    sortOrder: 'desc'
-  });</code></li>
-</ul>
-<h3>Proposal 3: Dynamic Expression Continuous Color Ramps</h3>
-<ul>
-<li><strong>Objective</strong>: Provide a high-level JS helper that dynamically generates MapLibre GL interpolation expressions from arbitrary numeric data columns without rebuilding GL style sheets.</li>
-</ul>
-<h3>Proposal 4: Single-File HTML Digital Twin Exporter</h3>
-<ul>
-<li><strong>Objective</strong>: Export the current map view, active vector micro-layers, and embedded DuckDB-WASM engine into a self-contained, air-gapped HTML file for offline stakeholder distribution.</li>
-</ul>
-<h3>Proposal 5: Cryptographic Lineage &amp; Audit Inspector</h3>
-<ul>
-<li><strong>Objective</strong>: Embed SHA-256 layer checksums and Apache Sedona transform recipes into the map metadata UI, providing instant provenance verification.</li>
-</ul>
-<hr />
-<h2>2. Upstream Submission Workflow</h2>
+<h2>1. Zero-Mock Data Integrity Protocol</h2>
+<p>In mission-critical geospatial engineering, synthetic coordinates or fake mock arrays (<code>sample_features = [...]</code>) corrupt spatial analysis and introduce catastrophic legal liability.</p>
+<h3>Strict Enforcement Rules</h3>
 <ol>
-<li>Fork <code>opengeos/GeoLibre</code>.</li>
-<li>Create dedicated feature branches (<code>feature/duckdb-wasm-core</code>, <code>feature/viewport-limiter</code>).</li>
-<li>Implement unit tests using Vitest and Playwright.</li>
-<li>Submit PRs with reference benchmarks demonstrating 60fps rendering under 15M parcel loads.</li>
+<li><strong>AST Scanner Gate</strong>: All pull requests must pass the Python AST scanner (<code>tests/lint/test_no_mock_data.py</code>), which traverses the abstract syntax tree to detect mock dictionaries, synthetic coordinate lists, and placeholder bounding boxes.</li>
+<li><strong>Dynamic Manifest Loading</strong>: UI viewers and inspection docks must load genuine data from live endpoints or verified JSON/GeoParquet assets (<code>config/dataset_manifest_v2.json</code>).</li>
+<li><strong>Explicit Connection Failure Handling</strong>: If an external data source is offline, the interface must display genuine connection status or error boundaries—never synthetic fallback records.</li>
 </ol>
+<hr />
+<h2>2. Compute Lifecycle &amp; Resource Teardown</h2>
+<p>To protect against cloud resource leaks and billing blowouts:
+1. <strong>Apache Sedona Session Teardown</strong>: Every SedonaContext script must explicitly execute <code>sedona.stop()</code> in <code>finally:</code> blocks.
+2. <strong>Headless Cluster Lifecycle</strong>: Headless Wherobots Cloud runtimes are spawned per batch and terminated immediately upon GeoParquet asset compilation.
+3. <strong>Automated Verification</strong>:
+   <code>bash
+   pytest tests/lint/ -v
+   pytest tests/test_hazard_scoring.py -v</code></p>
+<hr />
+<h2>3. Spatial ETL Telemetry &amp; Performance Benchmarks</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Target Standard</th>
+<th style="text-align: left;">Production Benchmark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Cadastre Ingestion Throughput</strong></td>
+<td style="text-align: left;">&gt; 200,000 parcels/sec</td>
+<td style="text-align: left;">~310,000 parcels/sec (Sedona medium runtime)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>GDA2020 CRS Projection Precision</strong></td>
+<td style="text-align: left;">Sub-millimetre ($\le 0.001\text{m}$)</td>
+<td style="text-align: left;">Exact EPSG:7844 ellipsoidal transformation</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DuckDB-WASM In-Memory Scoring Latency</strong></td>
+<td style="text-align: left;">&lt; 50ms</td>
+<td style="text-align: left;">12–15ms (10,000 parcels)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>WebGL Render Frame Rate</strong></td>
+<td style="text-align: left;">60 fps continuous</td>
+<td style="text-align: left;">60 fps (Area-Priority Limiter enabled)</td>
+</tr>
+</tbody>
+</table>
   </div>
 </div>
 
@@ -273,7 +257,7 @@ flowchart TD
     &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
   </div>
   <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
-    Built 2026-09-07 03:42 UTC
+    Built 2026-09-07 23:49 UTC
   </div>
 </footer>
 

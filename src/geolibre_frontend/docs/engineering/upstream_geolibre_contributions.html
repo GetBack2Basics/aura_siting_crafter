@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AURA Engineering | Multi Project Pipeline And Schemas | AURA Siting Crafter</title>
+  <title>AURA Engineering | Upstream Geolibre Contributions | AURA Siting Crafter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -187,135 +187,87 @@
     <a href="multi_project_pipeline_and_schemas.html" class="nav-link">Pipeline & Schemas</a>
     <a href="upstream_geolibre_contributions.html" class="nav-link">GeoLibre Upstream</a>
     <a href="spatial_qa_and_telemetry_standards.html" class="nav-link">QA & Telemetry</a>
-    <a href="../../src/geolibre_frontend/index.html" target="_blank" class="nav-link">National Viewer</a>
+    <a href="../../index.html" target="_blank" class="nav-link">National Report</a>
+    <a href="../../map.html" target="_blank" class="nav-link">National Map</a>
   </div>
 </nav>
 
 <div class="container">
   <div class="content-card">
-    <h1>Multi-Project Ingestion Pipeline &amp; Schema Specifications</h1>
-<p><strong>Module:</strong> Multi-Project Siting &amp; Package Generator<br />
-<strong>Maintainer:</strong> GetBack2Basics Spatial AI Engineering<br />
-<strong>Version:</strong> 2.0 (September 2026)  </p>
+    <h1>GeoLibre Upstream Contribution Proposals &amp; Architecture</h1>
+<p><strong>Target Upstream Repository:</strong> <a href="https://github.com/opengeos/GeoLibre"><code>opengeos/GeoLibre</code></a><br />
+<strong>Contributing Organization:</strong> GetBack2Basics Spatial AI Engineering<br />
+<strong>Status:</strong> Structured RFC &amp; Upstream Integration Proposals  </p>
 <hr />
-<h2>1. System Architecture &amp; Technical Data Flow</h2>
-<p>The Multi-Project Ingestion Pipeline establishes a repeatable, schema-validated workflow for compiling localized proponent spatial studies into standalone, high-performance web artifacts and statutory assessment reports.</p>
+<h2>Executive Summary</h2>
+<p>This specification outlines five modular Pull Request (PR) proposals designed to contribute high-performance WebGIS features developed in AURA Siting Crafter directly to the upstream <code>opengeos/GeoLibre</code> open-source ecosystem.</p>
 <div class="mermaid">
 flowchart TD
-    subgraph Ingestion["1. Proponent Ingestion & Schema Gate"]
-        M1["Project Manifest (config/projects/{Project_ID}.json)"] --> V1["Schema Validator (schema_project_manifest.json)"]
-        G1["Spatial Layers (data/projects/{Project_ID}/*.geojson)"] --> V2["Zero-Mock & Coordinate Precision Scanner"]
+    subgraph GeoLibreUpstream["opengeos/GeoLibre Core Architecture"]
+        Core["GeoLibre Core Map Engine (MapLibre GL Wrapper)"]
     end
 
-    subgraph Pipeline["2. Package Generator (tools/build_project_package.py)"]
-        V1 & V2 --> B1["Spatial Ingest & Topology Calculator"]
-        B1 --> B2["Client HTML Bundle Compiler"]
-        B1 --> B3["Statutory Report HTML Generator"]
+    subgraph Proposals["5 Modular Contribution Proposals"]
+        PR1["PR 1: DuckDB-WASM In-Memory Spatial SQL Engine"]
+        PR2["PR 2: Area-Priority Viewport Polygon Limiter"]
+        PR3["PR 3: Dynamic Expression Continuous Color Ramps"]
+        PR4["PR 4: Standalone Zero-Latency Digital Twin Exporter"]
+        PR5["PR 5: Cryptographic Data Lineage & Provenance Auditor"]
     end
 
-    subgraph Output["3. Production Artifacts"]
-        B2 --> P1["Project WebGIS Viewer (src/geolibre_frontend/projects/index_{Project_ID}.html)"]
-        B3 --> P2["Statutory Site Assessment (runner/projects/report_{Project_ID}.html)"]
-        P1 & P2 --> D1["DuckDB-WASM In-Memory Siting Engine"]
-    end
+    PR1 --> Core
+    PR2 --> Core
+    PR3 --> Core
+    PR4 --> Core
+    PR5 --> Core
 
-    style Ingestion fill:#1e293b,stroke:#3b82f6,color:#f8fafc
-    style Pipeline fill:#1e1b4b,stroke:#818cf8,color:#ffffff,stroke-width:2px
-    style Output fill:#065f46,stroke:#34d399,color:#ffffff,stroke-width:2px
+    style GeoLibreUpstream fill:#0f172a,stroke:#38bdf8,color:#ffffff,stroke-width:2px
+    style Proposals fill:#1e293b,stroke:#818cf8,color:#f8fafc
 </div>
 
 <hr />
-<h2>2. Project Directory Structure</h2>
-<pre><code>aura_siting_crafter/
-├── config/
-│   └── projects/
-│       ├── schema_project_manifest.json           [Manifest JSON Schema specification]
-│       └── LMCC_MacquarieCoal.json               [Site-specific project manifest]
-├── data/
-│   └── projects/
-│       └── LMCC_MacquarieCoal/                   [Site-specific spatial layers]
-│           ├── developable_pads_v1.geojson
-│           ├── staging_phases_v1.geojson
-│           ├── substation_phes_layout.geojson
-│           ├── rail_haulroad_spine.geojson
-│           ├── subsidence_zones_g1_g3.geojson
-│           ├── koala_biolink_corridor.geojson
-│           └── acoustic_bunds_buffers.geojson
-├── src/
-│   └── geolibre_frontend/
-│       ├── projects/
-│       │   └── index_LMCC_MacquarieCoal.html      [Interactive site WebGIS viewer]
-│       └── index.html                             [National viewer with project deep-links]
-├── runner/
-│   ├── projects/
-│   │   └── report_LMCC_MacquarieCoal.html         [Dedicated statutory site report]
-│   └── build_project_package.py                   [CLI package compilation tool]
-└── docs/
-    ├── business/                                  [Executive &amp; Institutional Dossiers]
-    └── engineering/                               [Developer Specifications &amp; Schemas]
-</code></pre>
+<h2>1. Modular PR Specifications</h2>
+<h3>Proposal 1: In-Memory DuckDB-WASM Siting Plugin (<code>geolibre-plugin-duckdb</code>)</h3>
+<ul>
+<li><strong>Objective</strong>: Embed DuckDB-WASM directly into GeoLibre map instances to execute high-throughput spatial joins, multi-criteria weighted scoring, and polygon area calculations locally in browser memory (&lt;15ms latency).</li>
+<li><strong>API Surface</strong>:
+  <code>typescript
+  map.use(new DuckDBSpatialPlugin({
+    parquetUrl: 'https://cdn.example.com/parcels.parquet',
+    initialQuery: 'SELECT * FROM parcels WHERE suitability_score &gt;= 0.7'
+  }));</code></li>
+</ul>
+<h3>Proposal 2: Area-Priority Viewport Feature Limiter (<code>geolibre-layer-limiter</code>)</h3>
+<ul>
+<li><strong>Objective</strong>: Prevent WebGL draw call bottlenecks when panning large cadastre layers (&gt;50k features) by ordering by descending bounding box / polygon area and capping rendering to top $N$ features.</li>
+<li><strong>API Surface</strong>:
+  <code>typescript
+  layer.setRenderOptimizer({
+    maxFeatures: 500,
+    sortProperty: 'area_ha',
+    sortOrder: 'desc'
+  });</code></li>
+</ul>
+<h3>Proposal 3: Dynamic Expression Continuous Color Ramps</h3>
+<ul>
+<li><strong>Objective</strong>: Provide a high-level JS helper that dynamically generates MapLibre GL interpolation expressions from arbitrary numeric data columns without rebuilding GL style sheets.</li>
+</ul>
+<h3>Proposal 4: Single-File HTML Digital Twin Exporter</h3>
+<ul>
+<li><strong>Objective</strong>: Export the current map view, active vector micro-layers, and embedded DuckDB-WASM engine into a self-contained, air-gapped HTML file for offline stakeholder distribution.</li>
+</ul>
+<h3>Proposal 5: Cryptographic Lineage &amp; Audit Inspector</h3>
+<ul>
+<li><strong>Objective</strong>: Embed SHA-256 layer checksums and Apache Sedona transform recipes into the map metadata UI, providing instant provenance verification.</li>
+</ul>
 <hr />
-<h2>3. Project Manifest JSON Schema (<code>schema_project_manifest.json</code>)</h2>
-<pre><code class="language-json">{
-  &quot;$schema&quot;: &quot;http://json-schema.org/draft-07/schema#&quot;,
-  &quot;title&quot;: &quot;AURA Project Manifest Schema&quot;,
-  &quot;type&quot;: &quot;object&quot;,
-  &quot;required&quot;: [&quot;project_id&quot;, &quot;project_name&quot;, &quot;proponent&quot;, &quot;lga&quot;, &quot;coordinates&quot;, &quot;layers&quot;],
-  &quot;properties&quot;: {
-    &quot;project_id&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;pattern&quot;: &quot;^[A-Za-z0-9_]+$&quot; },
-    &quot;project_name&quot;: { &quot;type&quot;: &quot;string&quot; },
-    &quot;proponent&quot;: { &quot;type&quot;: &quot;string&quot; },
-    &quot;lga&quot;: { &quot;type&quot;: &quot;string&quot; },
-    &quot;coordinates&quot;: {
-      &quot;type&quot;: &quot;object&quot;,
-      &quot;required&quot;: [&quot;lat&quot;, &quot;lng&quot;, &quot;zoom&quot;],
-      &quot;properties&quot;: {
-        &quot;lat&quot;: { &quot;type&quot;: &quot;number&quot; },
-        &quot;lng&quot;: { &quot;type&quot;: &quot;number&quot; },
-        &quot;zoom&quot;: { &quot;type&quot;: &quot;number&quot; }
-      }
-    },
-    &quot;engineering_baseline&quot;: {
-      &quot;type&quot;: &quot;object&quot;,
-      &quot;properties&quot;: {
-        &quot;gross_site_area_ha&quot;: { &quot;type&quot;: &quot;number&quot; },
-        &quot;target_nda_ha&quot;: { &quot;type&quot;: &quot;number&quot; },
-        &quot;power_capacity_mva&quot;: { &quot;type&quot;: &quot;number&quot; },
-        &quot;water_savings_gl_yr&quot;: { &quot;type&quot;: &quot;number&quot; }
-      }
-    },
-    &quot;layers&quot;: {
-      &quot;type&quot;: &quot;array&quot;,
-      &quot;items&quot;: {
-        &quot;type&quot;: &quot;object&quot;,
-        &quot;required&quot;: [&quot;id&quot;, &quot;name&quot;, &quot;file&quot;, &quot;type&quot;],
-        &quot;properties&quot;: {
-          &quot;id&quot;: { &quot;type&quot;: &quot;string&quot; },
-          &quot;name&quot;: { &quot;type&quot;: &quot;string&quot; },
-          &quot;file&quot;: { &quot;type&quot;: &quot;string&quot; },
-          &quot;type&quot;: { &quot;type&quot;: &quot;string&quot;, &quot;enum&quot;: [&quot;polygon&quot;, &quot;line&quot;, &quot;point&quot;] },
-          &quot;color&quot;: { &quot;type&quot;: &quot;string&quot; }
-        }
-      }
-    }
-  }
-}
-</code></pre>
-<hr />
-<h2>4. Execution &amp; Testing Commands</h2>
-<h3>Build Project Package CLI</h3>
-<pre><code class="language-bash">python tools/build_project_package.py --project LMCC_MacquarieCoal
-</code></pre>
-<h3>Automated Validation Suite</h3>
-<pre><code class="language-bash"># Run all lint checks and zero-mock AST scanning
-pytest tests/lint/ -v
-
-# Validate project manifest schema compliance
-pytest tests/test_project_manifest_schema.py -v
-
-# Run full project package integration tests
-pytest tests/test_project_package_builder.py -v
-</code></pre>
+<h2>2. Upstream Submission Workflow</h2>
+<ol>
+<li>Fork <code>opengeos/GeoLibre</code>.</li>
+<li>Create dedicated feature branches (<code>feature/duckdb-wasm-core</code>, <code>feature/viewport-limiter</code>).</li>
+<li>Implement unit tests using Vitest and Playwright.</li>
+<li>Submit PRs with reference benchmarks demonstrating 60fps rendering under 15M parcel loads.</li>
+</ol>
   </div>
 </div>
 
@@ -324,7 +276,7 @@ pytest tests/test_project_package_builder.py -v
     &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
   </div>
   <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
-    Built 2026-09-07 06:46 UTC
+    Built 2026-09-07 23:49 UTC
   </div>
 </footer>
 

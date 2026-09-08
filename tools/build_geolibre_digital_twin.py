@@ -275,8 +275,11 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   
   <!-- CesiumJS 3D Geospatial Engine -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.115.0/Build/Cesium/Widgets/widgets.css">
-  <script src="https://cdn.jsdelivr.net/npm/cesium@1.115.0/Build/Cesium/Cesium.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/Widgets/widgets.min.css" crossorigin="anonymous">
+  <script>
+    window.CESIUM_BASE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/';
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/Cesium.js" crossorigin="anonymous"></script>
 
   <style>
     :root {{
@@ -948,15 +951,92 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
 
   <!-- Bottom Camera FlyTo Controls -->
   <div class="bottom-bar">
-    <button class="btn-camera active" onclick="flyToView('overview')">🪐 Overview</button>
-    <button class="btn-camera" onclick="flyToView('lidar')">⛰️ 1m LiDAR Relief</button>
-    <button class="btn-camera" onclick="flyToView('substation')">⚡ 330kV & PHES</button>
-    <button class="btn-camera" onclick="flyToView('pads')">🏢 Pad 1-4 Mega-Hub</button>
-    <button class="btn-camera" onclick="flyToView('biolink')">🌿 Koala Biolink</button>
-    <button class="btn-camera" onclick="flyToView('iot')">📡 Live IoT Stations</button>
+    <button class="btn-camera active" onclick="flyToView('overview', this)">🪐 Overview</button>
+    <button class="btn-camera" onclick="flyToView('lidar', this)">⛰️ 1m LiDAR Relief</button>
+    <button class="btn-camera" onclick="flyToView('substation', this)">⚡ 330kV & PHES</button>
+    <button class="btn-camera" onclick="flyToView('pads', this)">🏢 Pad 1-4 Mega-Hub</button>
+    <button class="btn-camera" onclick="flyToView('biolink', this)">🌿 Koala Biolink</button>
+    <button class="btn-camera" onclick="flyToView('iot', this)">📡 Live IoT Stations</button>
   </div>
 
   <script>
+    // Explicitly disable Cesium Ion tracking / token lookups
+    if (typeof Cesium !== 'undefined' && Cesium.Ion) {{
+      Cesium.Ion.defaultAccessToken = '';
+    }}
+
+    // --- Camera FlyTo Presets (Declared at Top to Prevent TDZ Errors) ---
+    const cameraPresets = {{
+      overview: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3800),
+        orientation: {{
+          heading: Cesium.Math.toRadians(0),
+          pitch: Cesium.Math.toRadians(-42),
+          roll: 0.0
+        }}
+      }},
+      lidar: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.582, -32.940, 2100),
+        orientation: {{
+          heading: Cesium.Math.toRadians(345),
+          pitch: Cesium.Math.toRadians(-32),
+          roll: 0.0
+        }}
+      }},
+      substation: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.584, -32.932, 1400),
+        orientation: {{
+          heading: Cesium.Math.toRadians(350),
+          pitch: Cesium.Math.toRadians(-35),
+          roll: 0.0
+        }}
+      }},
+      pads: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1800),
+        orientation: {{
+          heading: Cesium.Math.toRadians(15),
+          pitch: Cesium.Math.toRadians(-38),
+          roll: 0.0
+        }}
+      }},
+      biolink: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.946, 2200),
+        orientation: {{
+          heading: Cesium.Math.toRadians(330),
+          pitch: Cesium.Math.toRadians(-35),
+          roll: 0.0
+        }}
+      }},
+      iot: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.650, -32.980, 12000),
+        orientation: {{
+          heading: Cesium.Math.toRadians(340),
+          pitch: Cesium.Math.toRadians(-40),
+          roll: 0.0
+        }}
+      }}
+    }};
+
+    let viewer = null;
+
+    function flyToView(viewKey, btnEl) {{
+      document.querySelectorAll('.btn-camera').forEach(b => b.classList.remove('active'));
+      if (btnEl) {{
+        btnEl.classList.add('active');
+      }} else if (window.event && window.event.target) {{
+        window.event.target.classList.add('active');
+      }}
+
+      const preset = cameraPresets[viewKey];
+      if (preset && viewer) {{
+        viewer.camera.flyTo({{
+          destination: preset.destination,
+          orientation: preset.orientation,
+          duration: 2.0
+        }});
+      }}
+    }}
+
     // --- Data Payloads ---
     const GEO_BOUNDARY = {json_boundary};
     const GEO_PADS = {json_pads};
@@ -1005,9 +1085,7 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
     let cadastreLayer = null;
 
     // --- Initialize CesiumJS 3D Viewer ---
-    window.CESIUM_BASE_URL = 'https://cdn.jsdelivr.net/npm/cesium@1.115.0/Build/Cesium/';
-    
-    const viewer = new Cesium.Viewer('cesiumContainer', {{
+    viewer = new Cesium.Viewer('cesiumContainer', {{
       terrainProvider: new Cesium.ArcGISTiledElevationTerrainProvider({{
         url: 'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'
       }}),
@@ -1025,13 +1103,18 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
       animation: false,
       navigationHelpButton: false,
       fullscreenButton: false,
-      shadows: true
+      shadows: false
     }});
+
+    // Hide credit container
+    if (viewer.cesiumWidget && viewer.cesiumWidget.creditContainer) {{
+      viewer.cesiumWidget.creditContainer.style.display = 'none';
+    }}
 
     viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.scene.globe.enableLighting = true;
 
-    // Label Distance Condition (Smoothly fades out above 7.5km altitude to prevent clutter)
+    // Label Distance Condition (Smoothly fades out above 7.5km altitude)
     const labelDistanceCondition = new Cesium.DistanceDisplayCondition(0, 7500);
 
     // --- Basemap Switcher ---
@@ -1082,23 +1165,51 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
       }}
     }}
 
-    // --- Helpers for Geometry Conversion ---
-    function parseCoords(coords) {{
-      const pos = [];
-      coords.forEach(pt => {{
-        pos.push(pt[0], pt[1]);
-      }});
-      return Cesium.Cartesian3.fromDegreesArray(pos);
+    // --- Safe Geometry Conversion Utilities ---
+    function extractCoordArray(geomOrCoords) {{
+      if (!geomOrCoords) return [];
+      if (geomOrCoords.type && geomOrCoords.coordinates) {{
+        const type = geomOrCoords.type;
+        const coords = geomOrCoords.coordinates;
+        if (type === 'Point') return [coords];
+        if (type === 'LineString') return coords;
+        if (type === 'Polygon') return coords[0] || [];
+        if (type === 'MultiPolygon') return (coords[0] && coords[0][0]) ? coords[0][0] : [];
+        if (type === 'MultiLineString') return coords[0] || [];
+        return coords;
+      }}
+      if (Array.isArray(geomOrCoords)) {{
+        if (geomOrCoords.length === 0) return [];
+        if (typeof geomOrCoords[0] === 'number') return [geomOrCoords];
+        if (typeof geomOrCoords[0][0] === 'number') return geomOrCoords;
+        if (Array.isArray(geomOrCoords[0])) return extractCoordArray(geomOrCoords[0]);
+      }}
+      return [];
     }}
 
-    function getCenterDegree(coords) {{
-      let sumLon = 0, sumLat = 0, count = 0;
-      coords.forEach(pt => {{
-        sumLon += pt[0];
-        sumLat += pt[1];
-        count++;
+    function parseCoords(geomOrCoords) {{
+      const pts = extractCoordArray(geomOrCoords);
+      const flat = [];
+      pts.forEach(pt => {{
+        if (Array.isArray(pt) && pt.length >= 2 && typeof pt[0] === 'number' && typeof pt[1] === 'number') {{
+          flat.push(pt[0], pt[1]);
+        }}
       }});
-      return {{ lon: sumLon / count, lat: sumLat / count }};
+      return Cesium.Cartesian3.fromDegreesArray(flat);
+    }}
+
+    function getCenterDegree(geomOrCoords) {{
+      const pts = extractCoordArray(geomOrCoords);
+      if (!pts || pts.length === 0) return {{ lon: 151.585, lat: -32.935 }};
+      let sumLon = 0, sumLat = 0, count = 0;
+      pts.forEach(pt => {{
+        if (Array.isArray(pt) && pt.length >= 2 && typeof pt[0] === 'number' && typeof pt[1] === 'number') {{
+          sumLon += pt[0];
+          sumLat += pt[1];
+          count++;
+        }}
+      }});
+      return count > 0 ? {{ lon: sumLon / count, lat: sumLat / count }} : {{ lon: 151.585, lat: -32.935 }};
     }}
 
     // --- Build 3D Entities ---
@@ -1106,11 +1217,11 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
     // 1. Precinct Boundary
     if (GEO_BOUNDARY && GEO_BOUNDARY.features) {{
       GEO_BOUNDARY.features.forEach(f => {{
-        if (f.geometry && f.geometry.coordinates) {{
+        if (f.geometry) {{
           const ent = viewer.entities.add({{
             name: "Precinct Boundary",
             polyline: {{
-              positions: parseCoords(f.geometry.coordinates[0]),
+              positions: parseCoords(f.geometry),
               width: 3,
               material: new Cesium.PolylineGlowMaterialProperty({{
                 glowPower: 0.25,
@@ -1127,16 +1238,15 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
     // 2. High-Resolution ELVIS 1m LiDAR Topographic Contours
     if (GEO_CONTOURS && GEO_CONTOURS.features) {{
       GEO_CONTOURS.features.forEach(f => {{
-        const elev = f.properties.elevation_m;
-        const isIndex = f.properties.type === "Index Contour";
-        const coords = f.geometry.coordinates;
-        const center = coords[Math.floor(coords.length / 2)];
+        const elev = f.properties ? f.properties.elevation_m : 0;
+        const isIndex = f.properties && f.properties.type === "Index Contour";
+        const center = getCenterDegree(f.geometry);
 
         const ent = viewer.entities.add({{
           name: elev + "m AHD LiDAR Contour",
-          properties: f.properties,
+          properties: f.properties || {{}},
           polyline: {{
-            positions: parseCoords(coords),
+            positions: parseCoords(f.geometry),
             width: isIndex ? 2.5 : 1.2,
             material: Cesium.Color.fromCssColorString(isIndex ? '#38bdf8' : 'rgba(56, 189, 248, 0.45)'),
             clampToGround: true
@@ -1146,7 +1256,7 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
 
         if (isIndex && center) {{
           const lbl = viewer.entities.add({{
-            position: Cesium.Cartesian3.fromDegrees(center[0], center[1], elev + 2),
+            position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, elev + 2),
             label: {{
               text: elev + "m AHD",
               font: '500 10px JetBrains Mono, monospace',
@@ -1166,38 +1276,45 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
     // 3. High-Resolution ELVIS 1m Slope Classification Heatmap
     if (GEO_SLOPE && GEO_SLOPE.features) {{
       GEO_SLOPE.features.forEach(f => {{
-        const props = f.properties;
-        const coords = f.geometry.coordinates[0];
-        const center = getCenterDegree(coords);
+        const props = f.properties || {{}};
+        const className = props.class || "Slope Classification";
+        const center = getCenterDegree(f.geometry);
         let color = '#34d399';
         let alpha = 0.25;
 
-        if (props.class.includes('>20%')) {{
+        if (className.includes('>20%')) {{
           color = '#ef4444';
           alpha = 0.35;
-        }} else if (props.class.includes('5-15%')) {{
+        }} else if (className.includes('5-15%')) {{
           color = '#fbbf24';
           alpha = 0.25;
         }}
 
-        const ent = viewer.entities.add({{
-          name: props.class,
+        // Fill Polygon on Terrain
+        const entPoly = viewer.entities.add({{
+          name: className,
           properties: props,
           polygon: {{
-            hierarchy: parseCoords(coords),
+            hierarchy: parseCoords(f.geometry),
             material: Cesium.Color.fromCssColorString(color).withAlpha(alpha),
-            outline: true,
-            outlineColor: Cesium.Color.fromCssColorString(color),
-            outlineWidth: 1.5,
             clampToGround: true
           }}
         }});
-        LayerEntities.slope.push(ent);
+        // Crisp Border
+        const entBorder = viewer.entities.add({{
+          polyline: {{
+            positions: parseCoords(f.geometry),
+            width: 1.5,
+            material: Cesium.Color.fromCssColorString(color),
+            clampToGround: true
+          }}
+        }});
+        LayerEntities.slope.push(entPoly, entBorder);
 
         const lbl = viewer.entities.add({{
           position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 8),
           label: {{
-            text: props.class + "\\n(" + props.suitability + ")",
+            text: className + "\\n(" + (props.suitability || "") + ")",
             font: '600 10.5px Outfit, sans-serif',
             fillColor: Cesium.Color.fromCssColorString(color),
             outlineColor: Cesium.Color.BLACK,
@@ -1211,31 +1328,35 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
       }});
     }}
 
-    // 4. ELVIS LiDAR 4.80 GB & 2.11 GB Survey Footprints
+    // 4. ELVIS LiDAR Survey Footprints
     if (GEO_SURVEYS && GEO_SURVEYS.features) {{
       GEO_SURVEYS.features.forEach(f => {{
-        const props = f.properties;
-        const coords = f.geometry.coordinates[0];
-        const center = getCenterDegree(coords);
+        const props = f.properties || {{}};
+        const center = getCenterDegree(f.geometry);
 
-        const ent = viewer.entities.add({{
-          name: props.title,
+        const entPoly = viewer.entities.add({{
+          name: props.title || "ELVIS LiDAR Survey",
           properties: props,
           polygon: {{
-            hierarchy: parseCoords(coords),
+            hierarchy: parseCoords(f.geometry),
             material: Cesium.Color.fromCssColorString('#c084fc').withAlpha(0.08),
-            outline: true,
-            outlineColor: Cesium.Color.fromCssColorString('#c084fc'),
-            outlineWidth: 2.5,
             clampToGround: true
           }}
         }});
-        LayerEntities.surveys.push(ent);
+        const entBorder = viewer.entities.add({{
+          polyline: {{
+            positions: parseCoords(f.geometry),
+            width: 2.5,
+            material: Cesium.Color.fromCssColorString('#c084fc'),
+            clampToGround: true
+          }}
+        }});
+        LayerEntities.surveys.push(entPoly, entBorder);
 
         const lbl = viewer.entities.add({{
           position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 25),
           label: {{
-            text: "📦 " + props.package_id + " (" + props.file_size + ")\\n" + props.resolution,
+            text: "📦 " + (props.package_id || "") + " (" + (props.file_size || "") + ")\\n" + (props.resolution || ""),
             font: '600 11px JetBrains Mono, monospace',
             fillColor: Cesium.Color.fromCssColorString('#c084fc'),
             outlineColor: Cesium.Color.BLACK,
@@ -1255,14 +1376,13 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
         const props = f.properties || {{}};
         const padId = props.pad_id || ("Pad " + (idx + 1));
         const areaHa = props.usable_area_ha || props.area_ha || 15.0;
-        const coords = f.geometry.coordinates[0];
-        const center = getCenterDegree(coords);
+        const center = getCenterDegree(f.geometry);
 
         const padEntity = viewer.entities.add({{
           name: padId,
           properties: props,
           polygon: {{
-            hierarchy: parseCoords(coords),
+            hierarchy: parseCoords(f.geometry),
             material: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.35),
             outline: true,
             outlineColor: Cesium.Color.fromCssColorString('#38bdf8'),
@@ -1296,8 +1416,7 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
     if (GEO_PHES && GEO_PHES.features) {{
       GEO_PHES.features.forEach(f => {{
         const props = f.properties || {{}};
-        const coords = f.geometry.coordinates[0];
-        const center = getCenterDegree(coords);
+        const center = getCenterDegree(f.geometry);
         const name = props.name || "Utility Infrastructure";
         const isPhes = name.includes("PHES") || name.includes("Reservoir");
 
@@ -1308,7 +1427,7 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
           name: name,
           properties: props,
           polygon: {{
-            hierarchy: parseCoords(coords),
+            hierarchy: parseCoords(f.geometry),
             material: Cesium.Color.fromCssColorString(color).withAlpha(0.45),
             outline: true,
             outlineColor: Cesium.Color.fromCssColorString(color),
@@ -1340,121 +1459,199 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
     if (GEO_RAILROAD && GEO_RAILROAD.features) {{
       GEO_RAILROAD.features.forEach(f => {{
         const props = f.properties || {{}};
-        const geom = f.geometry;
-        if (geom.type === "LineString") {{
-          const ent = viewer.entities.add({{
-            name: props.name || "Rail Haul Road",
-            properties: props,
-            polyline: {{
-              positions: parseCoords(geom.coordinates),
-              width: 4,
-              material: new Cesium.PolylineGlowMaterialProperty({{
-                glowPower: 0.2,
-                color: Cesium.Color.fromCssColorString('#f59e0b')
-              }}),
-              clampToGround: true
-            }}
-          }});
-          LayerEntities.rail.push(ent);
-        }}
+        const ent = viewer.entities.add({{
+          name: props.name || "Rail Haul Road",
+          properties: props,
+          polyline: {{
+            positions: parseCoords(f.geometry),
+            width: 4,
+            material: new Cesium.PolylineGlowMaterialProperty({{
+              glowPower: 0.2,
+              color: Cesium.Color.fromCssColorString('#f59e0b')
+            }}),
+            clampToGround: true
+          }}
+        }});
+        LayerEntities.rail.push(ent);
       }});
     }}
 
     // 8. Koala Biolink Corridor
     if (GEO_BIOLINK && GEO_BIOLINK.features) {{
       GEO_BIOLINK.features.forEach(f => {{
-        const coords = f.geometry.coordinates[0];
-        const center = getCenterDegree(coords);
-        const ent = viewer.entities.add({{
-          name: "Koala Biolink Corridor",
-          properties: f.properties || {{}},
-          polygon: {{
-            hierarchy: parseCoords(coords),
-            material: Cesium.Color.fromCssColorString('#10b981').withAlpha(0.3),
-            outline: true,
-            outlineColor: Cesium.Color.fromCssColorString('#34d399'),
-            outlineWidth: 2,
-            clampToGround: true
-          }}
-        }});
-        LayerEntities.biolink.push(ent);
+        const geom = f.geometry || {{}};
+        const props = f.properties || {{}};
+        const center = getCenterDegree(geom);
 
-        const lbl = viewer.entities.add({{
-          position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 10),
-          label: {{
-            text: "Koala Biolink Corridor (28 ha)",
-            font: '600 11px Outfit, sans-serif',
-            fillColor: Cesium.Color.fromCssColorString('#34d399'),
-            outlineColor: Cesium.Color.BLACK,
-            outlineWidth: 3,
-            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-            distanceDisplayCondition: labelDistanceCondition
-          }}
-        }});
-        LayerEntities.biolink.push(lbl);
-        LayerLabels.biolink.push(lbl);
+        if (geom.type === 'Point') {{
+          // Fauna Overpass Point Feature
+          const pin = viewer.entities.add({{
+            name: props.name || "Fauna Overpass Bridge",
+            properties: props,
+            position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 8),
+            point: {{
+              pixelSize: 10,
+              color: Cesium.Color.fromCssColorString('#10b981'),
+              outlineColor: Cesium.Color.WHITE,
+              outlineWidth: 2,
+              distanceDisplayCondition: labelDistanceCondition
+            }}
+          }});
+          LayerEntities.biolink.push(pin);
+
+          const lbl = viewer.entities.add({{
+            position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 18),
+            label: {{
+              text: "🐾 " + (props.name || "Wildlife Bridge"),
+              font: '600 11px Outfit, sans-serif',
+              fillColor: Cesium.Color.fromCssColorString('#34d399'),
+              outlineColor: Cesium.Color.BLACK,
+              outlineWidth: 3,
+              style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+              distanceDisplayCondition: labelDistanceCondition
+            }}
+          }});
+          LayerEntities.biolink.push(lbl);
+          LayerLabels.biolink.push(lbl);
+        }} else {{
+          // Regional Biolink Corridor Polygon
+          const entPoly = viewer.entities.add({{
+            name: props.name || "Koala Biolink Corridor",
+            properties: props,
+            polygon: {{
+              hierarchy: parseCoords(geom),
+              material: Cesium.Color.fromCssColorString('#10b981').withAlpha(0.3),
+              clampToGround: true
+            }}
+          }});
+          const entBorder = viewer.entities.add({{
+            polyline: {{
+              positions: parseCoords(geom),
+              width: 2,
+              material: Cesium.Color.fromCssColorString('#34d399'),
+              clampToGround: true
+            }}
+          }});
+          LayerEntities.biolink.push(entPoly, entBorder);
+
+          const lbl = viewer.entities.add({{
+            position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 10),
+            label: {{
+              text: props.name || "Koala Biolink Corridor",
+              font: '600 11px Outfit, sans-serif',
+              fillColor: Cesium.Color.fromCssColorString('#34d399'),
+              outlineColor: Cesium.Color.BLACK,
+              outlineWidth: 3,
+              style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+              distanceDisplayCondition: labelDistanceCondition
+            }}
+          }});
+          LayerEntities.biolink.push(lbl);
+          LayerLabels.biolink.push(lbl);
+        }}
       }});
     }}
 
-    // 9. Acoustic Overburden Bunds (8m Height)
+    // 9. Acoustic Overburden Bunds & Buffers
     if (GEO_ACOUSTIC && GEO_ACOUSTIC.features) {{
       GEO_ACOUSTIC.features.forEach(f => {{
-        const coords = f.geometry.coordinates[0];
-        const ent = viewer.entities.add({{
-          name: "3D Acoustic Overburden Bund",
-          properties: f.properties || {{}},
-          polygon: {{
-            hierarchy: parseCoords(coords),
-            material: Cesium.Color.fromCssColorString('#a855f7').withAlpha(0.4),
-            outline: true,
-            outlineColor: Cesium.Color.fromCssColorString('#c084fc'),
-            outlineWidth: 2,
-            height: 0,
-            extrudedHeight: 8
-          }}
-        }});
-        LayerEntities.acoustic.push(ent);
+        const geom = f.geometry || {{}};
+        const props = f.properties || {{}};
+        const name = props.name || "Acoustic Noise Control";
+
+        if (geom.type === 'LineString') {{
+          // 3D Bund Spine
+          const ent = viewer.entities.add({{
+            name: name,
+            properties: props,
+            polyline: {{
+              positions: parseCoords(geom),
+              width: 5,
+              material: new Cesium.PolylineGlowMaterialProperty({{
+                glowPower: 0.3,
+                color: Cesium.Color.fromCssColorString('#a855f7')
+              }}),
+              clampToGround: true
+            }}
+          }});
+          LayerEntities.acoustic.push(ent);
+        }} else {{
+          // Compliance Setback Polygon
+          const entPoly = viewer.entities.add({{
+            name: name,
+            properties: props,
+            polygon: {{
+              hierarchy: parseCoords(geom),
+              material: Cesium.Color.fromCssColorString('#a855f7').withAlpha(0.2),
+              clampToGround: true
+            }}
+          }});
+          const entBorder = viewer.entities.add({{
+            polyline: {{
+              positions: parseCoords(geom),
+              width: 1.5,
+              material: Cesium.Color.fromCssColorString('#c084fc'),
+              clampToGround: true
+            }}
+          }});
+          LayerEntities.acoustic.push(entPoly, entBorder);
+        }}
       }});
     }}
 
     // 10. Mine Subsidence (G1-G3 Zones)
     if (GEO_SUBSIDENCE && GEO_SUBSIDENCE.features) {{
       GEO_SUBSIDENCE.features.forEach(f => {{
-        const coords = f.geometry.coordinates[0];
+        const geom = f.geometry || {{}};
         const props = f.properties || {{}};
-        const ent = viewer.entities.add({{
-          name: props.zone || "Mine Subsidence Zone",
+        const name = props.zone || props.name || "Mine Subsidence Zone";
+
+        const entPoly = viewer.entities.add({{
+          name: name,
           properties: props,
           polygon: {{
-            hierarchy: parseCoords(coords),
+            hierarchy: parseCoords(geom),
             material: Cesium.Color.fromCssColorString('#ef4444').withAlpha(0.25),
-            outline: true,
-            outlineColor: Cesium.Color.fromCssColorString('#f87171'),
-            outlineWidth: 2,
             clampToGround: true
           }}
         }});
-        LayerEntities.subsidence.push(ent);
+        const entBorder = viewer.entities.add({{
+          polyline: {{
+            positions: parseCoords(geom),
+            width: 2,
+            material: Cesium.Color.fromCssColorString('#f87171'),
+            clampToGround: true
+          }}
+        }});
+        LayerEntities.subsidence.push(entPoly, entBorder);
       }});
     }}
 
     // 11. 1% AEP Flood Corridor
     if (GEO_FLOOD && GEO_FLOOD.features) {{
       GEO_FLOOD.features.forEach(f => {{
-        const coords = f.geometry.coordinates[0];
-        const ent = viewer.entities.add({{
-          name: f.properties.hazard || "1% AEP Flood Inundation Zone",
-          properties: f.properties || {{}},
+        const geom = f.geometry || {{}};
+        const props = f.properties || {{}};
+        const name = props.hazard || "1% AEP Flood Inundation Zone";
+
+        const entPoly = viewer.entities.add({{
+          name: name,
+          properties: props,
           polygon: {{
-            hierarchy: parseCoords(coords),
+            hierarchy: parseCoords(geom),
             material: Cesium.Color.fromCssColorString('#06b6d4').withAlpha(0.3),
-            outline: true,
-            outlineColor: Cesium.Color.fromCssColorString('#38bdf8'),
-            outlineWidth: 2,
             clampToGround: true
           }}
         }});
-        LayerEntities.flood.push(ent);
+        const entBorder = viewer.entities.add({{
+          polyline: {{
+            positions: parseCoords(geom),
+            width: 2,
+            material: Cesium.Color.fromCssColorString('#38bdf8'),
+            clampToGround: true
+          }}
+        }});
+        LayerEntities.flood.push(entPoly, entBorder);
       }});
     }}
 
@@ -1519,7 +1716,7 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
     // --- Lake Macquarie Real-Time IoT Sensors Fetching ---
     async function fetchLiveIoTSensors() {{
       const statusEl = document.getElementById('iot-status');
-      statusEl.textContent = "UPDATING...";
+      if (statusEl) statusEl.textContent = "UPDATING...";
 
       try {{
         // 1. Fetch live ATM41 Weather Stations
@@ -1591,20 +1788,27 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
 
         // Update HUD Metrics
         if (latestRecord) {{
-          document.getElementById('val-temp').textContent = (latestRecord.payload_fields_air_temperature_value != null ? latestRecord.payload_fields_air_temperature_value.toFixed(1) : "--") + " °C";
-          document.getElementById('val-humidity').textContent = (latestRecord.payload_fields_relative_humidity_value != null ? latestRecord.payload_fields_relative_humidity_value.toFixed(1) : "--") + " %";
-          document.getElementById('val-wind').textContent = (latestRecord.payload_fields_maximum_wind_speed_value != null ? latestRecord.payload_fields_maximum_wind_speed_value.toFixed(1) : "--") + " m/s";
-          document.getElementById('val-pressure').textContent = (latestRecord.payload_fields_atmospheric_pressure_value != null ? latestRecord.payload_fields_atmospheric_pressure_value.toFixed(0) : "----") + " hPa";
-          document.getElementById('val-solar').textContent = (latestRecord.payload_fields_solar_radiation_value != null ? latestRecord.payload_fields_solar_radiation_value.toFixed(1) : "--") + " W/m²";
-          document.getElementById('val-lightning').textContent = (latestRecord.payload_fields_lightning_average_distance_value != null ? latestRecord.payload_fields_lightning_average_distance_value.toFixed(1) : "0.0") + " km";
+          const tempVal = latestRecord.payload_fields_air_temperature_value != null ? Number(latestRecord.payload_fields_air_temperature_value).toFixed(1) : "--";
+          const humVal = latestRecord.payload_fields_relative_humidity_value != null ? Number(latestRecord.payload_fields_relative_humidity_value).toFixed(1) : "--";
+          const windVal = latestRecord.payload_fields_maximum_wind_speed_value != null ? Number(latestRecord.payload_fields_maximum_wind_speed_value).toFixed(1) : "--";
+          const pressVal = latestRecord.payload_fields_atmospheric_pressure_value != null ? Number(latestRecord.payload_fields_atmospheric_pressure_value).toFixed(0) : "----";
+          const solarVal = latestRecord.payload_fields_solar_radiation_value != null ? Number(latestRecord.payload_fields_solar_radiation_value).toFixed(1) : "--";
+          const lightningVal = latestRecord.payload_fields_lightning_average_distance_value != null ? Number(latestRecord.payload_fields_lightning_average_distance_value).toFixed(1) : "0.0";
+
+          document.getElementById('val-temp').textContent = tempVal + " °C";
+          document.getElementById('val-humidity').textContent = humVal + " %";
+          document.getElementById('val-wind').textContent = windVal + " m/s";
+          document.getElementById('val-pressure').textContent = pressVal + " hPa";
+          document.getElementById('val-solar').textContent = solarVal + " W/m²";
+          document.getElementById('val-lightning').textContent = lightningVal + " km";
           document.getElementById('iot-station-name').textContent = latestRecord.device_name || "Lake Mac ATM41 Station";
           document.getElementById('iot-timestamp').textContent = new Date(latestRecord.metadata_time).toLocaleTimeString();
         }}
 
-        statusEl.textContent = "LIVE";
+        if (statusEl) statusEl.textContent = "LIVE";
       }} catch (err) {{
-        console.warn("Live IoT fetch error:", err);
-        statusEl.textContent = "OFFLINE";
+        console.warn("Live IoT fetch notice:", err);
+        if (statusEl) statusEl.textContent = "OFFLINE";
       }}
     }}
 
@@ -1635,73 +1839,7 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
       }}
     }}, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
-    // --- Camera FlyTo Presets ---
-    const cameraPresets = {{
-      overview: {{
-        destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3800),
-        orientation: {{
-          heading: Cesium.Math.toRadians(0),
-          pitch: Cesium.Math.toRadians(-42),
-          roll: 0.0
-        }}
-      }},
-      lidar: {{
-        destination: Cesium.Cartesian3.fromDegrees(151.582, -32.940, 2100),
-        orientation: {{
-          heading: Cesium.Math.toRadians(345),
-          pitch: Cesium.Math.toRadians(-32),
-          roll: 0.0
-        }}
-      }},
-      substation: {{
-        destination: Cesium.Cartesian3.fromDegrees(151.584, -32.932, 1400),
-        orientation: {{
-          heading: Cesium.Math.toRadians(350),
-          pitch: Cesium.Math.toRadians(-35),
-          roll: 0.0
-        }}
-      }},
-      pads: {{
-        destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1800),
-        orientation: {{
-          heading: Cesium.Math.toRadians(15),
-          pitch: Cesium.Math.toRadians(-38),
-          roll: 0.0
-        }}
-      }},
-      biolink: {{
-        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.946, 2200),
-        orientation: {{
-          heading: Cesium.Math.toRadians(330),
-          pitch: Cesium.Math.toRadians(-35),
-          roll: 0.0
-        }}
-      }},
-      iot: {{
-        destination: Cesium.Cartesian3.fromDegrees(151.650, -32.980, 12000),
-        orientation: {{
-          heading: Cesium.Math.toRadians(340),
-          pitch: Cesium.Math.toRadians(-40),
-          roll: 0.0
-        }}
-      }}
-    }};
-
-    function flyToView(viewKey) {{
-      document.querySelectorAll('.btn-camera').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
-
-      const preset = cameraPresets[viewKey];
-      if (preset) {{
-        viewer.camera.flyTo({{
-          destination: preset.destination,
-          orientation: preset.orientation,
-          duration: 2.0
-        }});
-      }}
-    }}
-
-    // Initial Overview Flight
+    // Initial Overview Viewport Set
     viewer.camera.setView({{
       destination: cameraPresets.overview.destination,
       orientation: cameraPresets.overview.orientation

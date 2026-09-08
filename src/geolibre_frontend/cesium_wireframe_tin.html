@@ -174,14 +174,14 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--neon-cyan);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
     .control-row {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .control-label {
@@ -189,7 +189,7 @@
       justify-content: space-between;
       font-size: 11px;
       color: var(--text-muted);
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
     .control-slider {
@@ -206,14 +206,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 7px 10px;
+      padding: 8px 10px;
       background: rgba(15, 23, 42, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 6px;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
-      font-size: 11px;
+      font-size: 11.5px;
     }
 
     .layer-item:hover {
@@ -303,7 +303,7 @@
     </div>
     <div class="hud-controls">
       <button class="hud-btn" onclick="toggleSidebar()">
-        ⚙️ 3D Tools
+        ⚙️ Tools
       </button>
       <button class="hud-btn" onclick="resetView()">
         🔄 Reset 3D View
@@ -323,34 +323,30 @@
   <!-- Floating Sidebar Toolbox (Matching digital_twin_LMCC_MacquarieCoal.html) -->
   <div class="hud-sidebar" id="sidebar">
     <div class="section-header">
-      <span>3D Camera & Mesh Density</span>
+      <span>3D Camera & Light</span>
       <span style="cursor:pointer;" onclick="toggleSidebar()">✕</span>
     </div>
 
     <div class="control-row">
       <div class="control-label"><span>Pitch (Oblique Tilt)</span><span id="lbl-pitch">60°</span></div>
-      <input type="range" class="control-slider" id="slider-pitch" min="10" max="85" value="60" oninput="updatePitch(this.value)">
+      <input type="range" class="control-slider" id="slider-pitch" min="0" max="80" value="60" oninput="updatePitch(this.value)">
     </div>
     <div class="control-row">
-      <div class="control-label"><span>Bearing (Heading)</span><span id="lbl-bearing">345°</span></div>
-      <input type="range" class="control-slider" id="slider-bearing" min="0" max="360" value="345" oninput="updateBearing(this.value)">
+      <div class="control-label"><span>Bearing (Heading)</span><span id="lbl-bearing">28°</span></div>
+      <input type="range" class="control-slider" id="slider-bearing" min="0" max="360" value="28" oninput="updateBearing(this.value)">
     </div>
     <div class="control-row">
-      <div class="control-label"><span>TIN Line Opacity</span><span id="lbl-opacity">95%</span></div>
+      <div class="control-label"><span>Terrain Exaggeration</span><span id="lbl-exagg">1.5x</span></div>
+      <input type="range" class="control-slider" id="slider-exagg" min="10" max="25" value="15" oninput="updateExaggeration(this.value / 10)">
+    </div>
+    <div class="control-row">
+      <div class="control-label"><span>TIN Wireframe Opacity</span><span id="lbl-opacity">95%</span></div>
       <input type="range" class="control-slider" id="slider-opacity" min="10" max="100" value="95" oninput="updateOpacity(this.value)">
     </div>
-    <div class="control-row">
-      <div class="control-label"><span>Mesh Grid Density</span><span id="lbl-density">50x50</span></div>
-      <select id="select-density" onchange="updateDensity(this.value)" style="width: 100%; background: #0f172a; border: 1px solid var(--border-panel); border-radius: 4px; color: #fff; font-size: 11px; padding: 4px 8px;">
-        <option value="35">35x35 (1,225 Elevation Nodes)</option>
-        <option value="50" selected>50x50 (2,500 Elevation Nodes - Default)</option>
-        <option value="70">70x70 (4,900 Elevation Nodes - Ultra Res)</option>
-      </select>
-    </div>
 
-    <!-- 3D Digital Twin Micro-Layers -->
-    <div class="section-header" style="margin-top: 14px;">
-      <span>Digital Twin 3D Layers</span>
+    <!-- Digital Twin Micro-Layers -->
+    <div class="section-header" style="margin-top: 18px;">
+      <span>Digital Twin Micro-Layers</span>
     </div>
 
     <div class="layer-item" onclick="toggleLayerItem('wireframe')">
@@ -362,20 +358,12 @@
       <input type="checkbox" id="chk-surface" checked>
     </div>
     <div class="layer-item" onclick="toggleLayerItem('pads')">
-      <span><span class="layer-badge" style="background: var(--neon-blue);"></span>🏢 10 Developable Pads (154 ha)</span>
+      <span><span class="layer-badge" style="background: var(--neon-blue);"></span>🏢 10 Developable Pads (NDP-00 - 10)</span>
       <input type="checkbox" id="chk-pads" checked>
     </div>
-    <div class="layer-item" onclick="toggleLayerItem('phes')">
-      <span><span class="layer-badge" style="background: var(--neon-amber);"></span>⚡ 49 MWh PHES & 330kV Grid</span>
-      <input type="checkbox" id="chk-phes" checked>
-    </div>
-    <div class="layer-item" onclick="toggleLayerItem('biolink')">
-      <span><span class="layer-badge" style="background: #10b981;"></span>🌿 Koala Ecological Bio-Link</span>
-      <input type="checkbox" id="chk-biolink" checked>
-    </div>
-    <div class="layer-item" onclick="toggleLayerItem('contours')">
-      <span><span class="layer-badge" style="background: #38bdf8;"></span>〰️ 1m Topographic Contours</span>
-      <input type="checkbox" id="chk-contours" checked>
+    <div class="layer-item" onclick="toggleLayerItem('buildings')">
+      <span><span class="layer-badge" style="background: #38bdf8;"></span>🏢 3D Industrial Envelopes</span>
+      <input type="checkbox" id="chk-buildings" checked>
     </div>
     <div class="layer-item" onclick="toggleLayerItem('flood')">
       <span><span class="layer-badge" style="background: var(--neon-red);"></span>🌊 1% AEP Flood Inundation Ribbon</span>
@@ -385,9 +373,25 @@
       <span><span class="layer-badge" style="background: var(--neon-orange);"></span>⚠️ Steep Slope (>20%) Exclusions</span>
       <input type="checkbox" id="chk-slope" checked>
     </div>
+    <div class="layer-item" onclick="toggleLayerItem('subsidence')">
+      <span><span class="layer-badge" style="background: #f43f5e;"></span>⚠️ Mine Subsidence Advisory (G1-G3)</span>
+      <input type="checkbox" id="chk-subsidence" checked>
+    </div>
+    <div class="layer-item" onclick="toggleLayerItem('phes')">
+      <span><span class="layer-badge" style="background: #0ea5e9;"></span>⚡ 49 MWh Micro-PHES & 330kV Grid</span>
+      <input type="checkbox" id="chk-phes" checked>
+    </div>
     <div class="layer-item" onclick="toggleLayerItem('rail')">
       <span><span class="layer-badge" style="background: #fb923c;"></span>🚆 1.8km Rail Freight Siding Loop</span>
       <input type="checkbox" id="chk-rail" checked>
+    </div>
+    <div class="layer-item" onclick="toggleLayerItem('biolink')">
+      <span><span class="layer-badge" style="background: #10b981;"></span>🌿 Sugarloaf-Awaba Regional Bio-Link</span>
+      <input type="checkbox" id="chk-biolink" checked>
+    </div>
+    <div class="layer-item" onclick="toggleLayerItem('contours')">
+      <span><span class="layer-badge" style="background: #38bdf8;"></span>〰️ 1m / 5m / 20m Topographic Contours</span>
+      <input type="checkbox" id="chk-contours" checked>
     </div>
 
     <!-- ELI10 (Explain Like I'm 10) Explainer Card -->
@@ -399,17 +403,17 @@
         <strong>Imagine draping a glowing cyan spiderweb over real mountains and valleys!</strong>
       </p>
       <ul style="padding-left: 16px; color: #94a3b8; display: flex; flex-direction: column; gap: 4px;">
-        <li><strong>TIN (Triangles):</strong> We measure the exact height of the ground (from 20m down in the creek up to 138m high on the ridge) and draw triangles connecting every spot.</li>
-        <li><strong>Esri Satellite:</strong> A high-resolution photo from space sits directly beneath the glowing net.</li>
-        <li><strong>Precision Siting:</strong> You can tilt and spin the camera to inspect exactly where the ground is flat enough to build factories and solar farms without hitting steep hills or flood zones!</li>
+        <li><strong>TIN (Triangles):</strong> We measure the exact ground height (from 20m in the creek to 138m on the ridge) and draw triangles connecting every spot.</li>
+        <li><strong>Terrain Exaggeration (1.5x):</strong> Stretches the hills slightly so you can easily spot slopes and flat areas.</li>
+        <li><strong>Pitch & Bearing Sliders:</strong> Tilt and spin the 3D globe like an engineering video game!</li>
       </ul>
     </div>
   </div>
 
   <!-- Bottom Camera FlyTo Controls -->
   <div class="bottom-bar">
-    <button class="btn-cam active" onclick="flyToPreset('mesh_close', this)">🌐 Close-up TIN Mesh</button>
-    <button class="btn-cam" onclick="flyToPreset('overview', this)">🪐 Whole Precinct Overview</button>
+    <button class="btn-cam active" onclick="flyToPreset('default_view', this)">🪐 3D Perspective View (60° / 28°)</button>
+    <button class="btn-cam" onclick="flyToPreset('overview', this)">🌐 Whole Precinct Overview</button>
     <button class="btn-cam" onclick="flyToPreset('pads', this)">🏢 Siting Pads Hub</button>
     <button class="btn-cam" onclick="flyToPreset('ridge', this)">⛰️ Sugarloaf Ridge</button>
   </div>
@@ -419,22 +423,28 @@
       Cesium.Ion.defaultAccessToken = '';
     }
 
+    let currentPitch = 60;
+    let currentBearing = 28;
+    let currentExaggeration = 1.5;
+    let currentGridSize = 50;
+    let currentOpacity = 0.95;
+
     const cameraPresets = {
-      mesh_close: {
-        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.938, 1100),
-        orientation: { heading: Cesium.Math.toRadians(345), pitch: Cesium.Math.toRadians(-25), roll: 0.0 }
+      default_view: {
+        destination: Cesium.Cartesian3.fromDegrees(151.585, -32.952, 1600),
+        orientation: { heading: Cesium.Math.toRadians(28), pitch: Cesium.Math.toRadians(-60), roll: 0.0 }
       },
       overview: {
         destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3000),
-        orientation: { heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-35), roll: 0.0 }
+        orientation: { heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-45), roll: 0.0 }
       },
       pads: {
         destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1400),
-        orientation: { heading: Cesium.Math.toRadians(15), pitch: Cesium.Math.toRadians(-32), roll: 0.0 }
+        orientation: { heading: Cesium.Math.toRadians(28), pitch: Cesium.Math.toRadians(-55), roll: 0.0 }
       },
       ridge: {
         destination: Cesium.Cartesian3.fromDegrees(151.562, -32.945, 1700),
-        orientation: { heading: Cesium.Math.toRadians(330), pitch: Cesium.Math.toRadians(-28), roll: 0.0 }
+        orientation: { heading: Cesium.Math.toRadians(330), pitch: Cesium.Math.toRadians(-50), roll: 0.0 }
       }
     };
 
@@ -493,7 +503,7 @@
     let wireframePrimitive = null;
     let surfacePrimitive = null;
 
-    function build3DDEMMesh(gridSize, wireAlpha = 0.95) {
+    function build3DDEMMesh(gridSize, wireAlpha = 0.95, exagg = 1.5) {
       if (wireframePrimitive) {
         viewer.scene.primitives.remove(wireframePrimitive);
         wireframePrimitive = null;
@@ -522,8 +532,9 @@
           const normX = (lon - 151.55) / 0.055;
           const normY = (lat - (-32.95)) / 0.038;
 
-          // Authoritative 1.0m Bare-Earth DEM elevation calculation (20.4m to 138.6m AHD)
-          const elev = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 76 + Math.max(0, Math.min(1, normY)) * 34 + Math.sin(normX * 8) * 6;
+          // 1.0m Bare-Earth DEM elevation calculation with Terrain Exaggeration scaling
+          const rawElev = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 76 + Math.max(0, Math.min(1, normY)) * 34 + Math.sin(normX * 8) * 6;
+          const elev = 20.4 + (rawElev - 20.4) * exagg;
 
           // Surface vertex
           const cart = Cesium.Cartesian3.fromDegrees(lon, lat, elev);
@@ -531,20 +542,20 @@
           positions[vIdx * 3 + 1] = cart.y;
           positions[vIdx * 3 + 2] = cart.z;
 
-          // Offset wireframe vertex (+0.4m) for crisp rendering
+          // Offset wireframe vertex (+0.4m) for zero z-fighting
           const wireCart = Cesium.Cartesian3.fromDegrees(lon, lat, elev + 0.4);
           wirePositions[vIdx * 3] = wireCart.x;
           wirePositions[vIdx * 3 + 1] = wireCart.y;
           wirePositions[vIdx * 3 + 2] = wireCart.z;
 
           // Surface hypsometric elevation coloring
-          const t = Math.max(0, Math.min(1, (elev - 20) / 118));
+          const t = Math.max(0, Math.min(1, (rawElev - 20) / 118));
           const h = (1.0 - t) * 0.58;
           const rgb = Cesium.Color.fromHsl(h, 0.85, 0.42 + t * 0.18);
           surfaceColors[vIdx * 4] = Math.floor(rgb.red * 255);
           surfaceColors[vIdx * 4 + 1] = Math.floor(rgb.green * 255);
           surfaceColors[vIdx * 4 + 2] = Math.floor(rgb.blue * 255);
-          surfaceColors[vIdx * 4 + 3] = 150;
+          surfaceColors[vIdx * 4 + 3] = 140;
 
           // Cyan glowing vector wireframe
           wireColors[vIdx * 4] = 0;
@@ -677,10 +688,10 @@
       }));
     }
 
-    // Initialize 50x50 Mesh
-    build3DDEMMesh(50, 0.95);
+    // Initialize 50x50 Mesh with 1.5x Terrain Exaggeration
+    build3DDEMMesh(currentGridSize, currentOpacity, currentExaggeration);
 
-    // --- Vector Layers Setup (Pads, PHES, Biolink, Contours, Flood, Slope, Rail) ---
+    // --- Vector Layers Setup (Pads, Envelopes, PHES, Biolink, Contours, Flood, Slope, Subsidence, Rail) ---
     function extractCoordArray(geomOrCoords) {
       if (!geomOrCoords) return [];
       if (geomOrCoords.type && geomOrCoords.coordinates) {
@@ -732,19 +743,22 @@
     const GEO_CONTOURS = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"elevation_m": 20, "type": "Index Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.555, -32.912], [151.554, -32.9175], [151.553, -32.923], [151.556, -32.9285], [151.553, -32.934], [151.554, -32.9395], [151.555, -32.945], [151.554, -32.9505], [151.553, -32.956], [151.556, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 30, "type": "Intermediate Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.5585, -32.912], [151.5575, -32.9175], [151.5565, -32.923], [151.5595, -32.9285], [151.5565, -32.934], [151.5575, -32.9395], [151.5585, -32.945], [151.5575, -32.9505], [151.5565, -32.956], [151.5595, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 40, "type": "Index Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.562, -32.912], [151.561, -32.9175], [151.56, -32.923], [151.563, -32.9285], [151.56, -32.934], [151.561, -32.9395], [151.562, -32.945], [151.561, -32.9505], [151.56, -32.956], [151.563, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 50, "type": "Intermediate Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.5655, -32.912], [151.5645, -32.9175], [151.5635, -32.923], [151.5665, -32.9285], [151.5635, -32.934], [151.5645, -32.9395], [151.5655, -32.945], [151.5645, -32.9505], [151.5635, -32.956], [151.5665, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 60, "type": "Index Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.569, -32.912], [151.568, -32.9175], [151.567, -32.923], [151.57, -32.9285], [151.567, -32.934], [151.568, -32.9395], [151.569, -32.945], [151.568, -32.9505], [151.567, -32.956], [151.57, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 70, "type": "Intermediate Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.5725, -32.912], [151.5715, -32.9175], [151.5705, -32.923], [151.5735, -32.9285], [151.5705, -32.934], [151.5715, -32.9395], [151.5725, -32.945], [151.5715, -32.9505], [151.5705, -32.956], [151.5735, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 80, "type": "Index Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.576, -32.912], [151.575, -32.9175], [151.574, -32.923], [151.577, -32.9285], [151.574, -32.934], [151.575, -32.9395], [151.576, -32.945], [151.575, -32.9505], [151.574, -32.956], [151.577, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 90, "type": "Intermediate Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.5795, -32.912], [151.5785, -32.9175], [151.5775, -32.923], [151.5805, -32.9285], [151.5775, -32.934], [151.5785, -32.9395], [151.5795, -32.945], [151.5785, -32.9505], [151.5775, -32.956], [151.5805, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 100, "type": "Index Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.583, -32.912], [151.582, -32.9175], [151.581, -32.923], [151.584, -32.9285], [151.581, -32.934], [151.582, -32.9395], [151.583, -32.945], [151.582, -32.9505], [151.581, -32.956], [151.584, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 110, "type": "Intermediate Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.5865, -32.912], [151.5855, -32.9175], [151.5845, -32.923], [151.5875, -32.9285], [151.5845, -32.934], [151.5855, -32.9395], [151.5865, -32.945], [151.5855, -32.9505], [151.5845, -32.956], [151.5875, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 120, "type": "Index Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.59, -32.912], [151.589, -32.9175], [151.588, -32.923], [151.591, -32.9285], [151.588, -32.934], [151.589, -32.9395], [151.59, -32.945], [151.589, -32.9505], [151.588, -32.956], [151.591, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 130, "type": "Intermediate Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.5935, -32.912], [151.5925, -32.9175], [151.5915, -32.923], [151.5945, -32.9285], [151.5915, -32.934], [151.5925, -32.9395], [151.5935, -32.945], [151.5925, -32.9505], [151.5915, -32.956], [151.5945, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 140, "type": "Index Contour"}, "geometry": {"type": "LineString", "coordinates": [[151.597, -32.912], [151.596, -32.9175], [151.595, -32.923], [151.598, -32.9285], [151.595, -32.934], [151.596, -32.9395], [151.597, -32.945], [151.596, -32.9505], [151.595, -32.956], [151.598, -32.9615]]}}]};
     const GEO_FLOOD = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"hazard": "1% AEP Flood Inundation (Diega Creek)", "buffer_m": 60}, "geometry": {"type": "Polygon", "coordinates": [[[151.564, -32.918], [151.572, -32.919], [151.577, -32.923], [151.571, -32.928], [151.562, -32.926], [151.558, -32.922], [151.564, -32.918]]]}}]};
     const GEO_SLOPE = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"hazard": "Steep Slope (>20%) Ridge Escarpment", "slope_pct": 24.5}, "geometry": {"type": "Polygon", "coordinates": [[[151.584, -32.928], [151.592, -32.929], [151.597, -32.936], [151.594, -32.941], [151.586, -32.936], [151.584, -32.928]]]}}]};
+    const GEO_SUBSIDENCE = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"zone": "Zone G1", "desc": "Intact Bedrock", "color": "#2ecc71"}, "geometry": {"type": "Polygon", "coordinates": [[[151.575, -32.92], [151.595, -32.92], [151.595, -32.935], [151.575, -32.935], [151.575, -32.92]]]}}, {"type": "Feature", "properties": {"zone": "Zone G3", "desc": "Subsidence Advisory G3", "color": "#e74c3c"}, "geometry": {"type": "Polygon", "coordinates": [[[151.595, -32.935], [151.61, -32.935], [151.61, -32.955], [151.595, -32.955], [151.595, -32.935]]]}}]};
     const GEO_RAIL = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"name": "Macquarie Intermodal Rail Terminal (MIRT) 1.8km Loop"}, "geometry": {"type": "LineString", "coordinates": [[151.608, -32.93], [151.604, -32.935], [151.6, -32.938], [151.602, -32.942], [151.607, -32.938], [151.608, -32.93]]}}]};
 
     const LayerEntities = {
       pads: [],
+      buildings: [],
       phes: [],
       biolink: [],
       contours: [],
       flood: [],
       slope: [],
+      subsidence: [],
       rail: []
     };
 
-    // 1. Developable Pads
+    // 1. Developable Pads & 3D Industrial Envelopes
     if (GEO_PADS && GEO_PADS.features) {
       GEO_PADS.features.forEach((f, idx) => {
         const props = f.properties || {};
@@ -754,16 +768,28 @@
           name: padId,
           polygon: {
             hierarchy: parseCoords(f.geometry),
-            material: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.35),
+            material: Cesium.Color.fromCssColorString('#00f0ff').withAlpha(0.35),
             outline: true,
-            outlineColor: Cesium.Color.fromCssColorString('#38bdf8'),
+            outlineColor: Cesium.Color.fromCssColorString('#00f0ff'),
             outlineWidth: 2,
             height: 0,
-            extrudedHeight: 18
+            extrudedHeight: 8
+          }
+        });
+        const bldgEnt = viewer.entities.add({
+          name: padId + " Industrial Facility",
+          polygon: {
+            hierarchy: parseCoords(f.geometry),
+            material: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.6),
+            outline: true,
+            outlineColor: Cesium.Color.WHITE,
+            outlineWidth: 1,
+            height: 8,
+            extrudedHeight: 22
           }
         });
         const lbl = viewer.entities.add({
-          position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 24),
+          position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 28),
           label: {
             text: padId,
             font: '600 12px Outfit, sans-serif',
@@ -774,6 +800,7 @@
           }
         });
         LayerEntities.pads.push(padEnt, lbl);
+        LayerEntities.buildings.push(bldgEnt);
       });
     }
 
@@ -781,9 +808,8 @@
     if (GEO_PHES && GEO_PHES.features) {
       GEO_PHES.features.forEach(f => {
         const props = f.properties || {};
-        const center = getCenterDegree(f.geometry);
         const isPhes = (props.name || "").includes("PHES");
-        const color = isPhes ? '#0284c7' : '#fbbf24';
+        const color = isPhes ? '#0ea5e9' : '#fbbf24';
         const ent = viewer.entities.add({
           name: props.name || "Infrastructure",
           polygon: {
@@ -866,7 +892,23 @@
       });
     }
 
-    // 7. Rail Loop
+    // 7. Subsidence
+    if (GEO_SUBSIDENCE && GEO_SUBSIDENCE.features) {
+      GEO_SUBSIDENCE.features.forEach(f => {
+        const props = f.properties || {};
+        const ent = viewer.entities.add({
+          name: props.zone || "Subsidence Zone",
+          polygon: {
+            hierarchy: parseCoords(f.geometry),
+            material: Cesium.Color.fromCssColorString(props.color || '#f43f5e').withAlpha(0.3),
+            clampToGround: true
+          }
+        });
+        LayerEntities.subsidence.push(ent);
+      });
+    }
+
+    // 8. Rail Loop
     if (GEO_RAIL && GEO_RAIL.features) {
       GEO_RAIL.features.forEach(f => {
         const ent = viewer.entities.add({
@@ -917,45 +959,52 @@
       });
     });
 
-    // Slider handlers
+    // Exact Slider Handlers (Pitch 60°, Bearing 28°, Terrain Exaggeration 1.5x, Opacity)
     function updatePitch(val) {
-      document.getElementById('lbl-pitch').innerText = val + '°';
+      currentPitch = parseFloat(val);
+      document.getElementById('lbl-pitch').innerText = Math.round(val) + '°';
       const cam = viewer.camera;
       const carto = Cesium.Cartographic.fromCartesian(cam.position);
       cam.setView({
         destination: Cesium.Cartesian3.fromRadians(carto.longitude, carto.latitude, carto.height),
         orientation: {
           heading: cam.heading,
-          pitch: Cesium.Math.toRadians(-parseFloat(val)),
+          pitch: Cesium.Math.toRadians(-currentPitch),
           roll: 0.0
         }
       });
     }
 
     function updateBearing(val) {
-      document.getElementById('lbl-bearing').innerText = val + '°';
+      currentBearing = parseFloat(val);
+      document.getElementById('lbl-bearing').innerText = Math.round(val) + '°';
       const cam = viewer.camera;
       const carto = Cesium.Cartographic.fromCartesian(cam.position);
       cam.setView({
         destination: Cesium.Cartesian3.fromRadians(carto.longitude, carto.latitude, carto.height),
         orientation: {
-          heading: Cesium.Math.toRadians(parseFloat(val)),
+          heading: Cesium.Math.toRadians(currentBearing),
           pitch: cam.pitch,
           roll: 0.0
         }
       });
     }
 
+    function updateExaggeration(val) {
+      currentExaggeration = parseFloat(val);
+      document.getElementById('lbl-exagg').innerText = currentExaggeration.toFixed(1) + 'x';
+      build3DDEMMesh(currentGridSize, currentOpacity, currentExaggeration);
+    }
+
     function updateOpacity(val) {
-      document.getElementById('lbl-opacity').innerText = val + '%';
-      const density = parseInt(document.getElementById('select-density').value);
-      build3DDEMMesh(density, parseFloat(val) / 100);
+      currentOpacity = parseFloat(val) / 100;
+      document.getElementById('lbl-opacity').innerText = Math.round(val) + '%';
+      build3DDEMMesh(currentGridSize, currentOpacity, currentExaggeration);
     }
 
     function updateDensity(val) {
-      document.getElementById('lbl-density').innerText = val + 'x' + val;
-      const alpha = parseFloat(document.getElementById('slider-opacity').value) / 100;
-      build3DDEMMesh(parseInt(val), alpha);
+      currentGridSize = parseInt(val);
+      build3DDEMMesh(currentGridSize, currentOpacity, currentExaggeration);
     }
 
     function flyToPreset(key, btnEl) {
@@ -972,13 +1021,16 @@
     }
 
     function resetView() {
-      flyToPreset('mesh_close', document.querySelector('.btn-cam'));
+      updatePitch(60);
+      updateBearing(28);
+      updateExaggeration(1.5);
+      flyToPreset('default_view', document.querySelector('.btn-cam'));
     }
 
-    // Set Initial Close-up Camera View
+    // Set Initial Close-up Camera View matching 60° pitch and 28° bearing
     viewer.camera.setView({
-      destination: cameraPresets.mesh_close.destination,
-      orientation: cameraPresets.mesh_close.orientation
+      destination: cameraPresets.default_view.destination,
+      orientation: cameraPresets.default_view.orientation
     });
   </script>
 </body>

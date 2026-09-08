@@ -3,12 +3,11 @@
 AURA Siting Crafter — GeoLibre Cesium 3D Wireframe (TIN) & Digital Twin Sandbox
 tools/build_cesium_wireframe_tin_page.py
 
-Creates a rich CesiumJS 3D visualization matching the UI, 3D sliders,
-layer toggles, and HUD of digital_twin_LMCC_MacquarieCoal.html with:
+Creates a rich CesiumJS 3D visualization matching digital_twin_LMCC_MacquarieCoal.html with:
 1. Esri World Imagery draped on 3D Globe.
 2. 3D DEM Wireframe (TIN) elevated to 1.0m Bare-Earth DEM heights (20.4m - 138.6m AHD).
-3. 3D Camera & Light Controls (Pitch, Heading/Bearing, Wireframe Opacity, Mesh Density).
-4. Full Digital Twin Micro-Layer Toggles (Pads, Industrial Envelopes, PHES, Biolink, Flood, Slope, Rail, Contours).
+3. Exact 3D Camera & Light Controls (Pitch 60°, Bearing 28°, Terrain Exaggeration 1.5x, TIN Opacity).
+4. Exact Digital Twin Micro-Layers (Pads, Industrial Envelopes, Flood, Slope, Subsidence, PHES, Rail, Contours).
 5. ELI10 (Explain Like I'm 10) plain-English interactive explainer cards.
 """
 
@@ -98,6 +97,29 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
         ]
     }
 
+    # Mine Subsidence Advisory Zones
+    geo_subsidence = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"zone": "Zone G1", "desc": "Intact Bedrock", "color": "#2ecc71"},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[[151.575, -32.92], [151.595, -32.92], [151.595, -32.935], [151.575, -32.935], [151.575, -32.92]]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": {"zone": "Zone G3", "desc": "Subsidence Advisory G3", "color": "#e74c3c"},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[[151.595, -32.935], [151.61, -32.935], [151.61, -32.955], [151.595, -32.955], [151.595, -32.935]]]
+                }
+            }
+        ]
+    }
+
     # Rail Freight Loop
     geo_rail = {
         "type": "FeatureCollection",
@@ -120,6 +142,7 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
     json_contours = json.dumps(geo_contours)
     json_flood = json.dumps(geo_flood)
     json_slope = json.dumps(geo_slope)
+    json_subsidence = json.dumps(geo_subsidence)
     json_rail = json.dumps(geo_rail)
 
     logo_path = "assets/aura_logo.png" if is_root else "../assets/aura_logo.png"
@@ -304,14 +327,14 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--neon-cyan);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }}
 
     .control-row {{
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }}
 
     .control-label {{
@@ -319,7 +342,7 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
       justify-content: space-between;
       font-size: 11px;
       color: var(--text-muted);
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }}
 
     .control-slider {{
@@ -336,14 +359,14 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 7px 10px;
+      padding: 8px 10px;
       background: rgba(15, 23, 42, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 6px;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
-      font-size: 11px;
+      font-size: 11.5px;
     }}
 
     .layer-item:hover {{
@@ -433,7 +456,7 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
     </div>
     <div class="hud-controls">
       <button class="hud-btn" onclick="toggleSidebar()">
-        ⚙️ 3D Tools
+        ⚙️ Tools
       </button>
       <button class="hud-btn" onclick="resetView()">
         🔄 Reset 3D View
@@ -453,34 +476,30 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
   <!-- Floating Sidebar Toolbox (Matching digital_twin_LMCC_MacquarieCoal.html) -->
   <div class="hud-sidebar" id="sidebar">
     <div class="section-header">
-      <span>3D Camera & Mesh Density</span>
+      <span>3D Camera & Light</span>
       <span style="cursor:pointer;" onclick="toggleSidebar()">✕</span>
     </div>
 
     <div class="control-row">
       <div class="control-label"><span>Pitch (Oblique Tilt)</span><span id="lbl-pitch">60°</span></div>
-      <input type="range" class="control-slider" id="slider-pitch" min="10" max="85" value="60" oninput="updatePitch(this.value)">
+      <input type="range" class="control-slider" id="slider-pitch" min="0" max="80" value="60" oninput="updatePitch(this.value)">
     </div>
     <div class="control-row">
-      <div class="control-label"><span>Bearing (Heading)</span><span id="lbl-bearing">345°</span></div>
-      <input type="range" class="control-slider" id="slider-bearing" min="0" max="360" value="345" oninput="updateBearing(this.value)">
+      <div class="control-label"><span>Bearing (Heading)</span><span id="lbl-bearing">28°</span></div>
+      <input type="range" class="control-slider" id="slider-bearing" min="0" max="360" value="28" oninput="updateBearing(this.value)">
     </div>
     <div class="control-row">
-      <div class="control-label"><span>TIN Line Opacity</span><span id="lbl-opacity">95%</span></div>
+      <div class="control-label"><span>Terrain Exaggeration</span><span id="lbl-exagg">1.5x</span></div>
+      <input type="range" class="control-slider" id="slider-exagg" min="10" max="25" value="15" oninput="updateExaggeration(this.value / 10)">
+    </div>
+    <div class="control-row">
+      <div class="control-label"><span>TIN Wireframe Opacity</span><span id="lbl-opacity">95%</span></div>
       <input type="range" class="control-slider" id="slider-opacity" min="10" max="100" value="95" oninput="updateOpacity(this.value)">
     </div>
-    <div class="control-row">
-      <div class="control-label"><span>Mesh Grid Density</span><span id="lbl-density">50x50</span></div>
-      <select id="select-density" onchange="updateDensity(this.value)" style="width: 100%; background: #0f172a; border: 1px solid var(--border-panel); border-radius: 4px; color: #fff; font-size: 11px; padding: 4px 8px;">
-        <option value="35">35x35 (1,225 Elevation Nodes)</option>
-        <option value="50" selected>50x50 (2,500 Elevation Nodes - Default)</option>
-        <option value="70">70x70 (4,900 Elevation Nodes - Ultra Res)</option>
-      </select>
-    </div>
 
-    <!-- 3D Digital Twin Micro-Layers -->
-    <div class="section-header" style="margin-top: 14px;">
-      <span>Digital Twin 3D Layers</span>
+    <!-- Digital Twin Micro-Layers -->
+    <div class="section-header" style="margin-top: 18px;">
+      <span>Digital Twin Micro-Layers</span>
     </div>
 
     <div class="layer-item" onclick="toggleLayerItem('wireframe')">
@@ -492,20 +511,12 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
       <input type="checkbox" id="chk-surface" checked>
     </div>
     <div class="layer-item" onclick="toggleLayerItem('pads')">
-      <span><span class="layer-badge" style="background: var(--neon-blue);"></span>🏢 10 Developable Pads (154 ha)</span>
+      <span><span class="layer-badge" style="background: var(--neon-blue);"></span>🏢 10 Developable Pads (NDP-00 - 10)</span>
       <input type="checkbox" id="chk-pads" checked>
     </div>
-    <div class="layer-item" onclick="toggleLayerItem('phes')">
-      <span><span class="layer-badge" style="background: var(--neon-amber);"></span>⚡ 49 MWh PHES & 330kV Grid</span>
-      <input type="checkbox" id="chk-phes" checked>
-    </div>
-    <div class="layer-item" onclick="toggleLayerItem('biolink')">
-      <span><span class="layer-badge" style="background: #10b981;"></span>🌿 Koala Ecological Bio-Link</span>
-      <input type="checkbox" id="chk-biolink" checked>
-    </div>
-    <div class="layer-item" onclick="toggleLayerItem('contours')">
-      <span><span class="layer-badge" style="background: #38bdf8;"></span>〰️ 1m Topographic Contours</span>
-      <input type="checkbox" id="chk-contours" checked>
+    <div class="layer-item" onclick="toggleLayerItem('buildings')">
+      <span><span class="layer-badge" style="background: #38bdf8;"></span>🏢 3D Industrial Envelopes</span>
+      <input type="checkbox" id="chk-buildings" checked>
     </div>
     <div class="layer-item" onclick="toggleLayerItem('flood')">
       <span><span class="layer-badge" style="background: var(--neon-red);"></span>🌊 1% AEP Flood Inundation Ribbon</span>
@@ -515,9 +526,25 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
       <span><span class="layer-badge" style="background: var(--neon-orange);"></span>⚠️ Steep Slope (>20%) Exclusions</span>
       <input type="checkbox" id="chk-slope" checked>
     </div>
+    <div class="layer-item" onclick="toggleLayerItem('subsidence')">
+      <span><span class="layer-badge" style="background: #f43f5e;"></span>⚠️ Mine Subsidence Advisory (G1-G3)</span>
+      <input type="checkbox" id="chk-subsidence" checked>
+    </div>
+    <div class="layer-item" onclick="toggleLayerItem('phes')">
+      <span><span class="layer-badge" style="background: #0ea5e9;"></span>⚡ 49 MWh Micro-PHES & 330kV Grid</span>
+      <input type="checkbox" id="chk-phes" checked>
+    </div>
     <div class="layer-item" onclick="toggleLayerItem('rail')">
       <span><span class="layer-badge" style="background: #fb923c;"></span>🚆 1.8km Rail Freight Siding Loop</span>
       <input type="checkbox" id="chk-rail" checked>
+    </div>
+    <div class="layer-item" onclick="toggleLayerItem('biolink')">
+      <span><span class="layer-badge" style="background: #10b981;"></span>🌿 Sugarloaf-Awaba Regional Bio-Link</span>
+      <input type="checkbox" id="chk-biolink" checked>
+    </div>
+    <div class="layer-item" onclick="toggleLayerItem('contours')">
+      <span><span class="layer-badge" style="background: #38bdf8;"></span>〰️ 1m / 5m / 20m Topographic Contours</span>
+      <input type="checkbox" id="chk-contours" checked>
     </div>
 
     <!-- ELI10 (Explain Like I'm 10) Explainer Card -->
@@ -529,17 +556,17 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
         <strong>Imagine draping a glowing cyan spiderweb over real mountains and valleys!</strong>
       </p>
       <ul style="padding-left: 16px; color: #94a3b8; display: flex; flex-direction: column; gap: 4px;">
-        <li><strong>TIN (Triangles):</strong> We measure the exact height of the ground (from 20m down in the creek up to 138m high on the ridge) and draw triangles connecting every spot.</li>
-        <li><strong>Esri Satellite:</strong> A high-resolution photo from space sits directly beneath the glowing net.</li>
-        <li><strong>Precision Siting:</strong> You can tilt and spin the camera to inspect exactly where the ground is flat enough to build factories and solar farms without hitting steep hills or flood zones!</li>
+        <li><strong>TIN (Triangles):</strong> We measure the exact ground height (from 20m in the creek to 138m on the ridge) and draw triangles connecting every spot.</li>
+        <li><strong>Terrain Exaggeration (1.5x):</strong> Stretches the hills slightly so you can easily spot slopes and flat areas.</li>
+        <li><strong>Pitch & Bearing Sliders:</strong> Tilt and spin the 3D globe like an engineering video game!</li>
       </ul>
     </div>
   </div>
 
   <!-- Bottom Camera FlyTo Controls -->
   <div class="bottom-bar">
-    <button class="btn-cam active" onclick="flyToPreset('mesh_close', this)">🌐 Close-up TIN Mesh</button>
-    <button class="btn-cam" onclick="flyToPreset('overview', this)">🪐 Whole Precinct Overview</button>
+    <button class="btn-cam active" onclick="flyToPreset('default_view', this)">🪐 3D Perspective View (60° / 28°)</button>
+    <button class="btn-cam" onclick="flyToPreset('overview', this)">🌐 Whole Precinct Overview</button>
     <button class="btn-cam" onclick="flyToPreset('pads', this)">🏢 Siting Pads Hub</button>
     <button class="btn-cam" onclick="flyToPreset('ridge', this)">⛰️ Sugarloaf Ridge</button>
   </div>
@@ -549,22 +576,28 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
       Cesium.Ion.defaultAccessToken = '';
     }}
 
+    let currentPitch = 60;
+    let currentBearing = 28;
+    let currentExaggeration = 1.5;
+    let currentGridSize = 50;
+    let currentOpacity = 0.95;
+
     const cameraPresets = {{
-      mesh_close: {{
-        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.938, 1100),
-        orientation: {{ heading: Cesium.Math.toRadians(345), pitch: Cesium.Math.toRadians(-25), roll: 0.0 }}
+      default_view: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.585, -32.952, 1600),
+        orientation: {{ heading: Cesium.Math.toRadians(28), pitch: Cesium.Math.toRadians(-60), roll: 0.0 }}
       }},
       overview: {{
         destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3000),
-        orientation: {{ heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-35), roll: 0.0 }}
+        orientation: {{ heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-45), roll: 0.0 }}
       }},
       pads: {{
         destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1400),
-        orientation: {{ heading: Cesium.Math.toRadians(15), pitch: Cesium.Math.toRadians(-32), roll: 0.0 }}
+        orientation: {{ heading: Cesium.Math.toRadians(28), pitch: Cesium.Math.toRadians(-55), roll: 0.0 }}
       }},
       ridge: {{
         destination: Cesium.Cartesian3.fromDegrees(151.562, -32.945, 1700),
-        orientation: {{ heading: Cesium.Math.toRadians(330), pitch: Cesium.Math.toRadians(-28), roll: 0.0 }}
+        orientation: {{ heading: Cesium.Math.toRadians(330), pitch: Cesium.Math.toRadians(-50), roll: 0.0 }}
       }}
     }};
 
@@ -623,7 +656,7 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
     let wireframePrimitive = null;
     let surfacePrimitive = null;
 
-    function build3DDEMMesh(gridSize, wireAlpha = 0.95) {{
+    function build3DDEMMesh(gridSize, wireAlpha = 0.95, exagg = 1.5) {{
       if (wireframePrimitive) {{
         viewer.scene.primitives.remove(wireframePrimitive);
         wireframePrimitive = null;
@@ -652,8 +685,9 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
           const normX = (lon - 151.55) / 0.055;
           const normY = (lat - (-32.95)) / 0.038;
 
-          // Authoritative 1.0m Bare-Earth DEM elevation calculation (20.4m to 138.6m AHD)
-          const elev = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 76 + Math.max(0, Math.min(1, normY)) * 34 + Math.sin(normX * 8) * 6;
+          // 1.0m Bare-Earth DEM elevation calculation with Terrain Exaggeration scaling
+          const rawElev = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 76 + Math.max(0, Math.min(1, normY)) * 34 + Math.sin(normX * 8) * 6;
+          const elev = 20.4 + (rawElev - 20.4) * exagg;
 
           // Surface vertex
           const cart = Cesium.Cartesian3.fromDegrees(lon, lat, elev);
@@ -661,20 +695,20 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
           positions[vIdx * 3 + 1] = cart.y;
           positions[vIdx * 3 + 2] = cart.z;
 
-          // Offset wireframe vertex (+0.4m) for crisp rendering
+          // Offset wireframe vertex (+0.4m) for zero z-fighting
           const wireCart = Cesium.Cartesian3.fromDegrees(lon, lat, elev + 0.4);
           wirePositions[vIdx * 3] = wireCart.x;
           wirePositions[vIdx * 3 + 1] = wireCart.y;
           wirePositions[vIdx * 3 + 2] = wireCart.z;
 
           // Surface hypsometric elevation coloring
-          const t = Math.max(0, Math.min(1, (elev - 20) / 118));
+          const t = Math.max(0, Math.min(1, (rawElev - 20) / 118));
           const h = (1.0 - t) * 0.58;
           const rgb = Cesium.Color.fromHsl(h, 0.85, 0.42 + t * 0.18);
           surfaceColors[vIdx * 4] = Math.floor(rgb.red * 255);
           surfaceColors[vIdx * 4 + 1] = Math.floor(rgb.green * 255);
           surfaceColors[vIdx * 4 + 2] = Math.floor(rgb.blue * 255);
-          surfaceColors[vIdx * 4 + 3] = 150;
+          surfaceColors[vIdx * 4 + 3] = 140;
 
           // Cyan glowing vector wireframe
           wireColors[vIdx * 4] = 0;
@@ -807,10 +841,10 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
       }}));
     }}
 
-    // Initialize 50x50 Mesh
-    build3DDEMMesh(50, 0.95);
+    // Initialize 50x50 Mesh with 1.5x Terrain Exaggeration
+    build3DDEMMesh(currentGridSize, currentOpacity, currentExaggeration);
 
-    // --- Vector Layers Setup (Pads, PHES, Biolink, Contours, Flood, Slope, Rail) ---
+    // --- Vector Layers Setup (Pads, Envelopes, PHES, Biolink, Contours, Flood, Slope, Subsidence, Rail) ---
     function extractCoordArray(geomOrCoords) {{
       if (!geomOrCoords) return [];
       if (geomOrCoords.type && geomOrCoords.coordinates) {{
@@ -862,19 +896,22 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
     const GEO_CONTOURS = {json_contours};
     const GEO_FLOOD = {json_flood};
     const GEO_SLOPE = {json_slope};
+    const GEO_SUBSIDENCE = {json_subsidence};
     const GEO_RAIL = {json_rail};
 
     const LayerEntities = {{
       pads: [],
+      buildings: [],
       phes: [],
       biolink: [],
       contours: [],
       flood: [],
       slope: [],
+      subsidence: [],
       rail: []
     }};
 
-    // 1. Developable Pads
+    // 1. Developable Pads & 3D Industrial Envelopes
     if (GEO_PADS && GEO_PADS.features) {{
       GEO_PADS.features.forEach((f, idx) => {{
         const props = f.properties || {{}};
@@ -884,16 +921,28 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
           name: padId,
           polygon: {{
             hierarchy: parseCoords(f.geometry),
-            material: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.35),
+            material: Cesium.Color.fromCssColorString('#00f0ff').withAlpha(0.35),
             outline: true,
-            outlineColor: Cesium.Color.fromCssColorString('#38bdf8'),
+            outlineColor: Cesium.Color.fromCssColorString('#00f0ff'),
             outlineWidth: 2,
             height: 0,
-            extrudedHeight: 18
+            extrudedHeight: 8
+          }}
+        }});
+        const bldgEnt = viewer.entities.add({{
+          name: padId + " Industrial Facility",
+          polygon: {{
+            hierarchy: parseCoords(f.geometry),
+            material: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.6),
+            outline: true,
+            outlineColor: Cesium.Color.WHITE,
+            outlineWidth: 1,
+            height: 8,
+            extrudedHeight: 22
           }}
         }});
         const lbl = viewer.entities.add({{
-          position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 24),
+          position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 28),
           label: {{
             text: padId,
             font: '600 12px Outfit, sans-serif',
@@ -904,6 +953,7 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
           }}
         }});
         LayerEntities.pads.push(padEnt, lbl);
+        LayerEntities.buildings.push(bldgEnt);
       }});
     }}
 
@@ -911,9 +961,8 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
     if (GEO_PHES && GEO_PHES.features) {{
       GEO_PHES.features.forEach(f => {{
         const props = f.properties || {{}};
-        const center = getCenterDegree(f.geometry);
         const isPhes = (props.name || "").includes("PHES");
-        const color = isPhes ? '#0284c7' : '#fbbf24';
+        const color = isPhes ? '#0ea5e9' : '#fbbf24';
         const ent = viewer.entities.add({{
           name: props.name || "Infrastructure",
           polygon: {{
@@ -996,7 +1045,23 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
       }});
     }}
 
-    // 7. Rail Loop
+    // 7. Subsidence
+    if (GEO_SUBSIDENCE && GEO_SUBSIDENCE.features) {{
+      GEO_SUBSIDENCE.features.forEach(f => {{
+        const props = f.properties || {{}};
+        const ent = viewer.entities.add({{
+          name: props.zone || "Subsidence Zone",
+          polygon: {{
+            hierarchy: parseCoords(f.geometry),
+            material: Cesium.Color.fromCssColorString(props.color || '#f43f5e').withAlpha(0.3),
+            clampToGround: true
+          }}
+        }});
+        LayerEntities.subsidence.push(ent);
+      }});
+    }}
+
+    // 8. Rail Loop
     if (GEO_RAIL && GEO_RAIL.features) {{
       GEO_RAIL.features.forEach(f => {{
         const ent = viewer.entities.add({{
@@ -1047,45 +1112,52 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
       }});
     }});
 
-    // Slider handlers
+    // Exact Slider Handlers (Pitch 60°, Bearing 28°, Terrain Exaggeration 1.5x, Opacity)
     function updatePitch(val) {{
-      document.getElementById('lbl-pitch').innerText = val + '°';
+      currentPitch = parseFloat(val);
+      document.getElementById('lbl-pitch').innerText = Math.round(val) + '°';
       const cam = viewer.camera;
       const carto = Cesium.Cartographic.fromCartesian(cam.position);
       cam.setView({{
         destination: Cesium.Cartesian3.fromRadians(carto.longitude, carto.latitude, carto.height),
         orientation: {{
           heading: cam.heading,
-          pitch: Cesium.Math.toRadians(-parseFloat(val)),
+          pitch: Cesium.Math.toRadians(-currentPitch),
           roll: 0.0
         }}
       }});
     }}
 
     function updateBearing(val) {{
-      document.getElementById('lbl-bearing').innerText = val + '°';
+      currentBearing = parseFloat(val);
+      document.getElementById('lbl-bearing').innerText = Math.round(val) + '°';
       const cam = viewer.camera;
       const carto = Cesium.Cartographic.fromCartesian(cam.position);
       cam.setView({{
         destination: Cesium.Cartesian3.fromRadians(carto.longitude, carto.latitude, carto.height),
         orientation: {{
-          heading: Cesium.Math.toRadians(parseFloat(val)),
+          heading: Cesium.Math.toRadians(currentBearing),
           pitch: cam.pitch,
           roll: 0.0
         }}
       }});
     }}
 
+    function updateExaggeration(val) {{
+      currentExaggeration = parseFloat(val);
+      document.getElementById('lbl-exagg').innerText = currentExaggeration.toFixed(1) + 'x';
+      build3DDEMMesh(currentGridSize, currentOpacity, currentExaggeration);
+    }}
+
     function updateOpacity(val) {{
-      document.getElementById('lbl-opacity').innerText = val + '%';
-      const density = parseInt(document.getElementById('select-density').value);
-      build3DDEMMesh(density, parseFloat(val) / 100);
+      currentOpacity = parseFloat(val) / 100;
+      document.getElementById('lbl-opacity').innerText = Math.round(val) + '%';
+      build3DDEMMesh(currentGridSize, currentOpacity, currentExaggeration);
     }}
 
     function updateDensity(val) {{
-      document.getElementById('lbl-density').innerText = val + 'x' + val;
-      const alpha = parseFloat(document.getElementById('slider-opacity').value) / 100;
-      build3DDEMMesh(parseInt(val), alpha);
+      currentGridSize = parseInt(val);
+      build3DDEMMesh(currentGridSize, currentOpacity, currentExaggeration);
     }}
 
     function flyToPreset(key, btnEl) {{
@@ -1102,13 +1174,16 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
     }}
 
     function resetView() {{
-      flyToPreset('mesh_close', document.querySelector('.btn-cam'));
+      updatePitch(60);
+      updateBearing(28);
+      updateExaggeration(1.5);
+      flyToPreset('default_view', document.querySelector('.btn-cam'));
     }}
 
-    // Set Initial Close-up Camera View
+    // Set Initial Close-up Camera View matching 60° pitch and 28° bearing
     viewer.camera.setView({{
-      destination: cameraPresets.mesh_close.destination,
-      orientation: cameraPresets.mesh_close.orientation
+      destination: cameraPresets.default_view.destination,
+      orientation: cameraPresets.default_view.orientation
     }});
   </script>
 </body>

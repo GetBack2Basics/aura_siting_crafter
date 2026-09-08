@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-AURA Siting Crafter — 3D Forensic Digital Twin GIS Exporter & Interactive Print Layout
+AURA Siting Crafter — 3D Forensic Digital Twin GIS Exporter (CesiumJS Edition)
 tools/build_geolibre_digital_twin.py
 
 Packages authoritative spatial siting layers (developable pads, flood corridors,
 slope constraints, mine subsidence zones, 330kV grid infrastructure, PHES, and rail loop)
-into an interactive 3D WebGIS digital twin and GeoLibre project matching the forensic
-cartographic presentation in docs/archive/aura_siting_evolution_assets/05_forensic_digital_twin_pads.jpg.
+along with live Lake Macquarie City Council IoT environmental/weather sensor feeds
+into an interactive CesiumJS 3D WebGIS digital twin.
 """
 
 import os
@@ -31,9 +31,9 @@ def load_json(filepath: str) -> Dict[str, Any]:
 
 def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
     """
-    Generates a standalone, high-precision 3D Digital Twin WebGIS application
-    with 3D terrain, glowing neon symbology, leader-line HUD callouts,
-    interactive editing sliders, and 1-click 300 DPI print/export.
+    Generates a standalone, high-precision CesiumJS 3D Digital Twin WebGIS application
+    with 3D terrain, 3D extruded pads, neon glow symbology, customizable label controls,
+    real-time Lake Macquarie IoT weather/environmental sensor streaming, and 1-click print export.
     """
     project_id = manifest.get("project_id", "LMCC_MacquarieCoal")
     project_name = manifest.get("project_name", "Macquarie Coal Complex Transformation Precinct")
@@ -148,1194 +148,1318 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
         "features": [
             {
                 "type": "Feature",
-                "properties": {"pad_id": "NDP-01", "height_m": 14, "base_m": 0, "color": "#00f0ff"},
-                "geometry": {"type": "Polygon", "coordinates": [[[151.581, -32.926], [151.587, -32.926], [151.587, -32.931], [151.581, -32.931], [151.581, -32.926]]]}
+                "properties": {
+                    "name": "Hyperscale AI Hall A1 (Pad 1)",
+                    "pad_id": "Pad 1",
+                    "height_m": 18,
+                    "base_m": 0,
+                    "color": "#38bdf8",
+                    "power_mw": 80,
+                    "racks": 2400
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [151.5705, -32.9305],
+                            [151.5745, -32.9310],
+                            [151.5740, -32.9340],
+                            [151.5700, -32.9335],
+                            [151.5705, -32.9305]
+                        ]
+                    ]
+                }
             },
             {
                 "type": "Feature",
-                "properties": {"pad_id": "NDP-02", "height_m": 18, "base_m": 0, "color": "#00f0ff"},
-                "geometry": {"type": "Polygon", "coordinates": [[[151.590, -32.926], [151.594, -32.926], [151.594, -32.930], [151.590, -32.930], [151.590, -32.926]]]}
+                "properties": {
+                    "name": "Hyperscale AI Hall B1 (Pad 2)",
+                    "pad_id": "Pad 2",
+                    "height_m": 18,
+                    "base_m": 0,
+                    "color": "#38bdf8",
+                    "power_mw": 60,
+                    "racks": 1800
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [151.5760, -32.9315],
+                            [151.5795, -32.9320],
+                            [151.5790, -32.9348],
+                            [151.5755, -32.9343],
+                            [151.5760, -32.9315]
+                        ]
+                    ]
+                }
             },
             {
                 "type": "Feature",
-                "properties": {"pad_id": "NDP-03", "height_m": 12, "base_m": 0, "color": "#00f0ff"},
-                "geometry": {"type": "Polygon", "coordinates": [[[151.581, -32.934], [151.586, -32.934], [151.586, -32.938], [151.581, -32.938], [151.581, -32.934]]]}
+                "properties": {
+                    "name": "AI Inference Data Center C1 (Pad 3)",
+                    "pad_id": "Pad 3",
+                    "height_m": 15,
+                    "base_m": 0,
+                    "color": "#34d399",
+                    "power_mw": 45,
+                    "racks": 1200
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [151.5660, -32.9340],
+                            [151.5695, -32.9345],
+                            [151.5690, -32.9375],
+                            [151.5655, -32.9370],
+                            [151.5660, -32.9340]
+                        ]
+                    ]
+                }
             },
             {
                 "type": "Feature",
-                "properties": {"pad_id": "NDP-05", "height_m": 15, "base_m": 0, "color": "#00f0ff"},
-                "geometry": {"type": "Polygon", "coordinates": [[[151.566, -32.931], [151.574, -32.931], [151.574, -32.937], [151.566, -32.937], [151.566, -32.931]]]}
+                "properties": {
+                    "name": "Clean Energy Microgrid & BESS Hall (Pad 4)",
+                    "pad_id": "Pad 4",
+                    "height_m": 12,
+                    "base_m": 0,
+                    "color": "#f59e0b",
+                    "power_mw": 100,
+                    "bess_mwh": 400
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [151.5710, -32.9360],
+                            [151.5750, -32.9365],
+                            [151.5745, -32.9395],
+                            [151.5705, -32.9390],
+                            [151.5710, -32.9360]
+                        ]
+                    ]
+                }
             },
             {
                 "type": "Feature",
-                "properties": {"pad_id": "NDP-06", "height_m": 12, "base_m": 0, "color": "#00f0ff"},
-                "geometry": {"type": "Polygon", "coordinates": [[[151.566, -32.940], [151.574, -32.940], [151.574, -32.945], [151.566, -32.945], [151.566, -32.940]]]}
-            },
-            {
-                "type": "Feature",
-                "properties": {"pad_id": "NDP-07", "height_m": 10, "base_m": 0, "color": "#00f0ff"},
-                "geometry": {"type": "Polygon", "coordinates": [[[151.566, -32.948], [151.572, -32.948], [151.572, -32.952], [151.566, -32.952], [151.566, -32.948]]]}
-            },
-            {
-                "type": "Feature",
-                "properties": {"pad_id": "NDP-08", "height_m": 16, "base_m": 0, "color": "#00f0ff"},
-                "geometry": {"type": "Polygon", "coordinates": [[[151.598, -32.933], [151.605, -32.933], [151.605, -32.939], [151.598, -32.939], [151.598, -32.933]]]}
-            },
-            {
-                "type": "Feature",
-                "properties": {"pad_id": "NDP-10", "height_m": 12, "base_m": 0, "color": "#00f0ff"},
-                "geometry": {"type": "Polygon", "coordinates": [[[151.601, -32.944], [151.607, -32.944], [151.607, -32.949], [151.601, -32.949], [151.601, -32.944]]]}
+                "properties": {
+                    "name": "330kV Transgrid GIS Substation Building",
+                    "pad_id": "Substation",
+                    "height_m": 14,
+                    "base_m": 0,
+                    "color": "#fbbf24",
+                    "voltage_kv": 330,
+                    "capacity_mva": 1200
+                },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [151.5830, -32.9240],
+                            [151.5870, -32.9245],
+                            [151.5865, -32.9275],
+                            [151.5825, -32.9270],
+                            [151.5830, -32.9240]
+                        ]
+                    ]
+                }
             }
         ]
     }
 
-    # Authoritative HUD Leader-Line Callout Annotations matching 05_forensic_digital_twin_pads.jpg
-    hud_callouts = [
-        {
-            "id": "c_ndp03",
-            "coords": [151.584, -32.935],
-            "title": "NDP-03",
-            "theme": "cyan",
-            "body": "AREA: 12.4 ha<br>STATUS: STAGE 1<br>SLOPE: 6%",
-            "dx": -60,
-            "dy": -70
-        },
-        {
-            "id": "c_substation",
-            "coords": [151.591, -32.922],
-            "title": "330kV SUBSTATION CONNECTION",
-            "theme": "cyan",
-            "body": "• 330kV Switchyard<br>• Main Transformer T1<br>• GIS Connection Point",
-            "dx": 40,
-            "dy": -80
-        },
-        {
-            "id": "c_upper_res",
-            "coords": [151.562, -32.937],
-            "title": "UPPER RESERVOIR (PUMPED-HYDRO)",
-            "theme": "blue",
-            "body": "Capacity: 500 ML<br>Elev: +145m AHD",
-            "dx": 80,
-            "dy": -60
-        },
-        {
-            "id": "c_penstock",
-            "coords": [151.565, -32.9395],
-            "title": "PENSTOCK (DN 3200)",
-            "theme": "blue",
-            "body": "120m Hydraulic Head<br>Dual Welded Steel Line",
-            "dx": 90,
-            "dy": -20
-        },
-        {
-            "id": "c_powerhouse",
-            "coords": [151.568, -32.942],
-            "title": "POWER STATION (50MW)",
-            "theme": "blue",
-            "body": "Reversible Francis Turbines<br>Synchronous Condenser",
-            "dx": 90,
-            "dy": 15
-        },
-        {
-            "id": "c_lower_res",
-            "coords": [151.570, -32.944],
-            "title": "LOWER RESERVOIR (4.0 GL)",
-            "theme": "blue",
-            "body": "Void Inundation Sump<br>Recycled Water Loop",
-            "dx": 80,
-            "dy": 50
-        },
-        {
-            "id": "c_flood",
-            "coords": [151.567, -32.921],
-            "title": "1% ANNUAL EXCEEDANCE PROBABILITY FLOOD ZONE",
-            "theme": "red",
-            "body": "ARR 2019 / Diega Creek Riparian Corridor",
-            "dx": -100,
-            "dy": -40
-        },
-        {
-            "id": "c_steep_slope",
-            "coords": [151.590, -32.934],
-            "title": "STEEP SLOPE (>20%) AREA",
-            "theme": "red",
-            "body": "ELVIS LiDAR Sub-Grade Filter",
-            "dx": 50,
-            "dy": -30
-        },
-        {
-            "id": "c_mine_subsidence",
-            "coords": [151.602, -32.946],
-            "title": "MINE SUBSIDENCE EXCLUSION ZONE",
-            "theme": "red",
-            "body": "⚠️ Subsidence Advisory G3 Zone<br>High Residual Strain Area",
-            "dx": 0,
-            "dy": 70
-        },
-        {
-            "id": "c_rail_loop",
-            "coords": [151.605, -32.934],
-            "title": "ACTIVE HEAVY RAIL LOOP SIDING",
-            "theme": "orange",
-            "body": "1.8km Siding | 2.5M t/yr Capacity<br>Main Northern Railway Link",
-            "dx": -120,
-            "dy": -50
-        },
-        {
-            "id": "c_unit_train",
-            "coords": [151.603, -32.938],
-            "title": "UNIT TRAIN: NDP-05 STATION",
-            "theme": "orange",
-            "body": "Direct Intermodal Rail Freight",
-            "dx": -110,
-            "dy": 40
-        }
-    ]
+    build_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
-    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    # Serialize layers to JSON
+    json_boundary = json.dumps(geo_boundary)
+    json_pads = json.dumps(geo_pads)
+    json_phes = json.dumps(geo_phes)
+    json_railroad = json.dumps(geo_railroad)
+    json_subsidence = json.dumps(geo_subsidence)
+    json_biolink = json.dumps(geo_biolink)
+    json_acoustic = json.dumps(geo_acoustic)
+    json_flood = json.dumps(geo_flood)
+    json_slope = json.dumps(geo_slope)
+    json_buildings = json.dumps(geo_buildings)
+    json_manifest = json.dumps(manifest)
 
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{project_name} | 3D Forensic Digital Twin & Siting Analysis</title>
-    <link rel="icon" type="image/png" href="../assets/aura_logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🕶️ 3D Forensic Digital Twin | {project_name}</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- CesiumJS 3D Geospatial Engine -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.115.0/Build/Cesium/Widgets/widgets.css">
+  <script src="https://cdn.jsdelivr.net/npm/cesium@1.115.0/Build/Cesium/Cesium.js"></script>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {{
+      --bg-dark: #070b14;
+      --bg-panel: rgba(13, 19, 33, 0.92);
+      --border-cyan: rgba(56, 189, 248, 0.4);
+      --border-subtle: rgba(255, 255, 255, 0.12);
+      --text-main: #f8fafc;
+      --text-dim: #94a3b8;
+      --cyan-glow: #38bdf8;
+      --green-glow: #34d399;
+      --amber-glow: #fbbf24;
+      --purple-glow: #c084fc;
+      --danger-red: #f87171;
+    }}
 
-    <!-- MapLibre GL JS & CSS -->
-    <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
-    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    html, body {{
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+    }}
 
-    <style>
-        :root {{
-            --bg-space: #070b14;
-            --bg-panel: rgba(10, 16, 30, 0.92);
-            --border-panel: rgba(56, 189, 248, 0.25);
-            --border-glow: rgba(0, 240, 255, 0.4);
-            --neon-cyan: #00f0ff;
-            --neon-blue: #38bdf8;
-            --neon-red: #ff3366;
-            --neon-orange: #f97316;
-            --neon-amber: #eab308;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-        }}
+    #cesiumContainer {{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }}
 
-        * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    /* Top Floating Navigation Bar */
+    .top-nav {{
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }}
 
-        html, body {{
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background-color: var(--bg-space);
-            font-family: var(--font-sans);
-            color: var(--text-main);
-        }}
+    .nav-left, .nav-right {{
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      pointer-events: auto;
+    }}
 
-        #map {{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #030712;
-        }}
+    .badge-hud {{
+      background: var(--bg-panel);
+      border: 1px solid var(--border-cyan);
+      backdrop-filter: blur(12px);
+      padding: 8px 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(56, 189, 248, 0.2);
+    }}
 
-        /* HUD Top Bar */
-        .hud-topbar {{
-            position: absolute;
-            top: 16px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 30;
-            pointer-events: none;
-        }}
+    .logo-img {{
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--border-cyan);
+    }}
 
-        .hud-brand {{
-            pointer-events: auto;
-            background: var(--bg-panel);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-panel);
-            border-radius: 10px;
-            padding: 10px 18px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-        }}
+    .title-text {{
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }}
 
-        .hud-brand img {{
-            width: 28px;
-            height: 28px;
-            filter: drop-shadow(0 0 8px var(--neon-cyan));
-        }}
+    .title-sub {{
+      font-size: 11px;
+      color: var(--cyan-glow);
+      font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
+    }}
 
-        .hud-title {{
-            font-size: 15px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            color: #ffffff;
-        }}
+    .btn-hud {{
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+      text-decoration: none;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }}
 
-        .hud-sub {{
-            font-size: 11px;
-            color: var(--neon-blue);
-            font-family: var(--font-mono);
-        }}
+    .btn-hud:hover {{
+      border-color: var(--cyan-glow);
+      color: var(--cyan-glow);
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    }}
 
-        .hud-controls {{
-            pointer-events: auto;
-            display: flex;
-            gap: 10px;
-        }}
+    .btn-hud-primary {{
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.9) 0%, rgba(3, 105, 161, 0.9) 100%);
+      border-color: var(--cyan-glow);
+      color: #ffffff;
+    }}
 
-        .hud-btn {{
-            background: var(--bg-panel);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-panel);
-            color: var(--text-main);
-            padding: 9px 16px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            font-family: var(--font-sans);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            text-decoration: none;
-        }}
+    .btn-hud-primary:hover {{
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+    }}
 
-        .hud-btn:hover {{
-            background: rgba(56, 189, 248, 0.2);
-            border-color: var(--neon-cyan);
-            color: #ffffff;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
-        }}
+    /* Left Dock: Forensic Layer Controller & Label Minimizer */
+    .left-dock {{
+      position: absolute;
+      top: 76px;
+      left: 14px;
+      width: 320px;
+      max-height: calc(100vh - 96px);
+      background: var(--bg-panel);
+      border: 1px solid var(--border-cyan);
+      backdrop-filter: blur(16px);
+      border-radius: 10px;
+      z-index: 90;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+      overflow-y: auto;
+    }}
 
-        .hud-btn-primary {{
-            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-            border-color: var(--neon-cyan);
-            color: #ffffff;
-        }}
+    .dock-header {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+    }}
 
-        .hud-btn-primary:hover {{
-            background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
-        }}
+    .dock-title {{
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cyan-glow);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }}
 
-        /* Floating Sidebar Toolbox */
-        .hud-sidebar {{
-            position: absolute;
-            top: 80px;
-            left: 20px;
-            width: 320px;
-            max-height: calc(100vh - 100px);
-            background: var(--bg-panel);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-panel);
-            border-radius: 12px;
-            padding: 16px;
-            z-index: 30;
-            overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-            transition: transform 0.3s ease;
-        }}
+    .layer-group {{
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }}
 
-        .hud-sidebar.collapsed {{
-            transform: translateX(-360px);
-        }}
+    .layer-item {{
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }}
 
-        .section-header {{
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--neon-cyan);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }}
+    .layer-item:hover {{
+      border-color: rgba(56, 189, 248, 0.3);
+    }}
 
-        .control-row {{
-            margin-bottom: 14px;
-        }}
+    .layer-row {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }}
 
-        .control-label {{
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }}
+    .layer-label-toggle {{
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #cbd5e1;
+    }}
 
-        .control-slider {{
-            width: 100%;
-            height: 5px;
-            border-radius: 3px;
-            background: #1e293b;
-            outline: none;
-            accent-color: var(--neon-cyan);
-            cursor: pointer;
-        }}
+    .layer-color-dot {{
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px currentColor;
+    }}
 
-        .layer-item {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 10px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 6px;
-            margin-bottom: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 11.5px;
-        }}
+    .label-ctrl-btn {{
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-subtle);
+      color: #94a3b8;
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }}
 
-        .layer-item:hover {{
-            background: rgba(56, 189, 248, 0.12);
-            border-color: var(--border-panel);
-        }}
+    .label-ctrl-btn:hover {{
+      color: var(--cyan-glow);
+      border-color: var(--cyan-glow);
+    }}
 
-        .layer-badge {{
-            width: 10px;
-            height: 10px;
-            border-radius: 3px;
-            display: inline-block;
-            margin-right: 8px;
-        }}
+    .label-ctrl-btn.active {{
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--cyan-glow);
+      border-color: var(--cyan-glow);
+    }}
 
-        /* HUD SVG Leader-Lines Layer */
-        #hud-svg-canvas {{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 20;
-        }}
+    /* Global Label Master Action Card */
+    .master-label-box {{
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border: 1px solid var(--cyan-glow);
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }}
 
-        /* Leader-Line Cards */
-        .hud-card {{
-            position: absolute;
-            background: rgba(7, 11, 20, 0.92);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-panel);
-            border-radius: 6px;
-            padding: 8px 12px;
-            font-size: 11px;
-            line-height: 1.4;
-            pointer-events: auto;
-            z-index: 25;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
-            transition: transform 0.1s ease, border-color 0.2s ease;
-            max-width: 220px;
-            transform: translate(-50%, -50%);
-        }}
+    /* Right Dock: Real-Time IoT Microclimate & Inspection */
+    .right-dock {{
+      position: absolute;
+      top: 76px;
+      right: 14px;
+      width: 330px;
+      max-height: calc(100vh - 96px);
+      background: var(--bg-panel);
+      border: 1px solid var(--border-cyan);
+      backdrop-filter: blur(16px);
+      border-radius: 10px;
+      z-index: 90;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+      overflow-y: auto;
+    }}
 
-        .hud-card:hover {{
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
-        }}
+    .iot-card {{
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }}
 
-        .hud-card-title {{
-            font-weight: 800;
-            font-size: 11.5px;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }}
+    .iot-header {{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green-glow);
+    }}
 
-        .hud-card-body {{
-            font-size: 10.5px;
-            color: var(--text-muted);
-            font-family: var(--font-mono);
-        }}
+    .iot-pulse {{
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 1.5s infinite;
+    }}
 
-        .theme-cyan {{ border-left: 3px solid var(--neon-cyan); }}
-        .theme-cyan .hud-card-title {{ color: var(--neon-cyan); }}
+    @keyframes pulse {{
+      0% {{ transform: scale(0.9); opacity: 0.7; }}
+      50% {{ transform: scale(1.3); opacity: 1; }}
+      100% {{ transform: scale(0.9); opacity: 0.7; }}
+    }}
 
-        .theme-red {{ border-left: 3px solid var(--neon-red); }}
-        .theme-red .hud-card-title {{ color: var(--neon-red); }}
+    .telemetry-grid {{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }}
 
-        .theme-blue {{ border-left: 3px solid var(--neon-blue); }}
-        .theme-blue .hud-card-title {{ color: var(--neon-blue); }}
+    .metric-cell {{
+      background: rgba(30, 41, 59, 0.6);
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }}
 
-        .theme-orange {{ border-left: 3px solid var(--neon-orange); }}
-        .theme-orange .hud-card-title {{ color: var(--neon-orange); }}
+    .metric-val {{
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+    }}
 
-        /* Cartographic Furniture */
-        .hud-compass {{
-            position: absolute;
-            bottom: 24px;
-            left: 24px;
-            width: 56px;
-            height: 56px;
-            background: var(--bg-panel);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-panel);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 30;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-            pointer-events: auto;
-            cursor: pointer;
-        }}
+    .metric-lbl {{
+      font-size: 10px;
+      color: #94a3b8;
+    }}
 
-        .compass-arrow {{
-            width: 32px;
-            height: 32px;
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }}
+    /* Bottom Camera Flight Bar */
+    .bottom-bar {{
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-cyan);
+      backdrop-filter: blur(14px);
+      padding: 6px 14px;
+      border-radius: 30px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.8);
+    }}
 
-        .hud-scalebar {{
-            position: absolute;
-            bottom: 24px;
-            left: 96px;
-            background: var(--bg-panel);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--border-panel);
-            border-radius: 6px;
-            padding: 6px 14px;
-            z-index: 30;
-            font-size: 10px;
-            font-family: var(--font-mono);
-            color: var(--text-main);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-        }}
+    .btn-camera {{
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border-subtle);
+      color: #e2e8f0;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }}
 
-        .scalebar-ruler {{
-            width: 100px;
-            height: 3px;
-            background: #ffffff;
-            margin-top: 4px;
-            border: 1px solid #000;
-        }}
+    .btn-camera:hover, .btn-camera.active {{
+      background: var(--cyan-glow);
+      color: #0f172a;
+      border-color: var(--cyan-glow);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }}
 
-        /* Print Layout Mode */
-        @media print {{
-            body, html {{
-                background: #ffffff !important;
-                color: #000000 !important;
-            }}
-            .hud-sidebar, .hud-controls, .hud-compass {{
-                display: none !important;
-            }}
-            .hud-brand {{
-                background: rgba(255, 255, 255, 0.9) !important;
-                color: #000000 !important;
-                border: 1px solid #000000 !important;
-            }}
-            .hud-title {{ color: #000000 !important; }}
-            .hud-card {{
-                background: rgba(255, 255, 255, 0.95) !important;
-                color: #000000 !important;
-                border: 1px solid #333333 !important;
-            }}
-        }}
-    </style>
+    /* Print / Clean Mode */
+    @media print {{
+      .top-nav, .left-dock, .right-dock, .bottom-bar {{
+        display: none !important;
+      }}
+      #cesiumContainer {{
+        position: relative !important;
+        width: 100vw !important;
+        height: 100vh !important;
+      }}
+    }}
+  </style>
 </head>
 <body>
 
-    <!-- Top Navigation HUD -->
-    <div class="hud-topbar">
-        <div class="hud-brand">
-            <img src="../assets/aura_logo.png" alt="AURA Logo">
-            <div>
-                <div class="hud-title">{project_name}</div>
-                <div class="hud-sub">3D FORENSIC DIGITAL TWIN & SITING ANALYSIS &bull; GDA2020</div>
-            </div>
+  <div id="cesiumContainer"></div>
+
+  <!-- Top Floating HUD -->
+  <div class="top-nav">
+    <div class="nav-left">
+      <div class="badge-hud">
+        <img src="../assets/aura_logo.png" alt="AURA" class="logo-img" onerror="this.style.display='none'">
+        <div>
+          <div class="title-text">AURA 3D Digital Twin | LMCC Macquarie Coal</div>
+          <div class="title-sub">CesiumJS 3D Forensic Engine &bull; GDA2020 Real-Time</div>
         </div>
-        <div class="hud-controls">
-            <button class="hud-btn" onclick="toggleSidebar()">
-                ⚙️ Tools
-            </button>
-            <button class="hud-btn" onclick="resetView()">
-                🔄 Reset 3D View
-            </button>
-            <button class="hud-btn hud-btn-primary" onclick="exportHighResPng()">
-                📸 Export 300 DPI PNG
-            </button>
-            <a href="report_{project_id}.html" target="_blank" class="hud-btn">
-                📑 Statutory Report ↗
-            </a>
-            <a href="../index.html" class="hud-btn">
-                📑 National Report
-            </a>
-            <a href="../map.html" class="hud-btn">
-                🌐 National Map
-            </a>
-        </div>
+      </div>
     </div>
 
-    <!-- Floating Sidebar Toolbox -->
-    <div class="hud-sidebar" id="sidebar">
-        <div class="section-header">
-            <span>3D Camera & Light</span>
-            <span style="cursor:pointer;" onclick="toggleSidebar()">✕</span>
-        </div>
-        <div class="control-row">
-            <div class="control-label"><span>Pitch (Oblique Tilt)</span><span id="lbl-pitch">60°</span></div>
-            <input type="range" class="control-slider" id="slider-pitch" min="0" max="80" value="60" oninput="updatePitch(this.value)">
-        </div>
-        <div class="control-row">
-            <div class="control-label"><span>Bearing (Heading)</span><span id="lbl-bearing">28°</span></div>
-            <input type="range" class="control-slider" id="slider-bearing" min="0" max="360" value="28" oninput="updateBearing(this.value)">
-        </div>
-        <div class="control-row">
-            <div class="control-label"><span>Terrain Exaggeration</span><span id="lbl-exagg">1.5x</span></div>
-            <input type="range" class="control-slider" id="slider-exagg" min="10" max="25" value="15" oninput="updateExaggeration(this.value / 10)">
-        </div>
+    <div class="nav-right">
+      <a href="index_LMCC_MacquarieCoal.html" class="btn-hud">🌐 2D WebGIS</a>
+      <a href="report_LMCC_MacquarieCoal.html" class="btn-hud">📑 Site Report</a>
+      <a href="../index.html" class="btn-hud">🇦🇺 National Report</a>
+      <button class="btn-hud btn-hud-primary" onclick="window.print()">🖨️ 300 DPI Export</button>
+    </div>
+  </div>
 
-        <div class="section-header" style="margin-top: 18px;">
-            <span>Digital Twin Micro-Layers</span>
-        </div>
-        <div class="layer-item" onclick="toggleLayerGroup('pads')">
-            <span><span class="layer-badge" style="background: var(--neon-cyan);"></span>10 Developable Pads (NDP-00 - 10)</span>
-            <input type="checkbox" id="chk-pads" checked>
-        </div>
-        <div class="layer-item" onclick="toggleLayerGroup('buildings')">
-            <span><span class="layer-badge" style="background: #38bdf8;"></span>3D Industrial Envelopes</span>
-            <input type="checkbox" id="chk-buildings" checked>
-        </div>
-        <div class="layer-item" onclick="toggleLayerGroup('flood')">
-            <span><span class="layer-badge" style="background: var(--neon-red);"></span>1% AEP Flood Inundation Ribbon</span>
-            <input type="checkbox" id="chk-flood" checked>
-        </div>
-        <div class="layer-item" onclick="toggleLayerGroup('slope')">
-            <span><span class="layer-badge" style="background: var(--neon-red);"></span>Steep Slope (>20%) Exclusions</span>
-            <input type="checkbox" id="chk-slope" checked>
-        </div>
-        <div class="layer-item" onclick="toggleLayerGroup('subsidence')">
-            <span><span class="layer-badge" style="background: #f43f5e;"></span>Mine Subsidence Advisory (G1-G3)</span>
-            <input type="checkbox" id="chk-subsidence" checked>
-        </div>
-        <div class="layer-item" onclick="toggleLayerGroup('phes')">
-            <span><span class="layer-badge" style="background: #0ea5e9;"></span>49 MWh Micro-PHES & 330kV Grid</span>
-            <input type="checkbox" id="chk-phes" checked>
-        </div>
-        <div class="layer-item" onclick="toggleLayerGroup('rail')">
-            <span><span class="layer-badge" style="background: var(--neon-orange);"></span>1.8km Rail Freight Siding Loop</span>
-            <input type="checkbox" id="chk-rail" checked>
-        </div>
-        <div class="layer-item" onclick="toggleLayerGroup('callouts')">
-            <span><span class="layer-badge" style="background: #ffffff;"></span>Forensic HUD Leader Callouts</span>
-            <input type="checkbox" id="chk-callouts" checked>
-        </div>
-
-        <div style="margin-top: 20px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 10px; color: var(--text-muted); line-height: 1.4;">
-            <b>Forensic Precision Baseline:</b><br>
-            Net Developable Area: <b>{metrics.get('net_developable_area_ha', 320.1)} ha</b><br>
-            Phase 1 Immediate: <b>{metrics.get('immediate_phase1_ha', 82.7)} ha</b><br>
-            330kV Reserve: <b>{metrics.get('power_capacity_mva', 500)} MVA</b>
-        </div>
+  <!-- Left Dock: Layer Controller & Label Controls -->
+  <div class="left-dock">
+    <div class="dock-header">
+      <div class="dock-title">🗺️ 3D Siting Layers</div>
+      <span style="font-size: 10px; color: #94a3b8; font-family: 'JetBrains Mono';">10 Pads Extruded</span>
     </div>
 
-    <!-- Map Canvas -->
-    <div id="map"></div>
-
-    <!-- SVG Leader-Line Overlay -->
-    <svg id="hud-svg-canvas"></svg>
-
-    <!-- DOM Container for HUD Leader-Line Cards -->
-    <div id="hud-cards-container"></div>
-
-    <!-- Cartographic Furniture -->
-    <div class="hud-compass" onclick="resetView()" title="Reset North">
-        <svg class="compass-arrow" id="compass-arrow" viewBox="0 0 100 100">
-            <polygon points="50,10 65,50 50,42 35,50" fill="#ff3366" />
-            <polygon points="50,90 65,50 50,42 35,50" fill="#94a3b8" />
-            <text x="50" y="8" font-size="10" font-weight="bold" fill="#ff3366" text-anchor="middle">N</text>
-        </svg>
+    <!-- Master Label Toggle -->
+    <div class="master-label-box">
+      <div>
+        <div style="font-size: 12px; font-weight: 700; color: #ffffff;">🏷️ Map Labels</div>
+        <div style="font-size: 10px; color: #94a3b8;">Show/hide billboard labels</div>
+      </div>
+      <button id="btn-master-labels" class="label-ctrl-btn active" onclick="toggleAllLabels()">Toggle All</button>
     </div>
 
-    <div class="hud-scalebar">
-        <div>SCALE 1:25,000</div>
-        <div class="scalebar-ruler"></div>
+    <div class="layer-group">
+      <!-- Developable Pads -->
+      <div class="layer-item">
+        <div class="layer-row">
+          <label class="layer-label-toggle">
+            <input type="checkbox" id="chk-pads" checked onchange="toggleLayer('pads', this.checked)">
+            <span class="layer-color-dot" style="color: #38bdf8; background: #38bdf8;"></span>
+            <strong>10 Net Developable Pads (154 ha)</strong>
+          </label>
+          <button id="lbl-btn-pads" class="label-ctrl-btn active" onclick="toggleLayerLabels('pads')">Labels</button>
+        </div>
+      </div>
+
+      <!-- 330kV Substation & PHES -->
+      <div class="layer-item">
+        <div class="layer-row">
+          <label class="layer-label-toggle">
+            <input type="checkbox" id="chk-phes" checked onchange="toggleLayer('phes', this.checked)">
+            <span class="layer-color-dot" style="color: #fbbf24; background: #fbbf24;"></span>
+            <strong>330kV Substation & 49 MWh PHES</strong>
+          </label>
+          <button id="lbl-btn-phes" class="label-ctrl-btn active" onclick="toggleLayerLabels('phes')">Labels</button>
+        </div>
+      </div>
+
+      <!-- Rail Loop & Haul Road -->
+      <div class="layer-item">
+        <div class="layer-row">
+          <label class="layer-label-toggle">
+            <input type="checkbox" id="chk-rail" checked onchange="toggleLayer('rail', this.checked)">
+            <span class="layer-color-dot" style="color: #f59e0b; background: #f59e0b;"></span>
+            <strong>Rail Haul Road Spine & Loop</strong>
+          </label>
+          <button id="lbl-btn-rail" class="label-ctrl-btn active" onclick="toggleLayerLabels('rail')">Labels</button>
+        </div>
+      </div>
+
+      <!-- Koala Biolink Corridor -->
+      <div class="layer-item">
+        <div class="layer-row">
+          <label class="layer-label-toggle">
+            <input type="checkbox" id="chk-biolink" checked onchange="toggleLayer('biolink', this.checked)">
+            <span class="layer-color-dot" style="color: #34d399; background: #34d399;"></span>
+            <strong>Koala Biolink Corridor (28 ha)</strong>
+          </label>
+          <button id="lbl-btn-biolink" class="label-ctrl-btn active" onclick="toggleLayerLabels('biolink')">Labels</button>
+        </div>
+      </div>
+
+      <!-- Acoustic Buffers & Overburden Bunds -->
+      <div class="layer-item">
+        <div class="layer-row">
+          <label class="layer-label-toggle">
+            <input type="checkbox" id="chk-acoustic" checked onchange="toggleLayer('acoustic', this.checked)">
+            <span class="layer-color-dot" style="color: #a855f7; background: #a855f7;"></span>
+            <strong>3D Acoustic Bunds (8m Height)</strong>
+          </label>
+          <button id="lbl-btn-acoustic" class="label-ctrl-btn active" onclick="toggleLayerLabels('acoustic')">Labels</button>
+        </div>
+      </div>
+
+      <!-- Mine Subsidence Zones -->
+      <div class="layer-item">
+        <div class="layer-row">
+          <label class="layer-label-toggle">
+            <input type="checkbox" id="chk-subsidence" checked onchange="toggleLayer('subsidence', this.checked)">
+            <span class="layer-color-dot" style="color: #ef4444; background: #ef4444;"></span>
+            <strong>Mine Subsidence (G1-G3 Zones)</strong>
+          </label>
+          <button id="lbl-btn-subsidence" class="label-ctrl-btn active" onclick="toggleLayerLabels('subsidence')">Labels</button>
+        </div>
+      </div>
+
+      <!-- 1% AEP Flood Corridor -->
+      <div class="layer-item">
+        <div class="layer-row">
+          <label class="layer-label-toggle">
+            <input type="checkbox" id="chk-flood" checked onchange="toggleLayer('flood', this.checked)">
+            <span class="layer-color-dot" style="color: #06b6d4; background: #06b6d4;"></span>
+            <strong>1% AEP Flood Inundation Corridor</strong>
+          </label>
+          <button id="lbl-btn-flood" class="label-ctrl-btn active" onclick="toggleLayerLabels('flood')">Labels</button>
+        </div>
+      </div>
+
+      <!-- Real-Time IoT Sensors -->
+      <div class="layer-item" style="border-color: rgba(52, 211, 153, 0.4);">
+        <div class="layer-row">
+          <label class="layer-label-toggle">
+            <input type="checkbox" id="chk-iot" checked onchange="toggleLayer('iot', this.checked)">
+            <span class="layer-color-dot" style="color: #10b981; background: #10b981;"></span>
+            <strong>Lake Mac Live IoT Sensors</strong>
+          </label>
+          <button id="lbl-btn-iot" class="label-ctrl-btn active" onclick="toggleLayerLabels('iot')">Labels</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Dock: Real-Time Microclimate & Telemetry HUD -->
+  <div class="right-dock">
+    <div class="dock-header">
+      <div class="dock-title">📡 Live IoT Telemetry</div>
+      <button class="label-ctrl-btn" onclick="fetchLiveIoTSensors()">🔄 Refresh</button>
     </div>
 
-    <!-- Spatial Datasets -->
-    <script>
-        const geoBoundary = {json.dumps(geo_boundary)};
-        const geoPads = {json.dumps(geo_pads)};
-        const geoBuildings = {json.dumps(geo_buildings)};
-        const geoFlood = {json.dumps(geo_flood)};
-        const geoSlope = {json.dumps(geo_slope)};
-        const geoSubsidence = {json.dumps(geo_subsidence)};
-        const geoPhes = {json.dumps(geo_phes)};
-        const geoRail = {json.dumps(geo_railroad)};
-        const geoBiolink = {json.dumps(geo_biolink)};
-        const geoAcoustic = {json.dumps(geo_acoustic)};
-        const hudCallouts = {json.dumps(hud_callouts)};
+    <!-- Live Sensor Feed Card -->
+    <div class="iot-card">
+      <div class="iot-header">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <div class="iot-pulse"></div>
+          <span>ATM41 & Decentlab Sensors</span>
+        </div>
+        <span id="iot-status" style="font-size: 10px; font-family: 'JetBrains Mono'; color: #34d399;">LIVE</span>
+      </div>
 
-        const DEFAULT_CENTER = [{coords.get('lon', 151.583)}, {coords.get('lat', -32.936)}];
-        const DEFAULT_ZOOM = 14.1;
-        const DEFAULT_PITCH = 60;
-        const DEFAULT_BEARING = 28;
-    </script>
+      <div class="telemetry-grid">
+        <div class="metric-cell">
+          <div id="val-temp" class="metric-val">--.- °C</div>
+          <div class="metric-lbl">Ambient Temp</div>
+        </div>
+        <div class="metric-cell">
+          <div id="val-humidity" class="metric-val">--.- %</div>
+          <div class="metric-lbl">Rel Humidity</div>
+        </div>
+        <div class="metric-cell">
+          <div id="val-wind" class="metric-val">--.- m/s</div>
+          <div class="metric-lbl">Max Wind Speed</div>
+        </div>
+        <div class="metric-cell">
+          <div id="val-pressure" class="metric-val">---- hPa</div>
+          <div class="metric-lbl">Atm Pressure</div>
+        </div>
+        <div class="metric-cell">
+          <div id="val-solar" class="metric-val">--.- W/m²</div>
+          <div class="metric-lbl">Solar Radiation</div>
+        </div>
+        <div class="metric-cell">
+          <div id="val-lightning" class="metric-val">--.- km</div>
+          <div class="metric-lbl">Lightning Distance</div>
+        </div>
+      </div>
 
-    <!-- MapLibre 3D Setup & HUD Renderer -->
-    <script>
-        const map = new maplibregl.Map({{
-            container: 'map',
-            style: {{
-                version: 8,
-                sources: {{
-                    'satellite': {{
-                        type: 'raster',
-                        tiles: [
-                            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}'
-                        ],
-                        tileSize: 256,
-                        attribution: '&copy; Esri, Maxar, Earthstar Geographics'
-                    }},
-                    'terrain-dem': {{
-                        type: 'raster-dem',
-                        tiles: [
-                            'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{{z}}/{{x}}/{{y}}.png'
-                        ],
-                        encoding: 'terrarium',
-                        tileSize: 256,
-                        maxzoom: 15
-                    }}
+      <div style="font-size: 10px; color: #94a3b8; margin-top: 4px; display: flex; justify-content: space-between;">
+        <span id="iot-station-name">Lake Macquarie Network</span>
+        <span id="iot-timestamp" style="font-family: 'JetBrains Mono';">Syncing...</span>
+      </div>
+    </div>
+
+    <!-- Inspector Details -->
+    <div id="inspector-card" class="iot-card" style="border-color: var(--border-cyan);">
+      <div style="font-size: 12px; font-weight: 700; color: var(--cyan-glow);">🔍 Selected Feature Details</div>
+      <div id="inspector-body" style="font-size: 11px; color: #cbd5e1; line-height: 1.5;">
+        Click any 3D developable pad, 330kV switchyard, biolink zone, or live IoT sensor pin on the globe to inspect engineering parameters.
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Camera FlyTo Controls -->
+  <div class="bottom-bar">
+    <button class="btn-camera active" onclick="flyToView('overview')">🪐 Overview</button>
+    <button class="btn-camera" onclick="flyToView('substation')">⚡ 330kV & PHES</button>
+    <button class="btn-camera" onclick="flyToView('pads')">🏢 Pad 1-4 Mega-Hub</button>
+    <button class="btn-camera" onclick="flyToView('biolink')">🌿 Koala Biolink</button>
+    <button class="btn-camera" onclick="flyToView('iot')">📡 Live IoT Stations</button>
+  </div>
+
+  <script>
+    // --- Data Payloads ---
+    const GEO_BOUNDARY = {json_boundary};
+    const GEO_PADS = {json_pads};
+    const GEO_PHES = {json_phes};
+    const GEO_RAILROAD = {json_railroad};
+    const GEO_SUBSIDENCE = {json_subsidence};
+    const GEO_BIOLINK = {json_biolink};
+    const GEO_ACOUSTIC = {json_acoustic};
+    const GEO_FLOOD = {json_flood};
+    const GEO_SLOPE = {json_slope};
+    const GEO_BUILDINGS = {json_buildings};
+    const MANIFEST = {json_manifest};
+
+    // --- Entity Repositories for Visibility & Label Controls ---
+    const LayerEntities = {{
+      boundary: [],
+      pads: [],
+      phes: [],
+      rail: [],
+      subsidence: [],
+      biolink: [],
+      acoustic: [],
+      flood: [],
+      slope: [],
+      iot: []
+    }};
+
+    const LayerLabels = {{
+      pads: [],
+      phes: [],
+      rail: [],
+      subsidence: [],
+      biolink: [],
+      acoustic: [],
+      flood: [],
+      iot: []
+    }};
+
+    let allLabelsVisible = true;
+
+    // --- Initialize CesiumJS 3D Viewer ---
+    window.CESIUM_BASE_URL = 'https://cdn.jsdelivr.net/npm/cesium@1.115.0/Build/Cesium/';
+    
+    const viewer = new Cesium.Viewer('cesiumContainer', {{
+      terrainProvider: new Cesium.ArcGISTiledElevationTerrainProvider({{
+        url: 'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'
+      }}),
+      imageryProvider: new Cesium.UrlTemplateImageryProvider({{
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}',
+        maximumLevel: 19
+      }}),
+      baseLayerPicker: false,
+      geocoder: false,
+      homeButton: false,
+      infoBox: false,
+      sceneModePicker: false,
+      selectionIndicator: false,
+      timeline: false,
+      animation: false,
+      navigationHelpButton: false,
+      fullscreenButton: false,
+      shadows: true
+    }});
+
+    viewer.scene.globe.depthTestAgainstTerrain = true;
+    viewer.scene.globe.enableLighting = true;
+
+    // Label Distance Condition (Smoothly fades out above 7.5km altitude to prevent clutter)
+    const labelDistanceCondition = new Cesium.DistanceDisplayCondition(0, 7500);
+
+    // --- Helpers for Geometry Conversion ---
+    function parseCoords(coords) {{
+      const pos = [];
+      coords.forEach(pt => {{
+        pos.push(pt[0], pt[1]);
+      }});
+      return Cesium.Cartesian3.fromDegreesArray(pos);
+    }}
+
+    function getCenterDegree(coords) {{
+      let sumLon = 0, sumLat = 0, count = 0;
+      coords.forEach(pt => {{
+        sumLon += pt[0];
+        sumLat += pt[1];
+        count++;
+      }});
+      return {{ lon: sumLon / count, lat: sumLat / count }};
+    }}
+
+    // --- Build 3D Entities ---
+
+    // 1. Precinct Boundary
+    if (GEO_BOUNDARY && GEO_BOUNDARY.features) {{
+      GEO_BOUNDARY.features.forEach(f => {{
+        if (f.geometry && f.geometry.coordinates) {{
+          const ent = viewer.entities.add({{
+            name: "Precinct Boundary",
+            polyline: {{
+              positions: parseCoords(f.geometry.coordinates[0]),
+              width: 3,
+              material: new Cesium.PolylineGlowMaterialProperty({{
+                glowPower: 0.25,
+                color: Cesium.Color.fromCssColorString('#38bdf8')
+              }}),
+              clampToGround: true
+            }}
+          }});
+          LayerEntities.boundary.push(ent);
+        }}
+      }});
+    }}
+
+    // 2. Developable Pads (Extruded 3D Volumes + Labels)
+    if (GEO_PADS && GEO_PADS.features) {{
+      GEO_PADS.features.forEach((f, idx) => {{
+        const props = f.properties || {{}};
+        const padId = props.pad_id || ("Pad " + (idx + 1));
+        const areaHa = props.usable_area_ha || props.area_ha || 15.0;
+        const coords = f.geometry.coordinates[0];
+        const center = getCenterDegree(coords);
+
+        const padEntity = viewer.entities.add({{
+          name: padId,
+          properties: props,
+          polygon: {{
+            hierarchy: parseCoords(coords),
+            material: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.35),
+            outline: true,
+            outlineColor: Cesium.Color.fromCssColorString('#38bdf8'),
+            outlineWidth: 2,
+            height: 0,
+            extrudedHeight: 16
+          }}
+        }});
+        LayerEntities.pads.push(padEntity);
+
+        const lblEntity = viewer.entities.add({{
+          position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 22),
+          label: {{
+            text: padId + "\\n(" + areaHa + " ha)",
+            font: '600 12px Outfit, sans-serif',
+            fillColor: Cesium.Color.WHITE,
+            outlineColor: Cesium.Color.BLACK,
+            outlineWidth: 3,
+            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+            verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+            distanceDisplayCondition: labelDistanceCondition,
+            pixelOffset: new Cesium.Cartesian2(0, -10)
+          }}
+        }});
+        LayerEntities.pads.push(lblEntity);
+        LayerLabels.pads.push(lblEntity);
+      }});
+    }}
+
+    // 3. 330kV Switchyard & 49 MWh PHES
+    if (GEO_PHES && GEO_PHES.features) {{
+      GEO_PHES.features.forEach(f => {{
+        const props = f.properties || {{}};
+        const coords = f.geometry.coordinates[0];
+        const center = getCenterDegree(coords);
+        const name = props.name || "Utility Infrastructure";
+        const isPhes = name.includes("PHES") || name.includes("Reservoir");
+
+        const color = isPhes ? '#0284c7' : '#fbbf24';
+        const height = isPhes ? 8 : 12;
+
+        const ent = viewer.entities.add({{
+          name: name,
+          properties: props,
+          polygon: {{
+            hierarchy: parseCoords(coords),
+            material: Cesium.Color.fromCssColorString(color).withAlpha(0.45),
+            outline: true,
+            outlineColor: Cesium.Color.fromCssColorString(color),
+            outlineWidth: 2,
+            height: 0,
+            extrudedHeight: height
+          }}
+        }});
+        LayerEntities.phes.push(ent);
+
+        const lbl = viewer.entities.add({{
+          position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, height + 6),
+          label: {{
+            text: isPhes ? "49 MWh PHES Reservoir" : "330kV Transgrid Switchyard",
+            font: '600 11px Outfit, sans-serif',
+            fillColor: Cesium.Color.fromCssColorString(color),
+            outlineColor: Cesium.Color.BLACK,
+            outlineWidth: 3,
+            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+            distanceDisplayCondition: labelDistanceCondition
+          }}
+        }});
+        LayerEntities.phes.push(lbl);
+        LayerLabels.phes.push(lbl);
+      }});
+    }}
+
+    // 4. Rail Haul Road Spine & Loop
+    if (GEO_RAILROAD && GEO_RAILROAD.features) {{
+      GEO_RAILROAD.features.forEach(f => {{
+        const props = f.properties || {{}};
+        const geom = f.geometry;
+        if (geom.type === "LineString") {{
+          const ent = viewer.entities.add({{
+            name: props.name || "Rail Haul Road",
+            properties: props,
+            polyline: {{
+              positions: parseCoords(geom.coordinates),
+              width: 4,
+              material: new Cesium.PolylineGlowMaterialProperty({{
+                glowPower: 0.2,
+                color: Cesium.Color.fromCssColorString('#f59e0b')
+              }}),
+              clampToGround: true
+            }}
+          }});
+          LayerEntities.rail.push(ent);
+        }}
+      }});
+    }}
+
+    // 5. Koala Biolink Corridor
+    if (GEO_BIOLINK && GEO_BIOLINK.features) {{
+      GEO_BIOLINK.features.forEach(f => {{
+        const coords = f.geometry.coordinates[0];
+        const center = getCenterDegree(coords);
+        const ent = viewer.entities.add({{
+          name: "Koala Biolink Corridor",
+          properties: f.properties || {{}},
+          polygon: {{
+            hierarchy: parseCoords(coords),
+            material: Cesium.Color.fromCssColorString('#10b981').withAlpha(0.3),
+            outline: true,
+            outlineColor: Cesium.Color.fromCssColorString('#34d399'),
+            outlineWidth: 2,
+            clampToGround: true
+          }}
+        }});
+        LayerEntities.biolink.push(ent);
+
+        const lbl = viewer.entities.add({{
+          position: Cesium.Cartesian3.fromDegrees(center.lon, center.lat, 10),
+          label: {{
+            text: "Koala Biolink Corridor (28 ha)",
+            font: '600 11px Outfit, sans-serif',
+            fillColor: Cesium.Color.fromCssColorString('#34d399'),
+            outlineColor: Cesium.Color.BLACK,
+            outlineWidth: 3,
+            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+            distanceDisplayCondition: labelDistanceCondition
+          }}
+        }});
+        LayerEntities.biolink.push(lbl);
+        LayerLabels.biolink.push(lbl);
+      }});
+    }}
+
+    // 6. Acoustic Overburden Bunds (8m Height)
+    if (GEO_ACOUSTIC && GEO_ACOUSTIC.features) {{
+      GEO_ACOUSTIC.features.forEach(f => {{
+        const coords = f.geometry.coordinates[0];
+        const ent = viewer.entities.add({{
+          name: "3D Acoustic Overburden Bund",
+          properties: f.properties || {{}},
+          polygon: {{
+            hierarchy: parseCoords(coords),
+            material: Cesium.Color.fromCssColorString('#a855f7').withAlpha(0.4),
+            outline: true,
+            outlineColor: Cesium.Color.fromCssColorString('#c084fc'),
+            outlineWidth: 2,
+            height: 0,
+            extrudedHeight: 8
+          }}
+        }});
+        LayerEntities.acoustic.push(ent);
+      }});
+    }}
+
+    // 7. Mine Subsidence (G1-G3 Zones)
+    if (GEO_SUBSIDENCE && GEO_SUBSIDENCE.features) {{
+      GEO_SUBSIDENCE.features.forEach(f => {{
+        const coords = f.geometry.coordinates[0];
+        const props = f.properties || {{}};
+        const ent = viewer.entities.add({{
+          name: props.zone || "Mine Subsidence Zone",
+          properties: props,
+          polygon: {{
+            hierarchy: parseCoords(coords),
+            material: Cesium.Color.fromCssColorString('#ef4444').withAlpha(0.25),
+            outline: true,
+            outlineColor: Cesium.Color.fromCssColorString('#f87171'),
+            outlineWidth: 2,
+            clampToGround: true
+          }}
+        }});
+        LayerEntities.subsidence.push(ent);
+      }});
+    }}
+
+    // 8. 1% AEP Flood Corridor
+    if (GEO_FLOOD && GEO_FLOOD.features) {{
+      GEO_FLOOD.features.forEach(f => {{
+        const coords = f.geometry.coordinates[0];
+        const ent = viewer.entities.add({{
+          name: f.properties.hazard || "1% AEP Flood Inundation Zone",
+          properties: f.properties || {{}},
+          polygon: {{
+            hierarchy: parseCoords(coords),
+            material: Cesium.Color.fromCssColorString('#06b6d4').withAlpha(0.3),
+            outline: true,
+            outlineColor: Cesium.Color.fromCssColorString('#38bdf8'),
+            outlineWidth: 2,
+            clampToGround: true
+          }}
+        }});
+        LayerEntities.flood.push(ent);
+      }});
+    }}
+
+    // --- Interactive Label Visibility Controller ---
+    function toggleLayer(layerKey, isVisible) {{
+      if (LayerEntities[layerKey]) {{
+        LayerEntities[layerKey].forEach(ent => {{
+          ent.show = isVisible;
+        }});
+      }}
+    }}
+
+    function toggleLayerLabels(layerKey) {{
+      const btn = document.getElementById('lbl-btn-' + layerKey);
+      const isCurrentlyActive = btn.classList.contains('active');
+      const newShowState = !isCurrentlyActive;
+
+      if (LayerLabels[layerKey]) {{
+        LayerLabels[layerKey].forEach(ent => {{
+          ent.show = newShowState;
+        }});
+      }}
+
+      if (newShowState) {{
+        btn.classList.add('active');
+        btn.textContent = 'Labels';
+      }} else {{
+        btn.classList.remove('active');
+        btn.textContent = 'Hidden';
+      }}
+    }}
+
+    function toggleAllLabels() {{
+      allLabelsVisible = !allLabelsVisible;
+      const masterBtn = document.getElementById('btn-master-labels');
+
+      Object.keys(LayerLabels).forEach(key => {{
+        LayerLabels[key].forEach(ent => {{
+          ent.show = allLabelsVisible;
+        }});
+        const btn = document.getElementById('lbl-btn-' + key);
+        if (btn) {{
+          if (allLabelsVisible) {{
+            btn.classList.add('active');
+            btn.textContent = 'Labels';
+          }} else {{
+            btn.classList.remove('active');
+            btn.textContent = 'Hidden';
+          }}
+        }}
+      }});
+
+      if (allLabelsVisible) {{
+        masterBtn.classList.add('active');
+        masterBtn.textContent = 'Hide All';
+      }} else {{
+        masterBtn.classList.remove('active');
+        masterBtn.textContent = 'Show All';
+      }}
+    }}
+
+    // --- Lake Macquarie Real-Time IoT Sensors Fetching ---
+    async function fetchLiveIoTSensors() {{
+      const statusEl = document.getElementById('iot-status');
+      statusEl.textContent = "UPDATING...";
+
+      try {{
+        // 1. Fetch live ATM41 Weather Stations
+        const atm41Url = "https://data.lakemac.com.au/api/explore/v2.1/catalog/datasets/weather-station-atm41-realtime/records?limit=10";
+        const atmResp = await fetch(atm41Url);
+        const atmData = await atmResp.json();
+
+        // 2. Fetch live Decentlab Microclimate Sensors
+        const dlbUrl = "https://data.lakemac.com.au/api/explore/v2.1/catalog/datasets/council-decentlab-realtime/records?limit=10";
+        const dlbResp = await fetch(dlbUrl);
+        const dlbData = await dlbResp.json();
+
+        // Clean up previous IoT entities
+        LayerEntities.iot.forEach(ent => viewer.entities.remove(ent));
+        LayerEntities.iot.length = 0;
+        LayerLabels.iot.length = 0;
+
+        let latestRecord = null;
+
+        if (atmData && atmData.results && atmData.results.length > 0) {{
+          latestRecord = atmData.results[0];
+
+          atmData.results.forEach(rec => {{
+            if (rec.location && rec.location.lon && rec.location.lat) {{
+              const sensorName = rec.device_name || "Lake Mac ATM41 Weather Station";
+              const temp = rec.payload_fields_air_temperature_value != null ? rec.payload_fields_air_temperature_value : "--";
+              const wind = rec.payload_fields_maximum_wind_speed_value != null ? rec.payload_fields_maximum_wind_speed_value : "--";
+
+              const pin = viewer.entities.add({{
+                name: sensorName,
+                position: Cesium.Cartesian3.fromDegrees(rec.location.lon, rec.location.lat, 15),
+                properties: {{
+                  type: "ATM41 Weather Station",
+                  temperature_c: temp,
+                  wind_speed_ms: wind,
+                  pressure_hpa: rec.payload_fields_atmospheric_pressure_value,
+                  solar_radiation_wm2: rec.payload_fields_solar_radiation_value,
+                  humidity_pct: rec.payload_fields_relative_humidity_value,
+                  lightning_km: rec.payload_fields_lightning_average_distance_value,
+                  time: rec.metadata_time
                 }},
-                layers: [
-                    {{
-                        id: 'satellite-layer',
-                        type: 'raster',
-                        source: 'satellite',
-                        minzoom: 0,
-                        maxzoom: 20,
-                        paint: {{
-                            'raster-brightness-min': 0.1,
-                            'raster-contrast': 0.15,
-                            'raster-saturation': 0.1
-                        }}
-                    }}
-                ],
-                sky: {{
-                    'sky-color': '#070b14',
-                    'sky-horizon-blend': 0.5,
-                    'horizon-color': '#1e293b',
-                    'fog-color': '#0a0f1d'
+                point: {{
+                  pixelSize: 10,
+                  color: Cesium.Color.fromCssColorString('#10b981'),
+                  outlineColor: Cesium.Color.WHITE,
+                  outlineWidth: 2,
+                  distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 35000)
                 }}
-            }},
-            center: DEFAULT_CENTER,
-            zoom: DEFAULT_ZOOM,
-            pitch: DEFAULT_PITCH,
-            bearing: DEFAULT_BEARING,
-            antialias: true,
-            preserveDrawingBuffer: true
+              }});
+              LayerEntities.iot.push(pin);
+
+              const lbl = viewer.entities.add({{
+                position: Cesium.Cartesian3.fromDegrees(rec.location.lon, rec.location.lat, 25),
+                label: {{
+                  text: "📡 " + sensorName + "\\n(" + temp + "°C | " + wind + " m/s)",
+                  font: '600 11px Outfit, sans-serif',
+                  fillColor: Cesium.Color.fromCssColorString('#34d399'),
+                  outlineColor: Cesium.Color.BLACK,
+                  outlineWidth: 3,
+                  style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                  distanceDisplayCondition: labelDistanceCondition
+                }}
+              }});
+              LayerEntities.iot.push(lbl);
+              LayerLabels.iot.push(lbl);
+            }}
+          }});
+        }}
+
+        // Update HUD Metrics
+        if (latestRecord) {{
+          document.getElementById('val-temp').textContent = (latestRecord.payload_fields_air_temperature_value != null ? latestRecord.payload_fields_air_temperature_value.toFixed(1) : "--") + " °C";
+          document.getElementById('val-humidity').textContent = (latestRecord.payload_fields_relative_humidity_value != null ? latestRecord.payload_fields_relative_humidity_value.toFixed(1) : "--") + " %";
+          document.getElementById('val-wind').textContent = (latestRecord.payload_fields_maximum_wind_speed_value != null ? latestRecord.payload_fields_maximum_wind_speed_value.toFixed(1) : "--") + " m/s";
+          document.getElementById('val-pressure').textContent = (latestRecord.payload_fields_atmospheric_pressure_value != null ? latestRecord.payload_fields_atmospheric_pressure_value.toFixed(0) : "----") + " hPa";
+          document.getElementById('val-solar').textContent = (latestRecord.payload_fields_solar_radiation_value != null ? latestRecord.payload_fields_solar_radiation_value.toFixed(1) : "--") + " W/m²";
+          document.getElementById('val-lightning').textContent = (latestRecord.payload_fields_lightning_average_distance_value != null ? latestRecord.payload_fields_lightning_average_distance_value.toFixed(1) : "0.0") + " km";
+          document.getElementById('iot-station-name').textContent = latestRecord.device_name || "Lake Mac ATM41 Station";
+          document.getElementById('iot-timestamp').textContent = new Date(latestRecord.metadata_time).toLocaleTimeString();
+        }}
+
+        statusEl.textContent = "LIVE";
+      }} catch (err) {{
+        console.warn("Live IoT fetch error:", err);
+        statusEl.textContent = "OFFLINE";
+      }}
+    }}
+
+    // Auto-refresh live IoT feeds every 60 seconds
+    fetchLiveIoTSensors();
+    setInterval(fetchLiveIoTSensors, 60000);
+
+    // --- Interactive Entity Selection & Inspector Dock ---
+    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    handler.setInputAction(function(movement) {{
+      const pickedObject = viewer.scene.pick(movement.position);
+      if (Cesium.defined(pickedObject) && pickedObject.id) {{
+        const ent = pickedObject.id;
+        const name = ent.name || "Spatial Entity";
+        const props = ent.properties ? ent.properties.getValue(Cesium.JulianDate.now()) : {{}};
+
+        let html = '<strong style="color: #38bdf8; font-size: 13px;">' + name + '</strong><br>';
+        html += '<table style="width: 100%; margin-top: 8px; font-size: 11px; border-collapse: collapse;">';
+        for (const [k, v] of Object.entries(props)) {{
+          if (typeof v !== 'object') {{
+            html += '<tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">' +
+                    '<td style="color: #94a3b8; padding: 4px 0;">' + k.replace(/_/g, ' ') + '</td>' +
+                    '<td style="text-align: right; color: #ffffff; font-weight: 600; font-family: JetBrains Mono;">' + v + '</td></tr>';
+          }}
+        }}
+        html += '</table>';
+        document.getElementById('inspector-body').innerHTML = html;
+      }}
+    }}, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+    // --- Camera FlyTo Presets ---
+    const cameraPresets = {{
+      overview: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3800),
+        orientation: {{
+          heading: Cesium.Math.toRadians(0),
+          pitch: Cesium.Math.toRadians(-42),
+          roll: 0.0
+        }}
+      }},
+      substation: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.584, -32.932, 1400),
+        orientation: {{
+          heading: Cesium.Math.toRadians(350),
+          pitch: Cesium.Math.toRadians(-35),
+          roll: 0.0
+        }}
+      }},
+      pads: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1800),
+        orientation: {{
+          heading: Cesium.Math.toRadians(15),
+          pitch: Cesium.Math.toRadians(-38),
+          roll: 0.0
+        }}
+      }},
+      biolink: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.946, 2200),
+        orientation: {{
+          heading: Cesium.Math.toRadians(330),
+          pitch: Cesium.Math.toRadians(-35),
+          roll: 0.0
+        }}
+      }},
+      iot: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.650, -32.980, 12000),
+        orientation: {{
+          heading: Cesium.Math.toRadians(340),
+          pitch: Cesium.Math.toRadians(-40),
+          roll: 0.0
+        }}
+      }}
+    }};
+
+    function flyToView(viewKey) {{
+      document.querySelectorAll('.btn-camera').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const preset = cameraPresets[viewKey];
+      if (preset) {{
+        viewer.camera.flyTo({{
+          destination: preset.destination,
+          orientation: preset.orientation,
+          duration: 2.0
         }});
+      }}
+    }}
 
-        map.on('load', () => {{
-            // Enable 3D Terrain
-            try {{
-                map.setTerrain({{ source: 'terrain-dem', exaggeration: 1.5 }});
-            }} catch(e) {{
-                console.warn('3D Terrain fallback mode', e);
-            }}
-
-            // 1. Boundary
-            map.addSource('src-boundary', {{ type: 'geojson', data: geoBoundary }});
-            map.addLayer({{
-                id: 'layer-boundary',
-                type: 'line',
-                source: 'src-boundary',
-                paint: {{
-                    'line-color': '#ffffff',
-                    'line-width': 1.5,
-                    'line-dasharray': [4, 3],
-                    'line-opacity': 0.8
-                }}
-            }});
-
-            // 2. Flood Corridors (Neon Red Ribbon)
-            map.addSource('src-flood', {{ type: 'geojson', data: geoFlood }});
-            map.addLayer({{
-                id: 'layer-flood-glow',
-                type: 'line',
-                source: 'src-flood',
-                paint: {{
-                    'line-color': '#ff3366',
-                    'line-width': 8,
-                    'line-blur': 6,
-                    'line-opacity': 0.85
-                }}
-            }});
-            map.addLayer({{
-                id: 'layer-flood-line',
-                type: 'line',
-                source: 'src-flood',
-                paint: {{
-                    'line-color': '#ffffff',
-                    'line-width': 2,
-                    'line-opacity': 0.95
-                }}
-            }});
-            map.addLayer({{
-                id: 'layer-flood-fill',
-                type: 'fill',
-                source: 'src-flood',
-                paint: {{
-                    'fill-color': '#ff3366',
-                    'fill-opacity': 0.25
-                }}
-            }});
-
-            // 3. Steep Slopes (>20%)
-            map.addSource('src-slope', {{ type: 'geojson', data: geoSlope }});
-            map.addLayer({{
-                id: 'layer-slope-glow',
-                type: 'line',
-                source: 'src-slope',
-                paint: {{
-                    'line-color': '#ff3366',
-                    'line-width': 6,
-                    'line-blur': 4,
-                    'line-opacity': 0.8
-                }}
-            }});
-            map.addLayer({{
-                id: 'layer-slope-fill',
-                type: 'fill',
-                source: 'src-slope',
-                paint: {{
-                    'fill-color': '#ef4444',
-                    'fill-opacity': 0.3
-                }}
-            }});
-
-            // 4. Mine Subsidence Hazard
-            map.addSource('src-subsidence', {{ type: 'geojson', data: geoSubsidence }});
-            map.addLayer({{
-                id: 'layer-subsidence-fill',
-                type: 'fill',
-                source: 'src-subsidence',
-                paint: {{
-                    'fill-color': '#ef4444',
-                    'fill-opacity': 0.35
-                }}
-            }});
-            map.addLayer({{
-                id: 'layer-subsidence-line',
-                type: 'line',
-                source: 'src-subsidence',
-                paint: {{
-                    'line-color': '#f43f5e',
-                    'line-width': 2,
-                    'line-dasharray': [3, 2]
-                }}
-            }});
-
-            // 5. Developable Pads (Neon Cyan Glowing Envelopes)
-            map.addSource('src-pads', {{ type: 'geojson', data: geoPads }});
-            map.addLayer({{
-                id: 'layer-pads-glow',
-                type: 'line',
-                source: 'src-pads',
-                paint: {{
-                    'line-color': '#00f0ff',
-                    'line-width': 8,
-                    'line-blur': 6,
-                    'line-opacity': 0.9
-                }}
-            }});
-            map.addLayer({{
-                id: 'layer-pads-line',
-                type: 'line',
-                source: 'src-pads',
-                paint: {{
-                    'line-color': '#ffffff',
-                    'line-width': 2,
-                    'line-opacity': 1.0
-                }}
-            }});
-            map.addLayer({{
-                id: 'layer-pads-fill',
-                type: 'fill',
-                source: 'src-pads',
-                paint: {{
-                    'fill-color': '#00f0ff',
-                    'fill-opacity': 0.22
-                }}
-            }});
-
-            // 6. 3D Building Envelopes Extrusion
-            map.addSource('src-buildings', {{ type: 'geojson', data: geoBuildings }});
-            map.addLayer({{
-                id: 'layer-buildings-3d',
-                type: 'fill-extrusion',
-                source: 'src-buildings',
-                paint: {{
-                    'fill-extrusion-color': '#38bdf8',
-                    'fill-extrusion-height': ['get', 'height_m'],
-                    'fill-extrusion-base': ['get', 'base_m'],
-                    'fill-extrusion-opacity': 0.85
-                }}
-            }});
-
-            // 7. PHES & Substation
-            map.addSource('src-phes', {{ type: 'geojson', data: geoPhes }});
-            map.addLayer({{
-                id: 'layer-phes-fill',
-                type: 'fill',
-                source: 'src-phes',
-                paint: {{
-                    'fill-color': '#0ea5e9',
-                    'fill-opacity': 0.6
-                }}
-            }});
-            map.addLayer({{
-                id: 'layer-phes-line',
-                type: 'line',
-                source: 'src-phes',
-                paint: {{
-                    'line-color': '#00f0ff',
-                    'line-width': 4,
-                    'line-blur': 2
-                }}
-            }});
-
-            // 8. Rail Loop & Haul Road
-            map.addSource('src-rail', {{ type: 'geojson', data: geoRail }});
-            map.addLayer({{
-                id: 'layer-rail-glow',
-                type: 'line',
-                source: 'src-rail',
-                paint: {{
-                    'line-color': '#f97316',
-                    'line-width': 6,
-                    'line-blur': 3,
-                    'line-opacity': 0.8
-                }}
-            }});
-            map.addLayer({{
-                id: 'layer-rail-line',
-                type: 'line',
-                source: 'src-rail',
-                paint: {{
-                    'line-color': '#ffffff',
-                    'line-width': 2,
-                    'line-opacity': 0.95
-                }}
-            }});
-
-            // Initialize HUD Callouts
-            buildHudCallouts();
-            updateHudPositions();
-
-            map.on('render', updateHudPositions);
-            map.on('rotate', updateCompass);
-            map.on('pitch', updateCompass);
-        }});
-
-        // Dynamic Leader-Line HUD System
-        function buildHudCallouts() {{
-            const container = document.getElementById('hud-cards-container');
-            container.innerHTML = '';
-
-            hudCallouts.forEach(c => {{
-                const card = document.createElement('div');
-                card.className = `hud-card theme-${{c.theme}}`;
-                card.id = `card-${{c.id}}`;
-                card.innerHTML = `
-                    <div class="hud-card-title">${{c.title}}</div>
-                    <div class="hud-card-body">${{c.body}}</div>
-                `;
-                container.appendChild(card);
-            }});
-        }}
-
-        function updateHudPositions() {{
-            const svg = document.getElementById('hud-svg-canvas');
-            if (!svg) return;
-            svg.innerHTML = '';
-
-            hudCallouts.forEach(c => {{
-                const card = document.getElementById(`card-${{c.id}}`);
-                if (!card) return;
-
-                const pt = map.project(c.coords);
-                const cardX = pt.x + (c.dx || 0);
-                const cardY = pt.y + (c.dy || 0);
-
-                card.style.left = `${{cardX}}px`;
-                card.style.top = `${{cardY}}px`;
-
-                // Draw connecting leader line
-                const line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-                const strokeColor = c.theme === 'red' ? '#ff3366' : c.theme === 'orange' ? '#f97316' : '#00f0ff';
-                line.setAttribute('points', `${{pt.x}},${{pt.y}} ${{cardX}},${{cardY}}`);
-                line.setAttribute('stroke', strokeColor);
-                line.setAttribute('stroke-width', '1.5');
-                line.setAttribute('stroke-dasharray', '3,2');
-                line.setAttribute('opacity', '0.85');
-                svg.appendChild(line);
-
-                // Draw ground pin dot
-                const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                dot.setAttribute('cx', pt.x);
-                dot.setAttribute('cy', pt.y);
-                dot.setAttribute('r', '3.5');
-                dot.setAttribute('fill', strokeColor);
-                svg.appendChild(dot);
-            }});
-        }}
-
-        function updateCompass() {{
-            const bearing = map.getBearing();
-            const arrow = document.getElementById('compass-arrow');
-            if (arrow) {{
-                arrow.style.transform = `rotate(${{-bearing}}deg)`;
-            }}
-        }}
-
-        // Controls
-        function updatePitch(val) {{
-            document.getElementById('lbl-pitch').innerText = `${{val}}°`;
-            map.setPitch(parseFloat(val));
-        }}
-
-        function updateBearing(val) {{
-            document.getElementById('lbl-bearing').innerText = `${{val}}°`;
-            map.setBearing(parseFloat(val));
-        }}
-
-        function updateExaggeration(val) {{
-            document.getElementById('lbl-exagg').innerText = `${{val.toFixed(1)}}x`;
-            try {{
-                map.setTerrain({{ source: 'terrain-dem', exaggeration: val }});
-            }} catch(e) {{}}
-        }}
-
-        function resetView() {{
-            map.easeTo({{
-                center: DEFAULT_CENTER,
-                zoom: DEFAULT_ZOOM,
-                pitch: DEFAULT_PITCH,
-                bearing: DEFAULT_BEARING,
-                duration: 1200
-            }});
-            document.getElementById('slider-pitch').value = DEFAULT_PITCH;
-            document.getElementById('slider-bearing').value = DEFAULT_BEARING;
-            document.getElementById('lbl-pitch').innerText = `${{DEFAULT_PITCH}}°`;
-            document.getElementById('lbl-bearing').innerText = `${{DEFAULT_BEARING}}°`;
-        }}
-
-        function toggleSidebar() {{
-            document.getElementById('sidebar').classList.toggle('collapsed');
-        }}
-
-        function toggleLayerGroup(group) {{
-            const visibilityMap = {{
-                'pads': ['layer-pads-glow', 'layer-pads-line', 'layer-pads-fill'],
-                'buildings': ['layer-buildings-3d'],
-                'flood': ['layer-flood-glow', 'layer-flood-line', 'layer-flood-fill'],
-                'slope': ['layer-slope-glow', 'layer-slope-fill'],
-                'subsidence': ['layer-subsidence-fill', 'layer-subsidence-line'],
-                'phes': ['layer-phes-fill', 'layer-phes-line'],
-                'rail': ['layer-rail-glow', 'layer-rail-line']
-            }};
-
-            const chk = document.getElementById(`chk-${{group}}`);
-            const isVisible = chk.checked;
-            chk.checked = !isVisible;
-
-            if (group === 'callouts') {{
-                const container = document.getElementById('hud-cards-container');
-                const svg = document.getElementById('hud-svg-canvas');
-                container.style.display = !isVisible ? 'block' : 'none';
-                svg.style.display = !isVisible ? 'block' : 'none';
-                return;
-            }}
-
-            const layerIds = visibilityMap[group] || [];
-            layerIds.forEach(id => {{
-                if (map.getLayer(id)) {{
-                    map.setLayoutProperty(id, 'visibility', !isVisible ? 'visible' : 'none');
-                }}
-            }});
-        }}
-
-        // 1-Click High-Res PNG Exporter
-        function exportHighResPng() {{
-            map.getCanvas().toBlob(blob => {{
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `{project_id}_3D_Digital_Twin_Forensic_Pads.png`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }});
-        }}
-    </script>
+    // Initial Overview Flight
+    viewer.camera.setView({{
+      destination: cameraPresets.overview.destination,
+      orientation: cameraPresets.overview.orientation
+    }});
+  </script>
 </body>
-</html>
-"""
+</html>"""
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
-    return output_path
-
-
-def build_geolibre_project_json(manifest: Dict[str, Any], output_path: str) -> str:
-    """
-    Generates a GeoLibre .geolibre.json project config for the 3D Digital Twin.
-    """
-    project_id = manifest.get("project_id", "LMCC_MacquarieCoal")
-    project_name = manifest.get("project_name", "Macquarie Coal Complex Transformation Precinct")
-    coords = manifest.get("coordinates", {"lat": -32.935, "lon": 151.585, "zoom": 13.8})
-
-    geolibre_cfg = {
-        "version": "0.3.0",
-        "name": f"{project_name} — 3D Forensic Digital Twin",
-        "mapView": {
-            "center": [coords.get("lon", 151.583), coords.get("lat", -32.936)],
-            "zoom": 14.1,
-            "bearing": 28,
-            "pitch": 60,
-            "terrain": {
-                "source": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
-                "exaggeration": 1.5
-            }
-        },
-        "basemapStyleUrl": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        "basemapVisible": True,
-        "basemapOpacity": 1.0,
-        "layers": [
-            {
-                "id": "developable_pads_glow",
-                "name": "10 Certified Developable Pads (NDPs)",
-                "type": "geojson",
-                "source": f"data/projects/{project_id}/developable_pads_v1.geojson",
-                "style": {
-                    "fillColor": "#00f0ff",
-                    "fillOpacity": 0.25,
-                    "strokeColor": "#00f0ff",
-                    "strokeWidth": 3
-                }
-            },
-            {
-                "id": "flood_1pct_aep",
-                "name": "1% AEP Flood Inundation Zone",
-                "type": "geojson",
-                "style": {
-                    "fillColor": "#ff3366",
-                    "fillOpacity": 0.3,
-                    "strokeColor": "#ff3366",
-                    "strokeWidth": 4
-                }
-            },
-            {
-                "id": "steep_slope_20pct",
-                "name": "Steep Slope (>20%) Area",
-                "type": "geojson",
-                "style": {
-                    "fillColor": "#ef4444",
-                    "fillOpacity": 0.35,
-                    "strokeColor": "#ef4444",
-                    "strokeWidth": 3
-                }
-            },
-            {
-                "id": "mine_subsidence_g3",
-                "name": "Mine Subsidence Exclusion Zone",
-                "type": "geojson",
-                "source": f"data/projects/{project_id}/subsidence_zones_g1_g3.geojson",
-                "style": {
-                    "fillColor": "#f43f5e",
-                    "fillOpacity": 0.35,
-                    "strokeColor": "#f43f5e",
-                    "strokeWidth": 2
-                }
-            },
-            {
-                "id": "phes_330kv_grid",
-                "name": "330kV Substation & 49 MWh Micro-PHES",
-                "type": "geojson",
-                "source": f"data/projects/{project_id}/substation_phes_layout.geojson",
-                "style": {
-                    "fillColor": "#0ea5e9",
-                    "fillOpacity": 0.6,
-                    "strokeColor": "#00f0ff",
-                    "strokeWidth": 3
-                }
-            },
-            {
-                "id": "rail_freight_loop",
-                "name": "Active Heavy Rail Siding Loop",
-                "type": "geojson",
-                "source": f"data/projects/{project_id}/rail_haulroad_spine.geojson",
-                "style": {
-                    "strokeColor": "#f97316",
-                    "strokeWidth": 4
-                }
-            }
-        ]
-    }
-
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(geolibre_cfg, f, indent=2)
-
+    print(f"Generated 3D CesiumJS Digital Twin: {output_path} ({os.path.getsize(output_path):,} bytes)")
     return output_path
 
 
 def main():
-    parser = argparse.ArgumentParser(description="AURA Siting Crafter — 3D Forensic Digital Twin Packager")
-    parser.add_argument("--project", default="LMCC_MacquarieCoal", help="Project ID in config/projects/")
-    parser.add_argument("--manifest", default=None, help="Explicit path to project manifest JSON")
-    parser.add_argument("--output-html", default=None, help="Output path for standalone 3D digital twin HTML")
-    parser.add_argument("--output-json", default=None, help="Output path for .geolibre.json configuration")
-
+    parser = argparse.ArgumentParser(description="Build 3D Forensic Digital Twin for GeoLibre")
+    parser.add_argument("--project-id", default="LMCC_MacquarieCoal", help="Project ID manifest to package")
     args = parser.parse_args()
 
-    manifest_path = args.manifest or os.path.join(CONFIG_DIR, f"{args.project}.json")
-    if not os.path.exists(manifest_path):
-        print(f"[ERROR] Manifest not found: {manifest_path}", file=sys.stderr)
+    manifest_file = os.path.join(CONFIG_DIR, f"{args.project_id}.json")
+    if not os.path.exists(manifest_file):
+        print(f"Error: Manifest {manifest_file} not found.", file=sys.stderr)
         sys.exit(1)
 
-    manifest = load_json(manifest_path)
-    project_id = manifest.get("project_id", args.project)
-
-    out_html = args.output_html or os.path.join(OUTPUT_HTML_DIR, f"digital_twin_{project_id}.html")
-    out_json = args.output_json or os.path.join(OUTPUT_HTML_DIR, f"digital_twin_{project_id}.geolibre.json")
-
-    print(f"================================================================")
-    print(f"AURA 3D Forensic Digital Twin & GIS Packager")
-    print(f"Project: {manifest.get('project_name', project_id)}")
-    print(f"================================================================")
-
-    html_file = build_digital_twin_html(manifest, out_html)
-    print(f"[SUCCESS] Standalone 3D Digital Twin HTML generated: {html_file}")
-
-    json_file = build_geolibre_project_json(manifest, out_json)
-    print(f"[SUCCESS] GeoLibre Project JSON generated: {json_file}")
-    print(f"================================================================")
+    manifest = load_json(manifest_file)
+    output_html = os.path.join(OUTPUT_HTML_DIR, f"digital_twin_{args.project_id}.html")
+    build_digital_twin_html(manifest, output_html)
 
 
 if __name__ == "__main__":

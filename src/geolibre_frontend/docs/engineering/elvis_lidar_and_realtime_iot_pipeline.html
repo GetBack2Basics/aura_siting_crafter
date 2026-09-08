@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA Engineering | Elvis Lidar And Realtime Iot Pipeline | AURA Siting Crafter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Mermaid JS for Dynamic Architecture Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+  <style>
+    :root {
+      --bg-primary: #0a0f1d;
+      --bg-secondary: #111827;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border-color: rgba(59, 130, 246, 0.25);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-green: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 0;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(34, 197, 94, 0.08) 0%, transparent 40%);
+    }
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand span { color: var(--accent-blue); }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      color: #93c5fd;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(59, 130, 246, 0.1);
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      background: var(--accent-blue);
+      color: #0f172a;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 32px auto 64px auto;
+      padding: 0 24px;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 36px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin: 24px 0 12px 0;
+    }
+    p, li {
+      font-size: 14.5px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+    a:hover { color: #7dd3fc; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(30, 41, 59, 0.8);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    code {
+      font-family: var(--font-mono);
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #38bdf8;
+    }
+    pre {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    .mermaid {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <div class="nav-brand">
+    AURA <span>Siting Crafter</span>
+  </div>
+  <div class="nav-links">
+    <a href="../business/aura_enterprise_asymmetric_compute_and_ai_safety.html" class="nav-link">Enterprise Architecture</a>
+    <a href="geolibre_webgis_rendering_spec.html" class="nav-link">Rendering Spec</a>
+    <a href="multi_project_pipeline_and_schemas.html" class="nav-link">Pipeline & Schemas</a>
+    <a href="upstream_geolibre_contributions.html" class="nav-link">GeoLibre Upstream</a>
+    <a href="spatial_qa_and_telemetry_standards.html" class="nav-link">QA & Telemetry</a>
+    <a href="../../index.html" target="_blank" class="nav-link">National Report</a>
+    <a href="../../map.html" target="_blank" class="nav-link">National Map</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="content-card">
+    <h1>ELVIS 3D LiDAR &amp; Real-Time IoT Telemetry Engineering Specification</h1>
+<p><strong>Document:</strong> ELVIS 1m LiDAR DEM &amp; Real-Time Sensor Ingestion Architecture<br />
+<strong>Dataset URL:</strong> <a href="https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip">https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip</a> (4.80 GB)<br />
+<strong>Spatial Bounds:</strong> <code>POLYGON((151.565811822199 -33.09366981660604, 151.68571363131375 -33.09366981660604, 151.68571363131375 -32.93425892457497, 151.565811822199 -32.93425892457497, 151.565811822199 -33.09366981660604))</code> (WGS84 / GDA2020)<br />
+<strong>Region:</strong> Lake Macquarie &amp; Hunter Energy Transformation Corridor, NSW<br />
+<strong>Author:</strong> GetBack2Basics Spatial AI Engineering<br />
+<strong>Version:</strong> 1.0 (2026-09-08)  </p>
+<hr />
+<h2>1. Executive Summary</h2>
+<p>AURA Siting Crafter incorporates high-resolution point clouds and 1m Digital Elevation Models (DEM) from the Geoscience Australia / NSW Spatial Services ELVIS (Elevation Information System) portal alongside live municipal IoT environmental sensors to provide sub-meter forensic siting accuracy.</p>
+<p>This document defines:
+1. The ingestion and tiling pipeline for the 4.80 GB ELVIS LiDAR package (<code>DATA_2374297.zip</code>).
+2. The spatial boundary coverage analysis relative to the Macquarie Coal Complex Transformation Precinct.
+3. The real-time streaming integration with Lake Macquarie City Council's open data APIs (Decentlab environmental microclimate &amp; ATM41 weather stations).
+4. The 3D visualization architecture in CesiumJS with customizable layer and label management.</p>
+<div class="mermaid">
+flowchart TD
+    subgraph ELVIS_LiDAR["1. ELVIS 3D LiDAR Pipeline (4.8 GB)"]
+        A["ELVIS DATA_2374297.zip (4.8 GB)"] --> B["Unzip LAS/LAZ & GeoTIFFs"]
+        B --> C1["py3dtiles / Entwine (Point Clouds)"]
+        B --> C2["GDAL COG (1m DEM & Slope Grids)"]
+        C1 --> D1["Cesium 3D Tileset (Quantized Mesh)"]
+        C2 --> D2["Apache Sedona / DuckDB-WASM Earthworks"]
+    end
+
+    subgraph RealTime_IoT["2. Lake Macquarie City Council Real-Time IoT"]
+        E1["ATM41 Weather Station REST API"] --> F["Client-Side Fetch & HUD Aggregation"]
+        E2["Decentlab Microclimate REST API"] --> F
+        F --> G["Live 3D Billboard Sensors & Microclimate HUD"]
+    end
+
+    subgraph Cesium_3D["3. 3D Digital Twin Viewer (CesiumJS)"]
+        D1 --> H["CesiumJS 3D Globe Viewer"]
+        D2 --> H
+        G --> H
+        I["Layer & Label Minimization Controller"] --> H
+    end
+</div>
+
+<hr />
+<h2>2. Spatial Coverage &amp; Boundary Analysis</h2>
+<h3>Requested Bounding Polygon</h3>
+<pre><code class="language-sql">POLYGON((
+  151.565811822199 -33.09366981660604,
+  151.68571363131375 -33.09366981660604,
+  151.68571363131375 -32.93425892457497,
+  151.565811822199 -32.93425892457497,
+  151.565811822199 -33.09366981660604
+))
+</code></pre>
+<h3>Coverage Assessment</h3>
+<ul>
+<li><strong>Latitude Extent:</strong> <code>-33.0937°</code> to <code>-32.9343°</code> (~17.7 km north-south)</li>
+<li><strong>Longitude Extent:</strong> <code>151.5658°</code> to <code>151.6857°</code> (~11.2 km east-west)</li>
+<li><strong>Total Enclosed Area:</strong> Approximately 198.2 km² (19,820 ha)</li>
+<li><strong>Precinct Relationship:</strong></li>
+<li>Covers the southern transformation corridor, Lake Macquarie western shores, Eraring energy hub, and overlaps the southern boundary of the Macquarie Coal Complex (<code>-32.935°</code>).</li>
+<li>For full high-precision coverage of northern pads (Pads 1-4 and 330kV substation yard up to <code>-32.918°</code>), this dataset operates in conjunction with northern tile <code>DATA_2374296.zip</code> to form a unified seamless 1m DEM mosaic.</li>
+</ul>
+<hr />
+<h2>3. ELVIS LiDAR Processing Pipeline</h2>
+<h3>3.1 Point Cloud Ingestion &amp; 3D Tiles Generation</h3>
+<ol>
+<li><strong>Extraction &amp; Format Conversion</strong>:</li>
+<li>Raw LAZ files are converted to LAS format using <code>las2las</code> or PDAL.</li>
+<li>Coordinate Reference System is standardized to <code>EPSG:7856</code> (GDA2020 / MGA Zone 56) with vertical datum <code>AHD71</code>.</li>
+<li><strong>Quantized Mesh &amp; 3D Tiles Tiling</strong>:</li>
+<li>Using <code>py3dtiles</code> / <code>entwine</code>, point clouds are partitioned into octree-indexed 3D Tiles (<code>b3dm</code> / <code>pnts</code>).</li>
+<li>Lod levels enable smooth streaming inside CesiumJS across camera elevations from 0 to 50,000 meters.</li>
+</ol>
+<h3>3.2 Cut &amp; Fill Earthwork &amp; Slope Derivations</h3>
+<ul>
+<li><strong>1m DEM Generation</strong>: GeoTIFFs converted to Cloud-Optimized GeoTIFFs (COG) with Deflate compression and 512x512 tile blocks.</li>
+<li><strong>Apache Sedona Spatial SQL</strong>:</li>
+</ul>
+<pre><code class="language-sql">SELECT 
+    pad_id,
+    usable_area_ha,
+    ST_Slope(dem_rast, 1) AS slope_deg,
+    ST_Roughness(dem_rast, 1) AS surface_roughness
+FROM developable_pads_v1
+CROSS JOIN dem_lake_macquarie_1m;
+</code></pre>
+<hr />
+<h2>4. Lake Macquarie City Council Real-Time IoT Ingestion</h2>
+<h3>4.1 Live REST API Endpoints</h3>
+<p>AURA connects directly to genuine municipal sensor streams provided by Lake Macquarie City Council's Open Data Hub:</p>
+<ol>
+<li><strong>ATM41 All-in-One Weather Station Stream</strong>:</li>
+<li><strong>Endpoint:</strong> <code>https://data.lakemac.com.au/api/explore/v2.1/catalog/datasets/weather-station-atm41-realtime/records</code></li>
+<li><strong>Telemetry Metrics:</strong><ul>
+<li><code>payload_fields_air_temperature_value</code> (°C)</li>
+<li><code>payload_fields_relative_humidity_value</code> (%)</li>
+<li><code>payload_fields_maximum_wind_speed_value</code> (m/s)</li>
+<li><code>payload_fields_wind_direction_value</code> (°)</li>
+<li><code>payload_fields_atmospheric_pressure_value</code> (hPa)</li>
+<li><code>payload_fields_solar_radiation_value</code> (W/m²)</li>
+<li><code>payload_fields_lightning_average_distance_value</code> (km)</li>
+<li><code>payload_fields_precipitation_value</code> (mm/h)</li>
+</ul>
+</li>
+<li>
+<p><strong>Update Frequency:</strong> 5–15 minutes</p>
+</li>
+<li>
+<p><strong>Decentlab Environmental Microclimate Stream</strong>:</p>
+</li>
+<li><strong>Endpoint:</strong> <code>https://data.lakemac.com.au/api/explore/v2.1/catalog/datasets/council-decentlab-realtime/records</code></li>
+<li><strong>Telemetry Metrics:</strong><ul>
+<li><code>payload_fields_temperature</code> (°C)</li>
+<li><code>payload_fields_humidity</code> (%)</li>
+<li><code>location</code> (<code>lon</code>, <code>lat</code>)</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2>5. CesiumJS 3D Visualization &amp; Label Controls</h2>
+<h3>5.1 Interactive Label Management Architecture</h3>
+<p>To prevent visual clutter on complex multi-layer industrial 3D digital twins:
+* <strong>Per-Layer Toggles:</strong> Each layer group provides independent checkboxes for geometry visibility (<code>chk-pads</code>, <code>chk-phes</code>, etc.) and label visibility (<code>lbl-btn-pads</code>, <code>lbl-btn-phes</code>, etc.).
+* <strong>Master Quick-Toggle:</strong> Global button (<code>🏷️ Toggle All Labels</code>) toggles all billboard labels across the globe in a single action.
+* <strong>Distance Display Conditions (<code>Cesium.DistanceDisplayCondition</code>)</strong>:</p>
+<pre><code class="language-javascript">const labelDistanceCondition = new Cesium.DistanceDisplayCondition(0, 7500);
+</code></pre>
+<p>Billboards and textual callouts automatically hide when camera elevation exceeds 7,500m, revealing a clean macroeconomic overview.</p>
+<h3>5.2 3D Extrusion Standards</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Layer Key</th>
+<th style="text-align: left;">Extrusion Height</th>
+<th style="text-align: left;">Visual Styling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Developable Pads 1–10</strong></td>
+<td style="text-align: left;"><code>pads</code></td>
+<td style="text-align: left;">16m – 18m</td>
+<td style="text-align: left;">Translucent Cyan with Neon Border</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>330kV GIS Substation</strong></td>
+<td style="text-align: left;"><code>phes</code></td>
+<td style="text-align: left;">14m</td>
+<td style="text-align: left;">High-Voltage Yellow Gantry Envelope</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>49 MWh PHES Reservoir</strong></td>
+<td style="text-align: left;"><code>phes</code></td>
+<td style="text-align: left;">8m Depth</td>
+<td style="text-align: left;">Deep Blue Water Basin</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Acoustic Overburden Bunds</strong></td>
+<td style="text-align: left;"><code>acoustic</code></td>
+<td style="text-align: left;">8m Height</td>
+<td style="text-align: left;">Purple Acoustic Barrier Shader</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Koala Biolink Corridor</strong></td>
+<td style="text-align: left;"><code>biolink</code></td>
+<td style="text-align: left;">Ground Clamped</td>
+<td style="text-align: left;">Emerald Green Ecological Buffer</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Mine Subsidence Risk (G1–G3)</strong></td>
+<td style="text-align: left;"><code>subsidence</code></td>
+<td style="text-align: left;">Ground Clamped</td>
+<td style="text-align: left;">Translucent Red Hazard Shading</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>1% AEP Flood Inundation</strong></td>
+<td style="text-align: left;"><code>flood</code></td>
+<td style="text-align: left;">Ground Clamped</td>
+<td style="text-align: left;">Cyan Hydrological Flow Corridor</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Live IoT Weather Stations</strong></td>
+<td style="text-align: left;"><code>iot</code></td>
+<td style="text-align: left;">15m Billboard</td>
+<td style="text-align: left;">Glowing Green Pulsing Indicator</td>
+</tr>
+</tbody>
+</table>
+  </div>
+</div>
+
+<footer style="margin-top: 3rem; padding: 1.25rem 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; line-height: 1.5;">
+  <div style="text-align: left;">
+    &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
+  </div>
+  <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+    Built 2026-09-08 00:57 UTC
+  </div>
+</footer>
+
+</body>
+</html>

@@ -430,17 +430,11 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       }}
     }};
 
-    let terrainProvider = new Cesium.ArcGISTiledElevationTerrainProvider({{
-      url: 'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer'
-    }});
     let ellipsoidProvider = new Cesium.EllipsoidTerrainProvider();
 
     const viewer = new Cesium.Viewer('cesiumContainer', {{
-      terrainProvider: terrainProvider,
-      imageryProvider: new Cesium.UrlTemplateImageryProvider({{
-        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}',
-        maximumLevel: 19
-      }}),
+      terrainProvider: ellipsoidProvider,
+      baseLayer: false,
       baseLayerPicker: false,
       geocoder: false,
       homeButton: false,
@@ -458,8 +452,9 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       viewer.cesiumWidget.creditContainer.style.display = 'none';
     }}
 
-    viewer.scene.globe.depthTestAgainstTerrain = true;
-    viewer.scene.globe.enableLighting = true;
+    // Ambient 24/7 daylight illumination (prevents night-time blackouts)
+    viewer.scene.globe.enableLighting = false;
+    viewer.scene.globe.depthTestAgainstTerrain = false;
 
     // --- Basemap Controller ---
     function switchBasemap(type) {{
@@ -467,41 +462,50 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       const layers = viewer.imageryLayers;
       layers.removeAll();
 
+      let provider = null;
+
       if (type === 'esri') {{
         const btn = document.getElementById('bm-esri');
         if (btn) btn.classList.add('active');
-        layers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({{
+        provider = new Cesium.UrlTemplateImageryProvider({{
           url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}',
           maximumLevel: 19,
           credit: 'Esri World Imagery'
-        }}));
+        }});
       }} else if (type === 'nsw') {{
         const btn = document.getElementById('bm-nsw');
         if (btn) btn.classList.add('active');
-        layers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({{
+        provider = new Cesium.UrlTemplateImageryProvider({{
           url: 'https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}',
           maximumLevel: 19,
           credit: 'NSW Spatial Services'
-        }}));
+        }});
       }} else if (type === 'topo') {{
         const btn = document.getElementById('bm-topo');
         if (btn) btn.classList.add('active');
-        layers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({{
+        provider = new Cesium.UrlTemplateImageryProvider({{
           url: 'https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Topo_Map/MapServer/tile/{{z}}/{{y}}/{{x}}',
           maximumLevel: 18,
           credit: 'NSW Topographic Map'
-        }}));
+        }});
       }} else if (type === 'osm') {{
         const btn = document.getElementById('bm-osm');
         if (btn) btn.classList.add('active');
-        layers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({{
+        provider = new Cesium.UrlTemplateImageryProvider({{
           url: 'https://{{s}}.basemaps.cartocdn.com/rastertiles/voyager/{{z}}/{{x}}/{{y}}@2x.png',
           subdomains: ['a', 'b', 'c', 'd'],
           maximumLevel: 19,
           credit: 'OpenStreetMap contributors / CARTO'
-        }}));
+        }});
+      }}
+
+      if (provider) {{
+        layers.add(new Cesium.ImageryLayer(provider));
       }}
     }}
+
+    // Initialize default basemap immediately
+    switchBasemap('esri');
 
     function toggleTerrain(enable) {{
       viewer.terrainProvider = enable ? terrainProvider : ellipsoidProvider;

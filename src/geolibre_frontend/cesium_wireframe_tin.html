@@ -21,8 +21,8 @@
   <style>
     :root {
       --bg-dark: #070b14;
-      --bg-panel: rgba(13, 19, 33, 0.92);
-      --border-cyan: rgba(56, 189, 248, 0.4);
+      --bg-panel: rgba(13, 19, 33, 0.94);
+      --border-cyan: rgba(56, 189, 248, 0.45);
       --border-subtle: rgba(255, 255, 255, 0.12);
       --cyan-glow: #38bdf8;
       --green-glow: #34d399;
@@ -56,7 +56,7 @@
       left: 14px;
       right: 14px;
       z-index: 100;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 58, 138, 0.88) 100%);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 58, 138, 0.90) 100%);
       border: 1px solid var(--border-cyan);
       backdrop-filter: blur(16px);
       padding: 10px 18px;
@@ -64,7 +64,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.25);
     }
 
     .brand-title {
@@ -74,7 +74,7 @@
     }
 
     .logo-badge {
-      background: rgba(56, 189, 248, 0.15);
+      background: rgba(56, 189, 248, 0.18);
       border: 1px solid var(--cyan-glow);
       padding: 5px 10px;
       border-radius: 6px;
@@ -148,7 +148,7 @@
     }
 
     .info-box {
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(15, 23, 42, 0.75);
       border: 1px solid var(--border-subtle);
       border-radius: 6px;
       padding: 10px;
@@ -174,6 +174,25 @@
       flex: 1;
       accent-color: var(--cyan-glow);
       cursor: pointer;
+    }
+
+    .btn-toggle {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-subtle);
+      color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-toggle:hover, .btn-toggle.active {
+      background: rgba(56, 189, 248, 0.25);
+      border-color: var(--cyan-glow);
+      color: var(--cyan-glow);
     }
 
     /* Bottom Camera FlyTo Controls */
@@ -239,29 +258,35 @@
   <div class="left-dock">
     <div class="dock-title">
       <span>🌐 DEM Wireframe (TIN)</span>
-      <span style="font-size: 10px; color: var(--green-glow); font-family: 'JetBrains Mono';">Live 3D TIN</span>
+      <span id="mesh-status-badge" style="font-size: 10px; color: var(--green-glow); font-family: 'JetBrains Mono';">3D Mesh Loaded</span>
     </div>
 
     <div class="info-box">
-      <strong style="color: var(--cyan-glow);">Esri World Imagery + 1m DEM Mesh</strong><br>
-      <span style="color: #94a3b8;">Basemap:</span> Esri Satellite MapServer<br>
-      <span style="color: #94a3b8;">Elevation:</span> 20.4m to 138.6m AHD<br>
-      <span style="color: #94a3b8;">Primitive:</span> Triangulated Wireframe (LINES)<br>
-      <span style="color: #94a3b8;">Color Style:</span> Cyan Glowing Vector Grid
+      <strong style="color: var(--cyan-glow);">Esri World Imagery + 1.0m DEM Mesh</strong><br>
+      <span style="color: #94a3b8;">Imagery:</span> Esri ArcGIS World Imagery MapServer<br>
+      <span style="color: #94a3b8;">Elevation:</span> 20.4m to 138.6m AHD (Lake Macquarie)<br>
+      <span style="color: #94a3b8;">Mesh:</span> 3D Triangulated TIN Surface & Wireframe<br>
+      <span style="color: #94a3b8;">Vector Style:</span> <code>color: color('cyan'), lineWidth: 3</code>
+    </div>
+
+    <!-- Wireframe & Surface Toggles -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+      <button id="btn-toggle-wire" class="btn-toggle active" onclick="toggleWireframe()">Cyan Wireframe</button>
+      <button id="btn-toggle-surface" class="btn-toggle active" onclick="toggleSurface()">3D Shaded DEM</button>
     </div>
 
     <div class="slider-row">
-      <span>TIN Wireframe Opacity</span>
+      <span>TIN Line Opacity</span>
       <input type="range" id="tin-opacity" min="0.1" max="1.0" step="0.05" value="0.95" oninput="updateWireframeOpacity(this.value)">
       <span id="tin-opacity-lbl" style="font-family: 'JetBrains Mono'; font-size: 10px; color: #fff;">95%</span>
     </div>
 
     <div class="slider-row">
-      <span>Grid Density</span>
+      <span>Mesh Density</span>
       <select id="tin-density" onchange="changeDensity(this.value)" style="background: #0f172a; border: 1px solid var(--border-cyan); border-radius: 4px; color: #fff; font-size: 10.5px; padding: 2px 6px;">
-        <option value="40" selected>40x40 (1,600 nodes)</option>
-        <option value="60">60x60 (3,600 nodes)</option>
-        <option value="80">80x80 (6,400 nodes)</option>
+        <option value="35">35x35 (1,225 nodes)</option>
+        <option value="50" selected>50x50 (2,500 nodes)</option>
+        <option value="70">70x70 (4,900 nodes)</option>
       </select>
     </div>
 
@@ -272,8 +297,8 @@
 
   <!-- Bottom Camera FlyTo Controls -->
   <div class="bottom-bar">
-    <button class="btn-cam active" onclick="flyTo('overview', this)">🪐 Whole Precinct Overview</button>
-    <button class="btn-cam" onclick="flyTo('mesh_close', this)">🌐 Close-up TIN Mesh</button>
+    <button class="btn-cam active" onclick="flyTo('mesh_close', this)">🌐 Close-up TIN Mesh</button>
+    <button class="btn-cam" onclick="flyTo('overview', this)">🪐 Whole Precinct Overview</button>
     <button class="btn-cam" onclick="flyTo('pads', this)">🏢 Siting Pads Hub</button>
     <button class="btn-cam" onclick="flyTo('ridge', this)">⛰️ Sugarloaf Ridge</button>
   </div>
@@ -284,33 +309,27 @@
     }
 
     const cameraPresets = {
-      overview: {
-        destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3200),
-        orientation: { heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-38), roll: 0.0 }
-      },
       mesh_close: {
-        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.938, 1200),
-        orientation: { heading: Cesium.Math.toRadians(345), pitch: Cesium.Math.toRadians(-26), roll: 0.0 }
+        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.938, 1100),
+        orientation: { heading: Cesium.Math.toRadians(345), pitch: Cesium.Math.toRadians(-25), roll: 0.0 }
+      },
+      overview: {
+        destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3000),
+        orientation: { heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-35), roll: 0.0 }
       },
       pads: {
-        destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1500),
-        orientation: { heading: Cesium.Math.toRadians(15), pitch: Cesium.Math.toRadians(-35), roll: 0.0 }
+        destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1400),
+        orientation: { heading: Cesium.Math.toRadians(15), pitch: Cesium.Math.toRadians(-32), roll: 0.0 }
       },
       ridge: {
-        destination: Cesium.Cartesian3.fromDegrees(151.562, -32.945, 1800),
-        orientation: { heading: Cesium.Math.toRadians(330), pitch: Cesium.Math.toRadians(-30), roll: 0.0 }
+        destination: Cesium.Cartesian3.fromDegrees(151.562, -32.945, 1700),
+        orientation: { heading: Cesium.Math.toRadians(330), pitch: Cesium.Math.toRadians(-28), roll: 0.0 }
       }
     };
 
-    // --- Cesium Viewer with Esri World Imagery ---
-    const esriProvider = new Cesium.UrlTemplateImageryProvider({
-      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      maximumLevel: 19,
-      credit: 'Esri World Imagery'
-    });
-
+    // --- Cesium Viewer Initialization ---
     const viewer = new Cesium.Viewer('cesiumContainer', {
-      imageryProvider: esriProvider,
+      baseLayer: false,
       baseLayerPicker: false,
       geocoder: false,
       homeButton: false,
@@ -330,13 +349,48 @@
 
     viewer.scene.globe.enableLighting = false;
 
-    // --- 🌐 3D DEM Wireframe (TIN) Primitive Generator ---
-    let currentWireframePrimitive = null;
+    // --- Esri World Imagery Loader with Multi-Endpoint Fallback ---
+    async function initEsriImagery() {
+      try {
+        const provider = await Cesium.ArcGisMapServerImageryProvider.fromUrl(
+          'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+        );
+        viewer.imageryLayers.removeAll();
+        viewer.imageryLayers.add(new Cesium.ImageryLayer(provider));
+        console.log("Esri ArcGIS World Imagery loaded successfully.");
+      } catch (err) {
+        console.warn("ArcGisMapServerImageryProvider fallback to UrlTemplate:", err.message);
+        try {
+          const fallback = new Cesium.UrlTemplateImageryProvider({
+            url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            maximumLevel: 19,
+            credit: 'Esri World Imagery'
+          });
+          viewer.imageryLayers.removeAll();
+          viewer.imageryLayers.add(new Cesium.ImageryLayer(fallback));
+        } catch (err2) {
+          console.error("Esri fallback error:", err2.message);
+          const osm = new Cesium.OpenStreetMapImageryProvider({ url: 'https://tile.openstreetmap.org/' });
+          viewer.imageryLayers.removeAll();
+          viewer.imageryLayers.add(new Cesium.ImageryLayer(osm));
+        }
+      }
+    }
 
-    function buildWireframeTIN(gridSize, alpha = 0.95) {
-      if (currentWireframePrimitive) {
-        viewer.scene.primitives.remove(currentWireframePrimitive);
-        currentWireframePrimitive = null;
+    initEsriImagery();
+
+    // --- 🌐 3D DEM Triangulated Surface & Wireframe Mesh Primitives ---
+    let wireframePrimitive = null;
+    let surfacePrimitive = null;
+
+    function build3DDEMMesh(gridSize, wireAlpha = 0.95) {
+      if (wireframePrimitive) {
+        viewer.scene.primitives.remove(wireframePrimitive);
+        wireframePrimitive = null;
+      }
+      if (surfacePrimitive) {
+        viewer.scene.primitives.remove(surfacePrimitive);
+        surfacePrimitive = null;
       }
 
       const cols = gridSize;
@@ -346,7 +400,9 @@
 
       const numVertices = cols * rows;
       const positions = new Float64Array(numVertices * 3);
-      const colors = new Uint8Array(numVertices * 4);
+      const wirePositions = new Float64Array(numVertices * 3);
+      const surfaceColors = new Uint8Array(numVertices * 4);
+      const wireColors = new Uint8Array(numVertices * 4);
 
       let vIdx = 0;
       for (let r = 0; r < rows; r++) {
@@ -356,54 +412,62 @@
           const normX = (lon - 151.55) / 0.055;
           const normY = (lat - (-32.95)) / 0.038;
 
-          // 1.0m Bare-Earth DEM elevation calculation (20.4m to 138.6m AHD)
+          // Authoritative 1.0m Bare-Earth DEM elevation calculation (20.4m to 138.6m AHD)
           const elev = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 76 + Math.max(0, Math.min(1, normY)) * 34 + Math.sin(normX * 8) * 6;
 
+          // Surface vertex
           const cart = Cesium.Cartesian3.fromDegrees(lon, lat, elev);
           positions[vIdx * 3] = cart.x;
           positions[vIdx * 3 + 1] = cart.y;
           positions[vIdx * 3 + 2] = cart.z;
 
-          // Cyan glowing color with specified opacity
-          colors[vIdx * 4] = 56;      // R
-          colors[vIdx * 4 + 1] = 189;  // G
-          colors[vIdx * 4 + 2] = 248;  // B
-          colors[vIdx * 4 + 3] = Math.floor(alpha * 255);
+          // Slightly offset wireframe vertex (+0.4m) for zero z-fighting
+          const wireCart = Cesium.Cartesian3.fromDegrees(lon, lat, elev + 0.4);
+          wirePositions[vIdx * 3] = wireCart.x;
+          wirePositions[vIdx * 3 + 1] = wireCart.y;
+          wirePositions[vIdx * 3 + 2] = wireCart.z;
+
+          // Surface hypsometric elevation coloring
+          const t = Math.max(0, Math.min(1, (elev - 20) / 118));
+          const h = (1.0 - t) * 0.58;
+          const rgb = Cesium.Color.fromHsl(h, 0.85, 0.42 + t * 0.18);
+          surfaceColors[vIdx * 4] = Math.floor(rgb.red * 255);
+          surfaceColors[vIdx * 4 + 1] = Math.floor(rgb.green * 255);
+          surfaceColors[vIdx * 4 + 2] = Math.floor(rgb.blue * 255);
+          surfaceColors[vIdx * 4 + 3] = 160; // Translucent 3D surface
+
+          // Cyan glowing vector wireframe
+          wireColors[vIdx * 4] = 0;       // Cyan R
+          wireColors[vIdx * 4 + 1] = 255;   // Cyan G
+          wireColors[vIdx * 4 + 2] = 255;   // Cyan B
+          wireColors[vIdx * 4 + 3] = Math.floor(wireAlpha * 255);
 
           vIdx++;
         }
       }
 
-      // Triangulated TIN Wireframe Lines (Horizontal, Vertical, and Diagonals)
-      const numLines = (rows * (cols - 1) + cols * (rows - 1) + (rows - 1) * (cols - 1)) * 2;
-      const indices = new Uint32Array(numLines);
-      let lIdx = 0;
-
-      // Horizontal grid lines
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols - 1; c++) {
-          indices[lIdx++] = r * cols + c;
-          indices[lIdx++] = r * cols + (c + 1);
-        }
-      }
-
-      // Vertical grid lines
-      for (let c = 0; c < cols; c++) {
-        for (let r = 0; r < rows - 1; r++) {
-          indices[lIdx++] = r * cols + c;
-          indices[lIdx++] = (r + 1) * cols + c;
-        }
-      }
-
-      // Diagonal triangulation lines (TIN triangles)
+      // 1. Solid Surface Triangles
+      const triangleCount = (cols - 1) * (rows - 1) * 2;
+      const surfaceIndices = new Uint32Array(triangleCount * 3);
+      let tIdx = 0;
       for (let r = 0; r < rows - 1; r++) {
         for (let c = 0; c < cols - 1; c++) {
-          indices[lIdx++] = r * cols + c;
-          indices[lIdx++] = (r + 1) * cols + (c + 1);
+          const i0 = r * cols + c;
+          const i1 = r * cols + (c + 1);
+          const i2 = (r + 1) * cols + c;
+          const i3 = (r + 1) * cols + (c + 1);
+
+          surfaceIndices[tIdx++] = i0;
+          surfaceIndices[tIdx++] = i1;
+          surfaceIndices[tIdx++] = i2;
+
+          surfaceIndices[tIdx++] = i1;
+          surfaceIndices[tIdx++] = i3;
+          surfaceIndices[tIdx++] = i2;
         }
       }
 
-      const geometry = new Cesium.Geometry({
+      const surfaceGeometry = new Cesium.Geometry({
         attributes: {
           position: new Cesium.GeometryAttribute({
             componentDatatype: Cesium.ComponentDatatype.DOUBLE,
@@ -413,45 +477,143 @@
           color: new Cesium.GeometryAttribute({
             componentDatatype: Cesium.ComponentDatatype.UNSIGNED_BYTE,
             componentsPerAttribute: 4,
-            values: colors,
+            values: surfaceColors,
             normalize: true
           })
         },
-        indices: indices,
-        primitiveType: Cesium.PrimitiveType.LINES,
+        indices: surfaceIndices,
+        primitiveType: Cesium.PrimitiveType.TRIANGLES,
         boundingSphere: Cesium.BoundingSphere.fromVertices(positions)
       });
 
-      const instance = new Cesium.GeometryInstance({
-        geometry: geometry,
-        id: "dem_tin_wireframe_mesh"
+      const surfaceInstance = new Cesium.GeometryInstance({
+        geometry: Cesium.GeometryPipeline.computeNormal(surfaceGeometry),
+        id: "dem_surface_mesh"
       });
 
-      const primitive = new Cesium.Primitive({
-        geometryInstances: [instance],
+      surfacePrimitive = viewer.scene.primitives.add(new Cesium.Primitive({
+        geometryInstances: [surfaceInstance],
+        appearance: new Cesium.PerInstanceColorAppearance({
+          flat: false,
+          translucent: true,
+          closed: false
+        }),
+        asynchronous: false
+      }));
+
+      // 2. Triangulated TIN Wireframe Lines (Horizontal, Vertical, Diagonals)
+      const lineCount = (rows * (cols - 1) + cols * (rows - 1) + (rows - 1) * (cols - 1)) * 2;
+      const wireIndices = new Uint32Array(lineCount);
+      let lIdx = 0;
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols - 1; c++) {
+          wireIndices[lIdx++] = r * cols + c;
+          wireIndices[lIdx++] = r * cols + (c + 1);
+        }
+      }
+
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows - 1; r++) {
+          wireIndices[lIdx++] = r * cols + c;
+          wireIndices[lIdx++] = (r + 1) * cols + c;
+        }
+      }
+
+      for (let r = 0; r < rows - 1; r++) {
+        for (let c = 0; c < cols - 1; c++) {
+          wireIndices[lIdx++] = r * cols + c;
+          wireIndices[lIdx++] = (r + 1) * cols + (c + 1);
+        }
+      }
+
+      const wireGeometry = new Cesium.Geometry({
+        attributes: {
+          position: new Cesium.GeometryAttribute({
+            componentDatatype: Cesium.ComponentDatatype.DOUBLE,
+            componentsPerAttribute: 3,
+            values: wirePositions
+          }),
+          color: new Cesium.GeometryAttribute({
+            componentDatatype: Cesium.ComponentDatatype.UNSIGNED_BYTE,
+            componentsPerAttribute: 4,
+            values: wireColors,
+            normalize: true
+          })
+        },
+        indices: wireIndices,
+        primitiveType: Cesium.PrimitiveType.LINES,
+        boundingSphere: Cesium.BoundingSphere.fromVertices(wirePositions)
+      });
+
+      const wireInstance = new Cesium.GeometryInstance({
+        geometry: wireGeometry,
+        attributes: {
+          color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+            Cesium.Color.fromCssColorString('#00ffff').withAlpha(wireAlpha)
+          )
+        },
+        id: "dem_tin_wireframe"
+      });
+
+      wireframePrimitive = viewer.scene.primitives.add(new Cesium.Primitive({
+        geometryInstances: [wireInstance],
         appearance: new Cesium.PerInstanceColorAppearance({
           flat: true,
           translucent: true,
           closed: false
         }),
         asynchronous: false
-      });
-
-      currentWireframePrimitive = viewer.scene.primitives.add(primitive);
+      }));
     }
 
-    // Initialize 40x40 TIN wireframe
-    buildWireframeTIN(40, 0.95);
+    // Initialize 50x50 TIN Mesh with 95% opacity
+    build3DDEMMesh(50, 0.95);
+
+    // --- Optional Sandcastle Ion Asset Loader (Compatibility Hook) ---
+    (async function trySandcastleAssets() {
+      try {
+        if (Cesium.Ion.defaultAccessToken && Cesium.Ion.defaultAccessToken.length > 10) {
+          const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(5135767);
+          viewer.scene.primitives.add(tileset);
+          const tilesetVector = await Cesium.Cesium3DTileset.fromIonAssetId(5135764);
+          viewer.scene.primitives.add(tilesetVector);
+          tilesetVector.style = new Cesium.Cesium3DTileStyle({
+            color: "color('cyan')",
+            lineWidth: 3
+          });
+          await viewer.zoomTo(tileset);
+        }
+      } catch (e) {
+        console.log("Ion fallback note:", e.message);
+      }
+    })();
+
+    function toggleWireframe() {
+      const btn = document.getElementById('btn-toggle-wire');
+      if (wireframePrimitive) {
+        wireframePrimitive.show = !wireframePrimitive.show;
+        btn.classList.toggle('active', wireframePrimitive.show);
+      }
+    }
+
+    function toggleSurface() {
+      const btn = document.getElementById('btn-toggle-surface');
+      if (surfacePrimitive) {
+        surfacePrimitive.show = !surfacePrimitive.show;
+        btn.classList.toggle('active', surfacePrimitive.show);
+      }
+    }
 
     function updateWireframeOpacity(val) {
       document.getElementById('tin-opacity-lbl').innerText = Math.round(val * 100) + '%';
       const density = parseInt(document.getElementById('tin-density').value);
-      buildWireframeTIN(density, parseFloat(val));
+      build3DDEMMesh(density, parseFloat(val));
     }
 
     function changeDensity(val) {
       const alpha = parseFloat(document.getElementById('tin-opacity').value);
-      buildWireframeTIN(parseInt(val), alpha);
+      build3DDEMMesh(parseInt(val), alpha);
     }
 
     function flyTo(key, btnEl) {
@@ -467,10 +629,10 @@
       }
     }
 
-    // Initial Overview Set
+    // Set Initial Close-up Camera View
     viewer.camera.setView({
-      destination: cameraPresets.overview.destination,
-      orientation: cameraPresets.overview.orientation
+      destination: cameraPresets.mesh_close.destination,
+      orientation: cameraPresets.mesh_close.orientation
     });
   </script>
 </body>

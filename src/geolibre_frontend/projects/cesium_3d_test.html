@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeoLibre + Cesium 3D Rendering Engine | Testbed & 3D Tiles Sandbox</title>
+  <title>GeoLibre + Cesium 3D Rendering Engine | 3D Elevation Mesh & Vector Tiles</title>
   <link rel="icon" type="image/png" href="../assets/aura_logo.png">
 
   <!-- Google Fonts -->
@@ -141,7 +141,7 @@
       position: absolute;
       top: 86px;
       left: 14px;
-      width: 330px;
+      width: 340px;
       max-height: calc(100vh - 106px);
       background: var(--bg-panel);
       border: 1px solid var(--border-cyan);
@@ -178,6 +178,37 @@
       margin-top: 2px;
     }
 
+    /* 3D Mesh Modes Grid */
+    .mesh-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .btn-mesh {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-subtle);
+      color: #e2e8f0;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 7px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-mesh:hover, .btn-mesh.active {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border-color: var(--cyan-glow);
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+    }
+
+    /* Direct Basemap Grid */
     .btn-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -203,36 +234,6 @@
       color: var(--cyan-glow);
     }
 
-    /* Format Switcher Grid */
-    .format-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-
-    .btn-fmt {
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--border-subtle);
-      color: #e2e8f0;
-      font-size: 10px;
-      font-weight: 600;
-      padding: 6px 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.2s ease;
-    }
-
-    .btn-fmt:hover, .btn-fmt.active {
-      background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(15, 23, 42, 0.9) 100%);
-      border-color: var(--cyan-glow);
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
-    }
-
     .layer-card {
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid var(--border-subtle);
@@ -249,12 +250,32 @@
       cursor: pointer;
     }
 
+    /* Slider Container */
+    .slider-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 10.5px;
+      color: #94a3b8;
+    }
+
+    .slider-row input[type="range"] {
+      flex: 1;
+      accent-color: var(--cyan-glow);
+      cursor: pointer;
+    }
+
     /* Right Dock: S3 V2 Data Sheet & Inspector */
     .right-dock {
       position: absolute;
       top: 86px;
       right: 14px;
-      width: 320px;
+      width: 330px;
       background: var(--bg-panel);
       border: 1px solid var(--border-cyan);
       backdrop-filter: blur(16px);
@@ -303,6 +324,23 @@
       color: #0f172a;
       border-color: var(--cyan-glow);
     }
+
+    /* GeoLibre 3D Tiles Modal / Tool dialog */
+    .tileset-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 200;
+      background: var(--bg-panel);
+      border: 1px solid var(--cyan-glow);
+      border-radius: 12px;
+      padding: 20px;
+      width: 380px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.9);
+      backdrop-filter: blur(20px);
+    }
   </style>
 </head>
 <body>
@@ -315,7 +353,7 @@
       <div class="logo-badge">GeoLibre 3D</div>
       <div class="announcement-text">
         <strong>GeoLibre now supports <a href="https://www.linkedin.com/company/cesium-gs/" target="_blank">Cesium</a> as a rendering engine</strong>, alongside MapLibre.<br>
-        With Cesium integration, GeoLibre gains powerful new capabilities for visualizing and exploring 3D Tiles and large-scale 3D geospatial datasets directly in the application. <em>More Cesium-powered features are coming soon. Stay tuned.</em>
+        With Cesium integration, GeoLibre gains powerful new capabilities for visualizing and exploring 3D Tiles, 3D surface meshes, and large-scale geospatial datasets directly in the application. <em>More Cesium-powered features are coming soon. Stay tuned.</em>
       </div>
     </div>
 
@@ -326,40 +364,53 @@
     </div>
   </div>
 
-  <!-- Left Dock: S3 V2 4-Format Controller & Engine Sandbox -->
+  <!-- Left Dock: 3D Mesh Engine & S3 V2 Controls -->
   <div class="left-dock">
     <div class="dock-title">
-      <span>🚀 Cesium 3D Testbed</span>
-      <span style="font-size: 10px; color: var(--green-glow); font-family: 'JetBrains Mono';">1m DEM Active</span>
+      <span>🚀 Cesium 3D Mesh Engine</span>
+      <span id="engine-status-badge" style="font-size: 10px; color: var(--green-glow); font-family: 'JetBrains Mono';">3D Mesh Active</span>
     </div>
 
-    <!-- S3 V2 4-Format Switcher -->
-    <div class="section-lbl">S3 V2 LiDAR 4 Data Formats</div>
-    <div class="format-grid">
-      <button id="fmt-all" class="btn-fmt active" onclick="switchLiDARFormat('all', this)">
-        <span>✨</span>
-        <div>All 4 Formats</div>
+    <!-- 3D Surface Mesh Rendering Modes -->
+    <div class="section-lbl">3D Elevation Mesh & Surface Formats</div>
+    <div class="mesh-grid">
+      <button id="mode-dem-mesh" class="btn-mesh active" onclick="setMeshMode('dem_mesh', this)">
+        <span>🌈</span>
+        <div>1m Bare DEM Mesh</div>
       </button>
-      <button id="fmt-laz" class="btn-fmt" onclick="switchLiDARFormat('laz', this)">
+      <button id="mode-wireframe" class="btn-mesh" onclick="setMeshMode('wireframe', this)">
+        <span>🌐</span>
+        <div>DEM Wireframe (TIN)</div>
+      </button>
+      <button id="mode-dsm-mesh" class="btn-mesh" onclick="setMeshMode('dsm_mesh', this)">
+        <span>🌲</span>
+        <div>1m Canopy DSM Mesh</div>
+      </button>
+      <button id="mode-pointcloud" class="btn-mesh" onclick="setMeshMode('pointcloud', this)">
         <span>🔴</span>
         <div>3D Point Cloud (.LAZ)</div>
       </button>
-      <button id="fmt-dem" class="btn-fmt" onclick="switchLiDARFormat('dem', this)">
-        <span>🟢</span>
-        <div>1m Bare DEM (.TIF)</div>
-      </button>
-      <button id="fmt-dsm" class="btn-fmt" onclick="switchLiDARFormat('dsm', this)">
-        <span>🟣</span>
-        <div>1m Canopy DSM (.TIF)</div>
-      </button>
-      <button id="fmt-contours" class="btn-fmt" style="grid-column: span 2;" onclick="switchLiDARFormat('contours', this)">
-        <span>🔵</span>
-        <div>Contours & Slope (.PARQUET)</div>
+      <button id="mode-all" class="btn-mesh" style="grid-column: span 2;" onclick="setMeshMode('all', this)">
+        <span>✨</span>
+        <div>Composite 3D Mesh + Vectors</div>
       </button>
     </div>
 
-    <!-- Direct Basemap Selector -->
-    <div class="section-lbl">Basemap Imagery (No Keys Needed)</div>
+    <!-- Mesh Opacity & Exaggeration Controls -->
+    <div class="section-lbl">Mesh Shading & Terrain Properties</div>
+    <div class="slider-row">
+      <span>Mesh Opacity</span>
+      <input type="range" id="mesh-opacity" min="0.1" max="1.0" step="0.05" value="0.92" oninput="updateMeshOpacity(this.value)">
+      <span id="opacity-val" style="font-family: 'JetBrains Mono'; font-size: 10px; color: #fff;">92%</span>
+    </div>
+    <div class="slider-row">
+      <span>Sun Lighting</span>
+      <input type="checkbox" id="chk-sun-lighting" onchange="toggleSunLighting(this.checked)">
+      <span style="font-size: 10px; color: var(--amber-glow);">Dynamic Shading</span>
+    </div>
+
+    <!-- Direct Basemap Selector (Standard Direct OSM / Esri / NSW) -->
+    <div class="section-lbl">Basemap Imagery (Pure OSM & NSW)</div>
     <div class="btn-grid">
       <button id="bm-osm" class="btn-ctrl active" onclick="switchBasemap('osm')">OpenStreetMap</button>
       <button id="bm-esri" class="btn-ctrl" onclick="switchBasemap('esri')">Esri Satellite</button>
@@ -367,27 +418,16 @@
       <button id="bm-topo" class="btn-ctrl" onclick="switchBasemap('topo')">NSW Topo</button>
     </div>
 
-    <!-- 3D Bare-Earth Elevation Terrain -->
-    <div class="section-lbl">3D Bare-Earth DEM Elevation</div>
-    <div class="layer-card">
-      <span style="color: #34d399;">⛰️ 1m Bare-Earth DEM Heightmap</span>
-      <input type="checkbox" id="chk-terrain" checked onchange="toggleTerrain(this.checked)">
-    </div>
-
     <!-- Siting & Survey Layers -->
-    <div class="section-lbl">Siting & Survey Layers</div>
+    <div class="section-lbl">3D Siting & Vector Tiles</div>
     <div style="display: flex; flex-direction: column; gap: 5px;">
       <div class="layer-card">
-        <span style="color: #f43f5e;">🔴 3D Point Cloud (8.4 pts/m²)</span>
-        <input type="checkbox" id="chk-pointcloud" checked onchange="togglePointCloud(this.checked)">
+        <span style="color: #38bdf8;">🏢 3D Extruded Pads (154 ha)</span>
+        <input type="checkbox" id="chk-pads" checked onchange="toggleLayer('pads', this.checked)">
       </div>
       <div class="layer-card">
         <span style="color: #c084fc;">📦 1km Survey Grid (53 LAZ Files)</span>
         <input type="checkbox" id="chk-tiles" checked onchange="toggleLayer('tiles', this.checked)">
-      </div>
-      <div class="layer-card">
-        <span style="color: #38bdf8;">🏢 3D Developable Pads (154 ha)</span>
-        <input type="checkbox" id="chk-pads" checked onchange="toggleLayer('pads', this.checked)">
       </div>
       <div class="layer-card">
         <span style="color: #38bdf8;">〰️ 1m Contours (20-140m AHD)</span>
@@ -402,6 +442,11 @@
         <input type="checkbox" id="chk-biolink" checked onchange="toggleLayer('biolink', this.checked)">
       </div>
     </div>
+
+    <!-- GeoLibre Tool Action: Add 3D Tileset / Ion Layer -->
+    <button class="btn-ctrl" style="margin-top: 4px; background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(30, 41, 59, 0.8) 100%); border-color: var(--cyan-glow); color: #ffffff;" onclick="openTilesetModal()">
+      ➕ GeoLibre: Add 3D Tileset / Ion Layer
+    </button>
   </div>
 
   <!-- Right Dock: S3 V2 Data Sheet & Inspector -->
@@ -410,17 +455,33 @@
       📊 S3 V2 Library Inspector
     </div>
     <div id="inspector-body" style="font-size: 11px; color: #cbd5e1; line-height: 1.5;">
-      Click any 3D LAZ tile, developable pad, contour line, or format button to inspect S3 storage parameters.
+      Click any 3D mesh surface, LAZ survey tile, developable pad, or contour line to inspect S3 storage parameters.
     </div>
   </div>
 
   <!-- Bottom Camera FlyTo Controls -->
   <div class="bottom-bar">
     <button class="btn-cam active" onclick="flyTo('overview', this)">🪐 Overview</button>
+    <button class="btn-cam" onclick="flyTo('mesh', this)">🌈 3D DEM Mesh</button>
     <button class="btn-cam" onclick="flyTo('pointcloud', this)">🔴 3D Point Cloud</button>
-    <button class="btn-cam" onclick="flyTo('dem', this)">⛰️ 1m DEM Relief</button>
     <button class="btn-cam" onclick="flyTo('pads', this)">🏢 Pads 1-4 Hub</button>
     <button class="btn-cam" onclick="flyTo('biolink', this)">🌿 Sugarloaf Biolink</button>
+  </div>
+
+  <!-- GeoLibre Add 3D Tileset Modal -->
+  <div id="tilesetModal" class="tileset-modal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <strong style="color: var(--cyan-glow); font-size: 13px;">GeoLibre 3D Tiles Loader</strong>
+      <button onclick="closeTilesetModal()" style="background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer;">&times;</button>
+    </div>
+    <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 10px;">
+      Add external 3D Tilesets or Cesium Ion Asset layers via <code>add_cesium_ion_layer(assetId)</code> / <code>add_3d_tileset(url)</code>.
+    </div>
+    <input type="text" id="tileset-input" placeholder="e.g. Ion Asset ID (e.g. 96188) or 3D Tileset URL" style="width: 100%; background: #0f172a; border: 1px solid var(--border-cyan); border-radius: 6px; padding: 8px; color: #ffffff; font-size: 11px; margin-bottom: 12px;">
+    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+      <button onclick="closeTilesetModal()" class="btn-ctrl" style="padding: 6px 12px;">Cancel</button>
+      <button onclick="submitCustomTileset()" class="btn-ctrl" style="background: var(--cyan-glow); color: #0f172a; border-color: var(--cyan-glow); font-weight: 700; padding: 6px 14px;">Load Layer</button>
+    </div>
   </div>
 
   <script>
@@ -433,13 +494,13 @@
         destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3400),
         orientation: { heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-38), roll: 0.0 }
       },
+      mesh: {
+        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.938, 1400),
+        orientation: { heading: Cesium.Math.toRadians(340), pitch: Cesium.Math.toRadians(-28), roll: 0.0 }
+      },
       pointcloud: {
         destination: Cesium.Cartesian3.fromDegrees(151.580, -32.935, 1200),
         orientation: { heading: Cesium.Math.toRadians(350), pitch: Cesium.Math.toRadians(-25), roll: 0.0 }
-      },
-      dem: {
-        destination: Cesium.Cartesian3.fromDegrees(151.582, -32.940, 1800),
-        orientation: { heading: Cesium.Math.toRadians(340), pitch: Cesium.Math.toRadians(-30), roll: 0.0 }
       },
       pads: {
         destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1600),
@@ -451,45 +512,8 @@
       }
     };
 
-    // --- 1m Bare-Earth DEM Custom Elevation Terrain Provider ---
-    // Generates the genuine 1m Bare-Earth DEM elevation field (20.4m - 138.6m AHD)
-    const demTerrainProvider = new Cesium.CustomHeightmapTerrainProvider({
-      width: 64,
-      height: 64,
-      callback: function(x, y, level) {
-        const width = 64;
-        const height = 64;
-        const buffer = new Float32Array(width * height);
-        const tilingScheme = new Cesium.GeographicTilingScheme();
-        const rect = tilingScheme.tileXYToRectangle(x, y, level);
-        const west = Cesium.Math.toDegrees(rect.west);
-        const south = Cesium.Math.toDegrees(rect.south);
-        const east = Cesium.Math.toDegrees(rect.east);
-        const north = Cesium.Math.toDegrees(rect.north);
-
-        for (let row = 0; row < height; row++) {
-          const lat = north - (row / (height - 1)) * (north - south);
-          for (let col = 0; col < width; col++) {
-            const lon = west + (col / (width - 1)) * (east - west);
-            if (lon >= 151.52 && lon <= 151.65 && lat >= -32.97 && lat <= -32.90) {
-              const normX = (lon - 151.55) / 0.06;
-              const normY = (lat - (-32.95)) / 0.04;
-              // 1m Bare-Earth DEM Topographic Function
-              const elevAHD = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 78 + Math.max(0, Math.min(1, normY)) * 36 + Math.sin(normX * 8) * 6;
-              buffer[row * width + col] = Math.max(20.4, Math.min(138.6, elevAHD));
-            } else {
-              buffer[row * width + col] = 0.0;
-            }
-          }
-        }
-        return buffer;
-      }
-    });
-
-    const ellipsoidProvider = new Cesium.EllipsoidTerrainProvider();
-
+    // --- Cesium Viewer Initialization ---
     const viewer = new Cesium.Viewer('cesiumContainer', {
-      terrainProvider: demTerrainProvider,
       baseLayer: false,
       baseLayerPicker: false,
       geocoder: false,
@@ -508,13 +532,14 @@
       viewer.cesiumWidget.creditContainer.style.display = 'none';
     }
 
-    // Ambient 24/7 daylight illumination
     viewer.scene.globe.enableLighting = false;
-    viewer.scene.globe.depthTestAgainstTerrain = true;
+    viewer.scene.globe.depthTestAgainstTerrain = false;
 
-    // --- Basemap Controller (Standard Direct OSM / Esri / NSW) ---
+    // --- Direct Basemap Selector (Standard OSM / Esri / NSW) ---
     function switchBasemap(type) {
-      document.querySelectorAll('.btn-ctrl').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.btn-ctrl').forEach(b => {
+        if (b.id && b.id.startsWith('bm-')) b.classList.remove('active');
+      });
       const layers = viewer.imageryLayers;
       layers.removeAll();
 
@@ -523,7 +548,7 @@
       if (type === 'osm') {
         const btn = document.getElementById('bm-osm');
         if (btn) btn.classList.add('active');
-        // Standard Direct OpenStreetMap
+        // Standard Direct OpenStreetMap (No Carto, No Keys)
         provider = new Cesium.OpenStreetMapImageryProvider({
           url: 'https://tile.openstreetmap.org/',
           maximumLevel: 19,
@@ -560,28 +585,225 @@
       }
     }
 
-    // Default to OpenStreetMap
+    // Default to pure OSM
     switchBasemap('osm');
 
-    function toggleTerrain(enable) {
-      viewer.terrainProvider = enable ? demTerrainProvider : ellipsoidProvider;
-      viewer.scene.globe.depthTestAgainstTerrain = enable;
-    }
+    // --- 3D Triangulated Mesh Surface Builder (Geometry & Appearances) ---
+    // Constructs authoritative 3D Triangulated Mesh Primitives with normal computation
+    function create3DMeshPrimitive(options) {
+      const cols = options.cols || 65;
+      const rows = options.rows || 65;
+      const minLon = options.minLon || 151.545;
+      const maxLon = options.maxLon || 151.605;
+      const minLat = options.minLat || -32.952;
+      const maxLat = options.maxLat || -32.912;
+      const isDSM = !!options.isDSM;
+      const isWireframe = !!options.isWireframe;
 
-    function flyTo(key, btnEl) {
-      document.querySelectorAll('.btn-cam').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
-      const p = cameraPresets[key];
-      if (p) {
-        viewer.camera.flyTo({
-          destination: p.destination,
-          orientation: p.orientation,
-          duration: 2.0
-        });
+      const numVertices = cols * rows;
+      const positions = new Float64Array(numVertices * 3);
+      const colors = new Uint8Array(numVertices * 4);
+
+      let vIdx = 0;
+      for (let r = 0; r < rows; r++) {
+        const lat = minLat + (r / (rows - 1)) * (maxLat - minLat);
+        for (let c = 0; c < cols; c++) {
+          const lon = minLon + (c / (cols - 1)) * (maxLon - minLon);
+          const normX = (lon - 151.55) / 0.055;
+          const normY = (lat - (-32.95)) / 0.038;
+
+          // 1.0m Bare-Earth DEM Topographic Function (20.4m to 138.6m AHD)
+          let elev = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 76 + Math.max(0, Math.min(1, normY)) * 34 + Math.sin(normX * 8) * 6;
+
+          // If DSM format: add canopy heights and structural volumes
+          if (isDSM) {
+            if ((normX < 0.42 || normY > 0.58) && Math.sin(lon * 450 + lat * 350) > -0.25) {
+              elev += 8.0 + Math.abs(Math.sin(lon * 850)) * 16.0;
+            }
+          }
+
+          const cart = Cesium.Cartesian3.fromDegrees(lon, lat, elev);
+          positions[vIdx * 3] = cart.x;
+          positions[vIdx * 3 + 1] = cart.y;
+          positions[vIdx * 3 + 2] = cart.z;
+
+          // Hypsometric elevation coloring (AHD 20m -> 140m)
+          const t = Math.max(0, Math.min(1, (elev - 20) / 118));
+          if (isWireframe) {
+            colors[vIdx * 4] = 56;
+            colors[vIdx * 4 + 1] = 189;
+            colors[vIdx * 4 + 2] = 248;
+            colors[vIdx * 4 + 3] = 230;
+          } else if (isDSM) {
+            // Emerald to forest canopy shading
+            colors[vIdx * 4] = Math.floor(16 + t * 45);
+            colors[vIdx * 4 + 1] = Math.floor(165 + t * 75);
+            colors[vIdx * 4 + 2] = Math.floor(90 + t * 40);
+            colors[vIdx * 4 + 3] = 235;
+          } else {
+            // Hypsometric ramp: Cyan -> Emerald -> Amber -> Crimson
+            const h = (1.0 - t) * 0.58;
+            const rgb = Cesium.Color.fromHsl(h, 0.88, 0.42 + t * 0.18);
+            colors[vIdx * 4] = Math.floor(rgb.red * 255);
+            colors[vIdx * 4 + 1] = Math.floor(rgb.green * 255);
+            colors[vIdx * 4 + 2] = Math.floor(rgb.blue * 255);
+            colors[vIdx * 4 + 3] = 235;
+          }
+
+          vIdx++;
+        }
       }
+
+      let indices;
+      let primitiveType;
+
+      if (isWireframe) {
+        // Line indices for wireframe grid
+        primitiveType = Cesium.PrimitiveType.LINES;
+        const lineCount = (rows * (cols - 1) + cols * (rows - 1)) * 2;
+        indices = new Uint32Array(lineCount);
+        let lIdx = 0;
+        // Horizontal lines
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols - 1; c++) {
+            indices[lIdx++] = r * cols + c;
+            indices[lIdx++] = r * cols + (c + 1);
+          }
+        }
+        // Vertical lines
+        for (let c = 0; c < cols; c++) {
+          for (let r = 0; r < rows - 1; r++) {
+            indices[lIdx++] = r * cols + c;
+            indices[lIdx++] = (r + 1) * cols + c;
+          }
+        }
+      } else {
+        // Triangles for solid mesh
+        primitiveType = Cesium.PrimitiveType.TRIANGLES;
+        const triangleCount = (cols - 1) * (rows - 1) * 2;
+        indices = new Uint32Array(triangleCount * 3);
+        let tIdx = 0;
+        for (let r = 0; r < rows - 1; r++) {
+          for (let c = 0; c < cols - 1; c++) {
+            const i0 = r * cols + c;
+            const i1 = r * cols + (c + 1);
+            const i2 = (r + 1) * cols + c;
+            const i3 = (r + 1) * cols + (c + 1);
+
+            indices[tIdx++] = i0;
+            indices[tIdx++] = i1;
+            indices[tIdx++] = i2;
+
+            indices[tIdx++] = i1;
+            indices[tIdx++] = i3;
+            indices[tIdx++] = i2;
+          }
+        }
+      }
+
+      const geometry = new Cesium.Geometry({
+        attributes: {
+          position: new Cesium.GeometryAttribute({
+            componentDatatype: Cesium.ComponentDatatype.DOUBLE,
+            componentsPerAttribute: 3,
+            values: positions
+          }),
+          color: new Cesium.GeometryAttribute({
+            componentDatatype: Cesium.ComponentDatatype.UNSIGNED_BYTE,
+            componentsPerAttribute: 4,
+            values: colors,
+            normalize: true
+          })
+        },
+        indices: indices,
+        primitiveType: primitiveType,
+        boundingSphere: Cesium.BoundingSphere.fromVertices(positions)
+      });
+
+      const geomWithNormals = isWireframe ? geometry : Cesium.GeometryPipeline.computeNormal(geometry);
+
+      const instance = new Cesium.GeometryInstance({
+        geometry: geomWithNormals,
+        id: options.id || "mesh_instance"
+      });
+
+      const primitive = new Cesium.Primitive({
+        geometryInstances: [instance],
+        appearance: new Cesium.PerInstanceColorAppearance({
+          flat: isWireframe,
+          translucent: true,
+          closed: false
+        }),
+        asynchronous: false
+      });
+
+      return viewer.scene.primitives.add(primitive);
     }
 
-    // --- Safe Geometry Conversion Utilities ---
+    // Instantiate 3D Mesh Primitives
+    const MeshPrimitives = {
+      dem_mesh: create3DMeshPrimitive({ id: "bare_dem_mesh", isDSM: false, isWireframe: false, cols: 65, rows: 65 }),
+      wireframe: create3DMeshPrimitive({ id: "dem_wireframe_mesh", isDSM: false, isWireframe: true, cols: 45, rows: 45 }),
+      dsm_mesh: create3DMeshPrimitive({ id: "canopy_dsm_mesh", isDSM: true, isWireframe: false, cols: 65, rows: 65 })
+    };
+
+    // Initial state: DEM Mesh active, wireframe & DSM hidden
+    MeshPrimitives.dem_mesh.show = true;
+    MeshPrimitives.wireframe.show = false;
+    MeshPrimitives.dsm_mesh.show = false;
+
+    // --- 3D Point Cloud Primitive Collection (Classified Returns: Ground, Veg, Buildings) ---
+    const pointCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
+    (function generate3DPoints() {
+      const baseLon = 151.555, maxLon = 151.605;
+      const baseLat = -32.948, maxLat = -32.915;
+      const step = 0.0016;
+
+      for (let lon = baseLon; lon <= maxLon; lon += step) {
+        for (let lat = baseLat; lat <= maxLat; lat += step) {
+          const normX = (lon - baseLon) / (maxLon - baseLon);
+          const normY = (lat - baseLat) / (maxLat - baseLat);
+          const zBase = Math.round(115 - (normX * 55) - ((1 - normY) * 35) + Math.sin(normX * 12) * 8);
+
+          // Ground return
+          const groundColor = Cesium.Color.fromHsl(Math.max(0, Math.min(0.65, (zBase - 20) / 120 * 0.65)), 0.9, 0.6, 0.85);
+          pointCollection.add({
+            position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase),
+            color: groundColor,
+            pixelSize: 3.5,
+            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 16000)
+          });
+
+          // Canopy returns in vegetation zones
+          if ((normX < 0.4 || normY > 0.6) && Math.sin(lon * 400 + lat * 300) > -0.2) {
+            const treeHeight = 10 + Math.abs(Math.sin(lon * 800)) * 14;
+            for (let h = 4; h <= treeHeight; h += 4) {
+              pointCollection.add({
+                position: Cesium.Cartesian3.fromDegrees(lon + 0.0003 * Math.sin(h), lat + 0.0003 * Math.cos(h), zBase + h),
+                color: Cesium.Color.fromCssColorString('#10b981').withAlpha(0.75),
+                pixelSize: 3.0,
+                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 12000)
+              });
+            }
+          }
+
+          // Hardstand structure returns
+          if (normX >= 0.45 && normX <= 0.75 && normY >= 0.35 && normY <= 0.65) {
+            pointCollection.add({
+              position: Cesium.Cartesian3.fromDegrees(lon + 0.0005, lat + 0.0005, zBase + 6),
+              color: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.9),
+              pixelSize: 4.0,
+              distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 14000)
+            });
+          }
+        }
+      }
+    })();
+
+    // Default point cloud hidden while DEM mesh is front & center
+    pointCollection.show = false;
+
+    // --- Vector Tiles & Siting Geometry Layers ---
     function extractCoordArray(geomOrCoords) {
       if (!geomOrCoords) return [];
       if (geomOrCoords.type && geomOrCoords.coordinates) {
@@ -627,12 +849,11 @@
       return count > 0 ? { lon: sumLon / count, lat: sumLat / count } : { lon: 151.585, lat: -32.935 };
     }
 
-    // --- Data Payloads ---
     const GEO_BOUNDARY = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"name": "Macquarie Coal Complex Transformation Precinct", "gross_area_ha": 1100.0, "lga": "Lake Macquarie City Council"}, "geometry": {"type": "Polygon", "coordinates": [[[151.565, -32.915], [151.605, -32.915], [151.615, -32.945], [151.595, -32.96], [151.56, -32.955], [151.555, -32.93], [151.565, -32.915]]]}}]};
     const GEO_PADS = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"pad_id": "Pad A1", "group": "MCPP Plateau", "area_ha": 18.5, "phase": "Phase 1", "target_use": "Advanced Manufacturing", "bearing_capacity_kpa": 350}, "geometry": {"type": "Polygon", "coordinates": [[[151.58, -32.925], [151.588, -32.925], [151.588, -32.932], [151.58, -32.932], [151.58, -32.925]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad A2", "group": "MCPP Workshop", "area_ha": 12.0, "phase": "Phase 1", "target_use": "Hyperscale AI Compute", "bearing_capacity_kpa": 400}, "geometry": {"type": "Polygon", "coordinates": [[[151.589, -32.925], [151.595, -32.925], [151.595, -32.931], [151.589, -32.931], [151.589, -32.925]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad A3", "group": "MCPP South", "area_ha": 10.0, "phase": "Phase 1", "target_use": "Clean Tech Assembly", "bearing_capacity_kpa": 300}, "geometry": {"type": "Polygon", "coordinates": [[[151.58, -32.933], [151.587, -32.933], [151.587, -32.939], [151.58, -32.939], [151.58, -32.933]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad A4", "group": "West Wallsend Entry", "area_ha": 8.0, "phase": "Phase 1", "target_use": "Robotics & Research", "bearing_capacity_kpa": 350}, "geometry": {"type": "Polygon", "coordinates": [[[151.572, -32.923], [151.578, -32.923], [151.578, -32.928], [151.572, -32.928], [151.572, -32.923]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad B1", "group": "Westside Void North", "area_ha": 28.0, "phase": "Phase 2", "target_use": "Modular Prefabrication", "bearing_capacity_kpa": 250}, "geometry": {"type": "Polygon", "coordinates": [[[151.565, -32.93], [151.575, -32.93], [151.575, -32.938], [151.565, -32.938], [151.565, -32.93]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad B2", "group": "Westside Pit Floor", "area_ha": 26.0, "phase": "Phase 2", "target_use": "Heavy Transport & Fleet", "bearing_capacity_kpa": 250}, "geometry": {"type": "Polygon", "coordinates": [[[151.565, -32.939], [151.575, -32.939], [151.575, -32.946], [151.565, -32.946], [151.565, -32.939]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad B3", "group": "Westside Void South", "area_ha": 18.0, "phase": "Phase 2", "target_use": "Remanufacturing & Circular", "bearing_capacity_kpa": 250}, "geometry": {"type": "Polygon", "coordinates": [[[151.565, -32.947], [151.573, -32.947], [151.573, -32.953], [151.565, -32.953], [151.565, -32.947]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad C1", "group": "Teralba Northgate", "area_ha": 19.2, "phase": "Phase 1", "target_use": "Intermodal Rail Logistics", "bearing_capacity_kpa": 380}, "geometry": {"type": "Polygon", "coordinates": [[[151.597, -32.932], [151.606, -32.932], [151.606, -32.94], [151.597, -32.94], [151.597, -32.932]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad C2", "group": "Teralba Southgate", "area_ha": 15.0, "phase": "Phase 1", "target_use": "Business Park & Commercial", "bearing_capacity_kpa": 320}, "geometry": {"type": "Polygon", "coordinates": [[[151.6, -32.943], [151.608, -32.943], [151.608, -32.95], [151.6, -32.95], [151.6, -32.943]]]}}, {"type": "Feature", "properties": {"pad_id": "Pad D1", "group": "TSF Solar Plateau", "area_ha": 85.0, "phase": "Phase 3", "target_use": "Solar PV & 100MW BESS", "bearing_capacity_kpa": 150}, "geometry": {"type": "Polygon", "coordinates": [[[151.578, -32.942], [151.595, -32.942], [151.595, -32.955], [151.578, -32.955], [151.578, -32.942]]]}}]};
     const GEO_PHES = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"name": "330kV/132kV Multi-User Terminal Substation Reserve", "capacity_mva": 500, "type": "Substation"}, "geometry": {"type": "Polygon", "coordinates": [[[151.588, -32.92], [151.594, -32.92], [151.594, -32.924], [151.588, -32.924], [151.588, -32.92]]]}}, {"type": "Feature", "properties": {"name": "Upper Ridgeline Storage Reservoir (+145m AHD)", "volume_ml": 500, "type": "PHES Reservoir"}, "geometry": {"type": "Polygon", "coordinates": [[[151.56, -32.935], [151.564, -32.935], [151.564, -32.939], [151.56, -32.939], [151.56, -32.935]]]}}, {"type": "Feature", "properties": {"name": "PHES Reversible Penstock (120m Hydraulic Head)", "length_m": 950, "capacity_mwh": 49.0, "type": "Penstock"}, "geometry": {"type": "LineString", "coordinates": [[151.562, -32.937], [151.568, -32.942]]}}, {"type": "Feature", "properties": {"name": "Westside Void Lower Reservoir & Turbine Pit (+25m AHD)", "power_mw": 20, "type": "PHES Powerhouse"}, "geometry": {"type": "Point", "coordinates": [151.568, -32.942]}}]};
     const GEO_BIOLINK = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"name": "Sugarloaf-to-Awaba Regional Ecological Bio-Link (C2 Zone)", "width_m": 250, "area_ha": 320.0}, "geometry": {"type": "Polygon", "coordinates": [[[151.555, -32.915], [151.568, -32.915], [151.572, -32.935], [151.562, -32.958], [151.552, -32.958], [151.555, -32.915]]]}}, {"type": "Feature", "properties": {"name": "Fauna Overpass Bridge 1 (Sugarloaf Link)", "type": "Wildlife Overpass"}, "geometry": {"type": "Point", "coordinates": [151.57, -32.928]}}, {"type": "Feature", "properties": {"name": "Fauna Overpass Bridge 2 (Diega Creek Corridor)", "type": "Wildlife Overpass"}, "geometry": {"type": "Point", "coordinates": [151.585, -32.94]}}]};
-    const GEO_TILES = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3736338_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 23.7, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Ground & Canopy Classified", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3736338_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.55, -32.93], [151.56, -32.93], [151.56, -32.92], [151.55, -32.92], [151.55, -32.93]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3746337_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 35.1, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Ground & Canopy Classified", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3746337_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.56, -32.93], [151.57, -32.93], [151.57, -32.92], [151.56, -32.92], [151.56, -32.93]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3756340_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 31.7, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Bare-Earth DEM Surface", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3756340_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.57, -32.93], [151.58, -32.93], [151.58, -32.92], [151.57, -32.92], [151.57, -32.93]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3766343_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 44.3, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Precision Siting Pad A1-A4", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3766343_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.58, -32.93], [151.59, -32.93], [151.59, -32.92], [151.58, -32.92], [151.58, -32.93]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3776346_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 47.9, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "330kV Substation Corridor", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3776346_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.59, -32.93], [151.6, -32.93], [151.6, -32.92], [151.59, -32.92], [151.59, -32.93]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3736342_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 16.6, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Diega Creek Flood Plain", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3736342_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.55, -32.94], [151.56, -32.94], [151.56, -32.93], [151.55, -32.93], [151.55, -32.94]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3746340_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 38.9, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Sugarloaf Bio-Link Ridge", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3746340_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.56, -32.94], [151.57, -32.94], [151.57, -32.93], [151.56, -32.93], [151.56, -32.94]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3756341_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 21.9, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Central Logistics Hardstand", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3756341_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.57, -32.94], [151.58, -32.94], [151.58, -32.93], [151.57, -32.93], [151.57, -32.94]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3766344_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 58.0, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Pad B1-B3 Transformation", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3766344_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.58, -32.94], [151.59, -32.94], [151.59, -32.93], [151.58, -32.93], [151.58, -32.94]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3776343_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 29.2, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Intermodal Rail Loop Spine", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3776343_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.59, -32.94], [151.6, -32.94], [151.6, -32.93], [151.59, -32.93], [151.59, -32.94]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3746344_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 37.8, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Awaba Southern Corridor", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3746344_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.56, -32.95], [151.57, -32.95], [151.57, -32.94], [151.56, -32.94], [151.56, -32.95]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3756342_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 31.3, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "TSF Solar Plateau & PHES", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3756342_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.57, -32.95], [151.58, -32.95], [151.58, -32.94], [151.57, -32.94], [151.57, -32.95]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3766346_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 26.8, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Overburden Acoustic Bund", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3766346_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.58, -32.95], [151.59, -32.95], [151.59, -32.94], [151.58, -32.94], [151.58, -32.95]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3776348_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 24.1, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Lake Macquarie Eastern Link", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3776348_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.59, -32.95], [151.6, -32.95], [151.6, -32.94], [151.59, -32.94], [151.59, -32.95]]]}}]};
+    const GEO_TILES = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3736338_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 23.7, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Ground & Canopy Classified", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3736338_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.55, -32.93], [151.56, -32.93], [151.56, -32.92], [151.55, -32.92], [151.55, -32.93]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3746337_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 35.1, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Ground & Canopy Classified", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3746337_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.56, -32.93], [151.57, -32.93], [151.57, -32.92], [151.56, -32.92], [151.56, -32.93]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3756340_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 31.7, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Bare-Earth DEM Surface Mesh", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3756340_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.57, -32.93], [151.58, -32.93], [151.58, -32.92], [151.57, -32.92], [151.57, -32.93]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3766343_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 44.3, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Precision Siting Pad A1-A4", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3766343_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.58, -32.93], [151.59, -32.93], [151.59, -32.92], [151.58, -32.92], [151.58, -32.93]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3776346_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 47.9, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "330kV Substation Corridor", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3776346_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.59, -32.93], [151.6, -32.93], [151.6, -32.92], [151.59, -32.92], [151.59, -32.93]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3736342_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 16.6, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Diega Creek Flood Plain", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3736342_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.55, -32.94], [151.56, -32.94], [151.56, -32.93], [151.55, -32.93], [151.55, -32.94]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3746340_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 38.9, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Sugarloaf Bio-Link Ridge", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3746340_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.56, -32.94], [151.57, -32.94], [151.57, -32.93], [151.56, -32.93], [151.56, -32.94]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3756341_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 21.9, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Central Logistics Hardstand", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3756341_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.57, -32.94], [151.58, -32.94], [151.58, -32.93], [151.57, -32.93], [151.57, -32.94]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3766344_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 58.0, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Pad B1-B3 Transformation", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3766344_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.58, -32.94], [151.59, -32.94], [151.59, -32.93], [151.58, -32.93], [151.58, -32.94]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3776343_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 29.2, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Intermodal Rail Loop Spine", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3776343_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.59, -32.94], [151.6, -32.94], [151.6, -32.93], [151.59, -32.93], [151.59, -32.94]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3746344_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 37.8, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Awaba Southern Corridor", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3746344_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.56, -32.95], [151.57, -32.95], [151.57, -32.94], [151.56, -32.94], [151.56, -32.95]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3756342_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 31.3, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "TSF Solar Plateau & PHES", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3756342_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.57, -32.95], [151.58, -32.95], [151.58, -32.94], [151.57, -32.94], [151.57, -32.95]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3766346_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 26.8, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Overburden Acoustic Bund", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3766346_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.58, -32.95], [151.59, -32.95], [151.59, -32.94], [151.58, -32.94], [151.58, -32.95]]]}}, {"type": "Feature", "properties": {"tile_id": "NwcCst2018-C3-AHD_3776348_56_0001_0001.laz", "format": "LAS/LAZ 1.4 Classified Point Cloud", "file_size_mb": 24.1, "sensor": "RIEGL VQ-780i", "point_density": "8.4 pts/m\u00b2", "vertical_datum": "AHD (\u00b10.15m)", "classification_desc": "Lake Macquarie Eastern Link", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/NwcCst2018-C3-AHD_3776348_56_0001_0001.laz"}, "geometry": {"type": "Polygon", "coordinates": [[[151.59, -32.95], [151.6, -32.95], [151.6, -32.94], [151.59, -32.94], [151.59, -32.95]]]}}]};
     const GEO_CONTOURS = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"elevation_m": 20, "type": "Index Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.555, -32.912], [151.554, -32.9175], [151.553, -32.923], [151.556, -32.9285], [151.553, -32.934], [151.554, -32.9395], [151.555, -32.945], [151.554, -32.9505], [151.553, -32.956], [151.556, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 30, "type": "Intermediate Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.5585, -32.912], [151.5575, -32.9175], [151.5565, -32.923], [151.5595, -32.9285], [151.5565, -32.934], [151.5575, -32.9395], [151.5585, -32.945], [151.5575, -32.9505], [151.5565, -32.956], [151.5595, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 40, "type": "Index Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.562, -32.912], [151.561, -32.9175], [151.56, -32.923], [151.563, -32.9285], [151.56, -32.934], [151.561, -32.9395], [151.562, -32.945], [151.561, -32.9505], [151.56, -32.956], [151.563, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 50, "type": "Intermediate Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.5655, -32.912], [151.5645, -32.9175], [151.5635, -32.923], [151.5665, -32.9285], [151.5635, -32.934], [151.5645, -32.9395], [151.5655, -32.945], [151.5645, -32.9505], [151.5635, -32.956], [151.5665, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 60, "type": "Index Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.569, -32.912], [151.568, -32.9175], [151.567, -32.923], [151.57, -32.9285], [151.567, -32.934], [151.568, -32.9395], [151.569, -32.945], [151.568, -32.9505], [151.567, -32.956], [151.57, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 70, "type": "Intermediate Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.5725, -32.912], [151.5715, -32.9175], [151.5705, -32.923], [151.5735, -32.9285], [151.5705, -32.934], [151.5715, -32.9395], [151.5725, -32.945], [151.5715, -32.9505], [151.5705, -32.956], [151.5735, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 80, "type": "Index Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.576, -32.912], [151.575, -32.9175], [151.574, -32.923], [151.577, -32.9285], [151.574, -32.934], [151.575, -32.9395], [151.576, -32.945], [151.575, -32.9505], [151.574, -32.956], [151.577, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 90, "type": "Intermediate Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.5795, -32.912], [151.5785, -32.9175], [151.5775, -32.923], [151.5805, -32.9285], [151.5775, -32.934], [151.5785, -32.9395], [151.5795, -32.945], [151.5785, -32.9505], [151.5775, -32.956], [151.5805, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 100, "type": "Index Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.583, -32.912], [151.582, -32.9175], [151.581, -32.923], [151.584, -32.9285], [151.581, -32.934], [151.582, -32.9395], [151.583, -32.945], [151.582, -32.9505], [151.581, -32.956], [151.584, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 110, "type": "Intermediate Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.5865, -32.912], [151.5855, -32.9175], [151.5845, -32.923], [151.5875, -32.9285], [151.5845, -32.934], [151.5855, -32.9395], [151.5865, -32.945], [151.5855, -32.9505], [151.5845, -32.956], [151.5875, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 120, "type": "Index Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.59, -32.912], [151.589, -32.9175], [151.588, -32.923], [151.591, -32.9285], [151.588, -32.934], [151.589, -32.9395], [151.59, -32.945], [151.589, -32.9505], [151.588, -32.956], [151.591, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 130, "type": "Intermediate Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.5935, -32.912], [151.5925, -32.9175], [151.5915, -32.923], [151.5945, -32.9285], [151.5915, -32.934], [151.5925, -32.9395], [151.5935, -32.945], [151.5925, -32.9505], [151.5915, -32.956], [151.5945, -32.9615]]}}, {"type": "Feature", "properties": {"elevation_m": 140, "type": "Index Contour", "source": "1m Bare-Earth DEM (EPSG:7856)", "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "LineString", "coordinates": [[151.597, -32.912], [151.596, -32.9175], [151.595, -32.923], [151.598, -32.9285], [151.595, -32.934], [151.596, -32.9395], [151.597, -32.945], [151.596, -32.9505], [151.595, -32.956], [151.598, -32.9615]]}}]};
     const GEO_SLOPE = {"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"class": "0-5% Optimal Flat Plateau (North Workshop)", "suitability": "Optimal Building Floor Pad", "slope_range": "0-5%", "bearing_kpa": 400, "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "Polygon", "coordinates": [[[151.578, -32.922], [151.59, -32.922], [151.59, -32.934], [151.578, -32.934], [151.578, -32.922]]]}}, {"type": "Feature", "properties": {"class": "0-5% Optimal Flat Hardstand (South Pad)", "suitability": "Optimal Logistics Hardstand", "slope_range": "0-5%", "bearing_kpa": 350, "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "Polygon", "coordinates": [[[151.568, -32.936], [151.584, -32.936], [151.584, -32.948], [151.568, -32.948], [151.568, -32.936]]]}}, {"type": "Feature", "properties": {"class": ">20% Steep Ridge Escarpment", "suitability": "Geotechnical Hard Exclusion", "slope_range": ">20%", "bearing_kpa": 0, "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet"}, "geometry": {"type": "Polygon", "coordinates": [[[151.552, -32.914], [151.566, -32.914], [151.566, -32.956], [151.552, -32.956], [151.552, -32.914]]]}}]};
 
@@ -853,116 +1074,92 @@
       });
     }
 
-    // 7. Dense 3D Point Cloud Primitive Collection (Classified Returns: Ground, Veg, Buildings)
-    const pointCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
-    (function generate3DPoints() {
-      const baseLon = 151.555, maxLon = 151.605;
-      const baseLat = -32.948, maxLat = -32.915;
-      const step = 0.0016;
-
-      for (let lon = baseLon; lon <= maxLon; lon += step) {
-        for (let lat = baseLat; lat <= maxLat; lat += step) {
-          const normX = (lon - baseLon) / (maxLon - baseLon);
-          const normY = (lat - baseLat) / (maxLat - baseLat);
-          const zBase = Math.round(115 - (normX * 55) - ((1 - normY) * 35) + Math.sin(normX * 12) * 8);
-
-          // Ground return
-          const groundColor = Cesium.Color.fromHsl(Math.max(0, Math.min(0.65, (zBase - 20) / 120 * 0.65)), 0.9, 0.6, 0.85);
-          pointCollection.add({
-            position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase),
-            color: groundColor,
-            pixelSize: 3.5,
-            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 16000)
-          });
-
-          // Canopy returns in vegetation zones
-          if ((normX < 0.4 || normY > 0.6) && Math.sin(lon * 400 + lat * 300) > -0.2) {
-            const treeHeight = 10 + Math.abs(Math.sin(lon * 800)) * 14;
-            for (let h = 4; h <= treeHeight; h += 4) {
-              pointCollection.add({
-                position: Cesium.Cartesian3.fromDegrees(lon + 0.0003 * Math.sin(h), lat + 0.0003 * Math.cos(h), zBase + h),
-                color: Cesium.Color.fromCssColorString('#10b981').withAlpha(0.75),
-                pixelSize: 3.0,
-                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 12000)
-              });
-            }
-          }
-
-          // Hardstand structure returns
-          if (normX >= 0.45 && normX <= 0.75 && normY >= 0.35 && normY <= 0.65) {
-            pointCollection.add({
-              position: Cesium.Cartesian3.fromDegrees(lon + 0.0005, lat + 0.0005, zBase + 6),
-              color: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.9),
-              pixelSize: 4.0,
-              distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 14000)
-            });
-          }
-        }
-      }
-    })();
-
-    // --- S3 V2 4-Format Switcher Controller ---
-    function switchLiDARFormat(fmt, btnEl) {
-      document.querySelectorAll('.btn-fmt').forEach(b => b.classList.remove('active'));
+    // --- 3D Mesh Modes Controller ---
+    function setMeshMode(mode, btnEl) {
+      document.querySelectorAll('.btn-mesh').forEach(b => b.classList.remove('active'));
       if (btnEl) btnEl.classList.add('active');
 
       const body = document.getElementById('inspector-body');
+      const badge = document.getElementById('engine-status-badge');
 
-      if (fmt === 'laz') {
-        togglePointCloud(true);
+      if (mode === 'dem_mesh') {
+        MeshPrimitives.dem_mesh.show = true;
+        MeshPrimitives.wireframe.show = false;
+        MeshPrimitives.dsm_mesh.show = false;
+        pointCollection.show = false;
+        toggleLayer('contours', true);
+        toggleLayer('tiles', false);
+        flyTo('mesh');
+        badge.innerText = "1m DEM Mesh";
+        badge.style.color = "var(--green-glow)";
+        body.innerHTML = `
+          <strong style="color: #10b981;">🟢 Format 2: 1.0m Bare-Earth DEM 3D Mesh</strong><br>
+          <span style="color: #94a3b8;">Geometry:</span> Cesium.Geometry (Triangulated TIN Mesh)<br>
+          <span style="color: #94a3b8;">Normals:</span> GeometryPipeline.computeNormal (Dynamic Shading)<br>
+          <span style="color: #94a3b8;">Colormap:</span> Hypsometric Elevation Ramp (20.4m to 138.6m AHD)<br>
+          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #10b981; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_dem.parquet</code>
+        `;
+      } else if (mode === 'wireframe') {
+        MeshPrimitives.dem_mesh.show = false;
+        MeshPrimitives.wireframe.show = true;
+        MeshPrimitives.dsm_mesh.show = false;
+        pointCollection.show = false;
+        toggleLayer('contours', true);
         toggleLayer('tiles', true);
+        flyTo('mesh');
+        badge.innerText = "TIN Wireframe";
+        badge.style.color = "var(--cyan-glow)";
+        body.innerHTML = `
+          <strong style="color: #38bdf8;">🌐 Triangulated Wireframe Surface (TIN)</strong><br>
+          <span style="color: #94a3b8;">Primitive:</span> Cesium.PrimitiveType.LINES<br>
+          <span style="color: #94a3b8;">Purpose:</span> Engineering Slope & Earthwork Grade Analysis<br>
+          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #38bdf8; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_dem.parquet</code>
+        `;
+      } else if (mode === 'dsm_mesh') {
+        MeshPrimitives.dem_mesh.show = false;
+        MeshPrimitives.wireframe.show = false;
+        MeshPrimitives.dsm_mesh.show = true;
+        pointCollection.show = false;
+        toggleLayer('contours', true);
+        toggleLayer('tiles', false);
+        flyTo('biolink');
+        badge.innerText = "1m Canopy DSM";
+        badge.style.color = "var(--purple-glow)";
+        body.innerHTML = `
+          <strong style="color: #a855f7;">🟣 Format 3: 1.0m Canopy DSM Volumetric Surface</strong><br>
+          <span style="color: #94a3b8;">Feature:</span> Digital Surface Model with Canopy Envelope (+8m to +24m AGL)<br>
+          <span style="color: #94a3b8;">Structures:</span> Substation & Plant Volume Heights<br>
+          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #a855f7; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_dsm.parquet</code>
+        `;
+      } else if (mode === 'pointcloud') {
+        MeshPrimitives.dem_mesh.show = false;
+        MeshPrimitives.wireframe.show = false;
+        MeshPrimitives.dsm_mesh.show = false;
+        pointCollection.show = true;
         toggleLayer('contours', false);
+        toggleLayer('tiles', true);
         flyTo('pointcloud');
+        badge.innerText = "8.4 pts/m² LAZ";
+        badge.style.color = "var(--rose-glow)";
         body.innerHTML = `
           <strong style="color: #f43f5e;">🔴 Format 1: 3D Point Cloud (.LAZ)</strong><br>
-          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #38bdf8; font-size: 10px;">s3://.../elevation/laz/*.laz</code><br>
-          <span style="color: #94a3b8;">Format:</span> ASPRS LAS 1.4 Classified Returns<br>
-          <span style="color: #94a3b8;">Density:</span> 8.4 pts/m² (53 Survey Tiles)<br>
-          <span style="color: #94a3b8;">Sensor:</span> RIEGL VQ-780i Dual-Channel<br>
-          <span style="color: #94a3b8;">Datum:</span> AHD (±0.15m vertical accuracy)
-        `;
-      } else if (fmt === 'dem') {
-        togglePointCloud(false);
-        toggleLayer('tiles', false);
-        toggleLayer('contours', true);
-        flyTo('dem');
-        body.innerHTML = `
-          <strong style="color: #10b981;">🟢 Format 2: 1m Bare-Earth DEM (.TIF)</strong><br>
-          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #10b981; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_dem.parquet</code><br>
-          <span style="color: #94a3b8;">Resolution:</span> 1.0m Regular Ground Grid<br>
-          <span style="color: #94a3b8;">Elevation:</span> 20.4m to 138.6m AHD<br>
-          <span style="color: #94a3b8;">Terrain Mesh:</span> Custom Bare-Earth Heightmap
-        `;
-      } else if (fmt === 'dsm') {
-        togglePointCloud(true);
-        toggleLayer('tiles', false);
-        toggleLayer('contours', true);
-        flyTo('biolink');
-        body.innerHTML = `
-          <strong style="color: #a855f7;">🟣 Format 3: 1m Canopy DSM (.TIF)</strong><br>
-          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #a855f7; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_dsm.parquet</code><br>
-          <span style="color: #94a3b8;">Canopy Stand:</span> 8m - 24m Tree Heights<br>
-          <span style="color: #94a3b8;">Structures:</span> Substation & Plant Profiles
-        `;
-      } else if (fmt === 'contours') {
-        togglePointCloud(false);
-        toggleLayer('tiles', true);
-        toggleLayer('contours', true);
-        flyTo('dem');
-        body.innerHTML = `
-          <strong style="color: #38bdf8;">🔵 Format 4: Contours & Slope (.PARQUET)</strong><br>
-          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #38bdf8; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_slope.parquet</code><br>
-          <span style="color: #94a3b8;">Contours:</span> 1m, 5m, 20m Index Contours<br>
-          <span style="color: #94a3b8;">Slope Zones:</span> 0-5% (Optimal), 5-15%, >20%
+          <span style="color: #94a3b8;">Primitive:</span> Cesium.PointPrimitiveCollection<br>
+          <span style="color: #94a3b8;">Classification:</span> Ground, Canopy (+8 to +24m), Structures (+6 to +15m)<br>
+          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #f43f5e; font-size: 10px;">s3://.../elevation/laz/*.laz</code>
         `;
       } else {
-        togglePointCloud(true);
-        toggleLayer('tiles', true);
+        MeshPrimitives.dem_mesh.show = true;
+        MeshPrimitives.wireframe.show = true;
+        MeshPrimitives.dsm_mesh.show = false;
+        pointCollection.show = true;
         toggleLayer('contours', true);
+        toggleLayer('tiles', true);
         flyTo('overview');
+        badge.innerText = "Composite 3D";
+        badge.style.color = "var(--cyan-glow)";
         body.innerHTML = `
-          <strong style="color: #38bdf8;">✨ All 4 S3 V2 Formats Rendered</strong><br>
-          3D Point Cloud, Bare-Earth DEM elevation terrain, Canopy DSM, and Topographic Contours are active simultaneously.
+          <strong style="color: #38bdf8;">✨ Composite 3D Elevation Mesh + Vector Tiles</strong><br>
+          All 4 S3 V2 LiDAR Formats (Point Cloud, DEM Mesh, DSM, Contours/Slope) active concurrently with direct OSM.
         `;
       }
     }
@@ -975,10 +1172,72 @@
       }
     }
 
-    function togglePointCloud(show) {
-      if (pointCollection) {
-        pointCollection.show = show;
+    function updateMeshOpacity(val) {
+      document.getElementById('opacity-val').innerText = Math.round(val * 100) + '%';
+      // Adjust appearance translucency if needed
+    }
+
+    function toggleSunLighting(enable) {
+      viewer.scene.globe.enableLighting = enable;
+    }
+
+    function flyTo(key, btnEl) {
+      document.querySelectorAll('.btn-cam').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      const p = cameraPresets[key];
+      if (p) {
+        viewer.camera.flyTo({
+          destination: p.destination,
+          orientation: p.orientation,
+          duration: 2.0
+        });
       }
+    }
+
+    // --- GeoLibre Standard 3D Layer Tools: add_cesium_ion_layer & add_3d_tileset ---
+    window.add_cesium_ion_layer = async function(assetId, options = {}) {
+      try {
+        const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(parseInt(assetId), options);
+        viewer.scene.primitives.add(tileset);
+        viewer.zoomTo(tileset);
+        console.log("GeoLibre: Added Cesium Ion Asset", assetId);
+        return tileset;
+      } catch (err) {
+        console.warn("GeoLibre Ion Layer notice:", err.message);
+        alert("Ion Layer note: " + err.message);
+      }
+    };
+
+    window.add_3d_tileset = async function(url, options = {}) {
+      try {
+        const tileset = await Cesium.Cesium3DTileset.fromUrl(url, options);
+        viewer.scene.primitives.add(tileset);
+        viewer.zoomTo(tileset);
+        console.log("GeoLibre: Added 3D Tileset", url);
+        return tileset;
+      } catch (err) {
+        console.warn("GeoLibre 3D Tileset notice:", err.message);
+        alert("3D Tileset note: " + err.message);
+      }
+    };
+
+    function openTilesetModal() {
+      document.getElementById('tilesetModal').style.display = 'block';
+    }
+
+    function closeTilesetModal() {
+      document.getElementById('tilesetModal').style.display = 'none';
+    }
+
+    function submitCustomTileset() {
+      const val = document.getElementById('tileset-input').value.trim();
+      if (!val) return;
+      if (!isNaN(val)) {
+        window.add_cesium_ion_layer(parseInt(val));
+      } else {
+        window.add_3d_tileset(val);
+      }
+      closeTilesetModal();
     }
 
     // --- Interactive Entity Click Inspector ---
@@ -987,8 +1246,8 @@
       const picked = viewer.scene.pick(movement.position);
       if (Cesium.defined(picked) && picked.id) {
         const ent = picked.id;
-        const name = ent.name || "Spatial Feature";
-        const props = ent.properties ? ent.properties.getValue(Cesium.JulianDate.now()) : {};
+        const name = typeof ent === 'string' ? ent : (ent.name || "Spatial Feature");
+        const props = (typeof ent === 'object' && ent.properties) ? ent.properties.getValue(Cesium.JulianDate.now()) : {};
 
         let html = '<strong style="color: #38bdf8; font-size: 12px;">' + name + '</strong><br>';
         html += '<table style="width: 100%; margin-top: 6px; font-size: 10.5px; border-collapse: collapse;">';

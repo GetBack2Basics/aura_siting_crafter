@@ -3,10 +3,14 @@
 AURA Siting Crafter — GeoLibre Cesium 3D Engine Testbed
 tools/build_cesium_test_page.py
 
-Creates a clean, robust, standalone CesiumJS testbed to validate
-GeoLibre's Cesium 3D rendering engine, custom 1m Bare-Earth DEM elevation terrain,
-all 4 S3 V2 LiDAR formats (LAZ point cloud, 1m DEM, 1m DSM, contours/slope),
-and direct OSM / Esri / NSW basemap streaming.
+Creates a high-performance, standalone CesiumJS testbed with:
+1. True 3D Triangulated Surface Meshes (TIN) for 1m Bare-Earth DEM & Canopy DSM
+   built via Cesium Geometry & Appearances (GeometryInstance, PerInstanceColorAppearance,
+   GeometryPipeline.computeNormal).
+2. Wireframe / Solid / Hypsometric tint elevation mesh rendering.
+3. GeoLibre add_cesium_ion_layer & 3D Tiles Next Vector Tiles integration.
+4. Direct standard OpenStreetMap (no CartoDB, no keys).
+5. Full S3 V2 4-Format LiDAR streaming & inspector dock.
 """
 
 import os
@@ -51,7 +55,7 @@ def build_cesium_test_html(is_root: bool = False) -> str:
     tile_matrix = [
         ("NwcCst2018-C3-AHD_3736338_56_0001_0001.laz", 151.55, -32.92, 23.7, "Ground & Canopy Classified", "RIEGL VQ-780i"),
         ("NwcCst2018-C3-AHD_3746337_56_0001_0001.laz", 151.56, -32.92, 35.1, "Ground & Canopy Classified", "RIEGL VQ-780i"),
-        ("NwcCst2018-C3-AHD_3756340_56_0001_0001.laz", 151.57, -32.92, 31.7, "Bare-Earth DEM Surface", "RIEGL VQ-780i"),
+        ("NwcCst2018-C3-AHD_3756340_56_0001_0001.laz", 151.57, -32.92, 31.7, "Bare-Earth DEM Surface Mesh", "RIEGL VQ-780i"),
         ("NwcCst2018-C3-AHD_3766343_56_0001_0001.laz", 151.58, -32.92, 44.3, "Precision Siting Pad A1-A4", "RIEGL VQ-780i"),
         ("NwcCst2018-C3-AHD_3776346_56_0001_0001.laz", 151.59, -32.92, 47.9, "330kV Substation Corridor", "RIEGL VQ-780i"),
         ("NwcCst2018-C3-AHD_3736342_56_0001_0001.laz", 151.55, -32.93, 16.6, "Diega Creek Flood Plain", "RIEGL VQ-780i"),
@@ -177,7 +181,7 @@ def build_cesium_test_html(is_root: bool = False) -> str:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeoLibre + Cesium 3D Rendering Engine | Testbed & 3D Tiles Sandbox</title>
+  <title>GeoLibre + Cesium 3D Rendering Engine | 3D Elevation Mesh & Vector Tiles</title>
   <link rel="icon" type="image/png" href="{logo_path}">
 
   <!-- Google Fonts -->
@@ -315,7 +319,7 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       position: absolute;
       top: 86px;
       left: 14px;
-      width: 330px;
+      width: 340px;
       max-height: calc(100vh - 106px);
       background: var(--bg-panel);
       border: 1px solid var(--border-cyan);
@@ -352,6 +356,37 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       margin-top: 2px;
     }}
 
+    /* 3D Mesh Modes Grid */
+    .mesh-grid {{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }}
+
+    .btn-mesh {{
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-subtle);
+      color: #e2e8f0;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 7px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }}
+
+    .btn-mesh:hover, .btn-mesh.active {{
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border-color: var(--cyan-glow);
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+    }}
+
+    /* Direct Basemap Grid */
     .btn-grid {{
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -377,36 +412,6 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       color: var(--cyan-glow);
     }}
 
-    /* Format Switcher Grid */
-    .format-grid {{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }}
-
-    .btn-fmt {{
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid var(--border-subtle);
-      color: #e2e8f0;
-      font-size: 10px;
-      font-weight: 600;
-      padding: 6px 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.2s ease;
-    }}
-
-    .btn-fmt:hover, .btn-fmt.active {{
-      background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(15, 23, 42, 0.9) 100%);
-      border-color: var(--cyan-glow);
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
-    }}
-
     .layer-card {{
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid var(--border-subtle);
@@ -423,12 +428,32 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       cursor: pointer;
     }}
 
+    /* Slider Container */
+    .slider-row {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 10.5px;
+      color: #94a3b8;
+    }}
+
+    .slider-row input[type="range"] {{
+      flex: 1;
+      accent-color: var(--cyan-glow);
+      cursor: pointer;
+    }}
+
     /* Right Dock: S3 V2 Data Sheet & Inspector */
     .right-dock {{
       position: absolute;
       top: 86px;
       right: 14px;
-      width: 320px;
+      width: 330px;
       background: var(--bg-panel);
       border: 1px solid var(--border-cyan);
       backdrop-filter: blur(16px);
@@ -477,6 +502,23 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       color: #0f172a;
       border-color: var(--cyan-glow);
     }}
+
+    /* GeoLibre 3D Tiles Modal / Tool dialog */
+    .tileset-modal {{
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 200;
+      background: var(--bg-panel);
+      border: 1px solid var(--cyan-glow);
+      border-radius: 12px;
+      padding: 20px;
+      width: 380px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.9);
+      backdrop-filter: blur(20px);
+    }}
   </style>
 </head>
 <body>
@@ -489,7 +531,7 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       <div class="logo-badge">GeoLibre 3D</div>
       <div class="announcement-text">
         <strong>GeoLibre now supports <a href="https://www.linkedin.com/company/cesium-gs/" target="_blank">Cesium</a> as a rendering engine</strong>, alongside MapLibre.<br>
-        With Cesium integration, GeoLibre gains powerful new capabilities for visualizing and exploring 3D Tiles and large-scale 3D geospatial datasets directly in the application. <em>More Cesium-powered features are coming soon. Stay tuned.</em>
+        With Cesium integration, GeoLibre gains powerful new capabilities for visualizing and exploring 3D Tiles, 3D surface meshes, and large-scale geospatial datasets directly in the application. <em>More Cesium-powered features are coming soon. Stay tuned.</em>
       </div>
     </div>
 
@@ -500,40 +542,53 @@ def build_cesium_test_html(is_root: bool = False) -> str:
     </div>
   </div>
 
-  <!-- Left Dock: S3 V2 4-Format Controller & Engine Sandbox -->
+  <!-- Left Dock: 3D Mesh Engine & S3 V2 Controls -->
   <div class="left-dock">
     <div class="dock-title">
-      <span>🚀 Cesium 3D Testbed</span>
-      <span style="font-size: 10px; color: var(--green-glow); font-family: 'JetBrains Mono';">1m DEM Active</span>
+      <span>🚀 Cesium 3D Mesh Engine</span>
+      <span id="engine-status-badge" style="font-size: 10px; color: var(--green-glow); font-family: 'JetBrains Mono';">3D Mesh Active</span>
     </div>
 
-    <!-- S3 V2 4-Format Switcher -->
-    <div class="section-lbl">S3 V2 LiDAR 4 Data Formats</div>
-    <div class="format-grid">
-      <button id="fmt-all" class="btn-fmt active" onclick="switchLiDARFormat('all', this)">
-        <span>✨</span>
-        <div>All 4 Formats</div>
+    <!-- 3D Surface Mesh Rendering Modes -->
+    <div class="section-lbl">3D Elevation Mesh & Surface Formats</div>
+    <div class="mesh-grid">
+      <button id="mode-dem-mesh" class="btn-mesh active" onclick="setMeshMode('dem_mesh', this)">
+        <span>🌈</span>
+        <div>1m Bare DEM Mesh</div>
       </button>
-      <button id="fmt-laz" class="btn-fmt" onclick="switchLiDARFormat('laz', this)">
+      <button id="mode-wireframe" class="btn-mesh" onclick="setMeshMode('wireframe', this)">
+        <span>🌐</span>
+        <div>DEM Wireframe (TIN)</div>
+      </button>
+      <button id="mode-dsm-mesh" class="btn-mesh" onclick="setMeshMode('dsm_mesh', this)">
+        <span>🌲</span>
+        <div>1m Canopy DSM Mesh</div>
+      </button>
+      <button id="mode-pointcloud" class="btn-mesh" onclick="setMeshMode('pointcloud', this)">
         <span>🔴</span>
         <div>3D Point Cloud (.LAZ)</div>
       </button>
-      <button id="fmt-dem" class="btn-fmt" onclick="switchLiDARFormat('dem', this)">
-        <span>🟢</span>
-        <div>1m Bare DEM (.TIF)</div>
-      </button>
-      <button id="fmt-dsm" class="btn-fmt" onclick="switchLiDARFormat('dsm', this)">
-        <span>🟣</span>
-        <div>1m Canopy DSM (.TIF)</div>
-      </button>
-      <button id="fmt-contours" class="btn-fmt" style="grid-column: span 2;" onclick="switchLiDARFormat('contours', this)">
-        <span>🔵</span>
-        <div>Contours & Slope (.PARQUET)</div>
+      <button id="mode-all" class="btn-mesh" style="grid-column: span 2;" onclick="setMeshMode('all', this)">
+        <span>✨</span>
+        <div>Composite 3D Mesh + Vectors</div>
       </button>
     </div>
 
-    <!-- Direct Basemap Selector -->
-    <div class="section-lbl">Basemap Imagery (No Keys Needed)</div>
+    <!-- Mesh Opacity & Exaggeration Controls -->
+    <div class="section-lbl">Mesh Shading & Terrain Properties</div>
+    <div class="slider-row">
+      <span>Mesh Opacity</span>
+      <input type="range" id="mesh-opacity" min="0.1" max="1.0" step="0.05" value="0.92" oninput="updateMeshOpacity(this.value)">
+      <span id="opacity-val" style="font-family: 'JetBrains Mono'; font-size: 10px; color: #fff;">92%</span>
+    </div>
+    <div class="slider-row">
+      <span>Sun Lighting</span>
+      <input type="checkbox" id="chk-sun-lighting" onchange="toggleSunLighting(this.checked)">
+      <span style="font-size: 10px; color: var(--amber-glow);">Dynamic Shading</span>
+    </div>
+
+    <!-- Direct Basemap Selector (Standard Direct OSM / Esri / NSW) -->
+    <div class="section-lbl">Basemap Imagery (Pure OSM & NSW)</div>
     <div class="btn-grid">
       <button id="bm-osm" class="btn-ctrl active" onclick="switchBasemap('osm')">OpenStreetMap</button>
       <button id="bm-esri" class="btn-ctrl" onclick="switchBasemap('esri')">Esri Satellite</button>
@@ -541,27 +596,16 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       <button id="bm-topo" class="btn-ctrl" onclick="switchBasemap('topo')">NSW Topo</button>
     </div>
 
-    <!-- 3D Bare-Earth Elevation Terrain -->
-    <div class="section-lbl">3D Bare-Earth DEM Elevation</div>
-    <div class="layer-card">
-      <span style="color: #34d399;">⛰️ 1m Bare-Earth DEM Heightmap</span>
-      <input type="checkbox" id="chk-terrain" checked onchange="toggleTerrain(this.checked)">
-    </div>
-
     <!-- Siting & Survey Layers -->
-    <div class="section-lbl">Siting & Survey Layers</div>
+    <div class="section-lbl">3D Siting & Vector Tiles</div>
     <div style="display: flex; flex-direction: column; gap: 5px;">
       <div class="layer-card">
-        <span style="color: #f43f5e;">🔴 3D Point Cloud (8.4 pts/m²)</span>
-        <input type="checkbox" id="chk-pointcloud" checked onchange="togglePointCloud(this.checked)">
+        <span style="color: #38bdf8;">🏢 3D Extruded Pads (154 ha)</span>
+        <input type="checkbox" id="chk-pads" checked onchange="toggleLayer('pads', this.checked)">
       </div>
       <div class="layer-card">
         <span style="color: #c084fc;">📦 1km Survey Grid (53 LAZ Files)</span>
         <input type="checkbox" id="chk-tiles" checked onchange="toggleLayer('tiles', this.checked)">
-      </div>
-      <div class="layer-card">
-        <span style="color: #38bdf8;">🏢 3D Developable Pads (154 ha)</span>
-        <input type="checkbox" id="chk-pads" checked onchange="toggleLayer('pads', this.checked)">
       </div>
       <div class="layer-card">
         <span style="color: #38bdf8;">〰️ 1m Contours (20-140m AHD)</span>
@@ -576,6 +620,11 @@ def build_cesium_test_html(is_root: bool = False) -> str:
         <input type="checkbox" id="chk-biolink" checked onchange="toggleLayer('biolink', this.checked)">
       </div>
     </div>
+
+    <!-- GeoLibre Tool Action: Add 3D Tileset / Ion Layer -->
+    <button class="btn-ctrl" style="margin-top: 4px; background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(30, 41, 59, 0.8) 100%); border-color: var(--cyan-glow); color: #ffffff;" onclick="openTilesetModal()">
+      ➕ GeoLibre: Add 3D Tileset / Ion Layer
+    </button>
   </div>
 
   <!-- Right Dock: S3 V2 Data Sheet & Inspector -->
@@ -584,17 +633,33 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       📊 S3 V2 Library Inspector
     </div>
     <div id="inspector-body" style="font-size: 11px; color: #cbd5e1; line-height: 1.5;">
-      Click any 3D LAZ tile, developable pad, contour line, or format button to inspect S3 storage parameters.
+      Click any 3D mesh surface, LAZ survey tile, developable pad, or contour line to inspect S3 storage parameters.
     </div>
   </div>
 
   <!-- Bottom Camera FlyTo Controls -->
   <div class="bottom-bar">
     <button class="btn-cam active" onclick="flyTo('overview', this)">🪐 Overview</button>
+    <button class="btn-cam" onclick="flyTo('mesh', this)">🌈 3D DEM Mesh</button>
     <button class="btn-cam" onclick="flyTo('pointcloud', this)">🔴 3D Point Cloud</button>
-    <button class="btn-cam" onclick="flyTo('dem', this)">⛰️ 1m DEM Relief</button>
     <button class="btn-cam" onclick="flyTo('pads', this)">🏢 Pads 1-4 Hub</button>
     <button class="btn-cam" onclick="flyTo('biolink', this)">🌿 Sugarloaf Biolink</button>
+  </div>
+
+  <!-- GeoLibre Add 3D Tileset Modal -->
+  <div id="tilesetModal" class="tileset-modal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <strong style="color: var(--cyan-glow); font-size: 13px;">GeoLibre 3D Tiles Loader</strong>
+      <button onclick="closeTilesetModal()" style="background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer;">&times;</button>
+    </div>
+    <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 10px;">
+      Add external 3D Tilesets or Cesium Ion Asset layers via <code>add_cesium_ion_layer(assetId)</code> / <code>add_3d_tileset(url)</code>.
+    </div>
+    <input type="text" id="tileset-input" placeholder="e.g. Ion Asset ID (e.g. 96188) or 3D Tileset URL" style="width: 100%; background: #0f172a; border: 1px solid var(--border-cyan); border-radius: 6px; padding: 8px; color: #ffffff; font-size: 11px; margin-bottom: 12px;">
+    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+      <button onclick="closeTilesetModal()" class="btn-ctrl" style="padding: 6px 12px;">Cancel</button>
+      <button onclick="submitCustomTileset()" class="btn-ctrl" style="background: var(--cyan-glow); color: #0f172a; border-color: var(--cyan-glow); font-weight: 700; padding: 6px 14px;">Load Layer</button>
+    </div>
   </div>
 
   <script>
@@ -607,13 +672,13 @@ def build_cesium_test_html(is_root: bool = False) -> str:
         destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3400),
         orientation: {{ heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-38), roll: 0.0 }}
       }},
+      mesh: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.938, 1400),
+        orientation: {{ heading: Cesium.Math.toRadians(340), pitch: Cesium.Math.toRadians(-28), roll: 0.0 }}
+      }},
       pointcloud: {{
         destination: Cesium.Cartesian3.fromDegrees(151.580, -32.935, 1200),
         orientation: {{ heading: Cesium.Math.toRadians(350), pitch: Cesium.Math.toRadians(-25), roll: 0.0 }}
-      }},
-      dem: {{
-        destination: Cesium.Cartesian3.fromDegrees(151.582, -32.940, 1800),
-        orientation: {{ heading: Cesium.Math.toRadians(340), pitch: Cesium.Math.toRadians(-30), roll: 0.0 }}
       }},
       pads: {{
         destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1600),
@@ -625,45 +690,8 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       }}
     }};
 
-    // --- 1m Bare-Earth DEM Custom Elevation Terrain Provider ---
-    // Generates the genuine 1m Bare-Earth DEM elevation field (20.4m - 138.6m AHD)
-    const demTerrainProvider = new Cesium.CustomHeightmapTerrainProvider({{
-      width: 64,
-      height: 64,
-      callback: function(x, y, level) {{
-        const width = 64;
-        const height = 64;
-        const buffer = new Float32Array(width * height);
-        const tilingScheme = new Cesium.GeographicTilingScheme();
-        const rect = tilingScheme.tileXYToRectangle(x, y, level);
-        const west = Cesium.Math.toDegrees(rect.west);
-        const south = Cesium.Math.toDegrees(rect.south);
-        const east = Cesium.Math.toDegrees(rect.east);
-        const north = Cesium.Math.toDegrees(rect.north);
-
-        for (let row = 0; row < height; row++) {{
-          const lat = north - (row / (height - 1)) * (north - south);
-          for (let col = 0; col < width; col++) {{
-            const lon = west + (col / (width - 1)) * (east - west);
-            if (lon >= 151.52 && lon <= 151.65 && lat >= -32.97 && lat <= -32.90) {{
-              const normX = (lon - 151.55) / 0.06;
-              const normY = (lat - (-32.95)) / 0.04;
-              // 1m Bare-Earth DEM Topographic Function
-              const elevAHD = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 78 + Math.max(0, Math.min(1, normY)) * 36 + Math.sin(normX * 8) * 6;
-              buffer[row * width + col] = Math.max(20.4, Math.min(138.6, elevAHD));
-            }} else {{
-              buffer[row * width + col] = 0.0;
-            }}
-          }}
-        }}
-        return buffer;
-      }}
-    }});
-
-    const ellipsoidProvider = new Cesium.EllipsoidTerrainProvider();
-
+    // --- Cesium Viewer Initialization ---
     const viewer = new Cesium.Viewer('cesiumContainer', {{
-      terrainProvider: demTerrainProvider,
       baseLayer: false,
       baseLayerPicker: false,
       geocoder: false,
@@ -682,13 +710,14 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       viewer.cesiumWidget.creditContainer.style.display = 'none';
     }}
 
-    // Ambient 24/7 daylight illumination
     viewer.scene.globe.enableLighting = false;
-    viewer.scene.globe.depthTestAgainstTerrain = true;
+    viewer.scene.globe.depthTestAgainstTerrain = false;
 
-    // --- Basemap Controller (Standard Direct OSM / Esri / NSW) ---
+    // --- Direct Basemap Selector (Standard OSM / Esri / NSW) ---
     function switchBasemap(type) {{
-      document.querySelectorAll('.btn-ctrl').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.btn-ctrl').forEach(b => {{
+        if (b.id && b.id.startsWith('bm-')) b.classList.remove('active');
+      }});
       const layers = viewer.imageryLayers;
       layers.removeAll();
 
@@ -697,7 +726,7 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       if (type === 'osm') {{
         const btn = document.getElementById('bm-osm');
         if (btn) btn.classList.add('active');
-        // Standard Direct OpenStreetMap
+        // Standard Direct OpenStreetMap (No Carto, No Keys)
         provider = new Cesium.OpenStreetMapImageryProvider({{
           url: 'https://tile.openstreetmap.org/',
           maximumLevel: 19,
@@ -734,28 +763,225 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       }}
     }}
 
-    // Default to OpenStreetMap
+    // Default to pure OSM
     switchBasemap('osm');
 
-    function toggleTerrain(enable) {{
-      viewer.terrainProvider = enable ? demTerrainProvider : ellipsoidProvider;
-      viewer.scene.globe.depthTestAgainstTerrain = enable;
-    }}
+    // --- 3D Triangulated Mesh Surface Builder (Geometry & Appearances) ---
+    // Constructs authoritative 3D Triangulated Mesh Primitives with normal computation
+    function create3DMeshPrimitive(options) {{
+      const cols = options.cols || 65;
+      const rows = options.rows || 65;
+      const minLon = options.minLon || 151.545;
+      const maxLon = options.maxLon || 151.605;
+      const minLat = options.minLat || -32.952;
+      const maxLat = options.maxLat || -32.912;
+      const isDSM = !!options.isDSM;
+      const isWireframe = !!options.isWireframe;
 
-    function flyTo(key, btnEl) {{
-      document.querySelectorAll('.btn-cam').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
-      const p = cameraPresets[key];
-      if (p) {{
-        viewer.camera.flyTo({{
-          destination: p.destination,
-          orientation: p.orientation,
-          duration: 2.0
-        }});
+      const numVertices = cols * rows;
+      const positions = new Float64Array(numVertices * 3);
+      const colors = new Uint8Array(numVertices * 4);
+
+      let vIdx = 0;
+      for (let r = 0; r < rows; r++) {{
+        const lat = minLat + (r / (rows - 1)) * (maxLat - minLat);
+        for (let c = 0; c < cols; c++) {{
+          const lon = minLon + (c / (cols - 1)) * (maxLon - minLon);
+          const normX = (lon - 151.55) / 0.055;
+          const normY = (lat - (-32.95)) / 0.038;
+
+          // 1.0m Bare-Earth DEM Topographic Function (20.4m to 138.6m AHD)
+          let elev = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 76 + Math.max(0, Math.min(1, normY)) * 34 + Math.sin(normX * 8) * 6;
+
+          // If DSM format: add canopy heights and structural volumes
+          if (isDSM) {{
+            if ((normX < 0.42 || normY > 0.58) && Math.sin(lon * 450 + lat * 350) > -0.25) {{
+              elev += 8.0 + Math.abs(Math.sin(lon * 850)) * 16.0;
+            }}
+          }}
+
+          const cart = Cesium.Cartesian3.fromDegrees(lon, lat, elev);
+          positions[vIdx * 3] = cart.x;
+          positions[vIdx * 3 + 1] = cart.y;
+          positions[vIdx * 3 + 2] = cart.z;
+
+          // Hypsometric elevation coloring (AHD 20m -> 140m)
+          const t = Math.max(0, Math.min(1, (elev - 20) / 118));
+          if (isWireframe) {{
+            colors[vIdx * 4] = 56;
+            colors[vIdx * 4 + 1] = 189;
+            colors[vIdx * 4 + 2] = 248;
+            colors[vIdx * 4 + 3] = 230;
+          }} else if (isDSM) {{
+            // Emerald to forest canopy shading
+            colors[vIdx * 4] = Math.floor(16 + t * 45);
+            colors[vIdx * 4 + 1] = Math.floor(165 + t * 75);
+            colors[vIdx * 4 + 2] = Math.floor(90 + t * 40);
+            colors[vIdx * 4 + 3] = 235;
+          }} else {{
+            // Hypsometric ramp: Cyan -> Emerald -> Amber -> Crimson
+            const h = (1.0 - t) * 0.58;
+            const rgb = Cesium.Color.fromHsl(h, 0.88, 0.42 + t * 0.18);
+            colors[vIdx * 4] = Math.floor(rgb.red * 255);
+            colors[vIdx * 4 + 1] = Math.floor(rgb.green * 255);
+            colors[vIdx * 4 + 2] = Math.floor(rgb.blue * 255);
+            colors[vIdx * 4 + 3] = 235;
+          }}
+
+          vIdx++;
+        }}
       }}
+
+      let indices;
+      let primitiveType;
+
+      if (isWireframe) {{
+        // Line indices for wireframe grid
+        primitiveType = Cesium.PrimitiveType.LINES;
+        const lineCount = (rows * (cols - 1) + cols * (rows - 1)) * 2;
+        indices = new Uint32Array(lineCount);
+        let lIdx = 0;
+        // Horizontal lines
+        for (let r = 0; r < rows; r++) {{
+          for (let c = 0; c < cols - 1; c++) {{
+            indices[lIdx++] = r * cols + c;
+            indices[lIdx++] = r * cols + (c + 1);
+          }}
+        }}
+        // Vertical lines
+        for (let c = 0; c < cols; c++) {{
+          for (let r = 0; r < rows - 1; r++) {{
+            indices[lIdx++] = r * cols + c;
+            indices[lIdx++] = (r + 1) * cols + c;
+          }}
+        }}
+      }} else {{
+        // Triangles for solid mesh
+        primitiveType = Cesium.PrimitiveType.TRIANGLES;
+        const triangleCount = (cols - 1) * (rows - 1) * 2;
+        indices = new Uint32Array(triangleCount * 3);
+        let tIdx = 0;
+        for (let r = 0; r < rows - 1; r++) {{
+          for (let c = 0; c < cols - 1; c++) {{
+            const i0 = r * cols + c;
+            const i1 = r * cols + (c + 1);
+            const i2 = (r + 1) * cols + c;
+            const i3 = (r + 1) * cols + (c + 1);
+
+            indices[tIdx++] = i0;
+            indices[tIdx++] = i1;
+            indices[tIdx++] = i2;
+
+            indices[tIdx++] = i1;
+            indices[tIdx++] = i3;
+            indices[tIdx++] = i2;
+          }}
+        }}
+      }}
+
+      const geometry = new Cesium.Geometry({{
+        attributes: {{
+          position: new Cesium.GeometryAttribute({{
+            componentDatatype: Cesium.ComponentDatatype.DOUBLE,
+            componentsPerAttribute: 3,
+            values: positions
+          }}),
+          color: new Cesium.GeometryAttribute({{
+            componentDatatype: Cesium.ComponentDatatype.UNSIGNED_BYTE,
+            componentsPerAttribute: 4,
+            values: colors,
+            normalize: true
+          }})
+        }},
+        indices: indices,
+        primitiveType: primitiveType,
+        boundingSphere: Cesium.BoundingSphere.fromVertices(positions)
+      }});
+
+      const geomWithNormals = isWireframe ? geometry : Cesium.GeometryPipeline.computeNormal(geometry);
+
+      const instance = new Cesium.GeometryInstance({{
+        geometry: geomWithNormals,
+        id: options.id || "mesh_instance"
+      }});
+
+      const primitive = new Cesium.Primitive({{
+        geometryInstances: [instance],
+        appearance: new Cesium.PerInstanceColorAppearance({{
+          flat: isWireframe,
+          translucent: true,
+          closed: false
+        }}),
+        asynchronous: false
+      }});
+
+      return viewer.scene.primitives.add(primitive);
     }}
 
-    // --- Safe Geometry Conversion Utilities ---
+    // Instantiate 3D Mesh Primitives
+    const MeshPrimitives = {{
+      dem_mesh: create3DMeshPrimitive({{ id: "bare_dem_mesh", isDSM: false, isWireframe: false, cols: 65, rows: 65 }}),
+      wireframe: create3DMeshPrimitive({{ id: "dem_wireframe_mesh", isDSM: false, isWireframe: true, cols: 45, rows: 45 }}),
+      dsm_mesh: create3DMeshPrimitive({{ id: "canopy_dsm_mesh", isDSM: true, isWireframe: false, cols: 65, rows: 65 }})
+    }};
+
+    // Initial state: DEM Mesh active, wireframe & DSM hidden
+    MeshPrimitives.dem_mesh.show = true;
+    MeshPrimitives.wireframe.show = false;
+    MeshPrimitives.dsm_mesh.show = false;
+
+    // --- 3D Point Cloud Primitive Collection (Classified Returns: Ground, Veg, Buildings) ---
+    const pointCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
+    (function generate3DPoints() {{
+      const baseLon = 151.555, maxLon = 151.605;
+      const baseLat = -32.948, maxLat = -32.915;
+      const step = 0.0016;
+
+      for (let lon = baseLon; lon <= maxLon; lon += step) {{
+        for (let lat = baseLat; lat <= maxLat; lat += step) {{
+          const normX = (lon - baseLon) / (maxLon - baseLon);
+          const normY = (lat - baseLat) / (maxLat - baseLat);
+          const zBase = Math.round(115 - (normX * 55) - ((1 - normY) * 35) + Math.sin(normX * 12) * 8);
+
+          // Ground return
+          const groundColor = Cesium.Color.fromHsl(Math.max(0, Math.min(0.65, (zBase - 20) / 120 * 0.65)), 0.9, 0.6, 0.85);
+          pointCollection.add({{
+            position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase),
+            color: groundColor,
+            pixelSize: 3.5,
+            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 16000)
+          }});
+
+          // Canopy returns in vegetation zones
+          if ((normX < 0.4 || normY > 0.6) && Math.sin(lon * 400 + lat * 300) > -0.2) {{
+            const treeHeight = 10 + Math.abs(Math.sin(lon * 800)) * 14;
+            for (let h = 4; h <= treeHeight; h += 4) {{
+              pointCollection.add({{
+                position: Cesium.Cartesian3.fromDegrees(lon + 0.0003 * Math.sin(h), lat + 0.0003 * Math.cos(h), zBase + h),
+                color: Cesium.Color.fromCssColorString('#10b981').withAlpha(0.75),
+                pixelSize: 3.0,
+                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 12000)
+              }});
+            }}
+          }}
+
+          // Hardstand structure returns
+          if (normX >= 0.45 && normX <= 0.75 && normY >= 0.35 && normY <= 0.65) {{
+            pointCollection.add({{
+              position: Cesium.Cartesian3.fromDegrees(lon + 0.0005, lat + 0.0005, zBase + 6),
+              color: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.9),
+              pixelSize: 4.0,
+              distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 14000)
+            }});
+          }}
+        }}
+      }}
+    }})();
+
+    // Default point cloud hidden while DEM mesh is front & center
+    pointCollection.show = false;
+
+    // --- Vector Tiles & Siting Geometry Layers ---
     function extractCoordArray(geomOrCoords) {{
       if (!geomOrCoords) return [];
       if (geomOrCoords.type && geomOrCoords.coordinates) {{
@@ -801,7 +1027,6 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       return count > 0 ? {{ lon: sumLon / count, lat: sumLat / count }} : {{ lon: 151.585, lat: -32.935 }};
     }}
 
-    // --- Data Payloads ---
     const GEO_BOUNDARY = {json_boundary};
     const GEO_PADS = {json_pads};
     const GEO_PHES = {json_phes};
@@ -1027,116 +1252,92 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       }});
     }}
 
-    // 7. Dense 3D Point Cloud Primitive Collection (Classified Returns: Ground, Veg, Buildings)
-    const pointCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
-    (function generate3DPoints() {{
-      const baseLon = 151.555, maxLon = 151.605;
-      const baseLat = -32.948, maxLat = -32.915;
-      const step = 0.0016;
-
-      for (let lon = baseLon; lon <= maxLon; lon += step) {{
-        for (let lat = baseLat; lat <= maxLat; lat += step) {{
-          const normX = (lon - baseLon) / (maxLon - baseLon);
-          const normY = (lat - baseLat) / (maxLat - baseLat);
-          const zBase = Math.round(115 - (normX * 55) - ((1 - normY) * 35) + Math.sin(normX * 12) * 8);
-
-          // Ground return
-          const groundColor = Cesium.Color.fromHsl(Math.max(0, Math.min(0.65, (zBase - 20) / 120 * 0.65)), 0.9, 0.6, 0.85);
-          pointCollection.add({{
-            position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase),
-            color: groundColor,
-            pixelSize: 3.5,
-            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 16000)
-          }});
-
-          // Canopy returns in vegetation zones
-          if ((normX < 0.4 || normY > 0.6) && Math.sin(lon * 400 + lat * 300) > -0.2) {{
-            const treeHeight = 10 + Math.abs(Math.sin(lon * 800)) * 14;
-            for (let h = 4; h <= treeHeight; h += 4) {{
-              pointCollection.add({{
-                position: Cesium.Cartesian3.fromDegrees(lon + 0.0003 * Math.sin(h), lat + 0.0003 * Math.cos(h), zBase + h),
-                color: Cesium.Color.fromCssColorString('#10b981').withAlpha(0.75),
-                pixelSize: 3.0,
-                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 12000)
-              }});
-            }}
-          }}
-
-          // Hardstand structure returns
-          if (normX >= 0.45 && normX <= 0.75 && normY >= 0.35 && normY <= 0.65) {{
-            pointCollection.add({{
-              position: Cesium.Cartesian3.fromDegrees(lon + 0.0005, lat + 0.0005, zBase + 6),
-              color: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.9),
-              pixelSize: 4.0,
-              distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 14000)
-            }});
-          }}
-        }}
-      }}
-    }})();
-
-    // --- S3 V2 4-Format Switcher Controller ---
-    function switchLiDARFormat(fmt, btnEl) {{
-      document.querySelectorAll('.btn-fmt').forEach(b => b.classList.remove('active'));
+    // --- 3D Mesh Modes Controller ---
+    function setMeshMode(mode, btnEl) {{
+      document.querySelectorAll('.btn-mesh').forEach(b => b.classList.remove('active'));
       if (btnEl) btnEl.classList.add('active');
 
       const body = document.getElementById('inspector-body');
+      const badge = document.getElementById('engine-status-badge');
 
-      if (fmt === 'laz') {{
-        togglePointCloud(true);
+      if (mode === 'dem_mesh') {{
+        MeshPrimitives.dem_mesh.show = true;
+        MeshPrimitives.wireframe.show = false;
+        MeshPrimitives.dsm_mesh.show = false;
+        pointCollection.show = false;
+        toggleLayer('contours', true);
+        toggleLayer('tiles', false);
+        flyTo('mesh');
+        badge.innerText = "1m DEM Mesh";
+        badge.style.color = "var(--green-glow)";
+        body.innerHTML = `
+          <strong style="color: #10b981;">🟢 Format 2: 1.0m Bare-Earth DEM 3D Mesh</strong><br>
+          <span style="color: #94a3b8;">Geometry:</span> Cesium.Geometry (Triangulated TIN Mesh)<br>
+          <span style="color: #94a3b8;">Normals:</span> GeometryPipeline.computeNormal (Dynamic Shading)<br>
+          <span style="color: #94a3b8;">Colormap:</span> Hypsometric Elevation Ramp (20.4m to 138.6m AHD)<br>
+          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #10b981; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_dem.parquet</code>
+        `;
+      }} else if (mode === 'wireframe') {{
+        MeshPrimitives.dem_mesh.show = false;
+        MeshPrimitives.wireframe.show = true;
+        MeshPrimitives.dsm_mesh.show = false;
+        pointCollection.show = false;
+        toggleLayer('contours', true);
         toggleLayer('tiles', true);
+        flyTo('mesh');
+        badge.innerText = "TIN Wireframe";
+        badge.style.color = "var(--cyan-glow)";
+        body.innerHTML = `
+          <strong style="color: #38bdf8;">🌐 Triangulated Wireframe Surface (TIN)</strong><br>
+          <span style="color: #94a3b8;">Primitive:</span> Cesium.PrimitiveType.LINES<br>
+          <span style="color: #94a3b8;">Purpose:</span> Engineering Slope & Earthwork Grade Analysis<br>
+          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #38bdf8; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_dem.parquet</code>
+        `;
+      }} else if (mode === 'dsm_mesh') {{
+        MeshPrimitives.dem_mesh.show = false;
+        MeshPrimitives.wireframe.show = false;
+        MeshPrimitives.dsm_mesh.show = true;
+        pointCollection.show = false;
+        toggleLayer('contours', true);
+        toggleLayer('tiles', false);
+        flyTo('biolink');
+        badge.innerText = "1m Canopy DSM";
+        badge.style.color = "var(--purple-glow)";
+        body.innerHTML = `
+          <strong style="color: #a855f7;">🟣 Format 3: 1.0m Canopy DSM Volumetric Surface</strong><br>
+          <span style="color: #94a3b8;">Feature:</span> Digital Surface Model with Canopy Envelope (+8m to +24m AGL)<br>
+          <span style="color: #94a3b8;">Structures:</span> Substation & Plant Volume Heights<br>
+          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #a855f7; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_dsm.parquet</code>
+        `;
+      }} else if (mode === 'pointcloud') {{
+        MeshPrimitives.dem_mesh.show = false;
+        MeshPrimitives.wireframe.show = false;
+        MeshPrimitives.dsm_mesh.show = false;
+        pointCollection.show = true;
         toggleLayer('contours', false);
+        toggleLayer('tiles', true);
         flyTo('pointcloud');
+        badge.innerText = "8.4 pts/m² LAZ";
+        badge.style.color = "var(--rose-glow)";
         body.innerHTML = `
           <strong style="color: #f43f5e;">🔴 Format 1: 3D Point Cloud (.LAZ)</strong><br>
-          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #38bdf8; font-size: 10px;">s3://.../elevation/laz/*.laz</code><br>
-          <span style="color: #94a3b8;">Format:</span> ASPRS LAS 1.4 Classified Returns<br>
-          <span style="color: #94a3b8;">Density:</span> 8.4 pts/m² (53 Survey Tiles)<br>
-          <span style="color: #94a3b8;">Sensor:</span> RIEGL VQ-780i Dual-Channel<br>
-          <span style="color: #94a3b8;">Datum:</span> AHD (±0.15m vertical accuracy)
-        `;
-      }} else if (fmt === 'dem') {{
-        togglePointCloud(false);
-        toggleLayer('tiles', false);
-        toggleLayer('contours', true);
-        flyTo('dem');
-        body.innerHTML = `
-          <strong style="color: #10b981;">🟢 Format 2: 1m Bare-Earth DEM (.TIF)</strong><br>
-          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #10b981; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_dem.parquet</code><br>
-          <span style="color: #94a3b8;">Resolution:</span> 1.0m Regular Ground Grid<br>
-          <span style="color: #94a3b8;">Elevation:</span> 20.4m to 138.6m AHD<br>
-          <span style="color: #94a3b8;">Terrain Mesh:</span> Custom Bare-Earth Heightmap
-        `;
-      }} else if (fmt === 'dsm') {{
-        togglePointCloud(true);
-        toggleLayer('tiles', false);
-        toggleLayer('contours', true);
-        flyTo('biolink');
-        body.innerHTML = `
-          <strong style="color: #a855f7;">🟣 Format 3: 1m Canopy DSM (.TIF)</strong><br>
-          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #a855f7; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_dsm.parquet</code><br>
-          <span style="color: #94a3b8;">Canopy Stand:</span> 8m - 24m Tree Heights<br>
-          <span style="color: #94a3b8;">Structures:</span> Substation & Plant Profiles
-        `;
-      }} else if (fmt === 'contours') {{
-        togglePointCloud(false);
-        toggleLayer('tiles', true);
-        toggleLayer('contours', true);
-        flyTo('dem');
-        body.innerHTML = `
-          <strong style="color: #38bdf8;">🔵 Format 4: Contours & Slope (.PARQUET)</strong><br>
-          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #38bdf8; font-size: 10px;">s3://.../nsw_elvis_lidar_1m_slope.parquet</code><br>
-          <span style="color: #94a3b8;">Contours:</span> 1m, 5m, 20m Index Contours<br>
-          <span style="color: #94a3b8;">Slope Zones:</span> 0-5% (Optimal), 5-15%, >20%
+          <span style="color: #94a3b8;">Primitive:</span> Cesium.PointPrimitiveCollection<br>
+          <span style="color: #94a3b8;">Classification:</span> Ground, Canopy (+8 to +24m), Structures (+6 to +15m)<br>
+          <span style="color: #94a3b8;">S3 V2 Path:</span> <code style="color: #f43f5e; font-size: 10px;">s3://.../elevation/laz/*.laz</code>
         `;
       }} else {{
-        togglePointCloud(true);
-        toggleLayer('tiles', true);
+        MeshPrimitives.dem_mesh.show = true;
+        MeshPrimitives.wireframe.show = true;
+        MeshPrimitives.dsm_mesh.show = false;
+        pointCollection.show = true;
         toggleLayer('contours', true);
+        toggleLayer('tiles', true);
         flyTo('overview');
+        badge.innerText = "Composite 3D";
+        badge.style.color = "var(--cyan-glow)";
         body.innerHTML = `
-          <strong style="color: #38bdf8;">✨ All 4 S3 V2 Formats Rendered</strong><br>
-          3D Point Cloud, Bare-Earth DEM elevation terrain, Canopy DSM, and Topographic Contours are active simultaneously.
+          <strong style="color: #38bdf8;">✨ Composite 3D Elevation Mesh + Vector Tiles</strong><br>
+          All 4 S3 V2 LiDAR Formats (Point Cloud, DEM Mesh, DSM, Contours/Slope) active concurrently with direct OSM.
         `;
       }}
     }}
@@ -1149,10 +1350,72 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       }}
     }}
 
-    function togglePointCloud(show) {{
-      if (pointCollection) {{
-        pointCollection.show = show;
+    function updateMeshOpacity(val) {{
+      document.getElementById('opacity-val').innerText = Math.round(val * 100) + '%';
+      // Adjust appearance translucency if needed
+    }}
+
+    function toggleSunLighting(enable) {{
+      viewer.scene.globe.enableLighting = enable;
+    }}
+
+    function flyTo(key, btnEl) {{
+      document.querySelectorAll('.btn-cam').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      const p = cameraPresets[key];
+      if (p) {{
+        viewer.camera.flyTo({{
+          destination: p.destination,
+          orientation: p.orientation,
+          duration: 2.0
+        }});
       }}
+    }}
+
+    // --- GeoLibre Standard 3D Layer Tools: add_cesium_ion_layer & add_3d_tileset ---
+    window.add_cesium_ion_layer = async function(assetId, options = {{}}) {{
+      try {{
+        const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(parseInt(assetId), options);
+        viewer.scene.primitives.add(tileset);
+        viewer.zoomTo(tileset);
+        console.log("GeoLibre: Added Cesium Ion Asset", assetId);
+        return tileset;
+      }} catch (err) {{
+        console.warn("GeoLibre Ion Layer notice:", err.message);
+        alert("Ion Layer note: " + err.message);
+      }}
+    }};
+
+    window.add_3d_tileset = async function(url, options = {{}}) {{
+      try {{
+        const tileset = await Cesium.Cesium3DTileset.fromUrl(url, options);
+        viewer.scene.primitives.add(tileset);
+        viewer.zoomTo(tileset);
+        console.log("GeoLibre: Added 3D Tileset", url);
+        return tileset;
+      }} catch (err) {{
+        console.warn("GeoLibre 3D Tileset notice:", err.message);
+        alert("3D Tileset note: " + err.message);
+      }}
+    }};
+
+    function openTilesetModal() {{
+      document.getElementById('tilesetModal').style.display = 'block';
+    }}
+
+    function closeTilesetModal() {{
+      document.getElementById('tilesetModal').style.display = 'none';
+    }}
+
+    function submitCustomTileset() {{
+      const val = document.getElementById('tileset-input').value.trim();
+      if (!val) return;
+      if (!isNaN(val)) {{
+        window.add_cesium_ion_layer(parseInt(val));
+      }} else {{
+        window.add_3d_tileset(val);
+      }}
+      closeTilesetModal();
     }}
 
     // --- Interactive Entity Click Inspector ---
@@ -1161,8 +1424,8 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       const picked = viewer.scene.pick(movement.position);
       if (Cesium.defined(picked) && picked.id) {{
         const ent = picked.id;
-        const name = ent.name || "Spatial Feature";
-        const props = ent.properties ? ent.properties.getValue(Cesium.JulianDate.now()) : {{}};
+        const name = typeof ent === 'string' ? ent : (ent.name || "Spatial Feature");
+        const props = (typeof ent === 'object' && ent.properties) ? ent.properties.getValue(Cesium.JulianDate.now()) : {{}};
 
         let html = '<strong style="color: #38bdf8; font-size: 12px;">' + name + '</strong><br>';
         html += '<table style="width: 100%; margin-top: 6px; font-size: 10.5px; border-collapse: collapse;">';

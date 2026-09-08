@@ -468,25 +468,37 @@ def build_cesium_test_html(is_root: bool = False) -> str:
       layers.removeAll();
 
       if (type === 'esri') {{
-        document.getElementById('bm-esri').classList.add('active');
+        const btn = document.getElementById('bm-esri');
+        if (btn) btn.classList.add('active');
         layers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({{
           url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}',
-          maximumLevel: 19
+          maximumLevel: 19,
+          credit: 'Esri World Imagery'
         }}));
       }} else if (type === 'nsw') {{
-        document.getElementById('bm-nsw').classList.add('active');
-        layers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({{
-          url: 'https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Imagery/MapServer'
+        const btn = document.getElementById('bm-nsw');
+        if (btn) btn.classList.add('active');
+        layers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({{
+          url: 'https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}',
+          maximumLevel: 19,
+          credit: 'NSW Spatial Services'
         }}));
       }} else if (type === 'topo') {{
-        document.getElementById('bm-topo').classList.add('active');
-        layers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({{
-          url: 'https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Topo_Map/MapServer'
+        const btn = document.getElementById('bm-topo');
+        if (btn) btn.classList.add('active');
+        layers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({{
+          url: 'https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Topo_Map/MapServer/tile/{{z}}/{{y}}/{{x}}',
+          maximumLevel: 18,
+          credit: 'NSW Topographic Map'
         }}));
       }} else if (type === 'osm') {{
-        document.getElementById('bm-osm').classList.add('active');
-        layers.addImageryProvider(new Cesium.OpenStreetMapImageryProvider({{
-          url: 'https://a.tile.openstreetmap.org/'
+        const btn = document.getElementById('bm-osm');
+        if (btn) btn.classList.add('active');
+        layers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({{
+          url: 'https://{{s}}.basemaps.cartocdn.com/rastertiles/voyager/{{z}}/{{x}}/{{y}}@2x.png',
+          subdomains: ['a', 'b', 'c', 'd'],
+          maximumLevel: 19,
+          credit: 'OpenStreetMap contributors / CARTO'
         }}));
       }}
     }}

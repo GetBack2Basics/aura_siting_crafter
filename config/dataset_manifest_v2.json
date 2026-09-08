@@ -1,7 +1,7 @@
 {
   "manifest_version": "2.0.0",
-  "total_datasets": 25,
-  "updated_at": "2026-09-02 06:10:02 UTC",
+  "total_datasets": 26,
+  "updated_at": "2026-09-08 02:45:00 UTC",
   "datasets": {
     "national_cadastre_gnaf_v2": {
       "dataset_key": "national_cadastre_gnaf_v2",
@@ -828,6 +828,45 @@
         "table_name": "wa_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
+      }
+    },
+    "nsw_elvis_lidar_1m_dem_v2": {
+      "dataset_key": "nsw_elvis_lidar_1m_dem_v2",
+      "canonical_theme": "siting_elevation_lidar_dem",
+      "state": "nsw",
+      "dataset_name": "ELVIS NSW 1m High-Resolution LiDAR Digital Elevation Model & Contours",
+      "source_agency": "Geoscience Australia / NSW Spatial Services (ELVIS)",
+      "portal": "ELVIS Elevation - Foundation Spatial Data",
+      "service_type": "s3_geoparquet",
+      "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+      "package_archives": [
+        "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+        "https://elvis-downloads.s3.amazonaws.com/DATA_2374296.zip"
+      ],
+      "layer_id": 1,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:7856",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "bounds_wgs84": "POLYGON((151.565811822199 -33.09366981660604, 151.68571363131375 -33.09366981660604, 151.68571363131375 -32.93425892457497, 151.565811822199 -32.93425892457497, 151.565811822199 -33.09366981660604))",
+      "schema_mapping": {
+        "elevation_m": "ELEVATION_AHD",
+        "contour_type": "CONTOUR_TYPE",
+        "slope_pct": "SLOPE_PCT",
+        "slope_class": "SLOPE_CLASS",
+        "aspect_deg": "ASPECT_DEG",
+        "point_density_pts_m2": "PT_DENSITY",
+        "vertical_accuracy_m": "VERT_ACC_M"
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "nsw_elvis_lidar_1m_dem_v2",
+        "format": "havasu.iceberg",
+        "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dem.parquet"
       }
     }
   }

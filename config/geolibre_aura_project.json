@@ -451,6 +451,36 @@
             "line-opacity": 0.90
           },
           "popup_properties": ["corridor_id", "infrastructure_type", "buffer_setback_m", "operator"]
+        },
+        {
+          "id": "elvis_lidar_1m_contours",
+          "name": "ELVIS 1m LiDAR Topographic Contours (20m-140m AHD)",
+          "type": "line",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_contours.parquet",
+          "stream_url": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+          "visible": true,
+          "paint": {
+            "line-color": "#38bdf8",
+            "line-width": 1.5,
+            "line-opacity": 0.85
+          },
+          "popup_properties": ["elevation_m", "contour_type", "source", "vertical_accuracy_m"]
+        },
+        {
+          "id": "elvis_lidar_slope_classification",
+          "name": "ELVIS 1m LiDAR Slope Classification Heatmap",
+          "type": "fill",
+          "source_type": "geoparquet",
+          "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_slope.parquet",
+          "stream_url": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+          "visible": true,
+          "paint": {
+            "fill-color": "#34d399",
+            "fill-opacity": 0.30,
+            "fill-outline-color": "#10b981"
+          },
+          "popup_properties": ["class", "suitability", "slope_range_pct", "source"]
         }
       ]
     }

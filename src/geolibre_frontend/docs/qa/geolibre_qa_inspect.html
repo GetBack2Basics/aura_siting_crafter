@@ -651,262 +651,291 @@
             "name": "Geoscape National Cadastre & G-NAF Parcel Fabric",
             "state": "national",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Topographic_Base_Map/MapServer/0?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/national_cadastre_gnaf_v2.parquet",
             "type": "multipolygon",
             "base_count": 15400000,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "national_cyclone_hazard_tcha_v2": {
             "name": "Tropical Cyclone Hazard Assessment (TCHA) & AS/NZS 1170.2 Wind Regions",
             "state": "national",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/national_cyclone_hazard_tcha_v2.parquet",
             "type": "polygon",
             "base_count": 11,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "national_electricity_grid_v2": {
             "name": "Geoscience Australia National Electricity Transmission Grid (>=66kV)",
             "state": "national",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/national_electricity_grid_v2.parquet",
             "type": "linestring",
             "base_count": 4820,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "national_healthcare_nhsd_v2": {
             "name": "National Health Services Directory (NHSD) Hospitals & Health Facilities",
             "state": "national",
             "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=health",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/national_healthcare_nhsd_v2.parquet",
             "type": "point",
             "base_count": 4218,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "national_schools_acara_v2": {
             "name": "ACARA National Schools Directory",
             "state": "national",
             "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=schools",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/national_schools_acara_v2.parquet",
             "type": "point",
             "base_count": 10842,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "national_seismic_hazard_nsha_v2": {
             "name": "National Seismic Hazard Assessment (NSHA) Ground Motion PGA (National)",
             "state": "national",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/national_seismic_hazard_nsha_v2.parquet",
             "type": "polygon",
             "base_count": 9,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "nsw_bionet_bv_map_v2": {
             "name": "Biodiversity Values Map (Biodiversity Conservation Act 2016)",
             "state": "nsw",
             "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/9?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_bionet_bv_map_v2.parquet",
             "type": "multipolygon",
             "base_count": 7475,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "nsw_coastal_inundation_hazard_v2": {
             "name": "NSW Coastal Inundation, Storm Surge and Tidal Extent",
             "state": "nsw",
             "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Water_Theme/FeatureServer/7?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_coastal_inundation_hazard_v2.parquet",
             "type": "multipolygon",
             "base_count": 880,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
-      },
-      "nsw_landslide_susceptibility_v2": {
-            "name": "NSW Slope Instability and Landslide Hazard Susceptibility",
-            "state": "nsw",
-            "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7?f=json",
-            "type": "multipolygon",
-            "base_count": 4722,
-            "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
-      },
-      "nsw_national_seismic_hazard_v2": {
-            "name": "National Seismic Hazard Assessment (NSHA) Ground Motion PGA (NSW)",
-            "state": "nsw",
-            "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json",
-            "type": "polygon",
-            "base_count": 9,
-            "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
-      },
-      "nsw_transmission_grid_v2": {
-            "name": "High-Voltage Transmission Network and Terminal Substations (>=132kV)",
-            "state": "nsw",
-            "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/6?f=json",
-            "type": "linestring",
-            "base_count": 6575,
-            "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "nsw_elvis_lidar_1m_dem_v2": {
             "name": "ELVIS NSW 1m High-Resolution LiDAR Digital Elevation Model & Contours",
             "state": "nsw",
             "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dem.parquet",
             "type": "multipolygon",
             "base_count": 2840,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
-      },
-      "nsw_elvis_lidar_laz_pointcloud_v2": {
-            "name": "ELVIS NSW Classified 3D LiDAR Point Cloud (.LAZ / ASPRS Ground, Canopy & Structures)",
-            "state": "nsw",
-            "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
-            "type": "multipoint",
-            "base_count": 18450000,
-            "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "nsw_elvis_lidar_1m_dsm_v2": {
             "name": "ELVIS NSW 1m High-Resolution Digital Surface Model (Canopy & Structure DSM)",
             "state": "nsw",
             "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374296.zip",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dsm.parquet",
             "type": "multipolygon",
             "base_count": 2840,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "nsw_elvis_lidar_contours_v2": {
             "name": "ELVIS NSW 0.5m/1m Topographic Elevation Contours Fabric",
             "state": "nsw",
             "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_contours.parquet",
             "type": "multilinestring",
             "base_count": 14820,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
+      },
+      "nsw_elvis_lidar_laz_pointcloud_v2": {
+            "name": "ELVIS NSW Classified 3D LiDAR Point Cloud (.LAZ / ASPRS Ground, Canopy & Structures)",
+            "state": "nsw",
+            "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/*.laz",
+            "type": "multipoint",
+            "base_count": 18450000,
+            "hash": "ef0090b06033a9c1",
+            "sync_date": "2026-09-08 12:00 UTC"
+      },
+      "nsw_landslide_susceptibility_v2": {
+            "name": "NSW Slope Instability and Landslide Hazard Susceptibility",
+            "state": "nsw",
+            "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_landslide_susceptibility_v2.parquet",
+            "type": "multipolygon",
+            "base_count": 4722,
+            "hash": "ef0090b06033a9c1",
+            "sync_date": "2026-09-08 12:00 UTC"
+      },
+      "nsw_national_seismic_hazard_v2": {
+            "name": "National Seismic Hazard Assessment (NSHA) Ground Motion PGA (NSW)",
+            "state": "nsw",
+            "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_national_seismic_hazard_v2.parquet",
+            "type": "polygon",
+            "base_count": 9,
+            "hash": "ef0090b06033a9c1",
+            "sync_date": "2026-09-08 12:00 UTC"
+      },
+      "nsw_transmission_grid_v2": {
+            "name": "High-Voltage Transmission Network and Terminal Substations (>=132kV)",
+            "state": "nsw",
+            "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/6?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_transmission_grid_v2.parquet",
+            "type": "linestring",
+            "base_count": 6575,
+            "hash": "ef0090b06033a9c1",
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "qld_cyclone_hazard_tcha_v2": {
             "name": "Tropical Cyclone Hazard Assessment (TCHA) & AS/NZS 1170.2 Wind Regions",
             "state": "qld",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/qld_cyclone_hazard_tcha_v2.parquet",
             "type": "polygon",
             "base_count": 11,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "qld_landslide_susceptibility_v2": {
             "name": "Queensland State Planning Policy (SPP) Landslide Hazard Overlays",
             "state": "qld",
             "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/GeoscientificInformation/SoilsAndLandResource/MapServer/51?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/qld_landslide_susceptibility_v2.parquet",
             "type": "multipolygon",
             "base_count": 132621,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "qld_regulated_vegetation_vma_v2": {
             "name": "Regulated Vegetation Management Map (Vegetation Management Act 1999)",
             "state": "qld",
             "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Biota/VegetationManagement/MapServer/103?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/qld_regulated_vegetation_vma_v2.parquet",
             "type": "multipolygon",
             "base_count": 106931,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "qld_transmission_grid_v2": {
             "name": "Powerlink & Energex High-Voltage Transmission Grid (>=110kV)",
             "state": "qld",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/qld_transmission_grid_v2.parquet",
             "type": "linestring",
             "base_count": 3147,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "qld_waterway_barriers_hydro_v2": {
             "name": "Queensland Waterways for Waterway Barrier Works & Riparian Networks",
             "state": "qld",
             "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/33?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/qld_waterway_barriers_hydro_v2.parquet",
             "type": "linestring",
             "base_count": 55933,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "sa_transmission_grid_electranet_v2": {
             "name": "ElectraNet & SA Power Networks High-Voltage Grid (>=132kV)",
             "state": "sa",
             "endpoint": "https://data.sa.gov.au/data/api/3/action/package_list",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/sa_transmission_grid_electranet_v2.parquet",
             "type": "linestring",
             "base_count": 3250,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "tas_transmission_grid_tasnetworks_v2": {
             "name": "TasNetworks High-Voltage Transmission Network (>=110kV)",
             "state": "tas",
             "endpoint": "https://services.thelist.tas.gov.au/arcgis/rest/services/Public/Infrastructure/MapServer/4?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/tas_transmission_grid_tasnetworks_v2.parquet",
             "type": "linestring",
             "base_count": 89841,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "vic_hydro_watercourses_v2": {
             "name": "Vicmap Hydrography Watercourses and Water Bodies",
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/vic_hydro_watercourses_v2.parquet",
             "type": "linestring",
             "base_count": 8720,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "vic_landslide_slope_stability_v2": {
             "name": "Victorian Geotechnical Slope Stability and Landslide Hazard Overlay",
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/vic_landslide_slope_stability_v2.parquet",
             "type": "multipolygon",
             "base_count": 4610,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "vic_native_veg_nvim_v2": {
             "name": "Native Vegetation Information Management (NVIM) & Habitat Quality",
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/vic_native_veg_nvim_v2.parquet",
             "type": "multipolygon",
             "base_count": 12450,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "vic_planning_scheme_zones_v2": {
             "name": "Vicmap Planning Schemes (VPP Standardised Zones)",
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/vic_planning_scheme_zones_v2.parquet",
             "type": "multipolygon",
             "base_count": 5120,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "vic_transmission_grid_vicgrid_v2": {
             "name": "Victorian High-Voltage Transmission Network (>=66kV)",
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/vic_transmission_grid_vicgrid_v2.parquet",
             "type": "linestring",
             "base_count": 3250,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "wa_dbca_threatened_ecological_communities_v2": {
             "name": "DBCA Threatened Ecological Communities (TEC) & Priority Flora/Fauna",
             "state": "wa",
             "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Environment/MapServer/23?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/wa_dbca_threatened_ecological_communities_v2.parquet",
             "type": "multipolygon",
             "base_count": 5120,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       },
       "wa_transmission_grid_v2": {
             "name": "Western Power SWIS & Horizon Power Transmission Network (>=66kV)",
             "state": "wa",
             "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/75?f=json",
+            "s3_path": "s3://wherobots-user-storage/aura_siting/wa_transmission_grid_v2.parquet",
             "type": "linestring",
             "base_count": 870,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-02 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC"
       }
 };
 
@@ -991,7 +1020,7 @@
     document.getElementById('dataset-key-label').textContent = datasetKey;
     document.getElementById('dataset-name-label').textContent = meta.name;
     document.getElementById('dataset-state-label').textContent = `${jurisdiction.name} (${meta.state.toUpperCase()})`;
-    document.getElementById('s3-path-label').textContent = `s3://wherobots-user-storage/aura_siting_v2/${datasetKey}`;
+    document.getElementById('s3-path-label').textContent = meta.s3_path || (`s3://wherobots-user-storage/aura_siting_v2/${datasetKey}`);
     document.getElementById('s3-sync-date-label').textContent = meta.sync_date || '2026-09-01 19:21 UTC';
     document.getElementById('s3-hash-label').textContent = meta.hash || 'ef0090b06033a9c1';
     

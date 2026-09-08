@@ -1,7 +1,7 @@
 {
   "manifest_version": "2.0.0",
-  "total_datasets": 27,
-  "updated_at": "2026-09-09 07:45:00 UTC",
+  "total_datasets": 30,
+  "updated_at": "2026-09-09 08:35:00 UTC",
   "datasets": {
     "national_cadastre_gnaf_v2": {
       "dataset_key": "national_cadastre_gnaf_v2",
@@ -387,6 +387,103 @@
         "table_name": "nsw_elvis_lidar_1m_dem_v2",
         "format": "havasu.iceberg",
         "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dem.parquet"
+      }
+    },
+    "nsw_elvis_lidar_laz_pointcloud_v2": {
+      "dataset_key": "nsw_elvis_lidar_laz_pointcloud_v2",
+      "canonical_theme": "siting_elevation_lidar_pointcloud",
+      "state": "nsw",
+      "dataset_name": "ELVIS NSW Classified 3D LiDAR Point Cloud (.LAZ / ASPRS Ground, Canopy & Structures)",
+      "source_agency": "Geoscience Australia / NSW Spatial Services (ELVIS)",
+      "portal": "ELVIS Elevation - Foundation Spatial Data",
+      "service_type": "s3_laz",
+      "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+      "layer_id": 1,
+      "geometry_type": "MultiPoint",
+      "source_crs": "EPSG:7856",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "x_coord": "X",
+        "y_coord": "Y",
+        "elevation_m": "Z_AHD",
+        "asprs_class": "CLASSIFICATION",
+        "intensity": "INTENSITY",
+        "return_number": "RETURN_NUM",
+        "point_density_pts_m2": "PT_DENSITY"
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "nsw_elvis_lidar_laz_pointcloud_v2",
+        "format": "havasu.iceberg",
+        "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/*.laz"
+      }
+    },
+    "nsw_elvis_lidar_1m_dsm_v2": {
+      "dataset_key": "nsw_elvis_lidar_1m_dsm_v2",
+      "canonical_theme": "siting_elevation_lidar_dsm",
+      "state": "nsw",
+      "dataset_name": "ELVIS NSW 1m High-Resolution Digital Surface Model (Canopy & Structure DSM)",
+      "source_agency": "Geoscience Australia / NSW Spatial Services (ELVIS)",
+      "portal": "ELVIS Elevation - Foundation Spatial Data",
+      "service_type": "s3_geoparquet",
+      "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374296.zip",
+      "layer_id": 1,
+      "geometry_type": "MultiPolygon",
+      "source_crs": "EPSG:7856",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "elevation_m": "DSM_ELEVATION_AHD",
+        "canopy_height_m": "CANOPY_HEIGHT_AGL",
+        "surface_roughness": "ROUGHNESS_INDEX",
+        "slope_pct": "SLOPE_PCT",
+        "aspect_deg": "ASPECT_DEG"
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "nsw_elvis_lidar_1m_dsm_v2",
+        "format": "havasu.iceberg",
+        "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dsm.parquet"
+      }
+    },
+    "nsw_elvis_lidar_contours_v2": {
+      "dataset_key": "nsw_elvis_lidar_contours_v2",
+      "canonical_theme": "siting_elevation_lidar_contours",
+      "state": "nsw",
+      "dataset_name": "ELVIS NSW 0.5m/1m Topographic Elevation Contours Fabric",
+      "source_agency": "Geoscience Australia / NSW Spatial Services (ELVIS)",
+      "portal": "ELVIS Elevation - Foundation Spatial Data",
+      "service_type": "s3_geoparquet",
+      "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+      "layer_id": 1,
+      "geometry_type": "MultiLineString",
+      "source_crs": "EPSG:7856",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "schema_mapping": {
+        "contour_id": "OBJECTID",
+        "elevation_m": "CONTOUR_AHD",
+        "interval_m": "INTERVAL_TYPE",
+        "index_contour": "INDEX_FLAG"
+      },
+      "cleaning_rules": {
+        "st_make_valid": true,
+        "drop_null_geometries": true,
+        "clean_coordinates": true
+      },
+      "storage": {
+        "table_name": "nsw_elvis_lidar_contours_v2",
+        "format": "havasu.iceberg",
+        "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_contours.parquet"
       }
     },
     "qld_cyclone_hazard_tcha_v2": {

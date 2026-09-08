@@ -1,0 +1,37 @@
+{
+  "dataset_key": "nsw_elvis_lidar_1m_dsm_v2",
+  "canonical_theme": "siting_elevation_lidar_dsm",
+  "state": "nsw",
+  "dataset_name": "ELVIS NSW 1m High-Resolution Digital Surface Model (Canopy & Structure DSM)",
+  "source_agency": "Geoscience Australia / NSW Spatial Services (ELVIS)",
+  "portal": "ELVIS Elevation - Foundation Spatial Data",
+  "service_type": "s3_geoparquet",
+  "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374296.zip",
+  "package_archives": [
+    "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+    "https://elvis-downloads.s3.amazonaws.com/DATA_2374296.zip"
+  ],
+  "layer_id": 1,
+  "geometry_type": "MultiPolygon",
+  "source_crs": "EPSG:7856",
+  "target_crs": "EPSG:7844",
+  "metric_crs": "EPSG:3112",
+  "bounds_wgs84": "POLYGON((151.565811822199 -33.09366981660604, 151.68571363131375 -33.09366981660604, 151.68571363131375 -32.93425892457497, 151.565811822199 -32.93425892457497, 151.565811822199 -33.09366981660604))",
+  "schema_mapping": {
+    "elevation_m": "DSM_ELEVATION_AHD",
+    "canopy_height_m": "CANOPY_HEIGHT_AGL",
+    "surface_roughness": "ROUGHNESS_INDEX",
+    "slope_pct": "SLOPE_PCT",
+    "aspect_deg": "ASPECT_DEG"
+  },
+  "cleaning_rules": {
+    "st_make_valid": true,
+    "drop_null_geometries": true,
+    "clean_coordinates": true
+  },
+  "storage": {
+    "table_name": "nsw_elvis_lidar_1m_dsm_v2",
+    "format": "havasu.iceberg",
+    "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dsm.parquet"
+  }
+}

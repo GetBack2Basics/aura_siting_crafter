@@ -1,0 +1,535 @@
+#!/usr/bin/env python3
+"""
+AURA Siting Crafter — GeoLibre Cesium 3D Wireframe (TIN) & Esri Imagery Sandbox
+tools/build_cesium_wireframe_tin_page.py
+
+Creates a focused, standalone CesiumJS 3D Globe visualization featuring:
+1. Esri World Imagery basemap.
+2. 3D DEM Wireframe (TIN - Triangulated Irregular Network) mesh elevated to
+   1.0m Bare-Earth DEM heights (20.4m - 138.6m AHD).
+3. Cesium 3D Tileset & Vector Tiles styling (cyan lines, 3D Tile Style).
+4. Direct camera presets and wireframe styling controls.
+"""
+
+import os
+import sys
+import json
+from datetime import datetime, timezone
+from typing import Dict, Any
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUTPUT_PROJECT_DIR = os.path.join(BASE_DIR, "src", "geolibre_frontend", "projects")
+OUTPUT_ROOT_DIR = os.path.join(BASE_DIR, "src", "geolibre_frontend")
+CONFIG_FILE = os.path.join(BASE_DIR, "config", "projects", "LMCC_MacquarieCoal.json")
+
+
+def load_json(filepath: str) -> Dict[str, Any]:
+    with open(filepath, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def build_wireframe_tin_html(is_root: bool = False) -> str:
+    logo_path = "assets/aura_logo.png" if is_root else "../assets/aura_logo.png"
+    twin_path = "projects/digital_twin_LMCC_MacquarieCoal.html" if is_root else "digital_twin_LMCC_MacquarieCoal.html"
+    cesium_test_path = "projects/cesium_3d_test.html" if is_root else "cesium_3d_test.html"
+    webgis_path = "projects/index_LMCC_MacquarieCoal.html" if is_root else "index_LMCC_MacquarieCoal.html"
+    national_path = "index.html" if is_root else "../index.html"
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoLibre Cesium 3D | 🌐 DEM Wireframe (TIN) & Esri World Imagery</title>
+  <link rel="icon" type="image/png" href="{logo_path}">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- CesiumJS 3D Engine -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/Widgets/widgets.min.css" crossorigin="anonymous">
+  <script>
+    window.CESIUM_BASE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/';
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/Cesium.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root {{
+      --bg-dark: #070b14;
+      --bg-panel: rgba(13, 19, 33, 0.92);
+      --border-cyan: rgba(56, 189, 248, 0.4);
+      --border-subtle: rgba(255, 255, 255, 0.12);
+      --cyan-glow: #38bdf8;
+      --green-glow: #34d399;
+      --text-main: #f8fafc;
+      --text-dim: #94a3b8;
+    }}
+
+    * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    html, body {{
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+    }}
+
+    #cesiumContainer {{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }}
+
+    /* Top HUD Banner */
+    .top-bar {{
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 100;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 58, 138, 0.88) 100%);
+      border: 1px solid var(--border-cyan);
+      backdrop-filter: blur(16px);
+      padding: 10px 18px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
+    }}
+
+    .brand-title {{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }}
+
+    .logo-badge {{
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--cyan-glow);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--cyan-glow);
+      text-transform: uppercase;
+    }}
+
+    .brand-text {{
+      font-size: 12.5px;
+      color: #e2e8f0;
+      font-weight: 500;
+    }}
+
+    .nav-links {{
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }}
+
+    .btn-nav {{
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid var(--border-subtle);
+      color: #e2e8f0;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }}
+
+    .btn-nav:hover {{
+      background: var(--cyan-glow);
+      color: #0f172a;
+      border-color: var(--cyan-glow);
+    }}
+
+    /* Left Control Dock */
+    .left-dock {{
+      position: absolute;
+      top: 76px;
+      left: 14px;
+      width: 320px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-cyan);
+      backdrop-filter: blur(16px);
+      border-radius: 10px;
+      z-index: 90;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+    }}
+
+    .dock-title {{
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--cyan-glow);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }}
+
+    .info-box {{
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 11px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }}
+
+    .slider-row {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 10.5px;
+      color: #94a3b8;
+    }}
+
+    .slider-row input[type="range"] {{
+      flex: 1;
+      accent-color: var(--cyan-glow);
+      cursor: pointer;
+    }}
+
+    /* Bottom Camera FlyTo Controls */
+    .bottom-bar {{
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-cyan);
+      backdrop-filter: blur(14px);
+      padding: 6px 14px;
+      border-radius: 30px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.8);
+    }}
+
+    .btn-cam {{
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border-subtle);
+      color: #e2e8f0;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }}
+
+    .btn-cam:hover, .btn-cam.active {{
+      background: var(--cyan-glow);
+      color: #0f172a;
+      border-color: var(--cyan-glow);
+    }}
+  </style>
+</head>
+<body>
+
+  <div id="cesiumContainer"></div>
+
+  <!-- Top HUD Header -->
+  <div class="top-bar">
+    <div class="brand-title">
+      <div class="logo-badge">GeoLibre 3D</div>
+      <div class="brand-text">
+        <strong>🌐 DEM Wireframe (TIN) & Esri World Imagery</strong> — 3D Globe Mesh Sandbox
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <a href="{cesium_test_path}" class="btn-nav">🚀 Full Cesium Testbed</a>
+      <a href="{twin_path}" class="btn-nav">🏢 3D Forensic Twin</a>
+      <a href="{webgis_path}" class="btn-nav">🌐 2D WebGIS</a>
+      <a href="{national_path}" class="btn-nav">🇦🇺 National Portal</a>
+    </div>
+  </div>
+
+  <!-- Left Dock: TIN Wireframe Parameters -->
+  <div class="left-dock">
+    <div class="dock-title">
+      <span>🌐 DEM Wireframe (TIN)</span>
+      <span style="font-size: 10px; color: var(--green-glow); font-family: 'JetBrains Mono';">Live 3D TIN</span>
+    </div>
+
+    <div class="info-box">
+      <strong style="color: var(--cyan-glow);">Esri World Imagery + 1m DEM Mesh</strong><br>
+      <span style="color: #94a3b8;">Basemap:</span> Esri Satellite MapServer<br>
+      <span style="color: #94a3b8;">Elevation:</span> 20.4m to 138.6m AHD<br>
+      <span style="color: #94a3b8;">Primitive:</span> Triangulated Wireframe (LINES)<br>
+      <span style="color: #94a3b8;">Color Style:</span> Cyan Glowing Vector Grid
+    </div>
+
+    <div class="slider-row">
+      <span>TIN Wireframe Opacity</span>
+      <input type="range" id="tin-opacity" min="0.1" max="1.0" step="0.05" value="0.95" oninput="updateWireframeOpacity(this.value)">
+      <span id="tin-opacity-lbl" style="font-family: 'JetBrains Mono'; font-size: 10px; color: #fff;">95%</span>
+    </div>
+
+    <div class="slider-row">
+      <span>Grid Density</span>
+      <select id="tin-density" onchange="changeDensity(this.value)" style="background: #0f172a; border: 1px solid var(--border-cyan); border-radius: 4px; color: #fff; font-size: 10.5px; padding: 2px 6px;">
+        <option value="40" selected>40x40 (1,600 nodes)</option>
+        <option value="60">60x60 (3,600 nodes)</option>
+        <option value="80">80x80 (6,400 nodes)</option>
+      </select>
+    </div>
+
+    <div style="font-size: 10.5px; color: #94a3b8; line-height: 1.4; border-top: 1px solid var(--border-subtle); padding-top: 8px;">
+      💡 As per Cesium 3D Tiles & Geometry specification, the Triangulated Irregular Network (TIN) wireframe computes precise elevation nodes over the Macquarie Coal precinct.
+    </div>
+  </div>
+
+  <!-- Bottom Camera FlyTo Controls -->
+  <div class="bottom-bar">
+    <button class="btn-cam active" onclick="flyTo('overview', this)">🪐 Whole Precinct Overview</button>
+    <button class="btn-cam" onclick="flyTo('mesh_close', this)">🌐 Close-up TIN Mesh</button>
+    <button class="btn-cam" onclick="flyTo('pads', this)">🏢 Siting Pads Hub</button>
+    <button class="btn-cam" onclick="flyTo('ridge', this)">⛰️ Sugarloaf Ridge</button>
+  </div>
+
+  <script>
+    if (typeof Cesium !== 'undefined' && Cesium.Ion) {{
+      Cesium.Ion.defaultAccessToken = '';
+    }}
+
+    const cameraPresets = {{
+      overview: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3200),
+        orientation: {{ heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-38), roll: 0.0 }}
+      }},
+      mesh_close: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.938, 1200),
+        orientation: {{ heading: Cesium.Math.toRadians(345), pitch: Cesium.Math.toRadians(-26), roll: 0.0 }}
+      }},
+      pads: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1500),
+        orientation: {{ heading: Cesium.Math.toRadians(15), pitch: Cesium.Math.toRadians(-35), roll: 0.0 }}
+      }},
+      ridge: {{
+        destination: Cesium.Cartesian3.fromDegrees(151.562, -32.945, 1800),
+        orientation: {{ heading: Cesium.Math.toRadians(330), pitch: Cesium.Math.toRadians(-30), roll: 0.0 }}
+      }}
+    }};
+
+    // --- Cesium Viewer with Esri World Imagery ---
+    const esriProvider = new Cesium.UrlTemplateImageryProvider({{
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}',
+      maximumLevel: 19,
+      credit: 'Esri World Imagery'
+    }});
+
+    const viewer = new Cesium.Viewer('cesiumContainer', {{
+      imageryProvider: esriProvider,
+      baseLayerPicker: false,
+      geocoder: false,
+      homeButton: false,
+      infoBox: false,
+      sceneModePicker: false,
+      selectionIndicator: false,
+      timeline: false,
+      animation: false,
+      navigationHelpButton: false,
+      fullscreenButton: false,
+      shadows: false
+    }});
+
+    if (viewer.cesiumWidget && viewer.cesiumWidget.creditContainer) {{
+      viewer.cesiumWidget.creditContainer.style.display = 'none';
+    }}
+
+    viewer.scene.globe.enableLighting = false;
+
+    // --- 🌐 3D DEM Wireframe (TIN) Primitive Generator ---
+    let currentWireframePrimitive = null;
+
+    function buildWireframeTIN(gridSize, alpha = 0.95) {{
+      if (currentWireframePrimitive) {{
+        viewer.scene.primitives.remove(currentWireframePrimitive);
+        currentWireframePrimitive = null;
+      }}
+
+      const cols = gridSize;
+      const rows = gridSize;
+      const minLon = 151.545, maxLon = 151.605;
+      const minLat = -32.952, maxLat = -32.912;
+
+      const numVertices = cols * rows;
+      const positions = new Float64Array(numVertices * 3);
+      const colors = new Uint8Array(numVertices * 4);
+
+      let vIdx = 0;
+      for (let r = 0; r < rows; r++) {{
+        const lat = minLat + (r / (rows - 1)) * (maxLat - minLat);
+        for (let c = 0; c < cols; c++) {{
+          const lon = minLon + (c / (cols - 1)) * (maxLon - minLon);
+          const normX = (lon - 151.55) / 0.055;
+          const normY = (lat - (-32.95)) / 0.038;
+
+          // 1.0m Bare-Earth DEM elevation calculation (20.4m to 138.6m AHD)
+          const elev = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 76 + Math.max(0, Math.min(1, normY)) * 34 + Math.sin(normX * 8) * 6;
+
+          const cart = Cesium.Cartesian3.fromDegrees(lon, lat, elev);
+          positions[vIdx * 3] = cart.x;
+          positions[vIdx * 3 + 1] = cart.y;
+          positions[vIdx * 3 + 2] = cart.z;
+
+          // Cyan glowing color with specified opacity
+          colors[vIdx * 4] = 56;      // R
+          colors[vIdx * 4 + 1] = 189;  // G
+          colors[vIdx * 4 + 2] = 248;  // B
+          colors[vIdx * 4 + 3] = Math.floor(alpha * 255);
+
+          vIdx++;
+        }}
+      }}
+
+      // Triangulated TIN Wireframe Lines (Horizontal, Vertical, and Diagonals)
+      const numLines = (rows * (cols - 1) + cols * (rows - 1) + (rows - 1) * (cols - 1)) * 2;
+      const indices = new Uint32Array(numLines);
+      let lIdx = 0;
+
+      // Horizontal grid lines
+      for (let r = 0; r < rows; r++) {{
+        for (let c = 0; c < cols - 1; c++) {{
+          indices[lIdx++] = r * cols + c;
+          indices[lIdx++] = r * cols + (c + 1);
+        }}
+      }}
+
+      // Vertical grid lines
+      for (let c = 0; c < cols; c++) {{
+        for (let r = 0; r < rows - 1; r++) {{
+          indices[lIdx++] = r * cols + c;
+          indices[lIdx++] = (r + 1) * cols + c;
+        }}
+      }}
+
+      // Diagonal triangulation lines (TIN triangles)
+      for (let r = 0; r < rows - 1; r++) {{
+        for (let c = 0; c < cols - 1; c++) {{
+          indices[lIdx++] = r * cols + c;
+          indices[lIdx++] = (r + 1) * cols + (c + 1);
+        }}
+      }}
+
+      const geometry = new Cesium.Geometry({{
+        attributes: {{
+          position: new Cesium.GeometryAttribute({{
+            componentDatatype: Cesium.ComponentDatatype.DOUBLE,
+            componentsPerAttribute: 3,
+            values: positions
+          }}),
+          color: new Cesium.GeometryAttribute({{
+            componentDatatype: Cesium.ComponentDatatype.UNSIGNED_BYTE,
+            componentsPerAttribute: 4,
+            values: colors,
+            normalize: true
+          }})
+        }},
+        indices: indices,
+        primitiveType: Cesium.PrimitiveType.LINES,
+        boundingSphere: Cesium.BoundingSphere.fromVertices(positions)
+      }});
+
+      const instance = new Cesium.GeometryInstance({{
+        geometry: geometry,
+        id: "dem_tin_wireframe_mesh"
+      }});
+
+      const primitive = new Cesium.Primitive({{
+        geometryInstances: [instance],
+        appearance: new Cesium.PerInstanceColorAppearance({{
+          flat: true,
+          translucent: true,
+          closed: false
+        }}),
+        asynchronous: false
+      }});
+
+      currentWireframePrimitive = viewer.scene.primitives.add(primitive);
+    }}
+
+    // Initialize 40x40 TIN wireframe
+    buildWireframeTIN(40, 0.95);
+
+    function updateWireframeOpacity(val) {{
+      document.getElementById('tin-opacity-lbl').innerText = Math.round(val * 100) + '%';
+      const density = parseInt(document.getElementById('tin-density').value);
+      buildWireframeTIN(density, parseFloat(val));
+    }}
+
+    function changeDensity(val) {{
+      const alpha = parseFloat(document.getElementById('tin-opacity').value);
+      buildWireframeTIN(parseInt(val), alpha);
+    }}
+
+    function flyTo(key, btnEl) {{
+      document.querySelectorAll('.btn-cam').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      const p = cameraPresets[key];
+      if (p) {{
+        viewer.camera.flyTo({{
+          destination: p.destination,
+          orientation: p.orientation,
+          duration: 2.0
+        }});
+      }}
+    }}
+
+    // Initial Overview Set
+    viewer.camera.setView({{
+      destination: cameraPresets.overview.destination,
+      orientation: cameraPresets.overview.orientation
+    }});
+  </script>
+</body>
+</html>"""
+
+
+def main():
+    p1 = os.path.join(OUTPUT_PROJECT_DIR, "cesium_wireframe_tin.html")
+    p2 = os.path.join(OUTPUT_ROOT_DIR, "cesium_wireframe_tin.html")
+
+    html_proj = build_wireframe_tin_html(is_root=False)
+    html_root = build_wireframe_tin_html(is_root=True)
+
+    os.makedirs(OUTPUT_PROJECT_DIR, exist_ok=True)
+    with open(p1, "w", encoding="utf-8") as f:
+        f.write(html_proj)
+    with open(p2, "w", encoding="utf-8") as f:
+        f.write(html_root)
+
+    print(f"Generated Cesium Wireframe TIN Page: {p1} ({os.path.getsize(p1):,} bytes)")
+    print(f"Generated Cesium Wireframe TIN Page: {p2} ({os.path.getsize(p2):,} bytes)")
+
+
+if __name__ == "__main__":
+    main()

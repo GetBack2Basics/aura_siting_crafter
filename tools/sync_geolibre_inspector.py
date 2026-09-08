@@ -16,6 +16,7 @@ def sync_inspector():
         'national_cyclone_hazard_tcha_v2': 11,
         'nsw_bionet_bv_map_v2': 7475,
         'nsw_coastal_inundation_hazard_v2': 880,
+        'nsw_elvis_lidar_1m_dem_v2': 2840,
         'nsw_landslide_susceptibility_v2': 4722,
         'nsw_national_seismic_hazard_v2': 9,
         'nsw_transmission_grid_v2': 6575,

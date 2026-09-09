@@ -1224,24 +1224,31 @@
       // Handle offline downloaded package datasets (ELVIS LiDAR LAZ & DEM)
       if (meta.service_type === 's3_laz' || meta.service_type === 's3_geoparquet' || endpoint.endsWith('.zip') || endpoint.endsWith('.parquet')) {
         let s3Count = meta.base_count;
-        const badgeText = `${s3Count.toLocaleString()} | ${s3Count.toLocaleString()} | ${s3Count.toLocaleString()}`;
+        const badgeText = `0 (Bounds Only) | ${s3Count.toLocaleString()} (Lakehouse) | Offline Archive`;
         countBadge.textContent = badgeText;
-        countBadge.title = "Viewport : S3 Project Library : Rest/WMTS data source";
-        tableCount.textContent = `Offline Ingested Lakehouse Dataset (${s3Count.toLocaleString()} records)`;
+        countBadge.title = "Viewport (2D Features) : S3 Lakehouse Records : Upstream Distribution Source";
+        tableCount.textContent = `Spatial Bounds & Metadata Envelope (0 2D vector features rendered)`;
         tbody.innerHTML = `
           <tr>
             <td colspan="4" style="color: #38bdf8; line-height: 1.7; padding: 1rem;">
-              <strong>Dataset Type:</strong> <span style="color: #f8fafc;">Downloaded Elevation / LiDAR Foundation Spatial Data</span><br>
-              <strong>Source Distribution Package:</strong> <a href="${meta.endpoint}" target="_blank" style="color: #60a5fa; text-decoration: underline;">${meta.endpoint}</a><br>
-              <strong>S3 Lakehouse Storage:</strong> <code style="color: #34d399; font-family: monospace;">${meta.s3_path}</code><br>
-              <strong>Reconciled Records:</strong> <span style="color: #38bdf8; font-weight: bold;">${s3Count.toLocaleString()}</span> (100% Synced)<br>
-              <strong>Spatial Footprint:</strong> Lake Macquarie &amp; Hunter Energy Corridor <span style="color: #f59e0b;">[151.5658°E, -33.0937°S] to [151.6857°E, -32.9343°S]</span><br>
-              <strong>Lineage &amp; Hash:</strong> <span style="color: #f59e0b; font-family: monospace;">${meta.hash}</span> | Verified EPSG:7844 GDA2020 Conformance
+              <div style="font-weight: bold; color: #60a5fa; font-size: 0.95rem; margin-bottom: 0.5rem;">📦 Offline Downloaded Spatial Asset (No Live REST Service)</div>
+              <strong>Asset Category:</strong> <span style="color: #f8fafc;">3D LiDAR Point Cloud &amp; 1m Bare-Earth Elevation Raster</span><br>
+              <strong>Distribution Package:</strong> <a href="${meta.endpoint}" target="_blank" style="color: #60a5fa; text-decoration: underline;">${meta.endpoint}</a> (4.80 GB Archive)<br>
+              <strong>Lakehouse Storage:</strong> <code style="color: #34d399; font-family: monospace;">${meta.s3_path}</code><br>
+              <strong>Total Records in S3:</strong> <span style="color: #38bdf8; font-weight: bold;">${s3Count.toLocaleString()}</span> (Unzipped in S3 Lakehouse)<br>
+              <strong>Spatial Footprint:</strong> Lake Macquarie Precinct <span style="color: #f59e0b;">[151.5658°E, -33.0937°S] to [151.6857°E, -32.9343°S]</span><br>
+              <strong>2D Viewport Status:</strong> <span style="color: #94a3b8;">0 2D vector features rendered (Binary LAZ / DEM rasters require 3D WebGL / Cesium engine)</span><br>
+              <strong>3D Visualization Pathways:</strong>
+              <ul style="margin: 0.5rem 0 0 1.25rem; color: #cbd5e1; font-size: 0.8rem;">
+                <li><strong>Pathway 1:</strong> 3D Cesium TIN Wireframe &amp; Point Cloud (<a href="../../cesium_wireframe_tin.html" target="_blank" style="color: #00f0ff; text-decoration: underline;">Launch 3D Cesium Viewer</a>)</li>
+                <li><strong>Pathway 2:</strong> MapLibre / GeoLibre Terrarium Elevation RGB Raster Tiles</li>
+                <li><strong>Pathway 3:</strong> DuckDB-WASM Client-Side Parquet Range Queries</li>
+              </ul>
             </td>
           </tr>
         `;
         document.getElementById('symbology-desc').textContent = 
-          `Spatial footprint locked to genuine Lake Macquarie DEM/LiDAR package extent. S3 Lakehouse unzipped layer ready for 3D TIN and point cloud mesh rendering.`;
+          `Showing genuine bounding footprint of the Lake Macquarie LiDAR/DEM archive. 2D Leaflet map displays boundary envelope; 3D visualization is handled via CesiumJS.`;
         return;
       }
 

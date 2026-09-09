@@ -652,6 +652,7 @@
             "state": "national",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Topographic_Base_Map/MapServer/0?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_cadastre_gnaf_v2.parquet",
+            "service_type": "wfs",
             "type": "multipolygon",
             "base_count": 15400000,
             "hash": "ef0090b06033a9c1",
@@ -662,6 +663,7 @@
             "state": "national",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_cyclone_hazard_tcha_v2.parquet",
+            "service_type": "wfs",
             "type": "polygon",
             "base_count": 11,
             "hash": "ef0090b06033a9c1",
@@ -672,6 +674,7 @@
             "state": "national",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_electricity_grid_v2.parquet",
+            "service_type": "wfs",
             "type": "linestring",
             "base_count": 4820,
             "hash": "ef0090b06033a9c1",
@@ -682,6 +685,7 @@
             "state": "national",
             "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=health",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_healthcare_nhsd_v2.parquet",
+            "service_type": "wfs",
             "type": "point",
             "base_count": 4218,
             "hash": "ef0090b06033a9c1",
@@ -692,6 +696,7 @@
             "state": "national",
             "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=schools",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_schools_acara_v2.parquet",
+            "service_type": "wfs",
             "type": "point",
             "base_count": 10842,
             "hash": "ef0090b06033a9c1",
@@ -702,6 +707,7 @@
             "state": "national",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_seismic_hazard_nsha_v2.parquet",
+            "service_type": "wfs",
             "type": "polygon",
             "base_count": 9,
             "hash": "ef0090b06033a9c1",
@@ -712,6 +718,7 @@
             "state": "nsw",
             "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/9?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_bionet_bv_map_v2.parquet",
+            "service_type": "arcgis_featureserver",
             "type": "multipolygon",
             "base_count": 7475,
             "hash": "ef0090b06033a9c1",
@@ -722,6 +729,7 @@
             "state": "nsw",
             "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Water_Theme/FeatureServer/7?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_coastal_inundation_hazard_v2.parquet",
+            "service_type": "arcgis_featureserver",
             "type": "multipolygon",
             "base_count": 880,
             "hash": "ef0090b06033a9c1",
@@ -732,46 +740,107 @@
             "state": "nsw",
             "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
             "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dem.parquet",
+            "service_type": "s3_geoparquet",
             "type": "multipolygon",
             "base_count": 2840,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-08 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC",
+            "bounds": [
+                  [
+                        -33.09366981660604,
+                        151.565811822199
+                  ],
+                  [
+                        -32.93425892457497,
+                        151.68571363131375
+                  ]
+            ],
+            "center": [
+                  -33.01396,
+                  151.62576
+            ]
       },
       "nsw_elvis_lidar_1m_dsm_v2": {
             "name": "ELVIS NSW 1m High-Resolution Digital Surface Model (Canopy & Structure DSM)",
             "state": "nsw",
             "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374296.zip",
             "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dsm.parquet",
+            "service_type": "s3_geoparquet",
             "type": "multipolygon",
             "base_count": 2840,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-08 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC",
+            "bounds": [
+                  [
+                        -33.09366981660604,
+                        151.565811822199
+                  ],
+                  [
+                        -32.93425892457497,
+                        151.68571363131375
+                  ]
+            ],
+            "center": [
+                  -33.01396,
+                  151.62576
+            ]
       },
       "nsw_elvis_lidar_contours_v2": {
             "name": "ELVIS NSW 0.5m/1m Topographic Elevation Contours Fabric",
             "state": "nsw",
             "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
             "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_contours.parquet",
+            "service_type": "s3_geoparquet",
             "type": "multilinestring",
             "base_count": 14820,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-08 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC",
+            "bounds": [
+                  [
+                        -33.09366981660604,
+                        151.565811822199
+                  ],
+                  [
+                        -32.93425892457497,
+                        151.68571363131375
+                  ]
+            ],
+            "center": [
+                  -33.01396,
+                  151.62576
+            ]
       },
       "nsw_elvis_lidar_laz_pointcloud_v2": {
             "name": "ELVIS NSW Classified 3D LiDAR Point Cloud (.LAZ / ASPRS Ground, Canopy & Structures)",
             "state": "nsw",
             "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
             "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/*.laz",
+            "service_type": "s3_laz",
             "type": "multipoint",
             "base_count": 18450000,
             "hash": "ef0090b06033a9c1",
-            "sync_date": "2026-09-08 12:00 UTC"
+            "sync_date": "2026-09-08 12:00 UTC",
+            "bounds": [
+                  [
+                        -33.09366981660604,
+                        151.565811822199
+                  ],
+                  [
+                        -32.93425892457497,
+                        151.68571363131375
+                  ]
+            ],
+            "center": [
+                  -33.01396,
+                  151.62576
+            ]
       },
       "nsw_landslide_susceptibility_v2": {
             "name": "NSW Slope Instability and Landslide Hazard Susceptibility",
             "state": "nsw",
             "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/7?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_landslide_susceptibility_v2.parquet",
+            "service_type": "arcgis_featureserver",
             "type": "multipolygon",
             "base_count": 4722,
             "hash": "ef0090b06033a9c1",
@@ -782,6 +851,7 @@
             "state": "nsw",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_national_seismic_hazard_v2.parquet",
+            "service_type": "wfs",
             "type": "polygon",
             "base_count": 9,
             "hash": "ef0090b06033a9c1",
@@ -792,6 +862,7 @@
             "state": "nsw",
             "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/6?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_transmission_grid_v2.parquet",
+            "service_type": "arcgis_featureserver",
             "type": "linestring",
             "base_count": 6575,
             "hash": "ef0090b06033a9c1",
@@ -802,6 +873,7 @@
             "state": "qld",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/qld_cyclone_hazard_tcha_v2.parquet",
+            "service_type": "wfs",
             "type": "polygon",
             "base_count": 11,
             "hash": "ef0090b06033a9c1",
@@ -812,6 +884,7 @@
             "state": "qld",
             "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/GeoscientificInformation/SoilsAndLandResource/MapServer/51?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/qld_landslide_susceptibility_v2.parquet",
+            "service_type": "arcgis_featureserver",
             "type": "multipolygon",
             "base_count": 132621,
             "hash": "ef0090b06033a9c1",
@@ -822,6 +895,7 @@
             "state": "qld",
             "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Biota/VegetationManagement/MapServer/103?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/qld_regulated_vegetation_vma_v2.parquet",
+            "service_type": "arcgis_featureserver",
             "type": "multipolygon",
             "base_count": 106931,
             "hash": "ef0090b06033a9c1",
@@ -832,6 +906,7 @@
             "state": "qld",
             "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/qld_transmission_grid_v2.parquet",
+            "service_type": "arcgis_featureserver",
             "type": "linestring",
             "base_count": 3147,
             "hash": "ef0090b06033a9c1",
@@ -842,6 +917,7 @@
             "state": "qld",
             "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/33?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/qld_waterway_barriers_hydro_v2.parquet",
+            "service_type": "arcgis_featureserver",
             "type": "linestring",
             "base_count": 55933,
             "hash": "ef0090b06033a9c1",
@@ -852,6 +928,7 @@
             "state": "sa",
             "endpoint": "https://data.sa.gov.au/data/api/3/action/package_list",
             "s3_path": "s3://wherobots-user-storage/aura_siting/sa_transmission_grid_electranet_v2.parquet",
+            "service_type": "wfs",
             "type": "linestring",
             "base_count": 3250,
             "hash": "ef0090b06033a9c1",
@@ -862,6 +939,7 @@
             "state": "tas",
             "endpoint": "https://services.thelist.tas.gov.au/arcgis/rest/services/Public/Infrastructure/MapServer/4?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/tas_transmission_grid_tasnetworks_v2.parquet",
+            "service_type": "wfs",
             "type": "linestring",
             "base_count": 89841,
             "hash": "ef0090b06033a9c1",
@@ -872,6 +950,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "s3_path": "s3://wherobots-user-storage/aura_siting/vic_hydro_watercourses_v2.parquet",
+            "service_type": "wfs",
             "type": "linestring",
             "base_count": 8720,
             "hash": "ef0090b06033a9c1",
@@ -882,6 +961,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "s3_path": "s3://wherobots-user-storage/aura_siting/vic_landslide_slope_stability_v2.parquet",
+            "service_type": "wfs",
             "type": "multipolygon",
             "base_count": 4610,
             "hash": "ef0090b06033a9c1",
@@ -892,6 +972,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "s3_path": "s3://wherobots-user-storage/aura_siting/vic_native_veg_nvim_v2.parquet",
+            "service_type": "wfs",
             "type": "multipolygon",
             "base_count": 12450,
             "hash": "ef0090b06033a9c1",
@@ -902,6 +983,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "s3_path": "s3://wherobots-user-storage/aura_siting/vic_planning_scheme_zones_v2.parquet",
+            "service_type": "wfs",
             "type": "multipolygon",
             "base_count": 5120,
             "hash": "ef0090b06033a9c1",
@@ -912,6 +994,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "s3_path": "s3://wherobots-user-storage/aura_siting/vic_transmission_grid_vicgrid_v2.parquet",
+            "service_type": "wfs",
             "type": "linestring",
             "base_count": 3250,
             "hash": "ef0090b06033a9c1",
@@ -922,6 +1005,7 @@
             "state": "wa",
             "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Environment/MapServer/23?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/wa_dbca_threatened_ecological_communities_v2.parquet",
+            "service_type": "wfs",
             "type": "multipolygon",
             "base_count": 5120,
             "hash": "ef0090b06033a9c1",
@@ -932,6 +1016,7 @@
             "state": "wa",
             "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/75?f=json",
             "s3_path": "s3://wherobots-user-storage/aura_siting/wa_transmission_grid_v2.parquet",
+            "service_type": "wfs",
             "type": "linestring",
             "base_count": 870,
             "hash": "ef0090b06033a9c1",

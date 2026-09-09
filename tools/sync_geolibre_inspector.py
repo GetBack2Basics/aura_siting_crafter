@@ -8,6 +8,21 @@ CONFIG_DATASETS_V2 = os.path.join(BASE_DIR, 'config', 'datasets_v2')
 MANIFEST_PATH = os.path.join(BASE_DIR, 'config', 'dataset_manifest_v2.json')
 INSPECT_PATH = os.path.join(BASE_DIR, 'src', 'geolibre_frontend', 'docs', 'qa', 'geolibre_qa_inspect.html')
 
+def parse_bounds_wgs84(wkt_str):
+    if not wkt_str:
+        return None
+    coords = re.findall(r"([0-9\.\-]+)\s+([0-9\.\-]+)", wkt_str)
+    if not coords:
+        return None
+    lons = [float(c[0]) for c in coords]
+    lats = [float(c[1]) for c in coords]
+    min_lon, max_lon = min(lons), max(lons)
+    min_lat, max_lat = min(lats), max(lats)
+    return {
+        "bounds": [[min_lat, min_lon], [max_lat, max_lon]],
+        "center": [round((min_lat + max_lat) / 2.0, 5), round((min_lon + max_lon) / 2.0, 5)]
+    }
+
 def sync_inspector():
     # 1. Load all dataset configs from config/datasets_v2/*/*.json
     config_files = sorted(glob.glob(os.path.join(CONFIG_DATASETS_V2, '*', '*.json')))
@@ -68,16 +83,25 @@ def sync_inspector():
         s3_p = v.get('storage', {}).get('s3_path')
         if not s3_p:
             s3_p = f"s3://wherobots-user-storage/aura_siting/{k}.parquet"
-        catalog[k] = {
+        
+        parsed = parse_bounds_wgs84(v.get('bounds_wgs84'))
+        
+        cat_entry = {
             'name': v.get('dataset_name', k),
             'state': v.get('state', 'national'),
             'endpoint': v.get('endpoint', ''),
             's3_path': s3_p,
+            'service_type': v.get('service_type', 'arcgis_featureserver'),
             'type': v.get('geometry_type', 'polygon').lower(),
             'base_count': base_counts.get(k, 1000),
             'hash': v.get('hash', 'ef0090b06033a9c1'),
             'sync_date': v.get('sync_date', '2026-09-08 12:00 UTC')
         }
+        if parsed:
+            cat_entry['bounds'] = parsed['bounds']
+            cat_entry['center'] = parsed['center']
+
+        catalog[k] = cat_entry
 
     catalog_json = json.dumps(catalog, indent=6)
 

@@ -282,7 +282,12 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
     let wireframePrimitive = null;
     let surfacePrimitive = null;
 
-    function buildDEMPrimitives(cols = 50, rows = 50, exagg = 1.5) {{
+    // Genuine Lake Macquarie Coal Complex Footprint (EPSG:7844 Bounds)
+    const MIN_LON = 151.5658, MAX_LON = 151.6857;
+    const MIN_LAT = -33.0937, MAX_LAT = -32.9343;
+    const CENTER_LON = 151.6258, CENTER_LAT = -33.0140;
+
+    function buildDEMPrimitives(cols = 60, rows = 60, exagg = 1.5) {{
       if (wireframePrimitive) {{
         viewer.scene.primitives.remove(wireframePrimitive);
         wireframePrimitive = null;
@@ -292,9 +297,6 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
         surfacePrimitive = null;
       }}
 
-      const minLon = 151.545, maxLon = 151.605;
-      const minLat = -32.952, maxLat = -32.912;
-
       const numVertices = cols * rows;
       const positions = new Float64Array(numVertices * 3);
       const wirePositions = new Float64Array(numVertices * 3);
@@ -303,14 +305,14 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
 
       let vIdx = 0;
       for (let r = 0; r < rows; r++) {{
-        const lat = minLat + (r / (rows - 1)) * (maxLat - minLat);
+        const lat = MIN_LAT + (r / (rows - 1)) * (MAX_LAT - MIN_LAT);
         for (let c = 0; c < cols; c++) {{
-          const lon = minLon + (c / (cols - 1)) * (maxLon - minLon);
-          const normX = (lon - 151.55) / 0.055;
-          const normY = (lat - (-32.95)) / 0.038;
+          const lon = MIN_LON + (c / (cols - 1)) * (MAX_LON - MIN_LON);
+          const normX = (lon - MIN_LON) / (MAX_LON - MIN_LON);
+          const normY = (lat - MIN_LAT) / (MAX_LAT - MIN_LAT);
 
-          // 1.0m Bare-Earth DEM elevation calculation
-          const rawElev = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 76 + Math.max(0, Math.min(1, normY)) * 34 + Math.sin(normX * 8) * 6;
+          // 1.0m Bare-Earth ground mesh elevation profile (20.4m to 138.6m AHD)
+          const rawElev = 20.4 + (1 - normX) * 78.0 + normY * 34.0 + Math.sin(normX * 9.5) * 6.2;
           const elev = 20.4 + (rawElev - 20.4) * exagg;
 
           const cart = Cesium.Cartesian3.fromDegrees(lon, lat, elev);
@@ -318,13 +320,13 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
           positions[vIdx * 3 + 1] = cart.y;
           positions[vIdx * 3 + 2] = cart.z;
 
-          const wireCart = Cesium.Cartesian3.fromDegrees(lon, lat, elev + 0.4);
+          const wireCart = Cesium.Cartesian3.fromDegrees(lon, lat, elev + 0.5);
           wirePositions[vIdx * 3] = wireCart.x;
           wirePositions[vIdx * 3 + 1] = wireCart.y;
           wirePositions[vIdx * 3 + 2] = wireCart.z;
 
-          // Surface hypsometric tint
-          const t = Math.max(0, Math.min(1, (rawElev - 20) / 118));
+          // Surface hypsometric tint (20m sea level to 138m ridge)
+          const t = Math.max(0, Math.min(1, (rawElev - 20.4) / 118.2));
           const h = (1.0 - t) * 0.58;
           const rgb = Cesium.Color.fromHsl(h, 0.85, 0.42 + t * 0.18);
           surfaceColors[vIdx * 4] = Math.floor(rgb.red * 255);
@@ -459,33 +461,32 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
       }}));
     }}
 
-    buildDEMPrimitives(50, 50, currentExaggeration);
+    buildDEMPrimitives(60, 60, currentExaggeration);
 
     // --- 🔴 LAZ 3D Point Cloud Primitive Collection ---
     const pointCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
     (function generateLAZPoints() {{
-      const baseLon = 151.555, maxLon = 151.605;
-      const baseLat = -32.948, maxLat = -32.915;
-      const step = 0.0018;
+      const stepLon = (MAX_LON - MIN_LON) / 45;
+      const stepLat = (MAX_LAT - MIN_LAT) / 45;
 
-      for (let lon = baseLon; lon <= maxLon; lon += step) {{
-        for (let lat = baseLat; lat <= maxLat; lat += step) {{
-          const normX = (lon - baseLon) / (maxLon - baseLon);
-          const normY = (lat - baseLat) / (maxLat - baseLat);
-          const rawElev = 115 - (normX * 55) - ((1 - normY) * 35) + Math.sin(normX * 12) * 8;
+      for (let lon = MIN_LON; lon <= MAX_LON; lon += stepLon) {{
+        for (let lat = MIN_LAT; lat <= MAX_LAT; lat += stepLat) {{
+          const normX = (lon - MIN_LON) / (MAX_LON - MIN_LON);
+          const normY = (lat - MIN_LAT) / (MAX_LAT - MIN_LAT);
+          const rawElev = 20.4 + (1 - normX) * 78.0 + normY * 34.0 + Math.sin(normX * 9.5) * 6.2;
           const zBase = 20.4 + (rawElev - 20.4) * currentExaggeration;
 
-          // Ground return
+          // Ground return (Class 2 Ground)
           pointCollection.add({{
             position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase),
             color: Cesium.Color.fromCssColorString('#ff3366'),
             pixelSize: 3.5
           }});
 
-          // Canopy returns
-          if ((normX < 0.4 || normY > 0.6) && Math.sin(lon * 400 + lat * 300) > -0.2) {{
+          // Canopy / High Vegetation returns (Class 5)
+          if ((normX < 0.45 || normY > 0.55) && Math.sin(lon * 500 + lat * 400) > -0.1) {{
             pointCollection.add({{
-              position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase + 12),
+              position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase + 14.5),
               color: Cesium.Color.fromCssColorString('#10b981'),
               pixelSize: 3.0
             }});
@@ -555,12 +556,12 @@ def build_wireframe_tin_html(is_root: bool = False) -> str:
     function updateExaggeration(val) {{
       currentExaggeration = parseFloat(val);
       document.getElementById('lbl-exagg').innerText = currentExaggeration.toFixed(1) + 'x';
-      buildDEMPrimitives(50, 50, currentExaggeration);
+      buildDEMPrimitives(60, 60, currentExaggeration);
     }}
 
-    // Initial Camera View: Pitch 60°, Bearing 28°
+    // Initial Camera View: Centered directly over Lake Macquarie Coal Precinct footprint
     viewer.camera.setView({{
-      destination: Cesium.Cartesian3.fromDegrees(151.585, -32.952, 1600),
+      destination: Cesium.Cartesian3.fromDegrees(CENTER_LON, CENTER_LAT - 0.045, 4200),
       orientation: {{
         heading: Cesium.Math.toRadians(28),
         pitch: Cesium.Math.toRadians(-60),

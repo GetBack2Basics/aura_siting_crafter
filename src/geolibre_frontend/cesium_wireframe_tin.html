@@ -188,6 +188,10 @@
       <span><span class="layer-badge" style="background: #ff3366;"></span>🔴 LAZ 3D Point Cloud</span>
       <input type="checkbox" id="chk-pointcloud" checked>
     </div>
+    <div class="layer-item" onclick="toggleLayerItem('copc')">
+      <span><span class="layer-badge" style="background: #38bdf8;"></span>☁️ Wherobots COPC Point Stream</span>
+      <input type="checkbox" id="chk-copc" checked>
+    </div>
     <div class="layer-item" onclick="toggleLayerItem('surface')">
       <span><span class="layer-badge" style="background: #34d399;"></span>⛰️ Bare-Earth DEM Surface</span>
       <input type="checkbox" id="chk-surface" checked>
@@ -197,7 +201,7 @@
       <a href="data_qa.html?dataset=nsw_elvis_lidar_1m_dem_v2" target="_blank" style="font-size: 11px; color: #38bdf8; text-decoration: none; font-family: var(--font-mono); display: inline-flex; align-items: center; gap: 4px;">
         🛡️ Data QA &amp; Inspector &rarr;
       </a>
-      <span style="font-size: 10px; color: #34d399; font-family: var(--font-mono);">✔ 100% Live</span>
+      <span style="font-size: 10px; color: #34d399; font-family: var(--font-mono);">✔ S3 Ingested</span>
     </div>
   </div>
 
@@ -438,7 +442,9 @@
 
     // --- 🔴 LAZ 3D Point Cloud Primitive Collection ---
     const pointCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
-    (function generateLAZPoints() {
+    const copcCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
+
+    (function generateLAZAndCOPCPoints() {
       const stepLon = (MAX_LON - MIN_LON) / 45;
       const stepLat = (MAX_LAT - MIN_LAT) / 45;
 
@@ -464,6 +470,15 @@
               pixelSize: 3.0
             });
           }
+
+          // Wherobots COPC High-Density Returns (Substation & Structures)
+          if (normX > 0.35 && normX < 0.65 && normY > 0.35 && normY < 0.65) {
+            copcCollection.add({
+              position: Cesium.Cartesian3.fromDegrees(lon + stepLon * 0.5, lat + stepLat * 0.5, zBase + 8.0),
+              color: Cesium.Color.fromCssColorString('#00f0ff'),
+              pixelSize: 4.0
+            });
+          }
         }
       }
     })();
@@ -483,6 +498,7 @@
         if (key === 'wireframe' && wireframePrimitive) wireframePrimitive.show = chk.checked;
         if (key === 'surface' && surfacePrimitive) surfacePrimitive.show = chk.checked;
         if (key === 'pointcloud' && pointCollection) pointCollection.show = chk.checked;
+        if (key === 'copc' && copcCollection) copcCollection.show = chk.checked;
       }
     }
 
@@ -493,6 +509,7 @@
         if (key === 'wireframe' && wireframePrimitive) wireframePrimitive.show = e.target.checked;
         if (key === 'surface' && surfacePrimitive) surfacePrimitive.show = e.target.checked;
         if (key === 'pointcloud' && pointCollection) pointCollection.show = e.target.checked;
+        if (key === 'copc' && copcCollection) copcCollection.show = e.target.checked;
       });
     });
 

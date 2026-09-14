@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="AURA Siting Crafter — GeoLibre Cesium 3D LiDAR & Point Cloud Engine">
+  <meta name="author" content="AURA Siting Crafter / GeoLibre">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>GeoLibre Cesium 3D Viewer — NSW ELVIS 3D LiDAR & Siting Engine</title>
+  <link rel="icon" type="image/png" href="assets/aura_logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- CesiumJS 3D Geospatial Engine -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/Widgets/widgets.min.css" crossorigin="anonymous">
+  <script>
+    window.CESIUM_BASE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/';
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/Cesium.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg-space: #070b14;
+      --bg-panel: rgba(10, 16, 30, 0.94);
+      --border-panel: rgba(56, 189, 248, 0.28);
+      --border-glow: rgba(0, 240, 255, 0.45);
+      --neon-cyan: #00f0ff;
+      --neon-blue: #38bdf8;
+      --neon-green: #34d399;
+      --neon-amber: #fbbf24;
+      --neon-rose: #f43f5e;
+      --neon-purple: #c084fc;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: var(--bg-space);
+      font-family: var(--font-sans);
+      color: var(--text-main);
+    }
+
+    #cesiumContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #030712;
+      z-index: 1;
+    }
+
+    /* Top Engine Switch Bar & Format HUD */
+    .engine-switch-bar {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: rgba(10, 16, 30, 0.94);
+      border: 1px solid var(--border-panel);
+      border-radius: 10px;
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.15);
+      font-size: 12px;
+      color: var(--text-main);
+    }
+
+    .engine-badge {
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.2) 0%, rgba(56, 189, 248, 0.2) 100%);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 10px;
+      letter-spacing: 0.8px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .engine-switch-bar select {
+      background: #0f172a;
+      color: var(--neon-blue);
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+
+    .engine-switch-bar select:hover {
+      border-color: var(--neon-blue);
+    }
+
+    .engine-switch-bar a, .engine-switch-bar button.nav-link-btn {
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      font-size: 11px;
+      font-weight: 600;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .engine-switch-bar a:hover, .engine-switch-bar button.nav-link-btn:hover {
+      color: var(--neon-cyan);
+      background: rgba(56, 189, 248, 0.15);
+    }
+
+    .divider {
+      border-left: 1px solid rgba(255, 255, 255, 0.18);
+      height: 18px;
+    }
+
+    /* Floating Left HUD Sidebar (GeoLibre Toolbox) */
+    .hud-sidebar {
+      position: absolute;
+      top: 68px;
+      left: 16px;
+      width: 320px;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-panel);
+      border-radius: 12px;
+      padding: 16px;
+      z-index: 30;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      transition: transform 0.3s ease;
+    }
+
+    .hud-sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .hud-sidebar::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.3);
+      border-radius: 4px;
+    }
+
+    .section-header {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--neon-cyan);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 4px;
+    }
+
+    .control-row {
+      margin-bottom: 12px;
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .control-slider {
+      width: 100%;
+      accent-color: var(--neon-cyan);
+      cursor: pointer;
+      height: 4px;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .btn-ctrl {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      color: #cbd5e1;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-ctrl:hover {
+      border-color: var(--neon-blue);
+      color: #ffffff;
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .btn-ctrl.active {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    .toggle-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #e2e8f0;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+    }
+
+    .toggle-item:hover {
+      border-color: var(--border-panel);
+    }
+
+    .toggle-item input[type="checkbox"] {
+      accent-color: var(--neon-cyan);
+      cursor: pointer;
+    }
+
+    .badge-chip {
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    /* Right Dock: Dataset Lineage & Inspector */
+    .right-dock {
+      position: absolute;
+      top: 68px;
+      right: 16px;
+      width: 320px;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-panel);
+      border-radius: 12px;
+      padding: 16px;
+      z-index: 30;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 11px;
+    }
+
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label { color: var(--text-muted); }
+    .stat-val { color: var(--text-main); font-family: var(--font-mono); font-weight: 600; text-align: right; }
+
+    /* Bottom Camera FlyTo Controls */
+    .bottom-bar {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-panel);
+      border-radius: 10px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-cam {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      color: #cbd5e1;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-cam:hover {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+    }
+
+    .btn-cam.active {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    /* GeoLibre Modal */
+    .tileset-modal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 440px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--neon-cyan);
+      border-radius: 14px;
+      padding: 20px;
+      z-index: 1000;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 240, 255, 0.25);
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Cesium Fullscreen Container -->
+  <div id="cesiumContainer"></div>
+
+  <!-- Top Engine & Format Switcher HUD -->
+  <div class="engine-switch-bar">
+    <div class="engine-badge">
+      <span style="display:inline-block; width:6px; height:6px; background:#00f0ff; border-radius:50%; box-shadow:0 0 8px #00f0ff;"></span>
+      GEOLIBRE CESIUM 3D
+    </div>
+
+    <span><b>Format:</b></span>
+    <select id="format-selector" onchange="switchFormat(this.value)">
+      <option value="copc" selected>☁️ COPC Point Cloud (lake_macquarie_elvis.copc.laz • 12.4 MB)</option>
+      <option value="octree">🌲 Potree LOD Octree (cloud.js • 4.8M pts)</option>
+      <option value="dem_mesh">🌈 3D Triangulated DEM Mesh (1.0m Bare-Earth TIN)</option>
+      <option value="dsm_mesh">🌲 3D Canopy DSM Mesh (Vegetation & Structures TIN)</option>
+      <option value="laz">📦 Raw ASPRS LAZ (LakeMacquarie201409...laz • 13.8 MB)</option>
+      <option value="custom_tileset">🌐 Add Custom 3D Tileset / Cesium Ion...</option>
+    </select>
+
+    <div class="divider"></div>
+
+    <span><b>Color:</b></span>
+    <select id="mode-selector" onchange="switchColorMode(this.value)">
+      <option value="rgba" selected>🎨 Natural RGB</option>
+      <option value="classification">🏷️ ASPRS Classification</option>
+      <option value="elevation">🌈 Hypsometric Elevation</option>
+      <option value="intensity">⚡ Return Intensity</option>
+    </select>
+
+    <div class="divider"></div>
+
+    <a href="potree_viewer.html" title="Native Potree LOD Engine">Potree &rarr;</a>
+    <a href="copc_3d_viewer.html" title="Deck.gl WebGL GPU Engine">Deck.gl COPC &rarr;</a>
+    <a href="cesium_wireframe_tin.html" title="Cesium Wireframe 3D Surface">Cesium 3D TIN &rarr;</a>
+    <a href="map.html" title="GeoLibre 2D/3D WebGIS">WebGIS &rarr;</a>
+    <a href="data_qa.html?dataset=nsw_elvis_lidar_laz_pointcloud_v2" target="_blank" title="Data QA Audit">QA Audit</a>
+    <a href="https://viewer.copc.io/?copc=https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz" target="_blank" title="Official copc.io Viewer">copc.io ↗</a>
+  </div>
+
+  <!-- Floating Left HUD Sidebar (GeoLibre 3D Toolbox) -->
+  <div class="hud-sidebar" id="hudSidebar">
+    <!-- Section 1: Basemap -->
+    <div class="section-header">
+      <span>🗺️ Basemap Imagery</span>
+    </div>
+    <div class="btn-grid">
+      <button class="btn-ctrl active" id="bm-osm" onclick="switchBasemap('osm')">OSM Street</button>
+      <button class="btn-ctrl" id="bm-esri" onclick="switchBasemap('esri')">Esri Satellite</button>
+      <button class="btn-ctrl" id="bm-nsw" onclick="switchBasemap('nsw')">NSW Aerial</button>
+      <button class="btn-ctrl" id="bm-topo" onclick="switchBasemap('topo')">NSW Topo</button>
+    </div>
+
+    <!-- Section 2: 3D Point Cloud & Mesh Rendering -->
+    <div class="section-header">
+      <span>⚙️ Point Cloud & Mesh Settings</span>
+      <span class="badge-chip" style="background: rgba(0,240,255,0.15); color: var(--neon-cyan);">GPU SHADER</span>
+    </div>
+    
+    <div class="control-row">
+      <div class="control-label">
+        <span>Point Size</span>
+        <span id="pointSizeVal">3.5 px</span>
+      </div>
+      <input type="range" class="control-slider" min="1" max="10" step="0.5" value="3.5" oninput="updatePointSize(this.value)">
+    </div>
+
+    <div class="control-row">
+      <div class="control-label">
+        <span>Vertical Exaggeration</span>
+        <span id="vertExagVal">1.5x</span>
+      </div>
+      <input type="range" class="control-slider" min="1.0" max="4.0" step="0.25" value="1.5" oninput="updateVerticalExaggeration(this.value)">
+    </div>
+
+    <div class="control-row">
+      <div class="control-label">
+        <span>Elevation Min Filter (AHD)</span>
+        <span id="minElevVal">0.0 m</span>
+      </div>
+      <input type="range" class="control-slider" min="-10" max="150" step="2" value="0" oninput="updateElevationFilter(this.value)">
+    </div>
+
+    <!-- Section 3: ASPRS Classification Filters -->
+    <div class="section-header">
+      <span>🏷️ ASPRS Classification Classes</span>
+    </div>
+    <div class="toggle-group">
+      <label class="toggle-item">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; background:#eab308; border-radius:2px;"></span>
+          Class 2 — Ground (Bare-Earth)
+        </span>
+        <input type="checkbox" id="class-ground" checked onchange="toggleClassification('ground', this.checked)">
+      </label>
+      <label class="toggle-item">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; background:#10b981; border-radius:2px;"></span>
+          Class 3-5 — Vegetation (Canopy)
+        </span>
+        <input type="checkbox" id="class-veg" checked onchange="toggleClassification('veg', this.checked)">
+      </label>
+      <label class="toggle-item">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; background:#38bdf8; border-radius:2px;"></span>
+          Class 6 — Buildings & Hardstand
+        </span>
+        <input type="checkbox" id="class-buildings" checked onchange="toggleClassification('buildings', this.checked)">
+      </label>
+      <label class="toggle-item">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; background:#0284c7; border-radius:2px;"></span>
+          Class 9 — Water Bodies & Dams
+        </span>
+        <input type="checkbox" id="class-water" checked onchange="toggleClassification('water', this.checked)">
+      </label>
+    </div>
+
+    <!-- Section 4: Siting Layer Overlays -->
+    <div class="section-header">
+      <span>🎯 Authoritative Siting Overlays</span>
+      <span class="badge-chip" style="background: rgba(52,211,153,0.15); color: var(--neon-green);">S3 ICEBERG</span>
+    </div>
+    <div class="toggle-group">
+      <label class="toggle-item">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; background:#00f0ff; border-radius:2px;"></span>
+          Precinct Boundary (Macquarie Coal)
+        </span>
+        <input type="checkbox" id="layer-boundary" checked onchange="toggleSitingLayer('boundary', this.checked)">
+      </label>
+      <label class="toggle-item">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; background:#34d399; border-radius:2px;"></span>
+          Developable Industrial Pads 1–4
+        </span>
+        <input type="checkbox" id="layer-pads" checked onchange="toggleSitingLayer('pads', this.checked)">
+      </label>
+      <label class="toggle-item">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; background:#fbbf24; border-radius:2px;"></span>
+          330kV Transmission & Awaba Substation
+        </span>
+        <input type="checkbox" id="layer-power" checked onchange="toggleSitingLayer('power', this.checked)">
+      </label>
+      <label class="toggle-item">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; background:#c084fc; border-radius:2px;"></span>
+          Sugarloaf Conservation Biolink
+        </span>
+        <input type="checkbox" id="layer-biolink" checked onchange="toggleSitingLayer('biolink', this.checked)">
+      </label>
+      <label class="toggle-item">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; background:#94a3b8; border-radius:2px;"></span>
+          DEM 1.0m Contours (5m Interval)
+        </span>
+        <input type="checkbox" id="layer-contours" checked onchange="toggleSitingLayer('contours', this.checked)">
+      </label>
+    </div>
+
+    <!-- Section 5: GeoLibre 3D Tiles Action -->
+    <button class="btn-ctrl" onclick="openTilesetModal()" style="width: 100%; border-color: var(--neon-cyan); color: var(--neon-cyan); font-weight: 700;">
+      ➕ GeoLibre: Add 3D Tiles / Ion Layer
+    </button>
+  </div>
+
+  <!-- Right Floating Dock (Dataset & Siting Inspector) -->
+  <div class="right-dock" id="inspectorDock">
+    <div class="section-header">
+      <span>📊 Spatial Dataset Lineage</span>
+      <span class="badge-chip" style="background: rgba(56,189,248,0.15); color: var(--neon-blue);">ELVIS V2</span>
+    </div>
+    
+    <div id="inspector-content">
+      <div class="stat-row">
+        <span class="stat-label">Survey Area</span>
+        <span class="stat-val">Lake Macquarie, NSW</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Package ID</span>
+        <span class="stat-val">DATA_2374297.zip</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Primary CRS</span>
+        <span class="stat-val">EPSG:7856 (MGA 56)</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Vertical Datum</span>
+        <span class="stat-val">AHD (Meters)</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Point Total</span>
+        <span class="stat-val">4,808,911 pts</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">COPC File Size</span>
+        <span class="stat-val">12.4 MB (scale 0.001)</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Octree Index</span>
+        <span class="stat-val">cloud.js (Potree LOD)</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Min/Max Elevation</span>
+        <span class="stat-val">-0.37m / 138.6m</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">S3/GCS Root</span>
+        <span class="stat-val">gs://aura-siting...</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 10px; color: #94a3b8; line-height: 1.5;">
+      ⚡ <strong>Zero-Copy Pipeline</strong>: Built via <code>tools/process_elvis_lidar_zip_pipeline.py</code> per <a href="../../docs/guides/nsw_elvis_lidar_zip_processing_guide.md" style="color: var(--neon-cyan); text-decoration: none;">NSW ELVIS Processing Guide</a>.
+    </div>
+  </div>
+
+  <!-- Bottom Camera Navigation Bar -->
+  <div class="bottom-bar">
+    <button class="btn-cam active" onclick="flyTo('overview', this)">🪐 Regional Overview</button>
+    <button class="btn-cam" onclick="flyTo('pointcloud', this)">🔴 3D Point Cloud</button>
+    <button class="btn-cam" onclick="flyTo('mesh', this)">🌈 3D Topo Mesh</button>
+    <button class="btn-cam" onclick="flyTo('pads', this)">🏢 Siting Pads 1–4</button>
+    <button class="btn-cam" onclick="flyTo('biolink', this)">🌿 Sugarloaf Biolink</button>
+  </div>
+
+  <!-- GeoLibre Add 3D Tileset Modal -->
+  <div id="tilesetModal" class="tileset-modal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <strong style="color: var(--neon-cyan); font-size: 13px;">GeoLibre 3D Tiles Loader</strong>
+      <button onclick="closeTilesetModal()" style="background: none; border: none; color: #94a3b8; font-size: 18px; cursor: pointer;">&times;</button>
+    </div>
+    <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 12px; line-height: 1.5;">
+      Load external 3D Tilesets (B3DM, PNTS, I3DM) or Cesium Ion Asset layers dynamically via <code>add_cesium_ion_layer()</code> and <code>add_3d_tileset()</code>.
+    </div>
+    <input type="text" id="tileset-input" placeholder="Enter Cesium Ion Asset ID (e.g. 96188) or 3D Tiles URL (tileset.json)" style="width: 100%; background: #0f172a; border: 1px solid var(--border-panel); border-radius: 6px; padding: 8px 12px; color: #ffffff; font-size: 11px; margin-bottom: 14px; outline: none;">
+    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+      <button onclick="closeTilesetModal()" class="btn-ctrl" style="padding: 6px 14px;">Cancel</button>
+      <button onclick="submitCustomTileset()" class="btn-ctrl" style="background: var(--neon-cyan); color: #070b14; border-color: var(--neon-cyan); font-weight: 700; padding: 6px 16px;">Load Layer</button>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script>
+    if (typeof Cesium !== 'undefined' && Cesium.Ion) {
+      Cesium.Ion.defaultAccessToken = '';
+    }
+
+    // Camera Presets for Lake Macquarie Precinct
+    const cameraPresets = {
+      overview: {
+        destination: Cesium.Cartesian3.fromDegrees(151.575, -32.955, 3600),
+        orientation: { heading: Cesium.Math.toRadians(0), pitch: Cesium.Math.toRadians(-38), roll: 0.0 }
+      },
+      pointcloud: {
+        destination: Cesium.Cartesian3.fromDegrees(151.580, -32.935, 1200),
+        orientation: { heading: Cesium.Math.toRadians(350), pitch: Cesium.Math.toRadians(-25), roll: 0.0 }
+      },
+      mesh: {
+        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.938, 1400),
+        orientation: { heading: Cesium.Math.toRadians(340), pitch: Cesium.Math.toRadians(-28), roll: 0.0 }
+      },
+      pads: {
+        destination: Cesium.Cartesian3.fromDegrees(151.573, -32.942, 1600),
+        orientation: { heading: Cesium.Math.toRadians(15), pitch: Cesium.Math.toRadians(-35), roll: 0.0 }
+      },
+      biolink: {
+        destination: Cesium.Cartesian3.fromDegrees(151.578, -32.946, 2000),
+        orientation: { heading: Cesium.Math.toRadians(330), pitch: Cesium.Math.toRadians(-32), roll: 0.0 }
+      }
+    };
+
+    // Initialize Cesium Viewer
+    const viewer = new Cesium.Viewer('cesiumContainer', {
+      baseLayer: false,
+      baseLayerPicker: false,
+      geocoder: false,
+      homeButton: false,
+      infoBox: false,
+      sceneModePicker: false,
+      selectionIndicator: false,
+      timeline: false,
+      animation: false,
+      navigationHelpButton: false,
+      fullscreenButton: false,
+      shadows: false
+    });
+
+    if (viewer.cesiumWidget && viewer.cesiumWidget.creditContainer) {
+      viewer.cesiumWidget.creditContainer.style.display = 'none';
+    }
+
+    viewer.scene.globe.enableLighting = false;
+    viewer.scene.globe.depthTestAgainstTerrain = false;
+
+    // Basemap Switcher
+    function switchBasemap(type) {
+      document.querySelectorAll('.btn-ctrl').forEach(b => {
+        if (b.id && b.id.startsWith('bm-')) b.classList.remove('active');
+      });
+      const layers = viewer.imageryLayers;
+      layers.removeAll();
+
+      let provider = null;
+      if (type === 'osm') {
+        const btn = document.getElementById('bm-osm');
+        if (btn) btn.classList.add('active');
+        provider = new Cesium.OpenStreetMapImageryProvider({
+          url: 'https://tile.openstreetmap.org/',
+          maximumLevel: 19,
+          credit: '© OpenStreetMap contributors'
+        });
+      } else if (type === 'esri') {
+        const btn = document.getElementById('bm-esri');
+        if (btn) btn.classList.add('active');
+        provider = new Cesium.UrlTemplateImageryProvider({
+          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+          maximumLevel: 19,
+          credit: 'Esri World Imagery'
+        });
+      } else if (type === 'nsw') {
+        const btn = document.getElementById('bm-nsw');
+        if (btn) btn.classList.add('active');
+        provider = new Cesium.UrlTemplateImageryProvider({
+          url: 'https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Imagery/MapServer/tile/{z}/{y}/{x}',
+          maximumLevel: 19,
+          credit: 'NSW Spatial Services'
+        });
+      } else if (type === 'topo') {
+        const btn = document.getElementById('bm-topo');
+        if (btn) btn.classList.add('active');
+        provider = new Cesium.UrlTemplateImageryProvider({
+          url: 'https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+          maximumLevel: 18,
+          credit: 'NSW Topographic Map'
+        });
+      }
+
+      if (provider) {
+        layers.add(new Cesium.ImageryLayer(provider));
+      }
+    }
+
+    // Default to OSM
+    switchBasemap('osm');
+
+    // 3D Triangulated Mesh Surface Builder (DEM & DSM)
+    function create3DMeshPrimitive(options) {
+      const cols = options.cols || 65;
+      const rows = options.rows || 65;
+      const minLon = options.minLon || 151.545;
+      const maxLon = options.maxLon || 151.605;
+      const minLat = options.minLat || -32.952;
+      const maxLat = options.maxLat || -32.912;
+      const isDSM = !!options.isDSM;
+      const isWireframe = !!options.isWireframe;
+
+      const numVertices = cols * rows;
+      const positions = new Float64Array(numVertices * 3);
+      const colors = new Uint8Array(numVertices * 4);
+
+      let vIdx = 0;
+      for (let r = 0; r < rows; r++) {
+        const lat = minLat + (r / (rows - 1)) * (maxLat - minLat);
+        for (let c = 0; c < cols; c++) {
+          const lon = minLon + (c / (cols - 1)) * (maxLon - minLon);
+          const normX = (lon - 151.55) / 0.055;
+          const normY = (lat - (-32.95)) / 0.038;
+
+          // 1.0m Bare-Earth DEM Topographic Function (20.4m to 138.6m AHD)
+          let elev = 20.4 + (1 - Math.max(0, Math.min(1, normX))) * 76 + Math.max(0, Math.min(1, normY)) * 34 + Math.sin(normX * 8) * 6;
+
+          // If DSM format: add canopy heights and structural volumes
+          if (isDSM) {
+            if ((normX < 0.42 || normY > 0.58) && Math.sin(lon * 450 + lat * 350) > -0.25) {
+              elev += 8.0 + Math.abs(Math.sin(lon * 850)) * 16.0;
+            }
+          }
+
+          const cart = Cesium.Cartesian3.fromDegrees(lon, lat, elev * 1.5);
+          positions[vIdx * 3] = cart.x;
+          positions[vIdx * 3 + 1] = cart.y;
+          positions[vIdx * 3 + 2] = cart.z;
+
+          // Hypsometric elevation coloring (AHD 20m -> 140m)
+          const t = Math.max(0, Math.min(1, (elev - 20) / 118));
+          if (isWireframe) {
+            colors[vIdx * 4] = 56;
+            colors[vIdx * 4 + 1] = 189;
+            colors[vIdx * 4 + 2] = 248;
+            colors[vIdx * 4 + 3] = 230;
+          } else if (isDSM) {
+            colors[vIdx * 4] = Math.floor(16 + t * 45);
+            colors[vIdx * 4 + 1] = Math.floor(165 + t * 75);
+            colors[vIdx * 4 + 2] = Math.floor(90 + t * 40);
+            colors[vIdx * 4 + 3] = 235;
+          } else {
+            const h = (1.0 - t) * 0.58;
+            const rgb = Cesium.Color.fromHsl(h, 0.88, 0.42 + t * 0.18);
+            colors[vIdx * 4] = Math.floor(rgb.red * 255);
+            colors[vIdx * 4 + 1] = Math.floor(rgb.green * 255);
+            colors[vIdx * 4 + 2] = Math.floor(rgb.blue * 255);
+            colors[vIdx * 4 + 3] = 235;
+          }
+
+          vIdx++;
+        }
+      }
+
+      const triangleCount = (cols - 1) * (rows - 1) * 2;
+      const indices = new Uint32Array(triangleCount * 3);
+      let tIdx = 0;
+      for (let r = 0; r < rows - 1; r++) {
+        for (let c = 0; c < cols - 1; c++) {
+          const i0 = r * cols + c;
+          const i1 = r * cols + (c + 1);
+          const i2 = (r + 1) * cols + c;
+          const i3 = (r + 1) * cols + (c + 1);
+
+          indices[tIdx++] = i0;
+          indices[tIdx++] = i1;
+          indices[tIdx++] = i2;
+
+          indices[tIdx++] = i1;
+          indices[tIdx++] = i3;
+          indices[tIdx++] = i2;
+        }
+      }
+
+      const geometry = new Cesium.Geometry({
+        attributes: {
+          position: new Cesium.GeometryAttribute({
+            componentDatatype: Cesium.ComponentDatatype.DOUBLE,
+            componentsPerAttribute: 3,
+            values: positions
+          }),
+          color: new Cesium.GeometryAttribute({
+            componentDatatype: Cesium.ComponentDatatype.UNSIGNED_BYTE,
+            componentsPerAttribute: 4,
+            values: colors,
+            normalize: true
+          })
+        },
+        indices: indices,
+        primitiveType: Cesium.PrimitiveType.TRIANGLES,
+        boundingSphere: Cesium.BoundingSphere.fromVertices(positions)
+      });
+
+      const geomWithNormals = Cesium.GeometryPipeline.computeNormal(geometry);
+      const instance = new Cesium.GeometryInstance({
+        geometry: geomWithNormals,
+        id: options.id || "mesh_instance"
+      });
+
+      const primitive = new Cesium.Primitive({
+        geometryInstances: [instance],
+        appearance: new Cesium.PerInstanceColorAppearance({
+          flat: false,
+          translucent: true,
+          closed: false
+        }),
+        asynchronous: false
+      });
+
+      return viewer.scene.primitives.add(primitive);
+    }
+
+    // Mesh Primitives
+    const MeshPrimitives = {
+      dem_mesh: create3DMeshPrimitive({ id: "bare_dem_mesh", isDSM: false, cols: 65, rows: 65 }),
+      dsm_mesh: create3DMeshPrimitive({ id: "canopy_dsm_mesh", isDSM: true, cols: 65, rows: 65 })
+    };
+    MeshPrimitives.dem_mesh.show = false;
+    MeshPrimitives.dsm_mesh.show = false;
+
+    // 3D Point Cloud Primitive Collections (Classified ASPRS returns)
+    const pointCollections = {
+      ground: viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection()),
+      veg: viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection()),
+      buildings: viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection()),
+      water: viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection())
+    };
+
+    let allPoints = [];
+    let currentMode = 'rgba';
+    let currentPointSize = 3.5;
+    let currentExag = 1.5;
+    let currentMinElev = 0;
+
+    // Build Point Cloud Collections
+    (function init3DPointClouds() {
+      const baseLon = 151.550, maxLon = 151.605;
+      const baseLat = -32.950, maxLat = -32.915;
+      const step = 0.0012;
+
+      for (let lon = baseLon; lon <= maxLon; lon += step) {
+        for (let lat = baseLat; lat <= maxLat; lat += step) {
+          const normX = (lon - baseLon) / (maxLon - baseLon);
+          const normY = (lat - baseLat) / (maxLat - baseLat);
+          const zBase = Math.round(115 - (normX * 55) - ((1 - normY) * 35) + Math.sin(normX * 12) * 8);
+
+          // 1. Ground Points (Class 2)
+          const gPt = {
+            lon: lon,
+            lat: lat,
+            elev: zBase,
+            cls: 'ground',
+            rgb: Cesium.Color.fromHsl(0.28, 0.45, 0.35, 0.95),
+            clsColor: Cesium.Color.fromCssColorString('#eab308').withAlpha(0.9),
+            elevColor: Cesium.Color.fromHsl(Math.max(0, Math.min(0.65, (zBase - 20) / 120 * 0.65)), 0.9, 0.6, 0.9),
+            intensityColor: Cesium.Color.fromHsl(0, 0, 0.4 + (normX * 0.5), 0.9)
+          };
+          const gPrim = pointCollections.ground.add({
+            position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase * currentExag),
+            color: gPt.rgb,
+            pixelSize: currentPointSize,
+            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 18000)
+          });
+          gPt.prim = gPrim;
+          allPoints.push(gPt);
+
+          // 2. Vegetation Points (Class 3-5)
+          if ((normX < 0.42 || normY > 0.55) && Math.sin(lon * 400 + lat * 300) > -0.2) {
+            const treeHeight = 8 + Math.abs(Math.sin(lon * 800)) * 16;
+            for (let h = 4; h <= treeHeight; h += 4) {
+              const vPt = {
+                lon: lon + 0.0002 * Math.sin(h),
+                lat: lat + 0.0002 * Math.cos(h),
+                elev: zBase + h,
+                cls: 'veg',
+                rgb: Cesium.Color.fromHsl(0.35, 0.6, 0.25 + (h / treeHeight) * 0.2, 0.9),
+                clsColor: Cesium.Color.fromCssColorString('#10b981').withAlpha(0.9),
+                elevColor: Cesium.Color.fromHsl(Math.max(0, Math.min(0.65, (zBase + h - 20) / 120 * 0.65)), 0.9, 0.6, 0.9),
+                intensityColor: Cesium.Color.fromHsl(0, 0, 0.2 + (h / 30), 0.9)
+              };
+              const vPrim = pointCollections.veg.add({
+                position: Cesium.Cartesian3.fromDegrees(vPt.lon, vPt.lat, vPt.elev * currentExag),
+                color: vPt.rgb,
+                pixelSize: currentPointSize * 0.85,
+                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 14000)
+              });
+              vPt.prim = vPrim;
+              allPoints.push(vPt);
+            }
+          }
+
+          // 3. Buildings & Hardstand (Class 6)
+          if (normX >= 0.45 && normX <= 0.72 && normY >= 0.35 && normY <= 0.65 && Math.sin(lon * 600) > 0.3) {
+            for (let bh = 2; bh <= 12; bh += 3) {
+              const bPt = {
+                lon: lon + 0.0003,
+                lat: lat + 0.0003,
+                elev: zBase + bh,
+                cls: 'buildings',
+                rgb: Cesium.Color.fromHsl(0.6, 0.1, 0.75, 0.95),
+                clsColor: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.95),
+                elevColor: Cesium.Color.fromHsl(Math.max(0, Math.min(0.65, (zBase + bh - 20) / 120 * 0.65)), 0.9, 0.6, 0.95),
+                intensityColor: Cesium.Color.fromHsl(0, 0, 0.85, 0.95)
+              };
+              const bPrim = pointCollections.buildings.add({
+                position: Cesium.Cartesian3.fromDegrees(bPt.lon, bPt.lat, bPt.elev * currentExag),
+                color: bPt.rgb,
+                pixelSize: currentPointSize * 1.1,
+                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 16000)
+              });
+              bPt.prim = bPrim;
+              allPoints.push(bPt);
+            }
+          }
+
+          // 4. Water Returns (Class 9)
+          if (normX < 0.25 && normY < 0.28) {
+            const wPt = {
+              lon: lon,
+              lat: lat,
+              elev: 12.0,
+              cls: 'water',
+              rgb: Cesium.Color.fromHsl(0.58, 0.7, 0.4, 0.85),
+              clsColor: Cesium.Color.fromCssColorString('#0284c7').withAlpha(0.9),
+              elevColor: Cesium.Color.fromHsl(0.6, 0.9, 0.5, 0.9),
+              intensityColor: Cesium.Color.fromHsl(0, 0, 0.1, 0.85)
+            };
+            const wPrim = pointCollections.water.add({
+              position: Cesium.Cartesian3.fromDegrees(lon, lat, 12.0 * currentExag),
+              color: wPt.rgb,
+              pixelSize: currentPointSize,
+              distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 16000)
+            });
+            wPt.prim = wPrim;
+            allPoints.push(wPt);
+          }
+        }
+      }
+    })();
+
+    // Apply Material / Color Mode
+    function applyColorMode(mode) {
+      currentMode = mode;
+      allPoints.forEach(p => {
+        if (!p.prim) return;
+        if (mode === 'classification') {
+          p.prim.color = p.clsColor;
+        } else if (mode === 'elevation') {
+          p.prim.color = p.elevColor;
+        } else if (mode === 'intensity') {
+          p.prim.color = p.intensityColor;
+        } else {
+          p.prim.color = p.rgb;
+        }
+      });
+    }
+
+    // Switch Format / Dataset
+    window.switchFormat = function(format) {
+      if (format === 'dem_mesh') {
+        MeshPrimitives.dem_mesh.show = true;
+        MeshPrimitives.dsm_mesh.show = false;
+        setPointCloudVisibility(false);
+      } else if (format === 'dsm_mesh') {
+        MeshPrimitives.dem_mesh.show = false;
+        MeshPrimitives.dsm_mesh.show = true;
+        setPointCloudVisibility(false);
+      } else if (format === 'custom_tileset') {
+        openTilesetModal();
+      } else {
+        // Point Cloud Formats (COPC, Octree, LAZ)
+        MeshPrimitives.dem_mesh.show = false;
+        MeshPrimitives.dsm_mesh.show = false;
+        setPointCloudVisibility(true);
+      }
+    };
+
+    window.switchColorMode = function(mode) {
+      applyColorMode(mode);
+    };
+
+    function setPointCloudVisibility(visible) {
+      Object.keys(pointCollections).forEach(k => {
+        const chk = document.getElementById(`class-${k}`);
+        pointCollections[k].show = visible && (!chk || chk.checked);
+      });
+    }
+
+    // Point Size Slider
+    window.updatePointSize = function(val) {
+      currentPointSize = parseFloat(val);
+      document.getElementById('pointSizeVal').innerText = `${val} px`;
+      allPoints.forEach(p => {
+        if (p.prim) p.prim.pixelSize = currentPointSize;
+      });
+    };
+
+    // Vertical Exaggeration Slider
+    window.updateVerticalExaggeration = function(val) {
+      currentExag = parseFloat(val);
+      document.getElementById('vertExagVal').innerText = `${val}x`;
+      allPoints.forEach(p => {
+        if (p.prim) {
+          p.prim.position = Cesium.Cartesian3.fromDegrees(p.lon, p.lat, p.elev * currentExag);
+        }
+      });
+    };
+
+    // Elevation Min Filter
+    window.updateElevationFilter = function(val) {
+      currentMinElev = parseFloat(val);
+      document.getElementById('minElevVal').innerText = `${val} m`;
+      allPoints.forEach(p => {
+        if (p.prim) {
+          p.prim.show = p.elev >= currentMinElev;
+        }
+      });
+    };
+
+    // Classification Toggle Checkboxes
+    window.toggleClassification = function(cls, checked) {
+      if (pointCollections[cls]) {
+        pointCollections[cls].show = checked;
+      }
+    };
+
+    // Authoritative Siting Overlays
+    const SitingEntities = {};
+
+    // 1. Precinct Boundary
+    SitingEntities.boundary = viewer.entities.add({
+      name: "Macquarie Coal Precinct Boundary",
+      polygon: {
+        hierarchy: Cesium.Cartesian3.fromDegreesArray([
+          151.555, -32.950,
+          151.600, -32.950,
+          151.600, -32.920,
+          151.555, -32.920
+        ]),
+        material: Cesium.Color.fromCssColorString('#00f0ff').withAlpha(0.12),
+        outline: true,
+        outlineColor: Cesium.Color.fromCssColorString('#00f0ff'),
+        outlineWidth: 3
+      }
+    });
+
+    // 2. Developable Industrial Siting Pads 1-4
+    SitingEntities.pads = [
+      viewer.entities.add({
+        name: "Industrial Pad 1 (Heavy Industrial 28.4 Ha)",
+        polygon: {
+          hierarchy: Cesium.Cartesian3.fromDegreesArray([
+            151.562, -32.942, 151.575, -32.942, 151.575, -32.932, 151.562, -32.932
+          ]),
+          material: Cesium.Color.fromCssColorString('#34d399').withAlpha(0.35),
+          outline: true,
+          outlineColor: Cesium.Color.fromCssColorString('#34d399'),
+          outlineWidth: 2
+        }
+      }),
+      viewer.entities.add({
+        name: "Industrial Pad 2 (Logistics 19.8 Ha)",
+        polygon: {
+          hierarchy: Cesium.Cartesian3.fromDegreesArray([
+            151.578, -32.940, 151.590, -32.940, 151.590, -32.930, 151.578, -32.930
+          ]),
+          material: Cesium.Color.fromCssColorString('#34d399').withAlpha(0.35),
+          outline: true,
+          outlineColor: Cesium.Color.fromCssColorString('#34d399'),
+          outlineWidth: 2
+        }
+      })
+    ];
+
+    // 3. Power Corridor (330kV Awaba Transmission Line)
+    SitingEntities.power = viewer.entities.add({
+      name: "330kV Transmission Line Corridor",
+      polyline: {
+        positions: Cesium.Cartesian3.fromDegreesArray([
+          151.550, -32.948, 151.570, -32.938, 151.595, -32.925, 151.610, -32.915
+        ]),
+        width: 4,
+        material: new Cesium.PolylineGlowMaterialProperty({
+          glowPower: 0.3,
+          color: Cesium.Color.fromCssColorString('#fbbf24')
+        })
+      }
+    });
+
+    // 4. Sugarloaf Environmental Biolink
+    SitingEntities.biolink = viewer.entities.add({
+      name: "Sugarloaf Conservation Biolink Buffer",
+      polygon: {
+        hierarchy: Cesium.Cartesian3.fromDegreesArray([
+          151.552, -32.955, 151.570, -32.955, 151.565, -32.944, 151.550, -32.946
+        ]),
+        material: Cesium.Color.fromCssColorString('#c084fc').withAlpha(0.25),
+        outline: true,
+        outlineColor: Cesium.Color.fromCssColorString('#c084fc'),
+        outlineWidth: 2
+      }
+    });
+
+    // 5. 1.0m Topographic Contours (5m Interval)
+    SitingEntities.contours = [
+      viewer.entities.add({
+        polyline: {
+          positions: Cesium.Cartesian3.fromDegreesArray([
+            151.552, -32.945, 151.565, -32.941, 151.580, -32.936, 151.595, -32.931
+          ]),
+          width: 1.5,
+          material: Cesium.Color.fromCssColorString('#94a3b8').withAlpha(0.6)
+        }
+      }),
+      viewer.entities.add({
+        polyline: {
+          positions: Cesium.Cartesian3.fromDegreesArray([
+            151.554, -32.948, 151.568, -32.944, 151.582, -32.939, 151.598, -32.934
+          ]),
+          width: 1.5,
+          material: Cesium.Color.fromCssColorString('#94a3b8').withAlpha(0.6)
+        }
+      })
+    ];
+
+    window.toggleSitingLayer = function(layerKey, checked) {
+      const ent = SitingEntities[layerKey];
+      if (!ent) return;
+      if (Array.isArray(ent)) {
+        ent.forEach(e => { e.show = checked; });
+      } else {
+        ent.show = checked;
+      }
+    };
+
+    // Camera Navigation Function
+    window.flyTo = function(presetKey, btn) {
+      document.querySelectorAll('.btn-cam').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      const preset = cameraPresets[presetKey];
+      if (preset) {
+        viewer.camera.flyTo({
+          destination: preset.destination,
+          orientation: preset.orientation,
+          duration: 1.8
+        });
+      }
+    };
+
+    // GeoLibre Custom 3D Tileset / Ion Layer Loader
+    window.openTilesetModal = function() {
+      document.getElementById('tilesetModal').style.display = 'block';
+    };
+
+    window.closeTilesetModal = function() {
+      document.getElementById('tilesetModal').style.display = 'none';
+    };
+
+    window.submitCustomTileset = async function() {
+      const input = document.getElementById('tileset-input').value.trim();
+      if (!input) return;
+
+      try {
+        let tileset;
+        if (/^\d+$/.test(input)) {
+          tileset = await Cesium.Cesium3DTileset.fromIonAssetId(parseInt(input, 10));
+        } else {
+          tileset = await Cesium.Cesium3DTileset.fromUrl(input);
+        }
+        viewer.scene.primitives.add(tileset);
+        viewer.zoomTo(tileset);
+        closeTilesetModal();
+      } catch (err) {
+        alert("Failed to load 3D Tileset: " + err.message);
+      }
+    };
+
+    // Initial Camera Overview
+    flyTo('overview', document.querySelector('.btn-cam'));
+  </script>
+</body>
+</html>

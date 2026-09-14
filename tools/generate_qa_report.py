@@ -376,6 +376,7 @@ def build_qa_html_report(qa: Dict[str, Any], is_root_page: bool = False) -> str:
         siting_report_href = "index.html"
         map_inspector_href = "docs/qa/geolibre_qa_inspect.html"
         geolibre_app_href = "map.html"
+        potree_viewer_href = "potree_3d_viewer.html"
         tin_wireframe_href = "projects/cesium_wireframe_tin.html"
         data_lineage_href = "data_lineage_audit.html"
     else:
@@ -383,6 +384,7 @@ def build_qa_html_report(qa: Dict[str, Any], is_root_page: bool = False) -> str:
         siting_report_href = "../../index.html"
         map_inspector_href = "geolibre_qa_inspect.html"
         geolibre_app_href = "../../map.html"
+        potree_viewer_href = "../../potree_3d_viewer.html"
         tin_wireframe_href = "../../projects/cesium_wireframe_tin.html"
         data_lineage_href = "../../data_lineage_audit.html"
 
@@ -600,6 +602,7 @@ def build_qa_html_report(qa: Dict[str, Any], is_root_page: bool = False) -> str:
         <a href="{siting_report_href}" target="_blank" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #93c5fd; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">📑 Siting Report</a>
         <a href="{map_inspector_href}" target="_blank" style="background: rgba(6, 182, 212, 0.2); border: 1px solid #06b6d4; color: #67e8f9; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🗺️ Map Inspector</a>
         <a href="{geolibre_app_href}" target="_blank" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #6ee7b7; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🌐 GeoLibre App</a>
+        <a href="{potree_viewer_href}" target="_blank" style="background: rgba(0, 240, 255, 0.2); border: 1px solid #00f0ff; color: #00f0ff; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 700; box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);">⚡ Potree 3D LiDAR</a>
         <a href="{tin_wireframe_href}" target="_blank" style="background: rgba(0, 240, 255, 0.15); border: 1px solid #00f0ff; color: #38bdf8; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">🌐 3D Wireframe (TIN)</a>
         <a href="{data_lineage_href}" target="_blank" style="background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; color: #d8b4fe; padding: 0.4rem 0.8rem; border-radius: 0.35rem; font-size: 0.82rem; text-decoration: none; font-weight: 600;">📊 Lineage Audit</a>
         <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: {status_badge_color}; border: 1px solid {status_badge_color};">

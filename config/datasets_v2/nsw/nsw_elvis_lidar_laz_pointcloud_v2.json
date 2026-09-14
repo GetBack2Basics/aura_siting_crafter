@@ -5,11 +5,12 @@
   "dataset_name": "ELVIS NSW Classified 3D LiDAR Point Cloud (.LAZ / ASPRS Ground, Canopy & Structures)",
   "source_agency": "Geoscience Australia / NSW Spatial Services (ELVIS)",
   "portal": "ELVIS Elevation - Foundation Spatial Data",
-  "service_type": "s3_laz",
-  "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+  "service_type": "gcs_copc_laz",
+  "endpoint": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
   "package_archives": [
-    "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
-    "https://elvis-downloads.s3.amazonaws.com/DATA_2374296.zip"
+    "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
+    "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
+    "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/LakeMacquarie201409-LID1-C3-AHD_3666336_56_0002_0002.laz"
   ],
   "layer_id": 1,
   "geometry_type": "MultiPoint",

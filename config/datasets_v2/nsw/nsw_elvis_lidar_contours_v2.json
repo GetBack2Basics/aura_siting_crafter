@@ -5,11 +5,10 @@
   "dataset_name": "ELVIS NSW 0.5m/1m Topographic Elevation Contours Fabric",
   "source_agency": "Geoscience Australia / NSW Spatial Services (ELVIS)",
   "portal": "ELVIS Elevation - Foundation Spatial Data",
-  "service_type": "s3_geoparquet",
-  "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+  "service_type": "gcs_contours",
+  "endpoint": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
   "package_archives": [
-    "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
-    "https://elvis-downloads.s3.amazonaws.com/DATA_2374296.zip"
+    "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js"
   ],
   "layer_id": 1,
   "geometry_type": "MultiLineString",

@@ -1240,16 +1240,17 @@
               <strong>2D Viewport Status:</strong> <span style="color: #94a3b8;">0 2D vector features rendered (Binary LAZ / DEM rasters require 3D WebGL / Cesium engine)</span><br>
               <strong>3D Visualization Pathways:</strong>
               <ul style="margin: 0.5rem 0 0 1.25rem; color: #cbd5e1; font-size: 0.8rem;">
-                <li><strong>Pathway 1:</strong> 3D Deck.gl + MapLibre GPU Point Cloud &amp; COPC Viewer (<a href="../../copc_3d_viewer.html" target="_blank" style="color: #00f0ff; text-decoration: underline;">Launch Deck.gl 3D COPC Viewer</a>)</li>
-                <li><strong>Pathway 2:</strong> 3D CesiumJS TIN Wireframe &amp; Point Cloud (<a href="../../cesium_wireframe_tin.html" target="_blank" style="color: #38bdf8; text-decoration: underline;">Launch Cesium 3D Globe</a>)</li>
-                <li><strong>Pathway 3:</strong> MapLibre / GeoLibre Terrarium Elevation RGB Raster Tiles</li>
-                <li><strong>Pathway 4:</strong> DuckDB-WASM Client-Side Parquet Range Queries</li>
+                <li><strong>Pathway 1:</strong> Potree WebGL 3D Point Cloud Engine with Eye-Dome Lighting (<a href="../../potree_3d_viewer.html" target="_blank" style="color: #00f0ff; text-decoration: underline; font-weight: bold;">Launch Potree 3D LiDAR Viewer</a>)</li>
+                <li><strong>Pathway 2:</strong> 3D Deck.gl + MapLibre GPU Point Cloud &amp; COPC Viewer (<a href="../../copc_3d_viewer.html" target="_blank" style="color: #38bdf8; text-decoration: underline;">Launch Deck.gl 3D COPC Viewer</a>)</li>
+                <li><strong>Pathway 3:</strong> 3D CesiumJS TIN Wireframe &amp; Point Cloud (<a href="../../cesium_wireframe_tin.html" target="_blank" style="color: #60a5fa; text-decoration: underline;">Launch Cesium 3D Globe</a>)</li>
+                <li><strong>Pathway 4:</strong> MapLibre / GeoLibre Terrarium Elevation RGB Raster Tiles</li>
+                <li><strong>Pathway 5:</strong> DuckDB-WASM Client-Side Parquet Range Queries</li>
               </ul>
             </td>
           </tr>
         `;
         document.getElementById('symbology-desc').textContent = 
-          `Showing genuine bounding footprint of the Lake Macquarie LiDAR/DEM archive. 2D Leaflet map displays boundary envelope; 3D visualization is handled via Deck.gl & CesiumJS.`;
+          `Showing genuine bounding footprint of the Lake Macquarie LiDAR/DEM archive. 2D Leaflet map displays boundary envelope; 3D visualization is handled via Potree, Deck.gl & CesiumJS.`;
         return;
       }
 

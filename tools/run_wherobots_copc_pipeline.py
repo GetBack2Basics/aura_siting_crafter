@@ -42,9 +42,9 @@ print("=" * 60)
 spark = SparkSession.builder.appName("AuraElvisCopcIngest").getOrCreate()
 print("SparkSession initialized successfully:", spark.version)
 
-# Source package archive
-PACKAGE_URL = "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip"
-OUTPUT_DIR = "s3://wherobots-user-storage/aura_siting/copc/lake_macquarie/"
+# Source package archive on Google Cloud Storage
+PACKAGE_URL = "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz"
+OUTPUT_DIR = "wherobots://fgsdb/aura_siting/copc/lake_macquarie/"
 
 print(f"-> Target Output Location: {OUTPUT_DIR}")
 print("-> Processing ELVIS LiDAR Point Cloud & 1m Bare-Earth DEM...")

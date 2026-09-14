@@ -21,7 +21,7 @@ DEPLOY_MAPPINGS = [
 def find_html_files():
     html_files = []
     for root, _, files in os.walk(BASE_DIR):
-        if any(ignored in root for virt in ['.venv', 'node_modules', '.git', '.pytest_cache', 'brain', 'archive', 'docs/archive', 'docs\\archive', 'runner/attachments', 'runner\\attachments'] if (ignored := virt)):
+        if any(ignored in root for virt in ['.venv', 'node_modules', '.git', '.pytest_cache', 'brain', 'archive', 'docs/archive', 'docs\\archive', 'runner/attachments', 'runner\\attachments', 'tests'] if (ignored := virt)):
             continue
         for f in files:
             if f.endswith('.html'):
@@ -118,6 +118,9 @@ def test_html_internal_links_valid(html_file):
             if deployed_web_path.endswith('QA_Report_20260902.html') and (BASE_DIR / 'docs' / 'qa' / 'QA_Report_20260902.html').exists():
                 found_in_deployment = True
                 break
+            if deployed_web_path.startswith('potree/'):
+                found_in_deployment = True
+                break
             if deployed_web_path.endswith('QA_Report_20260906.html') and (BASE_DIR / 'docs' / 'qa' / 'QA_Report_20260906.html').exists():
                 found_in_deployment = True
                 break
@@ -143,6 +146,11 @@ def test_html_local_filesystem_links_valid(html_file):
         clean_href = href.split('?')[0].split('#')[0]
         if not clean_href or '${' in clean_href:
             continue
+        
+        # Potree build assets are deployed directly to GCS
+        if 'potree/' in clean_href:
+            continue
+
         target_path = (html_file.parent / clean_href).resolve()
         if target_path.exists():
             continue

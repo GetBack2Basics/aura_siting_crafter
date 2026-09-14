@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA GeoLibre Frontend Test Suite & Testbeds</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --border: rgba(59, 130, 246, 0.25);
+      --text: #f3f4f6;
+      --text-dim: #9ca3af;
+      --cyan: #06b6d4;
+      --blue: #3b82f6;
+      --green: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .header {
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid var(--cyan);
+      border-radius: 9999px;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    p.subtitle {
+      color: var(--text-dim);
+      font-size: 15px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.15);
+    }
+    .card h3 {
+      font-size: 18px;
+      color: #ffffff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card p {
+      color: var(--text-dim);
+      font-size: 13.5px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #0284c7, #06b6d4);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13.5px;
+      border-radius: 8px;
+      transition: opacity 0.2s;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+    .nav-back {
+      margin-top: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--cyan);
+      text-decoration: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="badge">AURA GeoLibre Test Suite</div>
+      <h1>Frontend Interactive Testbeds & Harnesses</h1>
+      <p class="subtitle">Authoritative browser test environments for 3D Cesium engines, COPC point cloud streaming, and triangulated terrain meshes.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div>
+          <h3>🌐 Cesium 3D Engine Testbed</h3>
+          <p>National precinct overview testing true 3D Triangulated Surface Meshes (TIN) for 1m Bare-Earth DEM, Canopy DSM, and OpenStreetMap streaming.</p>
+        </div>
+        <a href="cesium_3d_test.html" class="btn">Launch Cesium 3D Testbed &rarr;</a>
+      </div>
+
+      <div class="card">
+        <div>
+          <h3>🔬 CesiumJS Project Harness</h3>
+          <p>Precision siting pad inspection harness testing leader-line HUD callouts, 330kV transmission corridor rendering, and hypsometric elevation tinting.</p>
+        </div>
+        <a href="cesium_test.html" class="btn">Launch Cesium Harness &rarr;</a>
+      </div>
+    </div>
+
+    <div>
+      <a href="../index.html" class="nav-back">&larr; Return to GeoLibre WebGIS Production Suite</a>
+    </div>
+  </div>
+</body>
+</html>

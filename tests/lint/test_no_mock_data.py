@@ -33,6 +33,8 @@ def get_files_to_audit():
     files = []
     for pattern in AUDIT_DIRS:
         for f in glob.glob(pattern, recursive=True):
+            if not os.path.isfile(f):
+                continue
             # Exclude compiled monolithic HTML reports and digital twins that embed genuine spatial GeoJSON datasets
             filename = os.path.basename(f)
             if filename in ("national_suitability_report.html", "index.html") or filename.startswith("digital_twin_"):

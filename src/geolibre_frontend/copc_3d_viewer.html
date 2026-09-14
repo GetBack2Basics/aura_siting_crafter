@@ -11,12 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- MapLibre GL JS & Deck.gl CDN -->
+  <!-- MapLibre GL JS & Deck.gl CDN & Proj4js -->
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" crossorigin="anonymous">
   <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/deck.gl@8.9.33/dist.min.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@loaders.gl/core@4.0.5/dist/dist.min.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@loaders.gl/las@4.0.5/dist/dist.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
   <style>
     :root {
@@ -320,16 +319,16 @@
 
   <!-- Bottom Telemetry Bar -->
   <div class="telemetry-bar">
-    <div>Precinct: <span class="telemetry-val">Lake Macquarie Coal Complex</span></div>
-    <div>Footprint: <span class="telemetry-val">151.5658°E, -33.0937°S to 151.6857°E, -32.9343°S</span></div>
-    <div>Elevation: <span class="telemetry-val">20.4m – 138.6m AHD</span></div>
-    <div>Returns: <span class="telemetry-val">18,450,000 pts</span></div>
+    <div>Precinct: <span class="telemetry-val">Lake Macquarie, NSW</span></div>
+    <div>Live GCS Stream: <span class="telemetry-val">lake_macquarie_elvis.copc.laz (12.4 MB)</span></div>
+    <div>Footprint: <span class="telemetry-val">151.5639°E, -33.1064°S to 151.5856°E, -33.0886°S</span></div>
+    <div>Elevation: <span class="telemetry-val">-0.37m – 42.99m AHD (EPSG:7856)</span></div>
   </div>
 
   <script>
     // 1. Initialize MapLibre 3D Globe with Esri World Imagery
-    const CENTER_LON = 151.6258;
-    const CENTER_LAT = -33.0140;
+    const CENTER_LON = 151.575;
+    const CENTER_LAT = -33.098;
 
     const map = new maplibregl.Map({
       container: 'map',
@@ -356,15 +355,11 @@
         ]
       },
       center: [CENTER_LON, CENTER_LAT],
-      zoom: 13.8,
+      zoom: 14.5,
       pitch: 60,
       bearing: 28,
       antialias: true
     });
-
-    // 2. Synthesize High-Precision Point Cloud & TIN Mesh Data across Lake Macquarie Bounds
-    const MIN_LON = 151.5658, MAX_LON = 151.6857;
-    const MIN_LAT = -33.0937, MAX_LAT = -32.9343;
 
     let pointSize = 3.5;
     let showCOPC = true;
@@ -372,61 +367,83 @@
     let showWireframe = true;
     let showSurface = true;
 
-    // Generate Point Cloud Records (Ground = Red/Amber, Canopy = Green, Substation = Cyan)
-    const pointsData = [];
-    const stepLon = (MAX_LON - MIN_LON) / 50;
-    const stepLat = (MAX_LAT - MIN_LAT) / 50;
-
-    for (let lon = MIN_LON; lon <= MAX_LON; lon += stepLon) {
-      for (let lat = MIN_LAT; lat <= MAX_LAT; lat += stepLat) {
-        const normX = (lon - MIN_LON) / (MAX_LON - MIN_LON);
-        const normY = (lat - MIN_LAT) / (MAX_LAT - MIN_LAT);
-        const elev = 20.4 + (1 - normX) * 78.0 + normY * 34.0 + Math.sin(normX * 9.5) * 6.2;
-
-        // Ground point
-        pointsData.push({
-          position: [lon, lat, elev],
-          color: [255, 51, 102], // Rose ground
-          category: 'ground'
-        });
-
-        // Vegetation return
-        if ((normX < 0.45 || normY > 0.55) && Math.sin(lon * 500 + lat * 400) > -0.1) {
-          pointsData.push({
-            position: [lon, lat, elev + 14.5],
-            color: [16, 185, 129], // Emerald canopy
-            category: 'canopy'
-          });
-        }
-
-        // COPC Energy & Structure returns
-        if (normX > 0.35 && normX < 0.65 && normY > 0.35 && normY < 0.65) {
-          pointsData.push({
-            position: [lon + stepLon * 0.5, lat + stepLat * 0.5, elev + 8.0],
-            color: [0, 240, 255], // Neon cyan
-            category: 'copc'
-          });
-        }
-      }
+    // 2. Stream High-Precision Real Point Cloud Data from Google Cloud Storage
+    if (typeof proj4 !== 'undefined') {
+      proj4.defs("EPSG:7856", "+proj=utm +zone=56 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
     }
 
-    // Generate Wireframe Lines & Surface Triangles
+    const pointsData = [];
     const wireframeLines = [];
-    for (let lon = MIN_LON; lon < MAX_LON; lon += stepLon) {
-      for (let lat = MIN_LAT; lat < MAX_LAT; lat += stepLat) {
-        const normX1 = (lon - MIN_LON) / (MAX_LON - MIN_LON);
-        const normY1 = (lat - MIN_LAT) / (MAX_LAT - MIN_LAT);
-        const z1 = 20.4 + (1 - normX1) * 78.0 + normY1 * 34.0 + Math.sin(normX1 * 9.5) * 6.2;
 
-        const normX2 = (lon + stepLon - MIN_LON) / (MAX_LON - MIN_LON);
-        const normY2 = (lat + stepLat - MIN_LAT) / (MAX_LAT - MIN_LAT);
-        const z2 = 20.4 + (1 - normX2) * 78.0 + normY1 * 34.0 + Math.sin(normX2 * 9.5) * 6.2;
-        const z3 = 20.4 + (1 - normX1) * 78.0 + normY2 * 34.0 + Math.sin(normX1 * 9.5) * 6.2;
+    async function loadRealGcsData() {
+      const gcsBase = "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/";
+      const nodes = ["data/r.bin", "data/r0.bin", "data/r00.bin", "data/r02.bin", "data/r04.bin", "data/r06.bin"];
+      
+      pointsData.length = 0;
+      wireframeLines.length = 0;
 
-        wireframeLines.push({ source: [lon, lat, z1], target: [lon + stepLon, lat, z2] });
-        wireframeLines.push({ source: [lon, lat, z1], target: [lon, lat + stepLat, z3] });
-        wireframeLines.push({ source: [lon + stepLon, lat, z2], target: [lon, lat + stepLat, z3] });
+      let prevPt = null;
+      for (const node of nodes) {
+        try {
+          const resp = await fetch(gcsBase + node);
+          if (!resp.ok) continue;
+          const buf = await resp.arrayBuffer();
+          const dv = new DataView(buf);
+          const ptCount = Math.floor(buf.byteLength / 16);
+
+          for (let i = 0; i < ptCount; i++) {
+            const offset = i * 16;
+            const rawX = dv.getInt32(offset, true);
+            const rawY = dv.getInt32(offset + 4, true);
+            const rawZ = dv.getInt32(offset + 8, true);
+            const r = dv.getUint8(offset + 12);
+            const g = dv.getUint8(offset + 13);
+            const b = dv.getUint8(offset + 14);
+
+            const mgaX = 366000.0 + rawX * 0.01;
+            const mgaY = 6336000.0 + rawY * 0.01;
+            const elev = -0.37 + rawZ * 0.01;
+
+            let lon = 151.575, lat = -33.098;
+            if (typeof proj4 !== 'undefined') {
+              const coords = proj4("EPSG:7856", "EPSG:4326", [mgaX, mgaY]);
+              lon = coords[0];
+              lat = coords[1];
+            }
+
+            let category = 'ground';
+            let color = [r, g, b];
+            if (elev < 0.2) {
+              category = 'copc';
+              color = [0, 240, 255];
+            } else if (g > r && g > b && elev > 3.0) {
+              category = 'canopy';
+              color = [16, 185, 129];
+            } else {
+              category = 'ground';
+              color = [255, 51, 102];
+            }
+
+            const currentPt = [lon, lat, elev];
+            pointsData.push({
+              position: currentPt,
+              color: color,
+              category: category
+            });
+
+            if (prevPt && i % 4 === 0) {
+              wireframeLines.push({
+                source: prevPt,
+                target: currentPt
+              });
+            }
+            prevPt = currentPt;
+          }
+        } catch (err) {
+          console.warn("GCS point stream notice:", node, err);
+        }
       }
+      renderDeckLayers();
     }
 
     // 3. Initialize DeckGL Overlay
@@ -456,7 +473,7 @@
       }
 
       // 2. Wireframe TIN Lines Layer
-      if (showWireframe) {
+      if (showWireframe && wireframeLines.length > 0) {
         layers.push(
           new deck.LineLayer({
             id: 'wireframe-tin-layer',
@@ -481,7 +498,7 @@
     }
 
     map.on('load', () => {
-      renderDeckLayers();
+      loadRealGcsData();
     });
 
     // 4. UI Controls

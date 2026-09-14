@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GeoLibre + Cesium 3D Rendering Engine | 3D Elevation Mesh & Vector Tiles</title>
-  <link rel="icon" type="image/png" href="assets/aura_logo.png">
+  <link rel="icon" type="image/png" href="../assets/aura_logo.png">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,6 +17,7 @@
     window.CESIUM_BASE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/';
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/Cesium.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
   <style>
     :root {
@@ -358,9 +359,9 @@
     </div>
 
     <div class="nav-links">
-      <a href="projects/digital_twin_LMCC_MacquarieCoal.html" class="btn-nav">🏢 3D Forensic Twin</a>
-      <a href="projects/index_LMCC_MacquarieCoal.html" class="btn-nav">🌐 2D WebGIS</a>
-      <a href="index.html" class="btn-nav">🇦🇺 National Portal</a>
+      <a href="digital_twin_LMCC_MacquarieCoal.html" class="btn-nav">🏢 3D Forensic Twin</a>
+      <a href="index_LMCC_MacquarieCoal.html" class="btn-nav">🌐 2D WebGIS</a>
+      <a href="../index.html" class="btn-nav">🇦🇺 National Portal</a>
     </div>
   </div>
 
@@ -752,53 +753,65 @@
     MeshPrimitives.wireframe.show = false;
     MeshPrimitives.dsm_mesh.show = false;
 
-    // --- 3D Point Cloud Primitive Collection (Classified Returns: Ground, Veg, Buildings) ---
+    // --- 3D Point Cloud Primitive Collection (Classified Returns from Real GCS Stream) ---
     const pointCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
-    (function generate3DPoints() {
-      const baseLon = 151.555, maxLon = 151.605;
-      const baseLat = -32.948, maxLat = -32.915;
-      const step = 0.0016;
+    
+    if (typeof proj4 !== 'undefined') {
+      proj4.defs("EPSG:7856", "+proj=utm +zone=56 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
+    }
 
-      for (let lon = baseLon; lon <= maxLon; lon += step) {
-        for (let lat = baseLat; lat <= maxLat; lat += step) {
-          const normX = (lon - baseLon) / (maxLon - baseLon);
-          const normY = (lat - baseLat) / (maxLat - baseLat);
-          const zBase = Math.round(115 - (normX * 55) - ((1 - normY) * 35) + Math.sin(normX * 12) * 8);
+    async function streamRealGcsPoints() {
+      const gcsBase = "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/";
+      const nodes = ["data/r.bin", "data/r0.bin", "data/r00.bin", "data/r02.bin", "data/r04.bin", "data/r06.bin"];
 
-          // Ground return
-          const groundColor = Cesium.Color.fromHsl(Math.max(0, Math.min(0.65, (zBase - 20) / 120 * 0.65)), 0.9, 0.6, 0.85);
-          pointCollection.add({
-            position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase),
-            color: groundColor,
-            pixelSize: 3.5,
-            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 16000)
-          });
+      for (const node of nodes) {
+        try {
+          const resp = await fetch(gcsBase + node);
+          if (!resp.ok) continue;
+          const buf = await resp.arrayBuffer();
+          const dv = new DataView(buf);
+          const ptCount = Math.floor(buf.byteLength / 16);
 
-          // Canopy returns in vegetation zones
-          if ((normX < 0.4 || normY > 0.6) && Math.sin(lon * 400 + lat * 300) > -0.2) {
-            const treeHeight = 10 + Math.abs(Math.sin(lon * 800)) * 14;
-            for (let h = 4; h <= treeHeight; h += 4) {
-              pointCollection.add({
-                position: Cesium.Cartesian3.fromDegrees(lon + 0.0003 * Math.sin(h), lat + 0.0003 * Math.cos(h), zBase + h),
-                color: Cesium.Color.fromCssColorString('#10b981').withAlpha(0.75),
-                pixelSize: 3.0,
-                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 12000)
-              });
+          for (let i = 0; i < ptCount; i++) {
+            const offset = i * 16;
+            const rawX = dv.getInt32(offset, true);
+            const rawY = dv.getInt32(offset + 4, true);
+            const rawZ = dv.getInt32(offset + 8, true);
+            const r = dv.getUint8(offset + 12);
+            const g = dv.getUint8(offset + 13);
+            const b = dv.getUint8(offset + 14);
+
+            const mgaX = 366000.0 + rawX * 0.01;
+            const mgaY = 6336000.0 + rawY * 0.01;
+            const elev = -0.37 + rawZ * 0.01;
+
+            let lon = 151.575, lat = -33.098;
+            if (typeof proj4 !== 'undefined') {
+              const coords = proj4("EPSG:7856", "EPSG:4326", [mgaX, mgaY]);
+              lon = coords[0];
+              lat = coords[1];
             }
-          }
 
-          // Hardstand structure returns
-          if (normX >= 0.45 && normX <= 0.75 && normY >= 0.35 && normY <= 0.65) {
+            let color = Cesium.Color.fromHsl(Math.max(0, Math.min(0.65, (elev - (-0.37)) / 43.37 * 0.65)), 0.9, 0.6, 0.85);
+            if (g > r && g > b && elev > 3.0) {
+              color = Cesium.Color.fromCssColorString('#10b981').withAlpha(0.75);
+            } else if (r > 110 && g > 110 && b > 110 && elev > 2.0) {
+              color = Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.9);
+            }
+
             pointCollection.add({
-              position: Cesium.Cartesian3.fromDegrees(lon + 0.0005, lat + 0.0005, zBase + 6),
-              color: Cesium.Color.fromCssColorString('#38bdf8').withAlpha(0.9),
-              pixelSize: 4.0,
-              distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 14000)
+              position: Cesium.Cartesian3.fromDegrees(lon, lat, elev * 1.5),
+              color: color,
+              pixelSize: 3.5,
+              distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 16000)
             });
           }
+        } catch (err) {
+          console.warn("GCS point stream test notice:", node, err);
         }
       }
-    })();
+    }
+    streamRealGcsPoints();
 
     // Default point cloud hidden while DEM mesh is front & center
     pointCollection.show = false;

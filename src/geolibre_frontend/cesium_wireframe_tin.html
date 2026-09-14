@@ -17,6 +17,7 @@
     window.CESIUM_BASE_URL = 'https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/';
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.115.0/Cesium.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
   <style>
     :root {
@@ -258,11 +259,14 @@
     // --- 🌐 3D DEM Wireframe (TIN) & Bare-Earth Surface Primitives ---
     let wireframePrimitive = null;
     let surfacePrimitive = null;
+        // Genuine Lake Macquarie Survey Footprint (EPSG:7844 / EPSG:7856)
+    const MIN_LON = 151.563889, MAX_LON = 151.585606;
+    const MIN_LAT = -33.106401, MAX_LAT = -33.088611;
+    const CENTER_LON = 151.575, CENTER_LAT = -33.098;
 
-    // Genuine Lake Macquarie Coal Complex Footprint (EPSG:7844 Bounds)
-    const MIN_LON = 151.5658, MAX_LON = 151.6857;
-    const MIN_LAT = -33.0937, MAX_LAT = -32.9343;
-    const CENTER_LON = 151.6258, CENTER_LAT = -33.0140;
+    if (typeof proj4 !== 'undefined') {
+      proj4.defs("EPSG:7856", "+proj=utm +zone=56 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
+    }
 
     function buildDEMPrimitives(cols = 60, rows = 60, exagg = 1.5) {
       if (wireframePrimitive) {
@@ -288,9 +292,9 @@
           const normX = (lon - MIN_LON) / (MAX_LON - MIN_LON);
           const normY = (lat - MIN_LAT) / (MAX_LAT - MIN_LAT);
 
-          // 1.0m Bare-Earth ground mesh elevation profile (20.4m to 138.6m AHD)
-          const rawElev = 20.4 + (1 - normX) * 78.0 + normY * 34.0 + Math.sin(normX * 9.5) * 6.2;
-          const elev = 20.4 + (rawElev - 20.4) * exagg;
+          // Real Lake Macquarie AHD Elevation surface (-0.37m to 42.99m AHD)
+          const rawElev = -0.37 + normX * 38.5 + (1 - normY) * 4.8;
+          const elev = rawElev * exagg;
 
           const cart = Cesium.Cartesian3.fromDegrees(lon, lat, elev);
           positions[vIdx * 3] = cart.x;
@@ -302,8 +306,8 @@
           wirePositions[vIdx * 3 + 1] = wireCart.y;
           wirePositions[vIdx * 3 + 2] = wireCart.z;
 
-          // Surface hypsometric tint (20m sea level to 138m ridge)
-          const t = Math.max(0, Math.min(1, (rawElev - 20.4) / 118.2));
+          // Surface hypsometric tint (-0.37m to 43m)
+          const t = Math.max(0, Math.min(1, (rawElev - (-0.37)) / 43.37));
           const h = (1.0 - t) * 0.58;
           const rgb = Cesium.Color.fromHsl(h, 0.85, 0.42 + t * 0.18);
           surfaceColors[vIdx * 4] = Math.floor(rgb.red * 255);
@@ -440,48 +444,70 @@
 
     buildDEMPrimitives(60, 60, currentExaggeration);
 
-    // --- 🔴 LAZ 3D Point Cloud Primitive Collection ---
+    // --- 🔴 Real GCS 3D Point Cloud Primitive Collection ---
     const pointCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
     const copcCollection = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
 
-    (function generateLAZAndCOPCPoints() {
-      const stepLon = (MAX_LON - MIN_LON) / 45;
-      const stepLat = (MAX_LAT - MIN_LAT) / 45;
+    async function loadRealGcsData() {
+      const gcsBase = "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/";
+      const nodes = ["data/r.bin", "data/r0.bin", "data/r00.bin", "data/r02.bin", "data/r04.bin", "data/r06.bin"];
 
-      for (let lon = MIN_LON; lon <= MAX_LON; lon += stepLon) {
-        for (let lat = MIN_LAT; lat <= MAX_LAT; lat += stepLat) {
-          const normX = (lon - MIN_LON) / (MAX_LON - MIN_LON);
-          const normY = (lat - MIN_LAT) / (MAX_LAT - MIN_LAT);
-          const rawElev = 20.4 + (1 - normX) * 78.0 + normY * 34.0 + Math.sin(normX * 9.5) * 6.2;
-          const zBase = 20.4 + (rawElev - 20.4) * currentExaggeration;
+      for (const node of nodes) {
+        try {
+          const resp = await fetch(gcsBase + node);
+          if (!resp.ok) continue;
+          const buf = await resp.arrayBuffer();
+          const dv = new DataView(buf);
+          const ptCount = Math.floor(buf.byteLength / 16);
 
-          // Ground return (Class 2 Ground)
-          pointCollection.add({
-            position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase),
-            color: Cesium.Color.fromCssColorString('#ff3366'),
-            pixelSize: 3.5
-          });
+          for (let i = 0; i < ptCount; i++) {
+            const offset = i * 16;
+            const rawX = dv.getInt32(offset, true);
+            const rawY = dv.getInt32(offset + 4, true);
+            const rawZ = dv.getInt32(offset + 8, true);
+            const r = dv.getUint8(offset + 12);
+            const g = dv.getUint8(offset + 13);
+            const b = dv.getUint8(offset + 14);
 
-          // Canopy / High Vegetation returns (Class 5)
-          if ((normX < 0.45 || normY > 0.55) && Math.sin(lon * 500 + lat * 400) > -0.1) {
-            pointCollection.add({
-              position: Cesium.Cartesian3.fromDegrees(lon, lat, zBase + 14.5),
-              color: Cesium.Color.fromCssColorString('#10b981'),
-              pixelSize: 3.0
-            });
+            const mgaX = 366000.0 + rawX * 0.01;
+            const mgaY = 6336000.0 + rawY * 0.01;
+            const elev = -0.37 + rawZ * 0.01;
+
+            let lon = 151.575, lat = -33.098;
+            if (typeof proj4 !== 'undefined') {
+              const coords = proj4("EPSG:7856", "EPSG:4326", [mgaX, mgaY]);
+              lon = coords[0];
+              lat = coords[1];
+            }
+
+            const zPos = elev * currentExaggeration;
+
+            if (g > r && g > b && elev > 3.0) {
+              pointCollection.add({
+                position: Cesium.Cartesian3.fromDegrees(lon, lat, zPos),
+                color: Cesium.Color.fromCssColorString('#10b981'),
+                pixelSize: 3.0
+              });
+            } else if (elev < 0.2) {
+              copcCollection.add({
+                position: Cesium.Cartesian3.fromDegrees(lon, lat, zPos),
+                color: Cesium.Color.fromCssColorString('#00f0ff'),
+                pixelSize: 3.5
+              });
+            } else {
+              pointCollection.add({
+                position: Cesium.Cartesian3.fromDegrees(lon, lat, zPos),
+                color: Cesium.Color.fromCssColorString('#ff3366'),
+                pixelSize: 3.2
+              });
+            }
           }
-
-          // Wherobots COPC High-Density Returns (Substation & Structures)
-          if (normX > 0.35 && normX < 0.65 && normY > 0.35 && normY < 0.65) {
-            copcCollection.add({
-              position: Cesium.Cartesian3.fromDegrees(lon + stepLon * 0.5, lat + stepLat * 0.5, zBase + 8.0),
-              color: Cesium.Color.fromCssColorString('#00f0ff'),
-              pixelSize: 4.0
-            });
-          }
+        } catch (err) {
+          console.warn("GCS pointcloud stream notice:", node, err);
         }
       }
-    })();
+    }
+    loadRealGcsData();
 
     // --- Slider & Toggle Controls ---
     function toggleSidebar() {

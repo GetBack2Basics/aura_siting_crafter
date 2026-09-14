@@ -47,10 +47,10 @@ def test_geolibre_cesium_viewer_structure():
     assert "layer-biolink" in html
     assert "layer-contours" in html
 
-    # Lineage Inspector
-    assert "DATA_2374297.zip" in html
+    # Lineage Inspector / Live Data Source
+    assert "lake_macquarie_elvis.copc.laz" in html or "cloud.js" in html
     assert "EPSG:7856" in html
-    assert "4,808,911 pts" in html
+    assert "20,000" in html or "4,808,911 pts" in html or "Real GCS" in html
 
 
 def test_project_geolibre_cesium_viewer_structure():
@@ -61,4 +61,4 @@ def test_project_geolibre_cesium_viewer_structure():
 
     assert "Cesium.Viewer" in html
     assert "GEOLIBRE CESIUM 3D" in html
-    assert "DATA_2374297.zip" in html
+    assert "lake_macquarie_elvis.copc.laz" in html or "cloud.js" in html

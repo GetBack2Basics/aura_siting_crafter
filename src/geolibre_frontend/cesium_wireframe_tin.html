@@ -155,6 +155,25 @@
 
   <div id="cesiumContainer"></div>
 
+  <!-- Floating Top Navigation Pill Bar -->
+  <div style="position: absolute; top: 20px; right: 20px; z-index: 30; display: flex; gap: 8px; align-items: center; background: rgba(7, 11, 20, 0.88); backdrop-filter: blur(12px); border: 1px solid var(--border-panel); border-radius: 8px; padding: 6px 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
+    <a href="map.html" style="font-size: 11px; color: #38bdf8; text-decoration: none; font-family: var(--font-mono); display: inline-flex; align-items: center; gap: 4px;">
+      🌐 WebGIS &rarr;
+    </a>
+    <span style="color: rgba(255,255,255,0.2);">|</span>
+    <a href="geolibre_cesium_3d_viewer.html" style="font-size: 11px; color: #60a5fa; text-decoration: none; font-family: var(--font-mono); display: inline-flex; align-items: center; gap: 4px;">
+      🪐 Cesium 3D &rarr;
+    </a>
+    <span style="color: rgba(255,255,255,0.2);">|</span>
+    <a href="copc_3d_viewer.html" style="font-size: 11px; color: #34d399; text-decoration: none; font-family: var(--font-mono); display: inline-flex; align-items: center; gap: 4px;">
+      ☁️ Deck.gl COPC &rarr;
+    </a>
+    <span style="color: rgba(255,255,255,0.2);">|</span>
+    <a href="data_qa.html?dataset=nsw_elvis_lidar_1m_dem_v2" target="_blank" style="font-size: 11px; color: #f59e0b; text-decoration: none; font-family: var(--font-mono); display: inline-flex; align-items: center; gap: 4px; font-weight: 700;">
+      🛡️ Data QA Audit ↗
+    </a>
+  </div>
+
   <button id="btn-reopen" class="btn-reopen" onclick="toggleSidebar()">⚙️ 3D Controls</button>
 
   <!-- Sidebar with ONLY requested controls -->

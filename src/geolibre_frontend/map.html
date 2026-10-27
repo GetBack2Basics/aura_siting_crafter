@@ -1467,6 +1467,12 @@
         <span>🔬 Evidence Hub</span>
       </button>
 
+      <!-- Automated QA & Live Endpoint Verification Report Link -->
+      <a class="nav-btn" href="data_qa.html" target="_blank"
+        title="Automated QA Report: 100% CRS Compliance, Zero-Mock Audit & Live Endpoint Reconciliation">
+        <span>✅ Data QA</span>
+      </a>
+
       <!-- GeoLibre JSON Spec & Desktop GIS Integration -->
       <button class="nav-btn" onclick="openGeolibreModal()" title="GeoLibre Open GIS Spec & Desktop GIS Access">
         <span>⬇️ GeoLibre JSON</span>
@@ -1635,10 +1641,14 @@
           </div>
           <select id="saved-queries-select" class="saved-queries-select" onchange="onSavedQuerySelected(this.value)">
             <option value="">-- Choose a Preset or Saved Query --</option>
-            <optgroup label="⭐ Benchmark Presets" id="benchmark-optgroup">
-              <option value="preset_nsw">NSW Transmission (≥15ha, ≤1.5km)</option>
+            <optgroup label="⭐ Verified Benchmark Presets" id="benchmark-optgroup">
+              <option value="preset_nsw">NSW Transmission Corridor (≥15ha, ≤1.5km)</option>
               <option value="preset_water">Recycled Water Proximity (≤2km in Latrobe / Gladstone)</option>
               <option value="preset_buffer">Max Buffer Setback (≥1.5km from Receptors)</option>
+              <option value="preset_hyperscale">Top Hyperscale Scale (≥20ha, Score ≥ 0.95)</option>
+              <option value="preset_flat">Low-Slope & Flat Sites (Slope ≤ 2.0%, Area ≥ 15ha)</option>
+              <option value="preset_hydro_storage">Renewable Grid Storage (Hydro ≥ 50 MWh, Substation ≤ 1.0km)</option>
+              <option value="preset_national_top">National Top Tier Candidates (Score ≥ 0.95)</option>
             </optgroup>
             <optgroup label="💾 My Saved Queries (Browser Cache)" id="user-saved-optgroup">
               <!-- Dynamically populated from localStorage -->
@@ -1646,28 +1656,69 @@
           </select>
         </div>
 
-        <div>
-          <label for="ai-prompt-input" style="font-size: 0.76rem; color: #94a3b8; font-weight: 500;">Ask spatial
-            question (or edit SQL below):</label>
+        <!-- Step 1: Natural Language Query & Issue Analysis -->
+        <div style="background: rgba(10, 15, 29, 0.65); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 6px; padding: 0.65rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem;">
+            <label for="ai-prompt-input" style="font-size: 0.76rem; color: #60a5fa; font-weight: 700; display: flex; align-items: center; gap: 5px;">
+              <span>💬 Step 1: Natural Language Query</span>
+            </label>
+            <span style="font-size: 0.64rem; color: #94a3b8;">Plain English to SQL</span>
+          </div>
           <textarea id="ai-prompt-input" class="ai-textarea"
-            placeholder="e.g. Show me all candidate sites within 2km of 330kV lines in VIC..."></textarea>
-          <button class="ask-btn" id="ask-btn" onclick="submitAiQuery()">
-            <span>⚡ Translate & Run Spatial Query</span>
+            placeholder="e.g. Find candidate sites in Latrobe Valley or Gladstone with recycled water proximity <= 2km..."></textarea>
+
+          <!-- Prompt Suggestion Chips -->
+          <div style="margin-top: 0.4rem; display: flex; flex-wrap: wrap; gap: 0.25rem;">
+            <span class="preset-chip" onclick="setAiPrompt('Show candidate sites in NSW within 1.5km of high-voltage transmission lines and >= 15 ha')">⚡ NSW Power</span>
+            <span class="preset-chip" onclick="setAiPrompt('Find candidate sites in Latrobe Valley or Gladstone with recycled water proximity <= 2km')">💧 Recycled Water</span>
+            <span class="preset-chip" onclick="setAiPrompt('Filter sites with maximal buffer (>=1.5km) from schools and residential meshblocks')">🛡️ Strict Setback</span>
+            <span class="preset-chip" onclick="setAiPrompt('Show top hyperscale candidate sites with area >= 20 ha and suitability score >= 0.95')">🏆 Hyperscale Top</span>
+          </div>
+
+          <button class="ask-btn" id="ask-btn" onclick="translatePromptToSql()">
+            <span>✨ Step 1: Translate to Spatial SQL & Check Issues</span>
           </button>
         </div>
 
-        <!-- Output & Editable SQL Editor Card -->
+        <!-- Step 2: Inspection, Clarification & Review Card -->
         <div id="sql-output" class="sql-output-card">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 4px;">
+          <!-- Step 2 Header & Status -->
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 4px;">
             <div style="display: flex; align-items: center; gap: 0.4rem;">
-              <span style="color: #60a5fa; font-weight: 700; font-size: 0.78rem;">Editable DuckDB Spatial SQL:</span>
-              <span style="color: #34d399; font-size: 0.64rem; font-weight: 600; background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); padding: 0.1rem 0.35rem; border-radius: 3px;">✅ AST Schema Validated</span>
+              <span style="color: #60a5fa; font-weight: 700; font-size: 0.78rem;">📋 Step 2: Review DuckDB Spatial SQL</span>
+              <span id="ai-validation-badge" style="color: #38bdf8; font-size: 0.64rem; font-weight: 600; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); padding: 0.1rem 0.35rem; border-radius: 3px;">
+                ⏳ Review Pending Execution
+              </span>
             </div>
-            <span id="ai-result-count-badge" class="badge-count" style="font-size: 0.65rem;">0 matches</span>
+            <span id="ai-result-count-badge" class="badge-count" style="font-size: 0.65rem;">Not executed</span>
+          </div>
+
+          <!-- Clarifications, Issues & Feedback Section -->
+          <div id="ai-clarification-container" style="display: none; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 6px; padding: 0.55rem 0.7rem; margin-bottom: 0.55rem; font-size: 0.72rem;">
+            <!-- Issues & Assumptions -->
+            <div id="ai-issues-section" style="margin-bottom: 0.4rem;">
+              <div style="color: #fbbf24; font-weight: 700; font-size: 0.70rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 4px;">
+                <span>⚠️ Query Analysis & Assumptions:</span>
+              </div>
+              <ul id="ai-issues-list" style="margin: 0; padding-left: 1.1rem; color: #cbd5e1; line-height: 1.45;"></ul>
+            </div>
+
+            <!-- Clarifying Questions & Interactive Suggestions -->
+            <div id="ai-questions-section">
+              <div style="color: #38bdf8; font-weight: 700; font-size: 0.70rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 4px;">
+                <span>💡 Clarifying Questions & Quick Refinements:</span>
+              </div>
+              <ul id="ai-questions-list" style="margin: 0 0 0.4rem 0; padding-left: 1.1rem; color: #e2e8f0; line-height: 1.45;"></ul>
+              <div id="ai-recommendations-chips" style="display: flex; flex-wrap: wrap; gap: 0.25rem;"></div>
+            </div>
+          </div>
+
+          <div style="font-size: 0.69rem; color: #94a3b8; margin-bottom: 0.3rem;">
+            Inspect or edit SQL criteria directly before executing:
           </div>
 
           <textarea id="sql-code-editor" class="sql-code-editor" spellcheck="false"
-            title="Directly edit SQL criteria (dist_to_substation_km, area_ha, state_name, etc.) and click Run SQL or press Ctrl+Enter"
+            title="Review or edit SQL criteria and click 'Run Reviewed SQL' or press Ctrl+Enter"
             onkeydown="if((event.ctrlKey || event.metaKey) && event.key === 'Enter') runEditedSqlQuery()"></textarea>
 
           <div id="sql-explanation" style="color: #cbd5e1; font-size: 0.73rem; margin: 0.4rem 0 0.55rem;"></div>
@@ -1688,12 +1739,13 @@
             </button>
           </div>
 
+          <!-- Action Buttons Bar with Highlighted Step 2 Run Button -->
           <div
             style="display: flex; gap: 0.35rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem; flex-wrap: wrap;">
-            <button class="action-icon-btn"
-              style="flex: 1; padding: 0.35rem 0.5rem; color: #34d399; font-weight: 700; font-size: 0.72rem; border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.12);"
-              onclick="runEditedSqlQuery()" title="Execute currently edited SQL against candidate lakehouse">
-              ▶️ Run SQL
+            <button class="action-icon-btn run-sql-btn"
+              style="flex: 1.4; padding: 0.42rem 0.65rem; color: #ffffff; background: linear-gradient(135deg, #059669 0%, #10b981 100%); font-weight: 700; font-size: 0.75rem; border-color: #34d399; box-shadow: 0 2px 8px rgba(16,185,129,0.35);"
+              onclick="runEditedSqlQuery()" title="Execute currently reviewed SQL against candidate lakehouse (Ctrl+Enter)">
+              ▶️ Step 2: Run Reviewed SQL
             </button>
             <button class="action-icon-btn"
               style="padding: 0.35rem 0.55rem; color: #60a5fa; font-weight: 600; font-size: 0.72rem; border-color: rgba(59,130,246,0.4);"
@@ -1904,6 +1956,9 @@
           <span>🛡️ Data Lineage, Statutory Standards &amp; Provenance Hub</span>
         </div>
         <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <a href="data_qa.html" target="_blank" class="nav-btn" style="padding: 0.25rem 0.6rem; font-size: 0.72rem; color: #34d399; border-color: rgba(52, 211, 153, 0.4);">
+            ✅ Data QA Report ↗
+          </a>
           <a href="data_lineage_audit.html" target="_blank" class="nav-btn" style="padding: 0.25rem 0.6rem; font-size: 0.72rem; color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">
             Full Audit Page ↗
           </a>
@@ -2184,6 +2239,7 @@
             </div>
 
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <a href="data_qa.html" target="_blank" class="nav-btn" style="padding: 0.35rem 0.7rem; font-size: 0.72rem; color: #34d399; border-color: rgba(52, 211, 153, 0.4);">✅ Automated QA Report ↗</a>
               <a href="docs/qa/geolibre_qa_inspect.html" target="_blank" class="nav-btn" style="padding: 0.35rem 0.7rem; font-size: 0.72rem;">🔍 Launch Live QA Inspector ↗</a>
               <a href="data_lineage_audit.html" target="_blank" class="nav-btn" style="padding: 0.35rem 0.7rem; font-size: 0.72rem;">📑 Open Full Data Lineage Audit ↗</a>
             </div>
@@ -4422,22 +4478,88 @@
     // Benchmark Presets
     const PRESET_BENCHMARK_QUERIES = {
       preset_nsw: {
-        name: "NSW Transmission (≥15ha, ≤1.5km)",
+        name: "NSW Transmission Corridor (≥15ha, ≤1.5km)",
         prompt: "Show me candidate sites in NSW within 1.5km of high-voltage transmission lines and >= 15 ha",
         sql: "SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, geometry\nFROM read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')\nWHERE state_name = 'New South Wales' AND dist_to_substation_km <= 1.5 AND area_ha >= 15.0\nORDER BY suitability_score DESC;",
-        explanation: "Filtered to New South Wales candidate hubs with ≥15 ha developable land within 1.5km of high-voltage transmission corridors."
+        explanation: "Filtered to New South Wales candidate hubs with ≥15 ha developable land within 1.5km of high-voltage transmission corridors.",
+        issues: ["Scoped specifically to New South Wales; other state candidates excluded."],
+        questions: ["Would you like to relax the transmission buffer to ≤ 2.0 km or inspect Hunter Valley hubs?"],
+        recommendations: [
+          { label: "Substation ≤ 0.5 km", sql_patch: "dist_to_substation_km <= 0.5" },
+          { label: "Area ≥ 25 ha", sql_patch: "area_ha >= 25.0" }
+        ]
       },
       preset_water: {
         name: "Recycled Water Proximity (≤2km in Latrobe / Gladstone)",
         prompt: "Find candidate sites in Latrobe Valley or Gladstone with recycled water proximity <= 2km",
         sql: "SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, geometry\nFROM read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')\nWHERE dist_to_wwtw_km <= 2.0 AND (state_name = 'Victoria' OR state_name = 'Queensland')\nORDER BY suitability_score DESC;",
-        explanation: "Selected candidate hubs in Victoria (Latrobe Valley) and Queensland (Gladstone) within 2.0km of municipal/industrial recycled water loops."
+        explanation: "Selected candidate hubs in Victoria (Latrobe Valley) and Queensland (Gladstone) within 2.0km of municipal/industrial recycled water loops.",
+        issues: ["Multi-state regional query covering Victoria and Queensland candidate hubs."],
+        questions: ["Does the facility design require tertiary effluent or can it utilize potable water?"],
+        recommendations: [
+          { label: "Water ≤ 1.0 km (Stricter)", sql_patch: "dist_to_wwtw_km <= 1.0" },
+          { label: "Score ≥ 0.95", sql_patch: "suitability_score >= 0.95" }
+        ]
       },
       preset_buffer: {
         name: "Max Buffer Setback (≥1.5km from Receptors)",
         prompt: "Filter sites with maximal buffer (>=1.5km) from schools and residential meshblocks",
         sql: "SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, geometry\nFROM read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')\nWHERE dist_to_sensitive_km >= 1.5\nORDER BY suitability_score DESC;",
-        explanation: "Filtered candidate sites enforcing strict ≥1.5km statutory acoustic and environmental buffers from sensitive receptors."
+        explanation: "Filtered candidate sites enforcing strict ≥1.5km statutory acoustic and environmental buffers from sensitive receptors.",
+        issues: ["Statutory buffer constraint (≥1.5km) applied nationally across all candidate hubs."],
+        questions: ["Would you like to enforce minimum land parcel size alongside the acoustic buffer?"],
+        recommendations: [
+          { label: "+ Min Area ≥ 15 ha", sql_patch: "area_ha >= 15.0" },
+          { label: "Substation ≤ 1.0 km", sql_patch: "dist_to_substation_km <= 1.0" }
+        ]
+      },
+      preset_hyperscale: {
+        name: "Top Hyperscale Scale (≥20ha, Score ≥ 0.95)",
+        prompt: "Show top hyperscale candidate sites with area >= 20 ha and suitability score >= 0.95",
+        sql: "SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, geometry\nFROM read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')\nWHERE area_ha >= 20.0 AND suitability_score >= 0.95\nORDER BY suitability_score DESC;",
+        explanation: "Identified premier national hyperscale sites (≥20 ha) achieving top-tier MCDA composite scores (≥0.95).",
+        issues: ["Strict dual filter on large land parcel (≥20 ha) and high composite score (≥0.95)."],
+        questions: ["Would you like to examine transmission connection distances for these campuses?"],
+        recommendations: [
+          { label: "Score ≥ 0.90 (Broader)", sql_patch: "suitability_score >= 0.90" },
+          { label: "+ NSW Only", sql_patch: "state_name = 'New South Wales'" }
+        ]
+      },
+      preset_flat: {
+        name: "Low-Slope & Flat Sites (Slope ≤ 2.0%, Area ≥ 15ha)",
+        prompt: "Find candidate sites with flat terrain (slope <= 2.0%) and area >= 15 ha",
+        sql: "SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, geometry\nFROM read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')\nWHERE slope_pct <= 2.0 AND area_ha >= 15.0\nORDER BY suitability_score DESC;",
+        explanation: "Selected flat candidate sites (slope grade ≤ 2.0%) minimizing cut-and-fill civil earthworks for large slab construction.",
+        issues: ["Civil construction earthworks optimization constraint applied."],
+        questions: ["Would you like to add proximity to high-voltage transmission lines?"],
+        recommendations: [
+          { label: "Substation ≤ 1.0 km", sql_patch: "dist_to_substation_km <= 1.0" },
+          { label: "Water ≤ 2.0 km", sql_patch: "dist_to_wwtw_km <= 2.0" }
+        ]
+      },
+      preset_hydro_storage: {
+        name: "Renewable Grid Storage (Hydro ≥ 50 MWh, Substation ≤ 1.0km)",
+        prompt: "Find candidate sites with pumped hydro capacity >= 50 MWh and substation <= 1.0 km",
+        sql: "SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, pumped_hydro_capacity_mwh, geometry\nFROM read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')\nWHERE pumped_hydro_capacity_mwh >= 50.0 AND dist_to_substation_km <= 1.0\nORDER BY suitability_score DESC;",
+        explanation: "Targeted sites connected to high-capacity pumped hydro energy storage loops (≥50 MWh) within 1.0km of transmission substations.",
+        issues: ["Clean energy firming constraint applied."],
+        questions: ["Would you like to filter to a minimum parcel area?"],
+        recommendations: [
+          { label: "Area ≥ 20 ha", sql_patch: "area_ha >= 20.0" },
+          { label: "Water ≤ 2.0 km", sql_patch: "dist_to_wwtw_km <= 2.0" }
+        ]
+      },
+      preset_national_top: {
+        name: "National Top Tier Candidates (Score ≥ 0.95)",
+        prompt: "Identify all national top tier candidate hubs with composite suitability score >= 0.95",
+        sql: "SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, geometry\nFROM read_parquet('s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet')\nWHERE suitability_score >= 0.95\nORDER BY suitability_score DESC;",
+        explanation: "National ranking of top tier data center siting candidate hubs scoring ≥0.95 across power, water, land, and buffer criteria.",
+        issues: ["Ranked purely by composite 5-tier MCDA suitability model across all 8 states & territories."],
+        questions: ["Would you like to filter to candidate hubs in a specific jurisdiction?"],
+        recommendations: [
+          { label: "+ NSW Hubs", sql_patch: "state_name = 'New South Wales'" },
+          { label: "+ VIC Hubs", sql_patch: "state_name = 'Victoria'" }
+        ]
       }
     };
 
@@ -4499,6 +4621,83 @@
       delBtn.style.display = isUserQuery ? 'inline-block' : 'none';
     }
 
+    function setAiPrompt(text) {
+      const input = document.getElementById('ai-prompt-input');
+      if (input) {
+        input.value = text;
+        input.focus();
+      }
+    }
+
+    function renderClarificationFeedback(issues, questions, recommendations) {
+      const container = document.getElementById('ai-clarification-container');
+      const issuesList = document.getElementById('ai-issues-list');
+      const questionsList = document.getElementById('ai-questions-list');
+      const chipsContainer = document.getElementById('ai-recommendations-chips');
+      if (!container || !issuesList || !questionsList || !chipsContainer) return;
+
+      const hasIssues = issues && issues.length > 0;
+      const hasQuestions = questions && questions.length > 0;
+      const hasRecs = recommendations && recommendations.length > 0;
+
+      if (!hasIssues && !hasQuestions && !hasRecs) {
+        container.style.display = 'none';
+        return;
+      }
+
+      container.style.display = 'block';
+
+      // Issues
+      const issuesSection = document.getElementById('ai-issues-section');
+      if (issuesSection) {
+        issuesSection.style.display = hasIssues ? 'block' : 'none';
+        issuesList.innerHTML = (issues || []).map(i => `<li>${i}</li>`).join('');
+      }
+
+      // Questions
+      const questionsSection = document.getElementById('ai-questions-section');
+      if (questionsSection) {
+        questionsSection.style.display = (hasQuestions || hasRecs) ? 'block' : 'none';
+        questionsList.innerHTML = (questions || []).map(q => `<li>${q}</li>`).join('');
+      }
+
+      // Actionable recommendation chips
+      chipsContainer.innerHTML = '';
+      (recommendations || []).forEach(r => {
+        const chip = document.createElement('span');
+        chip.className = 'preset-chip';
+        chip.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+        chip.style.color = '#38bdf8';
+        chip.textContent = r.label;
+        chip.title = `Apply refinement: ${r.sql_patch}`;
+        chip.onclick = () => applyRecommendationPatch(r.sql_patch);
+        chipsContainer.appendChild(chip);
+      });
+    }
+
+    function applyRecommendationPatch(patch) {
+      const editor = document.getElementById('sql-code-editor');
+      if (!editor) return;
+      let sql = editor.value || '';
+      if (!sql.includes('WHERE')) {
+        sql = sql.replace(/ORDER BY/i, `WHERE ${patch}\nORDER BY`);
+      } else if (!sql.includes(patch)) {
+        sql = sql.replace(/WHERE\s+/i, `WHERE ${patch} AND `);
+      }
+      editor.value = sql;
+      const badge = document.getElementById('ai-validation-badge');
+      if (badge) {
+        badge.textContent = '✏️ SQL Modified — Click Run SQL';
+        badge.style.color = '#fbbf24';
+      }
+      const previewMatches = executeDuckDbSqlFilter(sql).length;
+      const countBadge = document.getElementById('ai-result-count-badge');
+      if (countBadge) {
+        countBadge.textContent = `${previewMatches} ${previewMatches === 1 ? 'Site' : 'Sites'} in Preview`;
+        countBadge.style.color = previewMatches > 0 ? '#38bdf8' : '#f87171';
+      }
+    }
+
     function onSavedQuerySelected(val) {
       updateDeleteButtonVisibility();
       if (!val) return;
@@ -4509,8 +4708,23 @@
         const editor = document.getElementById('sql-code-editor');
         if (editor) editor.value = preset.sql;
         document.getElementById('sql-explanation').textContent = preset.explanation;
+        
+        renderClarificationFeedback(preset.issues || [], preset.questions || [], preset.recommendations || []);
+        
+        const badge = document.getElementById('ai-validation-badge');
+        if (badge) {
+          badge.textContent = '⏳ Preset Ready — Click Run SQL to Execute';
+          badge.style.color = '#38bdf8';
+        }
+        
+        const previewMatches = executeDuckDbSqlFilter(preset.sql, preset.prompt).length;
+        const countBadge = document.getElementById('ai-result-count-badge');
+        if (countBadge) {
+          countBadge.textContent = `${previewMatches} ${previewMatches === 1 ? 'Site' : 'Sites'} Match Preview`;
+          countBadge.style.color = previewMatches > 0 ? '#34d399' : '#f87171';
+        }
+
         document.getElementById('sql-output').style.display = 'block';
-        runEditedSqlQuery();
       } else if (val.startsWith('user_')) {
         const saved = getSavedQueriesFromCache();
         const found = saved.find(q => q.id === val);
@@ -4519,8 +4733,27 @@
           const editor = document.getElementById('sql-code-editor');
           if (editor) editor.value = found.sql || '';
           document.getElementById('sql-explanation').textContent = found.explanation || `Custom query: ${found.name}`;
+          
+          renderClarificationFeedback(
+            ["Custom user query loaded from local browser cache."],
+            ["You can freely edit or refine criteria before execution."],
+            []
+          );
+
+          const badge = document.getElementById('ai-validation-badge');
+          if (badge) {
+            badge.textContent = '⏳ Saved Query Ready — Click Run SQL';
+            badge.style.color = '#38bdf8';
+          }
+          
+          const previewMatches = executeDuckDbSqlFilter(found.sql, found.prompt).length;
+          const countBadge = document.getElementById('ai-result-count-badge');
+          if (countBadge) {
+            countBadge.textContent = `${previewMatches} ${previewMatches === 1 ? 'Site' : 'Sites'} Match Preview`;
+            countBadge.style.color = previewMatches > 0 ? '#34d399' : '#f87171';
+          }
+
           document.getElementById('sql-output').style.display = 'block';
-          runEditedSqlQuery();
         }
       }
     }
@@ -4585,70 +4818,130 @@
       const lowerSql = (sqlText || '').toLowerCase();
       const lowerQ = (naturalQuery || '').toLowerCase();
 
-      return rawCandidatesData.filter(c => {
+      // 1. Parse State Filters (handles OR, IN, and single state)
+      let allowedStates = null;
+      const stateMatchIn = lowerSql.match(/state_name\s+in\s*\(([^)]+)\)/);
+      if (stateMatchIn) {
+        allowedStates = stateMatchIn[1].split(',').map(s => s.trim().replace(/['"]/g, '').toLowerCase());
+      } else if (lowerSql.includes('state_name') && lowerSql.includes(' or ')) {
+        const matches = Array.from(lowerSql.matchAll(/state_name\s*=\s*['"]([^'"]+)['"]/g));
+        if (matches.length > 0) {
+          allowedStates = matches.map(m => m[1].trim().toLowerCase());
+        }
+      } else {
+        const singleState = lowerSql.match(/state_name\s*=\s*['"]([^'"]+)['"]/);
+        if (singleState) {
+          allowedStates = [singleState[1].trim().toLowerCase()];
+        }
+      }
+
+      // If state not explicit in SQL, check natural query keywords
+      if (!allowedStates && lowerQ) {
+        const stateKeywords = {
+          'new south wales': ['nsw', 'new south wales', 'hunter', 'newcastle', 'lake macquarie'],
+          'victoria': ['vic', 'victoria', 'latrobe', 'morwell', 'traralgon', 'moe'],
+          'queensland': ['qld', 'queensland', 'gladstone', 'yarwun', 'calliope'],
+          'western australia': ['wa', 'western australia', 'collie'],
+          'australian capital territory': ['act', 'canberra', 'fyshwick', 'hume'],
+          'northern territory': ['nt', 'northern territory', 'darwin', 'east arm'],
+          'south australia': ['sa', 'south australia', 'port augusta'],
+          'tasmania': ['tas', 'tasmania', 'devonport']
+        };
+        const detected = [];
+        for (const [st, kws] of Object.entries(stateKeywords)) {
+          if (kws.some(k => new RegExp(`\\b${k}\\b`, 'i').test(lowerQ))) {
+            detected.push(st);
+          }
+        }
+        if (detected.length > 0) allowedStates = detected;
+      }
+
+      // 2. Parse Town filter (e.g. town_name = '...')
+      let allowedTown = null;
+      const townMatch = lowerSql.match(/town_name\s*=\s*['"]([^'"]+)['"]/);
+      if (townMatch) allowedTown = townMatch[1].trim().toLowerCase();
+
+      // 3. Helper to extract numeric conditions for field
+      function extractConditions(field) {
+        const regex = new RegExp(`${field}\\s*(<=|>=|<|>|=)\\s*(\\d+(?:\\.\\d+)?)`, 'g');
+        const conds = [];
+        let m;
+        while ((m = regex.exec(lowerSql)) !== null) {
+          conds.push({ op: m[1], val: parseFloat(m[2]) });
+        }
+        return conds;
+      }
+
+      const subConds = extractConditions('dist_to_substation_km');
+      const areaConds = extractConditions('area_ha');
+      const sensConds = extractConditions('dist_to_sensitive_km');
+      const wwtwConds = extractConditions('dist_to_wwtw_km');
+      const slopeConds = extractConditions('slope_pct');
+      const scoreConds = extractConditions('suitability_score');
+      const hazConds = extractConditions('hazard_score');
+      const hydroConds = extractConditions('pumped_hydro_capacity_mwh');
+
+      function testOps(val, conds) {
+        if (val === undefined || val === null) return true;
+        for (const c of conds) {
+          if (c.op === '<=' && !(val <= c.val)) return false;
+          if (c.op === '<' && !(val < c.val)) return false;
+          if (c.op === '>=' && !(val >= c.val)) return false;
+          if (c.op === '>' && !(val > c.val)) return false;
+          if (c.op === '=' && !(Math.abs(val - c.val) < 1e-4)) return false;
+        }
+        return true;
+      }
+
+      let results = rawCandidatesData.filter(c => {
         // State Filter
-        if (lowerSql.includes("state_name = 'new south wales'") || lowerQ.includes('nsw')) {
-          if (c.state_name !== 'New South Wales') return false;
-        }
-        if (lowerSql.includes("state_name = 'victoria'") || lowerQ.includes('vic')) {
-          if (c.state_name !== 'Victoria') return false;
-        }
-        if (lowerSql.includes("state_name = 'queensland'") || lowerQ.includes('qld')) {
-          if (c.state_name !== 'Queensland') return false;
-        }
-        if (lowerSql.includes("state_name = 'western australia'") || lowerQ.includes('wa')) {
-          if (c.state_name !== 'Western Australia') return false;
-        }
-        if (lowerSql.includes("state_name = 'australian capital territory'") || lowerQ.includes('act')) {
-          if (c.state_name !== 'Australian Capital Territory') return false;
-        }
-        if (lowerSql.includes("state_name = 'northern territory'") || lowerQ.includes('nt')) {
-          if (c.state_name !== 'Northern Territory') return false;
-        }
-        if (lowerSql.includes("state_name = 'south australia'") || lowerQ.includes('sa')) {
-          if (c.state_name !== 'South Australia') return false;
-        }
-        if (lowerSql.includes("state_name = 'tasmania'") || lowerQ.includes('tas')) {
-          if (c.state_name !== 'Tasmania') return false;
+        if (allowedStates && allowedStates.length > 0) {
+          const cState = (c.state_name || '').toLowerCase();
+          if (!allowedStates.some(st => cState.includes(st) || st.includes(cState))) {
+            return false;
+          }
         }
 
-        // Substation distance: dist_to_substation_km <= X
-        const subMatch = lowerSql.match(/dist_to_substation_km\s*<=\s*(\d+(?:\.\d+)?)/);
-        if (subMatch) {
-          const maxDist = parseFloat(subMatch[1]);
-          if (c.dist_to_substation_km > maxDist) return false;
+        // Town Filter
+        if (allowedTown) {
+          const cTown = (c.town_name || '').toLowerCase();
+          if (!cTown.includes(allowedTown)) return false;
         }
 
-        // Area: area_ha >= X
-        const areaMatch = lowerSql.match(/area_ha\s*>=\s*(\d+(?:\.\d+)?)/);
-        if (areaMatch) {
-          const minArea = parseFloat(areaMatch[1]);
-          if (c.area_ha < minArea) return false;
-        }
-
-        // Sensitive receptor buffer: dist_to_sensitive_km >= X
-        const sensMatch = lowerSql.match(/dist_to_sensitive_km\s*>=\s*(\d+(?:\.\d+)?)/);
-        if (sensMatch) {
-          const minSens = parseFloat(sensMatch[1]);
-          if (c.dist_to_sensitive_km < minSens) return false;
-        }
-
-        // Recycled water distance: dist_to_wwtw_km <= X
-        const wwtwMatch = lowerSql.match(/dist_to_wwtw_km\s*<=\s*(\d+(?:\.\d+)?)/);
-        if (wwtwMatch) {
-          const maxWwtw = parseFloat(wwtwMatch[1]);
-          if (c.dist_to_wwtw_km > maxWwtw) return false;
-        }
-
-        // Slope: slope_pct <= X
-        const slopeMatch = lowerSql.match(/slope_pct\s*<=\s*(\d+(?:\.\d+)?)/);
-        if (slopeMatch) {
-          const maxSlope = parseFloat(slopeMatch[1]);
-          if (c.slope_pct > maxSlope) return false;
-        }
+        // Numeric Filters
+        if (!testOps(c.dist_to_substation_km, subConds)) return false;
+        if (!testOps(c.area_ha, areaConds)) return false;
+        if (!testOps(c.dist_to_sensitive_km, sensConds)) return false;
+        if (!testOps(c.dist_to_wwtw_km, wwtwConds)) return false;
+        if (!testOps(c.slope_pct, slopeConds)) return false;
+        if (!testOps(c.suitability_score, scoreConds)) return false;
+        if (!testOps(c.hazard_score, hazConds)) return false;
+        if (!testOps(c.pumped_hydro_capacity_mwh, hydroConds)) return false;
 
         return true;
       });
+
+      // Sorting
+      if (lowerSql.includes('order by')) {
+        if (lowerSql.includes('suitability_score desc')) {
+          results.sort((a, b) => (b.suitability_score || 0) - (a.suitability_score || 0));
+        } else if (lowerSql.includes('suitability_score asc')) {
+          results.sort((a, b) => (a.suitability_score || 0) - (b.suitability_score || 0));
+        } else if (lowerSql.includes('area_ha desc')) {
+          results.sort((a, b) => (b.area_ha || 0) - (a.area_ha || 0));
+        } else if (lowerSql.includes('dist_to_substation_km asc')) {
+          results.sort((a, b) => (a.dist_to_substation_km || 0) - (b.dist_to_substation_km || 0));
+        }
+      }
+
+      // Limit
+      const limitMatch = lowerSql.match(/limit\s+(\d+)/);
+      if (limitMatch) {
+        const n = parseInt(limitMatch[1], 10);
+        if (!isNaN(n) && n > 0) results = results.slice(0, n);
+      }
+
+      return results;
     }
 
     function runEditedSqlQuery() {
@@ -4663,6 +4956,12 @@
       if (countBadge) {
         countBadge.textContent = `${matchCount} ${matchCount === 1 ? 'Site' : 'Sites'} Matched`;
         countBadge.style.color = matchCount > 0 ? '#34d399' : '#f87171';
+      }
+
+      const valBadge = document.getElementById('ai-validation-badge');
+      if (valBadge) {
+        valBadge.textContent = '✅ Executed on Map & Table';
+        valBadge.style.color = '#34d399';
       }
 
       applyAiFilterToMap();
@@ -4723,37 +5022,219 @@
       openLayerTable('national_candidates');
     }
 
-    async function submitAiQuery() {
+    // Step 1: Translate Natural Language to Spatial SQL & Check for Issues
+    async function translatePromptToSql() {
       const input = document.getElementById('ai-prompt-input');
       const btn = document.getElementById('ask-btn');
-      const query = (input.value || '').trim();
+      const query = (input ? input.value : '').trim();
       if (!query) return;
 
       btn.disabled = true;
-      btn.innerHTML = '<span>⚡ Translating & Executing...</span>';
+      btn.innerHTML = '<span>⚡ Translating & Analyzing Issues...</span>';
 
       try {
-        const response = await fetch(`${PROXY_URL}/api/ai/spatial-query`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: query, region: "national" })
-        });
+        let data = null;
+        try {
+          const response = await fetch(`${PROXY_URL}/api/ai/spatial-query`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: query, region: "national" })
+          });
+          if (response.ok) {
+            data = await response.json();
+          }
+        } catch (fetchErr) {
+          console.warn("Proxy spatial-query fetch failed, falling back to client translator:", fetchErr);
+        }
 
-        const data = await response.json();
+        // Client-side fallback translator if proxy is offline
+        if (!data || !data.translated_sql) {
+          data = translateNaturalLanguageClient(query);
+        }
+
         const editor = document.getElementById('sql-code-editor');
         if (editor) editor.value = data.translated_sql;
         document.getElementById('sql-explanation').textContent = data.explanation;
-        document.getElementById('sql-output').style.display = 'block';
 
-        // Execute query on map and table
-        runEditedSqlQuery();
+        // Render Issue Checks & Clarifying Questions for user review
+        renderClarificationFeedback(
+          data.issues_detected || [],
+          data.clarifying_questions || [],
+          data.recommendations || []
+        );
+
+        // Preview match count in badge without executing yet
+        const previewMatches = executeDuckDbSqlFilter(data.translated_sql, query).length;
+        const countBadge = document.getElementById('ai-result-count-badge');
+        if (countBadge) {
+          countBadge.textContent = `${previewMatches} ${previewMatches === 1 ? 'Site' : 'Sites'} in Preview`;
+          countBadge.style.color = previewMatches > 0 ? '#38bdf8' : '#f87171';
+        }
+
+        const valBadge = document.getElementById('ai-validation-badge');
+        if (valBadge) {
+          valBadge.textContent = '⏳ Review Pending — Click Run SQL to Execute';
+          valBadge.style.color = '#38bdf8';
+        }
+
+        // Show editable review card and smoothly scroll into view
+        const outputCard = document.getElementById('sql-output');
+        if (outputCard) {
+          outputCard.style.display = 'block';
+          outputCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
 
       } catch (err) {
-        console.error("AI query failed:", err);
+        console.error("AI translation failed:", err);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<span>⚡ Translate & Run Spatial Query</span>';
+        btn.innerHTML = '<span>✨ Step 1: Translate to Spatial SQL & Check Issues</span>';
       }
+    }
+
+    // Backward-compatible alias
+    function submitAiQuery() {
+      return translatePromptToSql();
+    }
+
+    // Client-side deterministic fallback translator
+    function translateNaturalLanguageClient(queryText) {
+      const lower_q = (queryText || '').toLowerCase();
+      const candidates_s3 = "s3://wherobots-user-storage/aura_siting/candidates/datacenter_candidates_national.parquet";
+      const clauses = [];
+      const explanationParts = [];
+      const issues = [];
+      const questions = [];
+      const recommendations = [];
+
+      // States & Regions
+      const regionMap = {
+        "New South Wales": ["nsw", "new south wales", "hunter", "newcastle", "lake macquarie", "teralba", "killingworth", "cockle creek", "west lake"],
+        "Victoria": ["vic", "victoria", "latrobe", "morwell", "traralgon", "moe"],
+        "Queensland": ["qld", "queensland", "gladstone", "yarwun", "calliope"],
+        "Western Australia": ["wa", "western australia", "collie"],
+        "Australian Capital Territory": ["act", "canberra", "fyshwick", "hume"],
+        "Northern Territory": ["nt", "northern territory", "darwin", "east arm"],
+        "South Australia": ["sa", "south australia", "port augusta"],
+        "Tasmania": ["tas", "tasmania", "devonport"]
+      };
+
+      const matchedStates = [];
+      for (const [st, aliases] of Object.entries(regionMap)) {
+        if (aliases.some(a => new RegExp(`\\b${a}\\b`, 'i').test(lower_q))) {
+          matchedStates.push(st);
+        }
+      }
+
+      if (matchedStates.length === 1) {
+        clauses.push(`state_name = '${matchedStates[0]}'`);
+        explanationParts.push(`Filtered to ${matchedStates[0]}`);
+      } else if (matchedStates.length > 1) {
+        clauses.push(`(${matchedStates.map(s => `state_name = '${s}'`).join(' OR ')})`);
+        explanationParts.push(`Filtered to states: ${matchedStates.join(', ')}`);
+      } else {
+        issues.push("Geographic boundary unspecified; defaulting to national scope across all 8 Australian States & Territories.");
+        questions.push("Would you like to narrow the search to a specific state (NSW, VIC, QLD, WA) or NEM region?");
+        recommendations.push({ label: "+ Focus on NSW", sql_patch: "state_name = 'New South Wales'" });
+        recommendations.push({ label: "+ Focus on Victoria", sql_patch: "state_name = 'Victoria'" });
+        recommendations.push({ label: "+ Focus on Queensland", sql_patch: "state_name = 'Queensland'" });
+      }
+
+      // Transmission
+      if (/substation|power|grid|kv|transmission|corridor/i.test(lower_q)) {
+        const m = lower_q.match(/(\d+(?:\.\d+)?)\s*(?:km|kilo)/);
+        const dist = m ? parseFloat(m[1]) : 1.5;
+        clauses.push(`dist_to_substation_km <= ${dist}`);
+        explanationParts.push(`within ${dist}km of high-voltage transmission`);
+        if (!m) {
+          issues.push("Transmission buffer defaulted to ≤ 1.5 km.");
+          questions.push("Transmission buffer defaulted to ≤ 1.5 km. Would you prefer a direct adjacent connection (≤ 0.5 km)?");
+          recommendations.push({ label: "Substation ≤ 0.5 km", sql_patch: "dist_to_substation_km <= 0.5" });
+        }
+      }
+
+      // Area
+      if (/ha|hectare|acres|area|parcel|large|hyperscale|scale/i.test(lower_q)) {
+        const m = lower_q.match(/(\d+(?:\.\d+)?)\s*(?:ha|hectare)/);
+        const area = m ? parseFloat(m[1]) : 15.0;
+        clauses.push(`area_ha >= ${area}`);
+        explanationParts.push(`minimum ${area} ha developable area`);
+        if (area >= 50.0) {
+          issues.push(`Largest parcel in national database is 44.5 ha in Teralba. Minimum ${area} ha will return 0 matches.`);
+          questions.push("Requested area exceeds candidate maximum. Should we relax the threshold to ≥ 25 ha?");
+          recommendations.push({ label: "Set Area ≥ 25 ha", sql_patch: "area_ha >= 25.0" });
+        } else if (!m) {
+          issues.push("Parcel area defaulted to 15 ha (hyperscale campus baseline).");
+          questions.push("What minimum parcel size is required for your facility (e.g. ≥ 15 ha for 100MW campus)?");
+          recommendations.push({ label: "Set Area ≥ 20 ha", sql_patch: "area_ha >= 20.0" });
+        }
+      }
+
+      // Receptors
+      if (/sensitive|receptor|school|hospital|residential|buffer|setback|acoustic/i.test(lower_q)) {
+        const m = lower_q.match(/(?:buffer|away|setback|from).*?(\d+(?:\.\d+)?)\s*(?:km|kilo)/);
+        const sens = m ? parseFloat(m[1]) : 1.0;
+        clauses.push(`dist_to_sensitive_km >= ${sens}`);
+        explanationParts.push(`at least ${sens}km setback from sensitive receptors`);
+        if (!m) {
+          issues.push("Receptor buffer defaulted to statutory baseline (≥ 1.0 km).");
+          questions.push("Setback set to ≥ 1.0 km. Should we enforce the strict Tier-1 buffer of ≥ 1.5 km?");
+          recommendations.push({ label: "Strict Buffer ≥ 1.5 km", sql_patch: "dist_to_sensitive_km >= 1.5" });
+        }
+      }
+
+      // Recycled water
+      if (/water|wwtw|recycled|cooling|effluent/i.test(lower_q)) {
+        const m = lower_q.match(/(?:water|wwtw|cooling).*?(\d+(?:\.\d+)?)\s*(?:km|kilo)/);
+        const wdist = m ? parseFloat(m[1]) : 2.0;
+        clauses.push(`dist_to_wwtw_km <= ${wdist}`);
+        explanationParts.push(`within ${wdist}km of recycled water infrastructure`);
+        if (!m) {
+          issues.push("Recycled water proximity defaulted to ≤ 2.0 km.");
+          questions.push("Recycled water defaulted to ≤ 2.0 km. Does your facility use air cooling or water cooling?");
+          recommendations.push({ label: "Recycled Water ≤ 1.0 km", sql_patch: "dist_to_wwtw_km <= 1.0" });
+        }
+      }
+
+      // Slope
+      if (/slope|grade|flat|terrain|topography/i.test(lower_q)) {
+        const m = lower_q.match(/(\d+(?:\.\d+)?)\s*%/);
+        const sl = m ? parseFloat(m[1]) : 2.5;
+        clauses.push(`slope_pct <= ${sl}`);
+        explanationParts.push(`terrain slope grade ≤ ${sl}%`);
+      }
+
+      // Score
+      if (/score|suitability|top|best|ranked/i.test(lower_q)) {
+        const m = lower_q.match(/(?:score|suitability)\s*(?:>=|>|over|at least)?\s*(\d+(?:\.\d+)?)/);
+        if (m) {
+          clauses.push(`suitability_score >= ${parseFloat(m[1])}`);
+          explanationParts.push(`MCDA composite score ≥ ${parseFloat(m[1])}`);
+        } else if (/top|best/i.test(lower_q)) {
+          clauses.push(`suitability_score >= 0.95`);
+          explanationParts.push(`top-tier candidates (score ≥ 0.95)`);
+          recommendations.push({ label: "Score ≥ 0.90 (Broader)", sql_patch: "suitability_score >= 0.90" });
+        }
+      }
+
+      // Pumped Hydro
+      if (/pumped hydro|hydro|firming|storage|battery/i.test(lower_q)) {
+        clauses.push(`pumped_hydro_capacity_mwh >= 50.0`);
+        explanationParts.push(`pumped hydro storage capacity ≥ 50 MWh`);
+      }
+
+      const whereStmt = clauses.length > 0 ? `WHERE ${clauses.join(' AND ')}` : '';
+      const sql = `SELECT town_name, state_name, area_ha, dist_to_substation_km, dist_to_wwtw_km, dist_to_sensitive_km, slope_pct, suitability_score, geometry\nFROM read_parquet('${candidates_s3}')\n${whereStmt}\nORDER BY suitability_score DESC;`.trim();
+
+      const explanation = `Translated natural language query into DuckDB Spatial SQL. ${explanationParts.length > 0 ? explanationParts.join(', ') : 'Selected all candidates ranked by suitability score'}.`;
+
+      return {
+        translated_sql: sql,
+        explanation: explanation,
+        issues_detected: issues,
+        clarifying_questions: questions,
+        recommendations: recommendations
+      };
     }
   </script>
 </body>

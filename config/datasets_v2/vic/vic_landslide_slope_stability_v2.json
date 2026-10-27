@@ -5,7 +5,7 @@
   "dataset_name": "Victorian Geotechnical Slope Stability and Landslide Hazard Overlay",
   "source_agency": "Geological Survey of Victoria / DEECA",
   "portal": "Data.Vic / Vicmap Spatial Platform",
-  "service_type": "wfs",
+  "service_type": "geoserver_wfs",
   "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
   "layer_id": 3,
   "geometry_type": "MultiPolygon",

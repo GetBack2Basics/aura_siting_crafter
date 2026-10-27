@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from pydantic import BaseModel, Field
 from src.geolibre_proxy.catalog_manager import CatalogManager
 from src.geolibre_proxy.ai_spatial_agent import SpatialAiAgent
@@ -19,6 +19,8 @@ app = FastAPI(
     title="AURA Siting GeoLibre Spatial AI Gateway",
     version="2.5.0",
     description="Conversational Natural Language to DuckDB Spatial SQL proxy for GeoLibre WebGIS",
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
 )
 
 # CORS middleware for GeoLibre WebGIS client
@@ -36,11 +38,56 @@ RUNNER_DIR = os.path.join(BASE_DIR, "runner")
 
 @app.get("/")
 def serve_webgis_root():
-    """Serves the main GeoLibre WebGIS application index.html."""
+    """Serves the main GeoLibre WebGIS application map.html."""
+    map_path = os.path.join(FRONTEND_DIR, "map.html")
+    if os.path.exists(map_path):
+        return FileResponse(map_path, media_type="text/html")
     index_path = os.path.join(FRONTEND_DIR, "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path, media_type="text/html")
     return {"status": "ok", "service": "geolibre-spatial-ai-proxy"}
+
+@app.get("/docs", include_in_schema=False)
+@app.get("/docs/", include_in_schema=False)
+def redirect_docs_root():
+    """Redirects /docs root to the automated data QA dashboard."""
+    return RedirectResponse(url="/data_qa.html")
+
+@app.get("/{filename}.html")
+def serve_frontend_html(filename: str):
+    """Serves any frontend HTML file (e.g. map.html, index.html, data_qa.html, data_lineage_audit.html)."""
+    fp = os.path.join(FRONTEND_DIR, f"{filename}.html")
+    if os.path.exists(fp) and os.path.isfile(fp):
+        return FileResponse(fp, media_type="text/html")
+    docs_qa_fp = os.path.join(FRONTEND_DIR, "docs", "qa", f"{filename}.html")
+    if os.path.exists(docs_qa_fp) and os.path.isfile(docs_qa_fp):
+        return FileResponse(docs_qa_fp, media_type="text/html")
+    raise HTTPException(status_code=404, detail=f"Frontend page '{filename}.html' not found")
+
+@app.get("/banner.png")
+def serve_banner_png():
+    """Serves project branding banner."""
+    bp = os.path.join(FRONTEND_DIR, "banner.png")
+    if os.path.exists(bp):
+        return FileResponse(bp, media_type="image/png")
+    raise HTTPException(status_code=404, detail="banner.png not found")
+
+# Static directory mounts for assets, projects, docs, and test harnesses
+_assets_dir = os.path.join(FRONTEND_DIR, "assets")
+if os.path.exists(_assets_dir):
+    app.mount("/assets", StaticFiles(directory=_assets_dir), name="assets")
+
+_projects_dir = os.path.join(FRONTEND_DIR, "projects")
+if os.path.exists(_projects_dir):
+    app.mount("/projects", StaticFiles(directory=_projects_dir), name="projects")
+
+_docs_dir = os.path.join(FRONTEND_DIR, "docs")
+if os.path.exists(_docs_dir):
+    app.mount("/docs", StaticFiles(directory=_docs_dir, html=True), name="docs")
+
+_tests_dir = os.path.join(FRONTEND_DIR, "tests")
+if os.path.exists(_tests_dir):
+    app.mount("/tests", StaticFiles(directory=_tests_dir, html=True), name="tests")
 
 @app.get("/aura-siting-crafter.geolibre.json")
 def serve_geolibre_json():
@@ -209,8 +256,10 @@ def get_catalog():
 @app.post("/api/ai/spatial-query", response_model=SpatialQueryResponse)
 def handle_spatial_query(request: SpatialQueryRequest):
     """Translates a natural language question into DuckDB Spatial SQL querying live S3 data."""
-    if not request.query.strip():
+    text = request.effective_query
+    if not text:
         raise HTTPException(status_code=400, detail="Query string cannot be empty")
+    request.query = text
     return ai_agent.translate_query(request)
 
 

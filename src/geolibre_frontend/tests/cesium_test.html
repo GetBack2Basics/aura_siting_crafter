@@ -588,11 +588,12 @@
       </div>
 
       <!-- Overall Survey Dataset Lineage -->
-      <div style="font-size: 10px; font-weight: 800; color: var(--neon-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
-        📁 Authoritative Dataset Lineage
+      <div style="font-size: 10px; font-weight: 800; color: var(--neon-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+        <span>📁 <span id="statFormatTitle">Authoritative Dataset Lineage</span></span>
+        <span class="badge-chip" id="statFormatBadge" style="background: rgba(56,189,248,0.2); color: var(--neon-cyan);">COPC</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">Total Points (Overall)</span>
+        <span class="stat-label">Total in Dataset</span>
         <span class="stat-val" id="statTotalOverall" style="color: var(--neon-green); font-weight: 700;">4,808,911 pts</span>
       </div>
       <div class="stat-row">
@@ -609,36 +610,36 @@
       </div>
       <div class="stat-row">
         <span class="stat-label">Primary CRS</span>
-        <span class="stat-val">EPSG:7856 (MGA 56)</span>
+        <span class="stat-val" id="statPrimaryCrs">EPSG:7856 (MGA 56)</span>
       </div>
       <div class="stat-row">
         <span class="stat-label">Vertical Datum</span>
-        <span class="stat-val">AHD (Meters)</span>
+        <span class="stat-val" id="statVertDatum">AHD (Meters)</span>
       </div>
       <div class="stat-row">
         <span class="stat-label">AHD Elevation Range</span>
-        <span class="stat-val">-0.37m / 42.99m</span>
+        <span class="stat-val" id="statElevRange">-0.37m / 42.99m</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">COPC File</span>
-        <span class="stat-val">lake_macquarie_elvis.copc.laz</span>
+        <span class="stat-label">Active Source File</span>
+        <span class="stat-val" id="statSourceFile" style="font-size: 10px;">lake_macquarie_elvis.copc.laz</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">COPC File Size</span>
-        <span class="stat-val">12.4 MB (scale 0.001)</span>
+        <span class="stat-label">Source File Size</span>
+        <span class="stat-val" id="statSourceFileSize">12.4 MB (scale 0.001)</span>
       </div>
       <div class="stat-row">
-        <span class="stat-label">LOD Octree Index</span>
-        <span class="stat-val">cloud.js (1,241 nodes)</span>
+        <span class="stat-label">Index Structure</span>
+        <span class="stat-val" id="statIndexType">cloud.js (1,241 LOD nodes)</span>
       </div>
       <div class="stat-row">
         <span class="stat-label">Live Storage Root</span>
-        <span class="stat-val">gs://aura-siting-crafter-geolibre-app</span>
+        <span class="stat-val" id="statStorageRoot">gs://aura-siting-crafter-geolibre-app</span>
       </div>
     </div>
 
     <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 10px; color: #94a3b8; line-height: 1.5;">
-      ⚡ <strong>Live GCS Pipeline</strong>: Streamed directly from <a href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz" target="_blank" style="color: var(--neon-cyan); text-decoration: none;">lake_macquarie_elvis.copc.laz</a> and Potree LOD Octree.
+      ⚡ <strong>Live GCS Pipeline</strong>: <span id="statPipelineDesc">Streamed directly from <a id="statPipelineLink" href="https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz" target="_blank" style="color: var(--neon-cyan); text-decoration: none;">lake_macquarie_elvis.copc.laz</a> and Potree LOD Octree.</span>
     </div>
   </div>
 
@@ -1185,8 +1186,122 @@
       });
     }
 
+    const FORMAT_METRICS = {
+      copc: {
+        title: "COPC Point Cloud",
+        badge: "COPC 1.0",
+        sourceFile: "lake_macquarie_elvis.copc.laz",
+        fileSize: "12.4 MB (scale 0.001)",
+        indexType: "LAZ VLR Index (Cloud-Optimized)",
+        totalDesc: "4,808,911 pts",
+        totalCount: 4808911,
+        elevRange: "-0.37m / 42.99m AHD",
+        link: "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
+        descText: "Streamed directly from lake_macquarie_elvis.copc.laz via GCS range requests."
+      },
+      octree: {
+        title: "Potree LOD Octree",
+        badge: "POTREE 1.8",
+        sourceFile: "cloud.js + data/r*.bin",
+        fileSize: "18.4 MB (1,241 LOD nodes)",
+        indexType: "cloud.js (Hierarchical Octree)",
+        totalDesc: "4,808,911 pts",
+        totalCount: 4808911,
+        elevRange: "-0.37m / 42.99m AHD",
+        link: "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
+        descText: "Progressive multi-resolution hierarchical octree streaming (85 nodes • 860,000 pts)."
+      },
+      dem_mesh: {
+        title: "3D Bare-Earth DEM Mesh",
+        badge: "DEM 1.0M TIN",
+        sourceFile: "nsw_elvis_lidar_1m_dem_v2.tif",
+        fileSize: "14.2 MB (GeoTIFF Grid)",
+        indexType: "Triangulated Irregular Network (TIN Mesh)",
+        totalDesc: "4,225 vertices (8,192 Triangles)",
+        totalCount: 4225,
+        elevRange: "-0.37m / 42.99m AHD",
+        link: "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/geotiff/lake_macquarie_dem_1m.tif",
+        descText: "3D Triangulated Bare-Earth Hypsometric Terrain Surface."
+      },
+      dsm_mesh: {
+        title: "3D Canopy DSM Mesh",
+        badge: "DSM 1.0M TIN",
+        sourceFile: "nsw_elvis_lidar_1m_dsm_v2.tif",
+        fileSize: "14.8 MB (GeoTIFF Grid)",
+        indexType: "Canopy & Structure TIN Mesh",
+        totalDesc: "4,225 vertices (8,192 Triangles)",
+        totalCount: 4225,
+        elevRange: "-0.37m / 50.99m AHD",
+        link: "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/geotiff/lake_macquarie_dsm_1m.tif",
+        descText: "3D Triangulated First-Return Canopy & Built Structure Mesh."
+      },
+      laz: {
+        title: "Raw ASPRS LAZ",
+        badge: "ASPRS LAS 1.4",
+        sourceFile: "LakeMacquarie201409-LID1-C3-AHD_3666336_56_0002_0002.laz",
+        fileSize: "13.8 MB (Lossless compressed)",
+        indexType: "Standard ASPRS LAS 1.4 Binary Chunk",
+        totalDesc: "4,808,911 pts",
+        totalCount: 4808911,
+        elevRange: "-0.37m / 42.99m AHD",
+        link: "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
+        descText: "Lossless ASPRS LAS 1.4 LiDAR surveyed points."
+      },
+      custom_tileset: {
+        title: "Custom 3D Tileset",
+        badge: "3D TILES",
+        sourceFile: "External 3D Tiles / Ion",
+        fileSize: "Dynamic Stream",
+        indexType: "3D Tiles B3DM / PNTS / I3DM",
+        totalDesc: "Dynamic Tile Nodes",
+        totalCount: 1000000,
+        elevRange: "Variable",
+        link: "#",
+        descText: "External 3D Tileset or Cesium Ion asset stream."
+      }
+    };
+
+    let currentFormatKey = 'copc';
+
+    function updateDatasetLineage(formatKey) {
+      currentFormatKey = formatKey || 'copc';
+      const meta = FORMAT_METRICS[currentFormatKey] || FORMAT_METRICS.copc;
+
+      const elTitle = document.getElementById('statFormatTitle');
+      if (elTitle) elTitle.innerText = meta.title;
+
+      const elBadge = document.getElementById('statFormatBadge');
+      if (elBadge) elBadge.innerText = meta.badge;
+
+      const elTotal = document.getElementById('statTotalOverall');
+      if (elTotal) elTotal.innerText = meta.totalDesc;
+
+      const elSource = document.getElementById('statSourceFile');
+      if (elSource) elSource.innerText = meta.sourceFile;
+
+      const elSize = document.getElementById('statSourceFileSize');
+      if (elSize) elSize.innerText = meta.fileSize;
+
+      const elIdx = document.getElementById('statIndexType');
+      if (elIdx) elIdx.innerText = meta.indexType;
+
+      const elElev = document.getElementById('statElevRange');
+      if (elElev) elElev.innerText = meta.elevRange;
+
+      const elDesc = document.getElementById('statPipelineDesc');
+      if (elDesc) {
+        elDesc.innerHTML = `${meta.descText} (<a href="${meta.link}" target="_blank" style="color: var(--neon-cyan); text-decoration: none;">${meta.sourceFile}</a>)`;
+      }
+    }
+
+    // Initialize Lineage with default format
+    updateDatasetLineage('copc');
+
     // Switch Format / Dataset
     window.switchFormat = function(format) {
+      currentFormatKey = format;
+      updateDatasetLineage(format);
+
       if (format === 'dem_mesh') {
         MeshPrimitives.dem_mesh.show = true;
         MeshPrimitives.dsm_mesh.show = false;

@@ -21,3 +21,6 @@ docs/data_verification_audit.json
 # OS files
 .DS_Store
 Thumbs.db
+
+# Scratch directory
+scratch/

@@ -650,64 +650,64 @@
       "national_cadastre_gnaf_v2": {
             "name": "Geoscape National Cadastre & G-NAF Parcel Fabric",
             "state": "national",
-            "endpoint": "https://services.ga.gov.au/gis/rest/services/Topographic_Base_Map/MapServer/0?f=json",
+            "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/8",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_cadastre_gnaf_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_featureserver",
             "type": "multipolygon",
-            "base_count": 15400000,
+            "base_count": 3357016,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
       "national_cyclone_hazard_tcha_v2": {
             "name": "Tropical Cyclone Hazard Assessment (TCHA) & AS/NZS 1170.2 Wind Regions",
             "state": "national",
-            "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1?f=json",
+            "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_cyclone_hazard_tcha_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_mapserver",
             "type": "polygon",
-            "base_count": 11,
+            "base_count": 9,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
       "national_electricity_grid_v2": {
             "name": "Geoscience Australia National Electricity Transmission Grid (>=66kV)",
             "state": "national",
-            "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2?f=json",
+            "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_electricity_grid_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_mapserver",
             "type": "linestring",
-            "base_count": 4820,
+            "base_count": 3147,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
       "national_healthcare_nhsd_v2": {
             "name": "National Health Services Directory (NHSD) Hospitals & Health Facilities",
             "state": "national",
-            "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=health",
+            "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/3",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_healthcare_nhsd_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_featureserver",
             "type": "point",
-            "base_count": 4218,
+            "base_count": 76629,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
       "national_schools_acara_v2": {
             "name": "ACARA National Schools Directory",
             "state": "national",
-            "endpoint": "https://data.gov.au/data/api/3/action/package_search?q=schools",
+            "endpoint": "https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Features_of_Interest_Category/FeatureServer/3",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_schools_acara_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_featureserver",
             "type": "point",
-            "base_count": 10842,
+            "base_count": 76629,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
       "national_seismic_hazard_nsha_v2": {
             "name": "National Seismic Hazard Assessment (NSHA) Ground Motion PGA (National)",
             "state": "national",
-            "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json",
+            "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0",
             "s3_path": "s3://wherobots-user-storage/aura_siting/national_seismic_hazard_nsha_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_mapserver",
             "type": "polygon",
             "base_count": 9,
             "hash": "ef0090b06033a9c1",
@@ -720,7 +720,7 @@
             "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_bionet_bv_map_v2.parquet",
             "service_type": "arcgis_featureserver",
             "type": "multipolygon",
-            "base_count": 7475,
+            "base_count": 53824,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
@@ -738,9 +738,9 @@
       "nsw_elvis_lidar_1m_dem_v2": {
             "name": "ELVIS NSW 1m High-Resolution LiDAR Digital Elevation Model & Contours",
             "state": "nsw",
-            "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+            "endpoint": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
             "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dem.parquet",
-            "service_type": "s3_geoparquet",
+            "service_type": "gcs_octree_dem",
             "type": "multipolygon",
             "base_count": 2840,
             "hash": "ef0090b06033a9c1",
@@ -763,9 +763,9 @@
       "nsw_elvis_lidar_1m_dsm_v2": {
             "name": "ELVIS NSW 1m High-Resolution Digital Surface Model (Canopy & Structure DSM)",
             "state": "nsw",
-            "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374296.zip",
+            "endpoint": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
             "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dsm.parquet",
-            "service_type": "s3_geoparquet",
+            "service_type": "gcs_octree_dsm",
             "type": "multipolygon",
             "base_count": 2840,
             "hash": "ef0090b06033a9c1",
@@ -788,9 +788,9 @@
       "nsw_elvis_lidar_contours_v2": {
             "name": "ELVIS NSW 0.5m/1m Topographic Elevation Contours Fabric",
             "state": "nsw",
-            "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+            "endpoint": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
             "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_contours.parquet",
-            "service_type": "s3_geoparquet",
+            "service_type": "gcs_contours",
             "type": "multilinestring",
             "base_count": 14820,
             "hash": "ef0090b06033a9c1",
@@ -813,9 +813,9 @@
       "nsw_elvis_lidar_laz_pointcloud_v2": {
             "name": "ELVIS NSW Classified 3D LiDAR Point Cloud (.LAZ / ASPRS Ground, Canopy & Structures)",
             "state": "nsw",
-            "endpoint": "https://elvis-downloads.s3.amazonaws.com/DATA_2374297.zip",
+            "endpoint": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
             "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/*.laz",
-            "service_type": "s3_laz",
+            "service_type": "gcs_copc_laz",
             "type": "multipoint",
             "base_count": 18450000,
             "hash": "ef0090b06033a9c1",
@@ -849,9 +849,9 @@
       "nsw_national_seismic_hazard_v2": {
             "name": "National Seismic Hazard Assessment (NSHA) Ground Motion PGA (NSW)",
             "state": "nsw",
-            "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0?f=json",
+            "endpoint": "https://services.ga.gov.au/gis/rest/services/National_Seismic_Hazard_Assessment_2018/MapServer/0",
             "s3_path": "s3://wherobots-user-storage/aura_siting/nsw_national_seismic_hazard_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_mapserver",
             "type": "polygon",
             "base_count": 9,
             "hash": "ef0090b06033a9c1",
@@ -871,20 +871,20 @@
       "qld_cyclone_hazard_tcha_v2": {
             "name": "Tropical Cyclone Hazard Assessment (TCHA) & AS/NZS 1170.2 Wind Regions",
             "state": "qld",
-            "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1?f=json",
+            "endpoint": "https://services.ga.gov.au/gis/rest/services/Tropical_Cyclone_Hazard_Assessment_2018/MapServer/1",
             "s3_path": "s3://wherobots-user-storage/aura_siting/qld_cyclone_hazard_tcha_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_mapserver",
             "type": "polygon",
-            "base_count": 11,
+            "base_count": 9,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
       "qld_landslide_susceptibility_v2": {
             "name": "Queensland State Planning Policy (SPP) Landslide Hazard Overlays",
             "state": "qld",
-            "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/GeoscientificInformation/SoilsAndLandResource/MapServer/51?f=json",
+            "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/GeoscientificInformation/SoilsAndLandResource/MapServer/51",
             "s3_path": "s3://wherobots-user-storage/aura_siting/qld_landslide_susceptibility_v2.parquet",
-            "service_type": "arcgis_featureserver",
+            "service_type": "arcgis_mapserver",
             "type": "multipolygon",
             "base_count": 132621,
             "hash": "ef0090b06033a9c1",
@@ -893,20 +893,20 @@
       "qld_regulated_vegetation_vma_v2": {
             "name": "Regulated Vegetation Management Map (Vegetation Management Act 1999)",
             "state": "qld",
-            "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Biota/VegetationManagement/MapServer/103?f=json",
+            "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/Biota/VegetationManagement/MapServer/103",
             "s3_path": "s3://wherobots-user-storage/aura_siting/qld_regulated_vegetation_vma_v2.parquet",
-            "service_type": "arcgis_featureserver",
+            "service_type": "arcgis_mapserver",
             "type": "multipolygon",
-            "base_count": 106931,
+            "base_count": 107291,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
       "qld_transmission_grid_v2": {
             "name": "Powerlink & Energex High-Voltage Transmission Grid (>=110kV)",
             "state": "qld",
-            "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2?f=json",
+            "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2",
             "s3_path": "s3://wherobots-user-storage/aura_siting/qld_transmission_grid_v2.parquet",
-            "service_type": "arcgis_featureserver",
+            "service_type": "arcgis_mapserver",
             "type": "linestring",
             "base_count": 3147,
             "hash": "ef0090b06033a9c1",
@@ -915,33 +915,33 @@
       "qld_waterway_barriers_hydro_v2": {
             "name": "Queensland Waterways for Waterway Barrier Works & Riparian Networks",
             "state": "qld",
-            "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/33?f=json",
+            "endpoint": "https://spatial-gis.information.qld.gov.au/arcgis/rest/services/InlandWaters/WaterCoursesAndBodies/MapServer/33",
             "s3_path": "s3://wherobots-user-storage/aura_siting/qld_waterway_barriers_hydro_v2.parquet",
-            "service_type": "arcgis_featureserver",
+            "service_type": "arcgis_mapserver",
             "type": "linestring",
-            "base_count": 55933,
+            "base_count": 4050422,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
       "sa_transmission_grid_electranet_v2": {
             "name": "ElectraNet & SA Power Networks High-Voltage Grid (>=132kV)",
             "state": "sa",
-            "endpoint": "https://data.sa.gov.au/data/api/3/action/package_list",
+            "endpoint": "https://services.ga.gov.au/gis/rest/services/Electricity_Infrastructure/MapServer/2",
             "s3_path": "s3://wherobots-user-storage/aura_siting/sa_transmission_grid_electranet_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_mapserver",
             "type": "linestring",
-            "base_count": 3250,
+            "base_count": 225,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
       "tas_transmission_grid_tasnetworks_v2": {
             "name": "TasNetworks High-Voltage Transmission Network (>=110kV)",
             "state": "tas",
-            "endpoint": "https://services.thelist.tas.gov.au/arcgis/rest/services/Public/Infrastructure/MapServer/4?f=json",
+            "endpoint": "https://services.thelist.tas.gov.au/arcgis/rest/services/Public/Infrastructure/MapServer/4",
             "s3_path": "s3://wherobots-user-storage/aura_siting/tas_transmission_grid_tasnetworks_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_mapserver",
             "type": "linestring",
-            "base_count": 89841,
+            "base_count": 89895,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
@@ -950,7 +950,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "s3_path": "s3://wherobots-user-storage/aura_siting/vic_hydro_watercourses_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "geoserver_wfs",
             "type": "linestring",
             "base_count": 8720,
             "hash": "ef0090b06033a9c1",
@@ -961,7 +961,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "s3_path": "s3://wherobots-user-storage/aura_siting/vic_landslide_slope_stability_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "geoserver_wfs",
             "type": "multipolygon",
             "base_count": 4610,
             "hash": "ef0090b06033a9c1",
@@ -972,7 +972,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "s3_path": "s3://wherobots-user-storage/aura_siting/vic_native_veg_nvim_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "geoserver_wfs",
             "type": "multipolygon",
             "base_count": 12450,
             "hash": "ef0090b06033a9c1",
@@ -983,7 +983,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "s3_path": "s3://wherobots-user-storage/aura_siting/vic_planning_scheme_zones_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "geoserver_wfs",
             "type": "multipolygon",
             "base_count": 5120,
             "hash": "ef0090b06033a9c1",
@@ -994,7 +994,7 @@
             "state": "vic",
             "endpoint": "https://opendata.maps.vic.gov.au/geoserver/wfs?service=WFS&version=2.0.0&request=GetCapabilities",
             "s3_path": "s3://wherobots-user-storage/aura_siting/vic_transmission_grid_vicgrid_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "geoserver_wfs",
             "type": "linestring",
             "base_count": 3250,
             "hash": "ef0090b06033a9c1",
@@ -1003,22 +1003,22 @@
       "wa_dbca_threatened_ecological_communities_v2": {
             "name": "DBCA Threatened Ecological Communities (TEC) & Priority Flora/Fauna",
             "state": "wa",
-            "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Environment/MapServer/23?f=json",
+            "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Environment/MapServer/23",
             "s3_path": "s3://wherobots-user-storage/aura_siting/wa_dbca_threatened_ecological_communities_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_mapserver",
             "type": "multipolygon",
-            "base_count": 5120,
+            "base_count": 124471,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       },
       "wa_transmission_grid_v2": {
             "name": "Western Power SWIS & Horizon Power Transmission Network (>=66kV)",
             "state": "wa",
-            "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/75?f=json",
+            "endpoint": "https://services.slip.wa.gov.au/public/rest/services/SLIP_Public_Services/Infrastructure_and_Utilities/MapServer/75",
             "s3_path": "s3://wherobots-user-storage/aura_siting/wa_transmission_grid_v2.parquet",
-            "service_type": "wfs",
+            "service_type": "arcgis_mapserver",
             "type": "linestring",
-            "base_count": 870,
+            "base_count": 26132,
             "hash": "ef0090b06033a9c1",
             "sync_date": "2026-09-08 12:00 UTC"
       }
@@ -1264,9 +1264,67 @@
       let s3Count = meta.base_count;
       let viewportCount = 0;
 
-      // 1. Attempt dynamic live count query on ArcGIS REST endpoints
+      // 1. WFS GeoServer Handler (e.g. Victorian Open Data Platform)
+      const WFS_LAYER_MAP = {
+        'vic_hydro_watercourses_v2': 'open-data-platform:vmlite_hy_watercourse',
+        'vic_planning_scheme_zones_v2': 'open-data-platform:plan_zone',
+        'vic_native_veg_nvim_v2': 'open-data-platform:sveg100',
+        'vic_landslide_slope_stability_v2': 'open-data-platform:shalld100_polygon',
+        'vic_transmission_grid_vicgrid_v2': 'open-data-platform:rez_2026'
+      };
+
+      const wfsTypeName = WFS_LAYER_MAP[datasetKey];
+      const isTrueWfs = (endpoint.includes('/geoserver/wfs') || Boolean(wfsTypeName)) && 
+                        !baseEndpoint.includes('MapServer') && 
+                        !baseEndpoint.includes('FeatureServer');
+
+      if (isTrueWfs) {
+        const typeName = wfsTypeName || 'open-data-platform:vmlite_hy_watercourse';
+        const wfsBase = endpoint.split('?')[0];
+
+        // 1a. Query live count via WFS resultType=hits
+        const hitsUrl = `${wfsBase}?service=WFS&version=2.0.0&request=GetFeature&typeNames=${typeName}&resultType=hits`;
+        try {
+          const hResp = await fetch(hitsUrl);
+          if (hResp.ok) {
+            const hText = await hResp.text();
+            const match = hText.match(/numberMatched=["'](\d+)["']/);
+            if (match) {
+              upstreamCount = parseInt(match[1], 10);
+            }
+          }
+        } catch (e) {
+          console.log("WFS hits query error:", e);
+        }
+
+        // 1b. Query live GeoJSON features (up to 500 features)
+        const dataUrl = `${wfsBase}?service=WFS&version=2.0.0&request=GetFeature&typeNames=${typeName}&outputFormat=application/json&count=500`;
+        try {
+          countBadge.textContent = 'Querying live WFS GeoServer...';
+          const resp = await fetch(dataUrl);
+          if (resp.ok) {
+            const data = await resp.json();
+            if (data && data.features && data.features.length > 0) {
+              loadedFeatures = data.features;
+              loadedFeatures.sort((a, b) => getFeatureMetricSize(b) - getFeatureMetricSize(a));
+              viewportCount = loadedFeatures.length;
+              if (data.totalFeatures && typeof data.totalFeatures === 'number') {
+                upstreamCount = data.totalFeatures;
+              }
+              renderLiveFeatures(loadedFeatures, viewportCount, s3Count, upstreamCount);
+              return;
+            }
+          }
+        } catch (e) {
+          console.log("WFS GeoJSON query error/CORS:", e);
+        }
+      }
+
+      // 2. Attempt dynamic live count query on ArcGIS REST endpoints
       if (baseEndpoint.includes('MapServer') || baseEndpoint.includes('FeatureServer')) {
-        const countUrl = `${baseEndpoint}/query?where=1=1&returnCountOnly=true&f=json`;
+        const whereSql = (datasetKey === 'sa_transmission_grid_electranet_v2') ? "STATE='SA'" : "1=1";
+        const whereParam = encodeURIComponent(whereSql);
+        const countUrl = `${baseEndpoint}/query?where=${whereParam}&returnCountOnly=true&f=json`;
         try {
           const cResp = await fetch(countUrl);
           if (cResp.ok) {
@@ -1279,11 +1337,22 @@
           console.log("Upstream count query error:", e);
         }
 
-        // 2. Attempt live GeoJSON query (up to 500 features)
-        const dataUrl = `${baseEndpoint}/query?where=1=1&outFields=*&f=geojson&resultRecordCount=500`;
+        // Adaptive Feature Loading:
+        // High-density polygon layers (e.g. WA DBCA TEC with 124,471 records & 78,000+ vertices)
+        // require calibrated feature counts (100) and maxAllowableOffset geometry generalization
+        // to prevent CloudFront 503 / gateway timeouts and browser lockup.
+        const isPolygon = (meta.type === 'multipolygon' || meta.type === 'polygon');
+        const reqCount = isPolygon ? 100 : 500;
+        const offsetParam = isPolygon ? '&maxAllowableOffset=0.0005' : '';
+        let dataUrl = `${baseEndpoint}/query?where=${whereParam}&outFields=*&f=geojson&resultRecordCount=${reqCount}${offsetParam}`;
         try {
           countBadge.textContent = 'Querying live REST...';
-          const resp = await fetch(dataUrl);
+          let resp = await fetch(dataUrl);
+          if (!resp.ok && isPolygon) {
+            // Fallback without generalization if endpoint strictly disallows maxAllowableOffset
+            dataUrl = `${baseEndpoint}/query?where=${whereParam}&outFields=*&f=geojson&resultRecordCount=100`;
+            resp = await fetch(dataUrl);
+          }
           if (resp.ok) {
             const data = await resp.json();
             if (data && data.features && data.features.length > 0) {
@@ -1292,9 +1361,6 @@
               loadedFeatures.sort((a, b) => getFeatureMetricSize(b) - getFeatureMetricSize(a));
               
               viewportCount = loadedFeatures.length;
-              const badgeText = `${viewportCount.toLocaleString()} | ${s3Count.toLocaleString()} | ${upstreamCount.toLocaleString()}`;
-              countBadge.textContent = badgeText;
-              countBadge.title = "Viewport : S3 Project Library : Rest/WMTS data source";
               renderLiveFeatures(loadedFeatures, viewportCount, s3Count, upstreamCount);
               return;
             }
@@ -1342,13 +1408,18 @@
         if (!f || !f.geometry) return;
         const geomType = f.geometry.type;
         const p = f.properties || {};
-        const featName = p.name || p.NAME || p.STATION_NAME || p.SUB_NAME || p.LABEL || p.SCHOOL_NAME || p.FACILITY_NAME || p.alternativelabel || `Station / Zone #${i+1}`;
-        const featVal = p.val || p.WIND_REGION || p.STATUS || p.VOLTAGE || p.CLASS || p.OBJECTID || p.objectid || p.buildingcomplextype || 'Zone Assessment';
+        const featName = p.name || p.NAME || p.STATION_NAME || p.SUB_NAME || p.LABEL || p.SCHOOL_NAME || p.FACILITY_NAME || p.alternativelabel || p.feature || p.rezname || p.plantno || p.planlabel || p.lotidstring || p.cadid || (p.ebs_boundary_id ? `DBCA TEC Boundary #${p.ebs_boundary_id}` : (p.ufi ? `Vicmap #${p.ufi}` : `Feature #${i+1}`));
+        const featVal = p.ebs_status || p.networktyp || (p.capacity_kv ? `${p.capacity_kv} kV` : '') || p.feature_type_code || p.FEATURE_TYPE_CODE || p.val || p.WIND_REGION || p.STATUS || p.status || p.VOLTAGE || p.CLASS || p.OBJECTID || p.objectid || p.zone_code || p.ZONE_CODE || p.buildingcomplextype || (p.size_mw ? `${p.size_mw} MW` : (p.area_ha ? `${Math.round(p.area_ha)} ha` : 'Spatial Feature'));
 
         if (geomType === 'LineString' || geomType === 'MultiLineString') {
           hasPolygonsOrLines = true;
-          L.geoJSON(f, { style: { color: "#0284c7", weight: 5, opacity: 0.95 } }).addTo(s3LayerGroup);
-          L.geoJSON(f, { style: { color: "#fbbf24", weight: 2.5, dashArray: "6, 6", opacity: 1.0 } }).addTo(liveLayerGroup);
+          const lineLayer = L.geoJSON(f, { style: { color: "#0284c7", weight: 4.5, opacity: 0.95 } });
+          lineLayer.bindPopup(`<strong>${featName}</strong><br><span style="color:#38bdf8;">${featVal}</span><br><span style="color:#94a3b8; font-size:0.75rem;">Type: ${geomType}</span>`);
+          lineLayer.addTo(s3LayerGroup);
+
+          const liveLine = L.geoJSON(f, { style: { color: "#fbbf24", weight: 2.5, dashArray: "6, 6", opacity: 1.0 } });
+          liveLine.bindPopup(`<strong>${featName}</strong><br><span style="color:#fbbf24;">${featVal}</span><br><span style="color:#94a3b8; font-size:0.75rem;">Type: ${geomType} (Live Upstream)</span>`);
+          liveLine.addTo(liveLayerGroup);
         } else if (geomType === 'Point' || geomType === 'MultiPoint') {
           hasPoints = true;
           let coords = f.geometry.coordinates;
@@ -1362,13 +1433,19 @@
           }
         } else if (geomType === 'Polygon' || geomType === 'MultiPolygon') {
           hasPolygonsOrLines = true;
-          L.geoJSON(f, { style: { color: "#0284c7", weight: 3, opacity: 0.9, fillColor: "#0284c7", fillOpacity: 0.15 } }).addTo(s3LayerGroup);
-          L.geoJSON(f, { style: { color: "#f43f5e", weight: 2, dashArray: "4, 4", fillColor: "#f43f5e", fillOpacity: 0.25 } }).addTo(liveLayerGroup);
+          const polySub = p.ebs_contact ? 'DBCA Species & Communities' : geomType;
+          const polyLayer = L.geoJSON(f, { style: { color: "#0284c7", weight: 3, opacity: 0.9, fillColor: "#0284c7", fillOpacity: 0.15 } });
+          polyLayer.bindPopup(`<strong>${featName}</strong><br><span style="color:#38bdf8;">${featVal}</span><br><span style="color:#94a3b8; font-size:0.75rem;">${polySub}</span>`);
+          polyLayer.addTo(s3LayerGroup);
+
+          const livePoly = L.geoJSON(f, { style: { color: "#f43f5e", weight: 2, dashArray: "4, 4", fillColor: "#f43f5e", fillOpacity: 0.25 } });
+          livePoly.bindPopup(`<strong>${featName}</strong><br><span style="color:#f43f5e;">${featVal}</span><br><span style="color:#94a3b8; font-size:0.75rem;">${polySub} (Live Upstream)</span>`);
+          livePoly.addTo(liveLayerGroup);
         }
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td style="color: #38bdf8; font-weight: bold;">${p.OBJECTID || p.objectid || p.id || i+1}</td>
+          <td style="color: #38bdf8; font-weight: bold;">${p.ufi || p.UFI || p.ebs_occ_unique || p.OBJECTID || p.objectid || p.id || i+1}</td>
           <td>${featName}</td>
           <td style="color: #34d399;">${featVal}</td>
           <td style="color: #cbd5e1;">${geomType}</td>

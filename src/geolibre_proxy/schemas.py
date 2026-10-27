@@ -6,11 +6,16 @@ from pydantic import BaseModel, Field
 
 
 class SpatialQueryRequest(BaseModel):
-    query: str = Field(..., description="Natural language spatial question or filtering criteria")
+    query: Optional[str] = Field(None, description="Natural language spatial question or filtering criteria")
+    prompt: Optional[str] = Field(None, description="Alias for natural language question or prompt")
     region: Optional[str] = Field("national", description="Target spatial region (e.g. national, hunter, latrobe, gladstone)")
     active_layers: Optional[List[str]] = Field(default_factory=list, description="IDs of active layers in GeoLibre viewport")
     openrouter_api_key: Optional[str] = Field(None, description="Optional user-provided OpenRouter BYOK key")
     model: Optional[str] = Field("gemini-2.5-flash", description="LLM model identifier")
+
+    @property
+    def effective_query(self) -> str:
+        return (self.query or self.prompt or "").strip()
 
 
 class SpatialQueryResponse(BaseModel):
@@ -20,6 +25,22 @@ class SpatialQueryResponse(BaseModel):
     explanation: str
     execution_engine: str = "DuckDB-WASM"
     suggested_viewport: Optional[Dict[str, Any]] = None
+    clarifying_questions: List[str] = Field(
+        default_factory=list,
+        description="Clarifying questions or suggestions to resolve ambiguity before execution"
+    )
+    issues_detected: List[str] = Field(
+        default_factory=list,
+        description="Potential issues, constraints conflicts, or edge cases detected in query"
+    )
+    recommendations: List[Dict[str, str]] = Field(
+        default_factory=list,
+        description="Actionable query recommendations with label and sql_patch"
+    )
+    confidence_score: float = Field(
+        1.0,
+        description="Confidence score between 0.0 and 1.0"
+    )
 
 
 class LayerCatalogItem(BaseModel):

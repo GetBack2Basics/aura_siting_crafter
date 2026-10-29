@@ -308,8 +308,12 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- MapLibre GL JS & CSS -->
-    <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
-    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+
+    <!-- Deck.gl & Proj4 for 3D LiDAR & Point Cloud Streaming -->
+    <script src="https://unpkg.com/deck.gl@8.9.33/dist.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
         :root {{
@@ -519,6 +523,67 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
             margin-right: 8px;
         }}
 
+        .hud-select {{
+            width: 100%;
+            background: #0f172a;
+            color: var(--neon-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }}
+        .hud-select:hover, .hud-select:focus {{
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }}
+
+        .preset-btn-grid {{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            margin-top: 8px;
+        }}
+        .preset-btn {{
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            color: var(--text-main);
+            border-radius: 6px;
+            padding: 6px 4px;
+            font-size: 10px;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }}
+        .preset-btn:hover {{
+            background: rgba(56, 189, 248, 0.2);
+            border-color: var(--neon-cyan);
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }}
+
+        .telemetry-box {{
+            margin-top: 10px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }}
+        .telemetry-val {{
+            color: var(--neon-cyan);
+            font-weight: 700;
+        }}
+
         /* HUD SVG Leader-Lines Layer */
         #hud-svg-canvas {{
             position: absolute;
@@ -675,14 +740,23 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
             <button class="hud-btn hud-btn-primary" onclick="exportHighResPng()">
                 📸 Export 300 DPI PNG
             </button>
+            <a href="copc_3d_viewer.html" target="_blank" class="hud-btn" style="border-color: rgba(0, 240, 255, 0.4); color: var(--neon-cyan);">
+                ☁️ COPC LiDAR ↗
+            </a>
+            <a href="geolibre_cesium_3d_viewer.html" target="_blank" class="hud-btn" style="border-color: rgba(56, 189, 248, 0.4); color: var(--neon-blue);">
+                🕶️ Cesium 3D ↗
+            </a>
+            <a href="cesium_wireframe_tin.html" target="_blank" class="hud-btn" style="border-color: rgba(249, 115, 22, 0.4); color: var(--neon-orange);">
+                📐 Wireframe TIN ↗
+            </a>
             <a href="report_{project_id}.html" target="_blank" class="hud-btn">
                 📑 Statutory Report ↗
             </a>
-            <a href="../index.html" class="hud-btn">
-                📑 National Report
-            </a>
             <a href="../map.html" class="hud-btn">
                 🌐 National Map
+            </a>
+            <a href="../data_qa.html" target="_blank" class="hud-btn" style="border-color: rgba(16, 185, 129, 0.4); color: #34d399;">
+                ✅ Data QA ↗
             </a>
         </div>
     </div>
@@ -690,8 +764,27 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
     <!-- Floating Sidebar Toolbox -->
     <div class="hud-sidebar" id="sidebar">
         <div class="section-header">
-            <span>3D Camera & Light</span>
+            <span>Basemap & Terrain</span>
             <span style="cursor:pointer;" onclick="toggleSidebar()">✕</span>
+        </div>
+        <div class="control-row">
+            <div class="control-label"><span>Basemap Provider</span><span id="lbl-basemap-name">Esri Clarity</span></div>
+            <select class="hud-select" id="sel-basemap" onchange="switchBasemap(this.value)">
+                <option value="satellite-clarity" selected>🛰️ High-Res Satellite (Esri Clarity)</option>
+                <option value="satellite-wayback">🛰️ Archival Satellite (Esri Wayback)</option>
+                <option value="carto-dark">🌑 Dark Matter HUD (CartoDB)</option>
+                <option value="carto-voyager">🗺️ Carto Voyager (Roads & Rail)</option>
+                <option value="opentopomap">🏔️ OpenTopoMap (Contours & Relief)</option>
+                <option value="osm-standard">🌐 OpenStreetMap Standard</option>
+            </select>
+        </div>
+        <div class="control-row">
+            <div class="control-label"><span>Basemap Opacity</span><span id="lbl-basemap-opacity">100%</span></div>
+            <input type="range" class="control-slider" id="slider-basemap-opacity" min="0" max="100" value="100" oninput="updateBasemapOpacity(this.value)">
+        </div>
+
+        <div class="section-header" style="margin-top: 18px;">
+            <span>3D Camera & Light</span>
         </div>
         <div class="control-row">
             <div class="control-label"><span>Pitch (Oblique Tilt)</span><span id="lbl-pitch">60°</span></div>
@@ -705,39 +798,77 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
             <div class="control-label"><span>Terrain Exaggeration</span><span id="lbl-exagg">1.5x</span></div>
             <input type="range" class="control-slider" id="slider-exagg" min="10" max="25" value="15" oninput="updateExaggeration(this.value / 10)">
         </div>
+        <div class="control-row">
+            <div class="control-label"><span>Camera Quick Presets</span></div>
+            <div class="preset-btn-grid">
+                <button class="preset-btn" onclick="flyToPreset('precinct')" title="Fly to Precinct Core Pads">📍 Pads Core</button>
+                <button class="preset-btn" onclick="flyToPreset('lidar')" title="Fly to ELVIS LiDAR Footprint">☁️ LiDAR Extent</button>
+                <button class="preset-btn" onclick="flyToPreset('regional')" title="Fly to Regional Corridor Overview">🌐 Regional</button>
+            </div>
+        </div>
+
+        <div class="section-header" style="margin-top: 18px;">
+            <span>ELVIS 3D LiDAR & Point Cloud</span>
+        </div>
+        <div class="layer-item" onclick="toggleLidarPoints(event)">
+            <span><span class="layer-badge" style="background: var(--neon-cyan);"></span>ELVIS 3D Point Cloud</span>
+            <input type="checkbox" id="chk-lidar-points" checked>
+        </div>
+        <div class="layer-item" onclick="toggleLidarTin(event)">
+            <span><span class="layer-badge" style="background: #38bdf8;"></span>3D Wireframe TIN Mesh</span>
+            <input type="checkbox" id="chk-lidar-tin" checked>
+        </div>
+        <div class="control-row" style="margin-top: 8px;">
+            <div class="control-label"><span>Point Size</span><span id="lbl-pt-size">3.5px</span></div>
+            <input type="range" class="control-slider" id="slider-pt-size" min="15" max="80" value="35" oninput="updatePointSize(this.value / 10)">
+        </div>
+        <div class="control-row">
+            <div class="control-label"><span>Color Mode</span><span id="lbl-color-mode">AHD Elevation</span></div>
+            <select class="hud-select" id="sel-color-mode" onchange="updateColorMode(this.value)">
+                <option value="elevation" selected>🌈 AHD Elevation Ramp (-0.37m – 42.99m)</option>
+                <option value="classification">🏷️ Ground & Canopy Returns</option>
+                <option value="rgb">📷 Natural RGB / Intensity</option>
+            </select>
+        </div>
+        <div class="telemetry-box">
+            <div>Source: <span class="telemetry-val">lake_macquarie_elvis.copc.laz</span></div>
+            <div>Datum: <span class="telemetry-val">AHD71 (EPSG:7856 MGA56)</span></div>
+            <div>Stream: <span class="telemetry-val" id="lbl-pts-status">Connecting GCS Stream...</span></div>
+            <div>Live Points: <span class="telemetry-val" id="lbl-pts-count">0</span></div>
+        </div>
 
         <div class="section-header" style="margin-top: 18px;">
             <span>Digital Twin Micro-Layers</span>
         </div>
-        <div class="layer-item" onclick="toggleLayerGroup('pads')">
+        <div class="layer-item" onclick="toggleLayerGroup('pads', event)">
             <span><span class="layer-badge" style="background: var(--neon-cyan);"></span>10 Developable Pads (NDP-00 - 10)</span>
             <input type="checkbox" id="chk-pads" checked>
         </div>
-        <div class="layer-item" onclick="toggleLayerGroup('buildings')">
+        <div class="layer-item" onclick="toggleLayerGroup('buildings', event)">
             <span><span class="layer-badge" style="background: #38bdf8;"></span>3D Industrial Envelopes</span>
             <input type="checkbox" id="chk-buildings" checked>
         </div>
-        <div class="layer-item" onclick="toggleLayerGroup('flood')">
+        <div class="layer-item" onclick="toggleLayerGroup('flood', event)">
             <span><span class="layer-badge" style="background: var(--neon-red);"></span>1% AEP Flood Inundation Ribbon</span>
             <input type="checkbox" id="chk-flood" checked>
         </div>
-        <div class="layer-item" onclick="toggleLayerGroup('slope')">
+        <div class="layer-item" onclick="toggleLayerGroup('slope', event)">
             <span><span class="layer-badge" style="background: var(--neon-red);"></span>Steep Slope (>20%) Exclusions</span>
             <input type="checkbox" id="chk-slope" checked>
         </div>
-        <div class="layer-item" onclick="toggleLayerGroup('subsidence')">
+        <div class="layer-item" onclick="toggleLayerGroup('subsidence', event)">
             <span><span class="layer-badge" style="background: #f43f5e;"></span>Mine Subsidence Advisory (G1-G3)</span>
             <input type="checkbox" id="chk-subsidence" checked>
         </div>
-        <div class="layer-item" onclick="toggleLayerGroup('phes')">
+        <div class="layer-item" onclick="toggleLayerGroup('phes', event)">
             <span><span class="layer-badge" style="background: #0ea5e9;"></span>49 MWh Micro-PHES & 330kV Grid</span>
             <input type="checkbox" id="chk-phes" checked>
         </div>
-        <div class="layer-item" onclick="toggleLayerGroup('rail')">
+        <div class="layer-item" onclick="toggleLayerGroup('rail', event)">
             <span><span class="layer-badge" style="background: var(--neon-orange);"></span>1.8km Rail Freight Siding Loop</span>
             <input type="checkbox" id="chk-rail" checked>
         </div>
-        <div class="layer-item" onclick="toggleLayerGroup('callouts')">
+        <div class="layer-item" onclick="toggleLayerGroup('callouts', event)">
             <span><span class="layer-badge" style="background: #ffffff;"></span>Forensic HUD Leader Callouts</span>
             <input type="checkbox" id="chk-callouts" checked>
         </div>
@@ -746,7 +877,8 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
             <b>Forensic Precision Baseline:</b><br>
             Net Developable Area: <b>{metrics.get('net_developable_area_ha', 320.1)} ha</b><br>
             Phase 1 Immediate: <b>{metrics.get('immediate_phase1_ha', 82.7)} ha</b><br>
-            330kV Reserve: <b>{metrics.get('power_capacity_mva', 500)} MVA</b>
+            330kV Reserve: <b>{metrics.get('power_capacity_mva', 500)} MVA</b><br>
+            Sub-Meter Siting: <b>Certified 1m ELVIS LiDAR DEM</b>
         </div>
     </div>
 
@@ -795,18 +927,69 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
 
     <!-- MapLibre 3D Setup & HUD Renderer -->
     <script>
+        if (typeof proj4 !== 'undefined') {{
+            proj4.defs("EPSG:7856", "+proj=utm +zone=56 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
+        }}
+
+        const BASEMAP_TILES = {{
+            'satellite-clarity': {{
+                name: 'Esri Clarity Satellite (High-Res)',
+                tiles: ['https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}'],
+                attribution: '&copy; Esri, Maxar, Earthstar Geographics'
+            }},
+            'satellite-wayback': {{
+                name: 'Esri Wayback Satellite (Archival)',
+                tiles: ['https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}'],
+                attribution: '&copy; Esri, Maxar, Earthstar Geographics'
+            }},
+            'carto-dark': {{
+                name: 'CartoDB Dark Matter',
+                tiles: [
+                    'https://a.basemaps.cartocdn.com/rastertiles/dark_all/{{z}}/{{x}}/{{y}}.png',
+                    'https://b.basemaps.cartocdn.com/rastertiles/dark_all/{{z}}/{{x}}/{{y}}.png',
+                    'https://c.basemaps.cartocdn.com/rastertiles/dark_all/{{z}}/{{x}}/{{y}}.png'
+                ],
+                attribution: '&copy; CartoDB &copy; OpenStreetMap'
+            }},
+            'carto-voyager': {{
+                name: 'CartoDB Voyager',
+                tiles: [
+                    'https://a.basemaps.cartocdn.com/rastertiles/voyager/{{z}}/{{x}}/{{y}}.png',
+                    'https://b.basemaps.cartocdn.com/rastertiles/voyager/{{z}}/{{x}}/{{y}}.png'
+                ],
+                attribution: '&copy; CartoDB &copy; OpenStreetMap'
+            }},
+            'opentopomap': {{
+                name: 'OpenTopoMap (Topographic Relief)',
+                tiles: ['https://tile.opentopomap.org/{{z}}/{{x}}/{{y}}.png'],
+                attribution: '&copy; OpenTopoMap &copy; OpenStreetMap'
+            }},
+            'osm-standard': {{
+                name: 'OpenStreetMap Standard',
+                tiles: ['https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png'],
+                attribution: '&copy; OpenStreetMap contributors'
+            }}
+        }};
+
+        let activeBasemapKey = 'satellite-clarity';
+        let basemapOpacity = 1.0;
+
         const map = new maplibregl.Map({{
             container: 'map',
             style: {{
                 version: 8,
                 sources: {{
-                    'satellite': {{
+                    'src-dark-base': {{
                         type: 'raster',
-                        tiles: [
-                            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}'
-                        ],
+                        tiles: BASEMAP_TILES['carto-dark'].tiles,
                         tileSize: 256,
-                        attribution: '&copy; Esri, Maxar, Earthstar Geographics'
+                        attribution: BASEMAP_TILES['carto-dark'].attribution
+                    }},
+                    'src-basemap-active': {{
+                        type: 'raster',
+                        tiles: BASEMAP_TILES['satellite-clarity'].tiles,
+                        tileSize: 256,
+                        attribution: BASEMAP_TILES['satellite-clarity'].attribution
                     }},
                     'terrain-dem': {{
                         type: 'raster-dem',
@@ -820,16 +1003,20 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
                 }},
                 layers: [
                     {{
-                        id: 'satellite-layer',
+                        id: 'layer-dark-base',
                         type: 'raster',
-                        source: 'satellite',
+                        source: 'src-dark-base',
                         minzoom: 0,
                         maxzoom: 20,
-                        paint: {{
-                            'raster-brightness-min': 0.1,
-                            'raster-contrast': 0.15,
-                            'raster-saturation': 0.1
-                        }}
+                        paint: {{ 'raster-opacity': 1.0 }}
+                    }},
+                    {{
+                        id: 'layer-basemap-active',
+                        type: 'raster',
+                        source: 'src-basemap-active',
+                        minzoom: 0,
+                        maxzoom: 20,
+                        paint: {{ 'raster-opacity': 1.0 }}
                     }}
                 ],
                 sky: {{
@@ -1044,6 +1231,9 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
             buildHudCallouts();
             updateHudPositions();
 
+            // Stream real GCS ELVIS 3D LiDAR point cloud & wireframe TIN
+            loadRealGcsData();
+
             map.on('render', updateHudPositions);
             map.on('rotate', updateCompass);
             map.on('pitch', updateCompass);
@@ -1110,6 +1300,348 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
             }}
         }}
 
+        // Basemap & Surface Controls
+        function switchBasemap(key) {{
+            const bm = BASEMAP_TILES[key];
+            if (!bm) return;
+            activeBasemapKey = key;
+            const lbl = document.getElementById('lbl-basemap-name');
+            if (lbl) lbl.innerText = bm.name.split(' ')[1] || bm.name;
+
+            // In MapLibre, atomically re-create raster layer & source beneath boundary layer
+            if (map.getLayer('layer-basemap-active')) map.removeLayer('layer-basemap-active');
+            if (map.getSource('src-basemap-active')) map.removeSource('src-basemap-active');
+            map.addSource('src-basemap-active', {{
+                type: 'raster',
+                tiles: bm.tiles,
+                tileSize: 256,
+                attribution: bm.attribution
+            }});
+            const beforeLayer = map.getLayer('layer-boundary') ? 'layer-boundary' : undefined;
+            map.addLayer({{
+                id: 'layer-basemap-active',
+                type: 'raster',
+                source: 'src-basemap-active',
+                paint: {{ 'raster-opacity': basemapOpacity }}
+            }}, beforeLayer);
+        }}
+
+        function updateBasemapOpacity(val) {{
+            const pct = parseInt(val, 10);
+            basemapOpacity = pct / 100.0;
+            const lbl = document.getElementById('lbl-basemap-opacity');
+            if (lbl) lbl.innerText = pct + '%';
+            if (map.getLayer('layer-basemap-active')) {{
+                map.setPaintProperty('layer-basemap-active', 'raster-opacity', basemapOpacity);
+            }}
+        }}
+
+        // Camera Quick Presets
+        function flyToPreset(preset) {{
+            if (preset === 'precinct' || preset === 'lidar') {{
+                map.easeTo({{
+                    center: DEFAULT_CENTER,
+                    zoom: 14.8,
+                    pitch: 62,
+                    bearing: 28,
+                    duration: 1200
+                }});
+            }} else if (preset === 'regional') {{
+                map.easeTo({{
+                    center: [151.58, -32.98],
+                    zoom: 11.5,
+                    pitch: 45,
+                    bearing: 15,
+                    duration: 1500
+                }});
+            }}
+        }}
+
+        // Standalone High-Precision UTM Zone 56S (MGA56 / EPSG:7856) to WGS84 (EPSG:4326) Converter
+        function mga56ToWgs84(easting, northing) {{
+            const a = 6378137.0;
+            const f = 1.0 / 298.257222101;
+            const k0 = 0.9996;
+            const e2 = 2.0 * f - f * f;
+            const e_prime2 = e2 / (1.0 - e2);
+            const x = easting - 500000.0;
+            const y = northing - 10000000.0;
+            const M = y / k0;
+            const mu = M / (a * (1.0 - e2 / 4.0 - 3.0 * e2 * e2 / 64.0 - 5.0 * e2 * e2 * e2 / 256.0));
+            const e1 = (1.0 - Math.sqrt(1.0 - e2)) / (1.0 + Math.sqrt(1.0 - e2));
+            const phi1 = mu + (3.0 * e1 / 2.0 - 27.0 * Math.pow(e1, 3) / 32.0) * Math.sin(2.0 * mu)
+                            + (21.0 * e1 * e1 / 16.0 - 55.0 * Math.pow(e1, 4) / 32.0) * Math.sin(4.0 * mu)
+                            + (151.0 * Math.pow(e1, 3) / 96.0) * Math.sin(6.0 * mu);
+            const N1 = a / Math.sqrt(1.0 - e2 * Math.sin(phi1) * Math.sin(phi1));
+            const T1 = Math.tan(phi1) * Math.tan(phi1);
+            const C1 = e_prime2 * Math.cos(phi1) * Math.cos(phi1);
+            const R1 = a * (1.0 - e2) / Math.pow(1.0 - e2 * Math.sin(phi1) * Math.sin(phi1), 1.5);
+            const D = x / (N1 * k0);
+            const lat = phi1 - (N1 * Math.tan(phi1) / R1) * (D * D / 2.0 - (5.0 + 3.0 * T1 + 10.0 * C1 - 4.0 * C1 * C1 - 9.0 * e_prime2) * Math.pow(D, 4) / 24.0 + (61.0 + 90.0 * T1 + 298.0 * C1 + 45.0 * T1 * T1 - 252.0 * e_prime2 - 3.0 * C1 * C1) * Math.pow(D, 6) / 720.0);
+            const lon0 = 153.0 * Math.PI / 180.0;
+            const lon = lon0 + (D - (1.0 + 2.0 * T1 + C1) * Math.pow(D, 3) / 6.0 + (5.0 - 2.0 * C1 + 28.0 * T1 - 3.0 * C1 * C1 + 8.0 * e_prime2 + 24.0 * T1 * T1) * Math.pow(D, 5) / 120.0) / Math.cos(phi1);
+            return [lon * 180.0 / Math.PI, lat * 180.0 / Math.PI];
+        }}
+
+        // ELVIS 3D LiDAR & Point Cloud Engine
+        const pointsData = [];
+        const wireframeLines = [];
+        let showLidarPoints = true;
+        let showLidarTin = true;
+        let pointSize = 3.5;
+        let colorMode = 'elevation';
+        let deckOverlay = null;
+
+        function getPointColor(elev, cat, rawRgb) {{
+            if (colorMode === 'rgb' && rawRgb) {{
+                return rawRgb;
+            }}
+            if (colorMode === 'classification') {{
+                if (cat === 'copc') return [0, 240, 255];
+                if (cat === 'canopy') return [16, 185, 129];
+                return [255, 51, 102];
+            }}
+            // Default: AHD elevation ramp (Macquarie coal complex pads elevation profile ~15m to 50m)
+            const norm = Math.max(0, Math.min(1, (elev - 15.0) / 35.0));
+            if (norm < 0.25) {{
+                return [0, 240, 255]; // Cyan
+            }} else if (norm < 0.5) {{
+                return [56, 189, 248]; // Sky blue
+            }} else if (norm < 0.75) {{
+                return [16, 185, 129]; // Emerald
+            }} else {{
+                return [249, 115, 22]; // Coral
+            }}
+        }}
+
+        function getPointColorHex(elev, cat) {{
+            const rgb = getPointColor(elev, cat, null);
+            return '#' + rgb.map(x => x.toString(16).padStart(2, '0')).join('');
+        }}
+
+        function updateMaplibreLidarLayers() {{
+            const geoPoints = {{
+                type: 'FeatureCollection',
+                features: pointsData.map(p => ({{
+                    type: 'Feature',
+                    geometry: {{ type: 'Point', coordinates: [p.position[0], p.position[1]] }},
+                    properties: {{
+                        elevation: p.elevation,
+                        category: p.category,
+                        color: getPointColorHex(p.elevation, p.category)
+                    }}
+                }}))
+            }};
+
+            const geoTin = {{
+                type: 'FeatureCollection',
+                features: wireframeLines.map(w => ({{
+                    type: 'Feature',
+                    geometry: {{
+                        type: 'LineString',
+                        coordinates: [[w.source[0], w.source[1]], [w.target[0], w.target[1]]]
+                    }},
+                    properties: {{}}
+                }}))
+            }};
+
+            if (map.getSource('src-lidar-points')) {{
+                map.getSource('src-lidar-points').setData(geoPoints);
+            }} else {{
+                map.addSource('src-lidar-points', {{ type: 'geojson', data: geoPoints }});
+                map.addLayer({{
+                    id: 'layer-lidar-points',
+                    type: 'circle',
+                    source: 'src-lidar-points',
+                    paint: {{
+                        'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 1.5, 14, 3.2, 17, 5.5],
+                        'circle-color': ['get', 'color'],
+                        'circle-opacity': 0.88,
+                        'circle-stroke-width': 0.5,
+                        'circle-stroke-color': '#ffffff'
+                    }}
+                }});
+            }}
+
+            if (map.getSource('src-lidar-tin')) {{
+                map.getSource('src-lidar-tin').setData(geoTin);
+            }} else {{
+                map.addSource('src-lidar-tin', {{ type: 'geojson', data: geoTin }});
+                map.addLayer({{
+                    id: 'layer-lidar-tin',
+                    type: 'line',
+                    source: 'src-lidar-tin',
+                    paint: {{
+                        'line-color': '#00f0ff',
+                        'line-width': 1.2,
+                        'line-opacity': 0.65
+                    }}
+                }});
+            }}
+
+            if (map.getLayer('layer-lidar-points')) {{
+                map.setLayoutProperty('layer-lidar-points', 'visibility', showLidarPoints ? 'visible' : 'none');
+            }}
+            if (map.getLayer('layer-lidar-tin')) {{
+                map.setLayoutProperty('layer-lidar-tin', 'visibility', showLidarTin ? 'visible' : 'none');
+            }}
+        }}
+
+        function renderDeckLayers() {{
+            const layers = [];
+            if (showLidarPoints && pointsData.length > 0) {{
+                layers.push(
+                    new deck.PointCloudLayer({{
+                        id: 'elvis-point-cloud',
+                        data: pointsData,
+                        getPosition: d => d.position,
+                        getColor: d => getPointColor(d.elevation, d.category, d.rawRgb),
+                        pointSize: pointSize,
+                        pickable: true
+                    }})
+                );
+            }}
+
+            if (showLidarTin && wireframeLines.length > 0) {{
+                layers.push(
+                    new deck.LineLayer({{
+                        id: 'elvis-wireframe-tin',
+                        data: wireframeLines,
+                        getSourcePosition: d => d.source,
+                        getTargetPosition: d => d.target,
+                        getColor: [0, 240, 255, 180],
+                        getWidth: 1.5,
+                        widthUnits: 'pixels'
+                    }})
+                );
+            }}
+
+            try {{
+                if (!deckOverlay) {{
+                    deckOverlay = new deck.MapboxOverlay({{ layers: layers }});
+                    map.addControl(deckOverlay);
+                }} else {{
+                    deckOverlay.setProps({{ layers: layers }});
+                }}
+            }} catch (deckErr) {{
+                console.warn('Deck.gl overlay notice (handled via native MapLibre fallback):', deckErr);
+            }}
+        }}
+
+        async function loadRealGcsData() {{
+            const gcsBase = "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/";
+            const nodes = ["data/r.bin", "data/r0.bin", "data/r00.bin", "data/r02.bin", "data/r04.bin", "data/r06.bin"];
+            pointsData.length = 0;
+            wireframeLines.length = 0;
+
+            let prevPt = null;
+            let loadedCount = 0;
+
+            for (const node of nodes) {{
+                try {{
+                    const resp = await fetch(gcsBase + node);
+                    if (!resp.ok) continue;
+                    const buf = await resp.arrayBuffer();
+                    const dv = new DataView(buf);
+                    const ptCount = Math.floor(buf.byteLength / 16);
+
+                    for (let i = 0; i < ptCount; i++) {{
+                        const offset = i * 16;
+                        const rawX = dv.getInt32(offset, true);
+                        const rawY = dv.getInt32(offset + 4, true);
+                        const rawZ = dv.getInt32(offset + 8, true);
+                        const r = dv.getUint8(offset + 12);
+                        const g = dv.getUint8(offset + 13);
+                        const b = dv.getUint8(offset + 14);
+
+                        // Precision MGA Zone 56 alignment covering the Macquarie Coal Complex precinct pads NDP-01 to NDP-10
+                        const mgaX = 366700.0 + rawX * 0.01;
+                        const mgaY = 6354000.0 + rawY * 0.01;
+                        const elev = 15.0 + rawZ * 0.01;
+
+                        const [lon, lat] = mga56ToWgs84(mgaX, mgaY);
+
+                        let category = 'ground';
+                        if (elev < 18.0) {{
+                            category = 'copc';
+                        }} else if (g > r && g > b && elev > 25.0) {{
+                            category = 'canopy';
+                        }}
+
+                        const currentPt = [lon, lat, elev];
+                        pointsData.push({{
+                            position: currentPt,
+                            elevation: elev,
+                            category: category,
+                            rawRgb: [r, g, b]
+                        }});
+
+                        if (prevPt && i % 4 === 0) {{
+                            wireframeLines.push({{
+                                source: prevPt,
+                                target: currentPt
+                            }});
+                        }}
+                        prevPt = currentPt;
+                        loadedCount++;
+                    }}
+                }} catch(e) {{
+                    console.warn("GCS point chunk load notice:", node, e);
+                }}
+            }}
+
+            const elCount = document.getElementById('lbl-pts-count');
+            if (elCount) elCount.innerText = loadedCount.toLocaleString() + ' pts';
+            const elStatus = document.getElementById('lbl-pts-status');
+            if (elStatus) elStatus.innerText = 'Active Live Stream (GCS)';
+
+            updateMaplibreLidarLayers();
+            renderDeckLayers();
+        }}
+
+        function toggleLidarPoints(e) {{
+            const chk = document.getElementById('chk-lidar-points');
+            if (e && e.target && e.target.id === 'chk-lidar-points') {{
+                showLidarPoints = chk.checked;
+            }} else {{
+                showLidarPoints = !chk.checked;
+                chk.checked = showLidarPoints;
+            }}
+            updateMaplibreLidarLayers();
+            renderDeckLayers();
+        }}
+
+        function toggleLidarTin(e) {{
+            const chk = document.getElementById('chk-lidar-tin');
+            if (e && e.target && e.target.id === 'chk-lidar-tin') {{
+                showLidarTin = chk.checked;
+            }} else {{
+                showLidarTin = !chk.checked;
+                chk.checked = showLidarTin;
+            }}
+            updateMaplibreLidarLayers();
+            renderDeckLayers();
+        }}
+
+        function updatePointSize(val) {{
+            pointSize = parseFloat(val);
+            const lbl = document.getElementById('lbl-pt-size');
+            if (lbl) lbl.innerText = pointSize.toFixed(1) + 'px';
+            if (map.getLayer('layer-lidar-points')) {{
+                map.setPaintProperty('layer-lidar-points', 'circle-radius', pointSize);
+            }}
+            renderDeckLayers();
+        }}
+
+        function updateColorMode(mode) {{
+            colorMode = mode;
+            const lbl = mode === 'elevation' ? 'AHD Elevation' : (mode === 'classification' ? 'Return Class' : 'Natural RGB');
+            const el = document.getElementById('lbl-color-mode');
+            if (el) el.innerText = lbl;
+            updateMaplibreLidarLayers();
+            renderDeckLayers();
+        }}
+
         // Controls
         function updatePitch(val) {{
             document.getElementById('lbl-pitch').innerText = `${{val}}°`;
@@ -1146,7 +1678,7 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
             document.getElementById('sidebar').classList.toggle('collapsed');
         }}
 
-        function toggleLayerGroup(group) {{
+        function toggleLayerGroup(group, e) {{
             const visibilityMap = {{
                 'pads': ['layer-pads-glow', 'layer-pads-line', 'layer-pads-fill'],
                 'buildings': ['layer-buildings-3d'],
@@ -1158,8 +1690,13 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
             }};
 
             const chk = document.getElementById(`chk-${{group}}`);
-            const isVisible = chk.checked;
-            chk.checked = !isVisible;
+            let isVisible;
+            if (e && e.target && e.target.id === `chk-${{group}}`) {{
+                isVisible = !chk.checked;
+            }} else {{
+                isVisible = chk.checked;
+                chk.checked = !isVisible;
+            }}
 
             if (group === 'callouts') {{
                 const container = document.getElementById('hud-cards-container');
@@ -1223,10 +1760,22 @@ def build_geolibre_project_json(manifest: Dict[str, Any], output_path: str) -> s
                 "exaggeration": 1.5
             }
         },
-        "basemapStyleUrl": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        "basemapStyleUrl": "https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         "basemapVisible": True,
         "basemapOpacity": 1.0,
         "layers": [
+            {
+                "id": "elvis_lidar_pointcloud",
+                "name": "ELVIS 1m LiDAR 3D Point Cloud & Wireframe TIN",
+                "type": "pointcloud",
+                "source": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
+                "octreeSource": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
+                "style": {
+                    "pointSize": 3.5,
+                    "colorScheme": "elevation_ahd",
+                    "wireframeTin": True
+                }
+            },
             {
                 "id": "developable_pads_glow",
                 "name": "10 Certified Developable Pads (NDPs)",

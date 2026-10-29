@@ -14,10 +14,22 @@
       "exaggeration": 1.5
     }
   },
-  "basemapStyleUrl": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  "basemapStyleUrl": "https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   "basemapVisible": true,
   "basemapOpacity": 1.0,
   "layers": [
+    {
+      "id": "elvis_lidar_pointcloud",
+      "name": "ELVIS 1m LiDAR 3D Point Cloud & Wireframe TIN",
+      "type": "pointcloud",
+      "source": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
+      "octreeSource": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
+      "style": {
+        "pointSize": 3.5,
+        "colorScheme": "elevation_ahd",
+        "wireframeTin": true
+      }
+    },
     {
       "id": "developable_pads_glow",
       "name": "10 Certified Developable Pads (NDPs)",

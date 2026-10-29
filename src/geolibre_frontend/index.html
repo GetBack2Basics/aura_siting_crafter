@@ -179,6 +179,67 @@
       height: 100%;
     }
 
+    /* Basemap Dropdown Popover */
+    .basemap-popover-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .basemap-popover-card {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #101626;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 0.45rem;
+      padding: 0.65rem 0.8rem;
+      min-width: 230px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75);
+      display: none;
+      flex-direction: column;
+      gap: 0.55rem;
+      z-index: 2000;
+      backdrop-filter: blur(12px);
+    }
+
+    .basemap-popover-card.open {
+      display: flex;
+    }
+
+    .basemap-popover-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .popover-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .basemap-select {
+      background: #1a2236;
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 0.3rem;
+      padding: 0.28rem 0.5rem;
+      font-size: 0.74rem;
+      font-family: inherit;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .basemap-opacity-slider {
+      width: 100%;
+      height: 5px;
+      accent-color: #3b82f6;
+      cursor: pointer;
+    }
+
     /* Interactive Custom Layer Control & Legend Tree (Collapsed by Default on Load) */
     .custom-layer-panel {
       position: absolute;
@@ -581,11 +642,7 @@
       </a>
       <a href="data_lineage_audit.html" class="metadata-pill" target="_blank" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3); color: #34d399; text-decoration: none;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Data Provenance &amp; Lineage Audit
-      </a>
-      <a href="data_qa.html" class="metadata-pill" target="_blank" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.5); color: #6ee7b7; text-decoration: none; font-weight: 700;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        Data QA Report ↗
+        Data Provenance & Lineage Audit
       </a>
       <a href="https://wherobots.com/" class="metadata-pill" target="_blank" style="color: #60a5fa; text-decoration: none;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
@@ -659,6 +716,36 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
         National Siting Map
       </h2>
+      <!-- Basemap Controls Dropdown Popover -->
+      <div class="basemap-popover-wrapper">
+        <button class="nav-btn" id="basemap-popover-btn" onclick="toggleBasemapPopover()"
+          title="Change Basemap Style & Opacity" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); color: #93c5fd; padding: 0.25rem 0.6rem; border-radius: 0.35rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.35rem;">
+          <span>🗺️ Basemap ▾</span>
+        </button>
+        <div class="basemap-popover-card" id="basemap-popover">
+          <div class="basemap-popover-row">
+            <div class="popover-label">
+              <span>Basemap Style</span>
+            </div>
+            <select class="basemap-select" id="basemap-select" onchange="changeBasemap(this.value)">
+              <option value="osm-terrain" selected>⛰️ OSM Terrain</option>
+              <option value="esri-imagery">🛰️ Esri World Imagery</option>
+              <option value="osm-standard">🗺️ OpenStreetMap Standard</option>
+              <option value="esri-topo">🗺️ Esri World Topo</option>
+              <option value="dark-canvas">🌑 No Basemap (Dark Canvas)</option>
+              <option value="white-canvas">⚪ No Basemap (White Canvas)</option>
+            </select>
+          </div>
+          <div class="basemap-popover-row">
+            <div class="popover-label">
+              <span>Basemap Opacity</span>
+              <span id="basemap-opacity-val">50%</span>
+            </div>
+            <input type="range" class="basemap-opacity-slider" id="basemap-opacity" min="0" max="100" value="50"
+              oninput="setBasemapOpacity(this.value)">
+          </div>
+        </div>
+      </div>
     </div>
     
     <div id="map-wrapper">
@@ -1806,7 +1893,7 @@ function executeCustomAiQuery() {
       &copy;&reg; 2026 <a href="https://github.com/GetBack2Basics" target="_blank" style="color: #60a5fa; text-decoration: underline;">GetBack2Basics</a> &bull; <a href="https://aura.getback2basics.net" target="_blank" style="color: #60a5fa; text-decoration: underline;">aura.getback2basics.net</a> &bull; An open-source first commercial initiative
     </div>
     <div style="text-align: right; color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
-      Built <span id="build-timestamp">202609081247</span> UTC
+      Built <span id="build-timestamp">202610300630</span> UTC
     </div>
   </footer>
 </div>
@@ -1837,11 +1924,72 @@ if (candidatesData.length > 0 && document.getElementById('stat-best')) {
 // -------------------------------------------------------------
 const map = L.map('map').setView([-26.5, 134.0], 4);
 
-// Basemap: Esri World Topo / Shaded Relief Terrain (Default)
-const esriTopo = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-  maxZoom: 19,
-  attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, USGS, NOAA, National Geographic, DeLorme, HERE, Geonames.org'
-}).addTo(map);
+// Basemap Tiles: OSM and Esri (Consistent with GeoLibre WebGIS maps, zero CartoDB)
+let basemapCurrentOpacity = 0.50;
+const BASEMAP_TILES = {
+  'osm-terrain': L.tileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png', {
+    maxZoom: 17,
+    opacity: basemapCurrentOpacity,
+    attribution: '&copy; <a href="https://opentopomap.org">OpenTopoMap</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }),
+  'esri-imagery': L.tileLayer('https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    opacity: basemapCurrentOpacity,
+    attribution: 'Tiles &copy; Esri, Maxar, Earthstar Geographics'
+  }),
+  'osm-standard': L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    opacity: basemapCurrentOpacity,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }),
+  'esri-topo': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    opacity: basemapCurrentOpacity,
+    attribution: 'Tiles &copy; Esri &mdash; Sources: GEBCO, USGS, NOAA, National Geographic, DeLorme, HERE, Geonames.org'
+  })
+};
+
+let currentBasemap = BASEMAP_TILES['osm-terrain'].addTo(map);
+const esriTopo = BASEMAP_TILES['esri-topo'];
+
+function toggleBasemapPopover() {
+  const pop = document.getElementById('basemap-popover');
+  if (pop) pop.classList.toggle('open');
+}
+
+document.addEventListener('click', (e) => {
+  const pop = document.getElementById('basemap-popover');
+  const btn = document.getElementById('basemap-popover-btn');
+  if (pop && btn && !pop.contains(e.target) && !btn.contains(e.target)) {
+    pop.classList.remove('open');
+  }
+});
+
+function changeBasemap(key) {
+  if (currentBasemap) map.removeLayer(currentBasemap);
+  const mapWrapper = document.getElementById('map-wrapper');
+  if (key === 'white-canvas') {
+    if (mapWrapper) mapWrapper.style.backgroundColor = '#ffffff';
+    currentBasemap = null;
+  } else if (key === 'dark-canvas') {
+    if (mapWrapper) mapWrapper.style.backgroundColor = '#0a0f1d';
+    currentBasemap = null;
+  } else if (BASEMAP_TILES[key]) {
+    if (mapWrapper) mapWrapper.style.backgroundColor = '#0a0f1d';
+    currentBasemap = BASEMAP_TILES[key];
+    currentBasemap.setOpacity(basemapCurrentOpacity);
+    currentBasemap.addTo(map);
+  }
+}
+
+function setBasemapOpacity(val) {
+  basemapCurrentOpacity = parseFloat(val) / 100.0;
+  const valEl = document.getElementById('basemap-opacity-val');
+  if (valEl) valEl.textContent = `${parseInt(val)}%`;
+  if (currentBasemap && typeof currentBasemap.setOpacity === 'function') {
+    currentBasemap.setOpacity(basemapCurrentOpacity);
+  }
+}
 
 // 1. GA Major Electricity Transmission Lines (Dynamic Voltage Layer with Zoom Filtering)
 const gaPowerLines = L.esri.dynamicMapLayer({

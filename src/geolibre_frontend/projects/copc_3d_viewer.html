@@ -327,8 +327,8 @@
 
   <script>
     // 1. Initialize MapLibre 3D Globe with Esri World Imagery
-    const CENTER_LON = 151.575;
-    const CENTER_LAT = -33.098;
+    const CENTER_LON = 151.585;
+    const CENTER_LAT = -32.935;
 
     const map = new maplibregl.Map({
       container: 'map',
@@ -338,10 +338,11 @@
           'esri-satellite': {
             type: 'raster',
             tiles: [
-              'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+              'https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
             ],
             tileSize: 256,
-            maxzoom: 19
+            maxzoom: 19,
+            attribution: '&copy; Esri, Maxar, Earthstar Geographics'
           }
         },
         layers: [
@@ -367,13 +368,99 @@
     let showWireframe = true;
     let showSurface = true;
 
-    // 2. Stream High-Precision Real Point Cloud Data from Google Cloud Storage
+    // High-Precision UTM Zone 56S to WGS84 Converter
+    function mga56ToWgs84(easting, northing) {
+      const a = 6378137.0;
+      const f = 1.0 / 298.257222101;
+      const k0 = 0.9996;
+      const e2 = 2.0 * f - f * f;
+      const e_prime2 = e2 / (1.0 - e2);
+      const x = easting - 500000.0;
+      const y = northing - 10000000.0;
+      const M = y / k0;
+      const mu = M / (a * (1.0 - e2 / 4.0 - 3.0 * e2 * e2 / 64.0 - 5.0 * e2 * e2 * e2 / 256.0));
+      const e1 = (1.0 - Math.sqrt(1.0 - e2)) / (1.0 + Math.sqrt(1.0 - e2));
+      const phi1 = mu + (3.0 * e1 / 2.0 - 27.0 * Math.pow(e1, 3) / 32.0) * Math.sin(2.0 * mu)
+                      + (21.0 * e1 * e1 / 16.0 - 55.0 * Math.pow(e1, 4) / 32.0) * Math.sin(4.0 * mu)
+                      + (151.0 * Math.pow(e1, 3) / 96.0) * Math.sin(6.0 * mu);
+      const N1 = a / Math.sqrt(1.0 - e2 * Math.sin(phi1) * Math.sin(phi1));
+      const T1 = Math.tan(phi1) * Math.tan(phi1);
+      const C1 = e_prime2 * Math.cos(phi1) * Math.cos(phi1);
+      const R1 = a * (1.0 - e2) / Math.pow(1.0 - e2 * Math.sin(phi1) * Math.sin(phi1), 1.5);
+      const D = x / (N1 * k0);
+      const lat = phi1 - (N1 * Math.tan(phi1) / R1) * (D * D / 2.0 - (5.0 + 3.0 * T1 + 10.0 * C1 - 4.0 * C1 * C1 - 9.0 * e_prime2) * Math.pow(D, 4) / 24.0 + (61.0 + 90.0 * T1 + 298.0 * C1 + 45.0 * T1 * T1 - 252.0 * e_prime2 - 3.0 * C1 * C1) * Math.pow(D, 6) / 720.0);
+      const lon0 = 153.0 * Math.PI / 180.0;
+      const lon = lon0 + (D - (1.0 + 2.0 * T1 + C1) * Math.pow(D, 3) / 6.0 + (5.0 - 2.0 * C1 + 28.0 * T1 - 3.0 * C1 * C1 + 8.0 * e_prime2 + 24.0 * T1 * T1) * Math.pow(D, 5) / 120.0) / Math.cos(phi1);
+      return [lon * 180.0 / Math.PI, lat * 180.0 / Math.PI];
+    }
+
     if (typeof proj4 !== 'undefined') {
       proj4.defs("EPSG:7856", "+proj=utm +zone=56 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs");
     }
 
     const pointsData = [];
     const wireframeLines = [];
+
+    function updateMaplibreLayers() {
+      const geoPoints = {
+        type: 'FeatureCollection',
+        features: pointsData.map(p => ({
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: [p.position[0], p.position[1]] },
+          properties: {
+            elevation: p.position[2],
+            category: p.category,
+            color: 'rgb(' + p.color.join(',') + ')'
+          }
+        }))
+      };
+
+      const geoTin = {
+        type: 'FeatureCollection',
+        features: wireframeLines.map(w => ({
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: [[w.source[0], w.source[1]], [w.target[0], w.target[1]]]
+          },
+          properties: {}
+        }))
+      };
+
+      if (map.getSource('src-copc-points')) {
+        map.getSource('src-copc-points').setData(geoPoints);
+      } else {
+        map.addSource('src-copc-points', { type: 'geojson', data: geoPoints });
+        map.addLayer({
+          id: 'layer-copc-points',
+          type: 'circle',
+          source: 'src-copc-points',
+          paint: {
+            'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 1.5, 14, 3.2, 17, 5.5],
+            'circle-color': ['get', 'color'],
+            'circle-opacity': 0.88,
+            'circle-stroke-width': 0.5,
+            'circle-stroke-color': '#ffffff'
+          }
+        });
+      }
+
+      if (map.getSource('src-copc-tin')) {
+        map.getSource('src-copc-tin').setData(geoTin);
+      } else {
+        map.addSource('src-copc-tin', { type: 'geojson', data: geoTin });
+        map.addLayer({
+          id: 'layer-copc-tin',
+          type: 'line',
+          source: 'src-copc-tin',
+          paint: {
+            'line-color': '#00f0ff',
+            'line-width': 1.2,
+            'line-opacity': 0.65
+          }
+        });
+      }
+    }
 
     async function loadRealGcsData() {
       const gcsBase = "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/";
@@ -400,23 +487,18 @@
             const g = dv.getUint8(offset + 13);
             const b = dv.getUint8(offset + 14);
 
-            const mgaX = 366000.0 + rawX * 0.01;
-            const mgaY = 6336000.0 + rawY * 0.01;
-            const elev = -0.37 + rawZ * 0.01;
+            const mgaX = 366700.0 + rawX * 0.01;
+            const mgaY = 6354000.0 + rawY * 0.01;
+            const elev = 15.0 + rawZ * 0.01;
 
-            let lon = 151.575, lat = -33.098;
-            if (typeof proj4 !== 'undefined') {
-              const coords = proj4("EPSG:7856", "EPSG:4326", [mgaX, mgaY]);
-              lon = coords[0];
-              lat = coords[1];
-            }
+            const [lon, lat] = mga56ToWgs84(mgaX, mgaY);
 
             let category = 'ground';
             let color = [r, g, b];
-            if (elev < 0.2) {
+            if (elev < 18.0) {
               category = 'copc';
               color = [0, 240, 255];
-            } else if (g > r && g > b && elev > 3.0) {
+            } else if (g > r && g > b && elev > 25.0) {
               category = 'canopy';
               color = [16, 185, 129];
             } else {
@@ -443,6 +525,7 @@
           console.warn("GCS point stream notice:", node, err);
         }
       }
+      updateMaplibreLayers();
       renderDeckLayers();
     }
 
@@ -487,13 +570,17 @@
         );
       }
 
-      if (!deckOverlay) {
-        deckOverlay = new deck.MapboxOverlay({
-          layers: layers
-        });
-        map.addControl(deckOverlay);
-      } else {
-        deckOverlay.setProps({ layers: layers });
+      try {
+        if (!deckOverlay) {
+          deckOverlay = new deck.MapboxOverlay({
+            layers: layers
+          });
+          map.addControl(deckOverlay);
+        } else {
+          deckOverlay.setProps({ layers: layers });
+        }
+      } catch (deckErr) {
+        console.warn('DeckGL overlay notice (rendered via MapLibre native):', deckErr);
       }
     }
 

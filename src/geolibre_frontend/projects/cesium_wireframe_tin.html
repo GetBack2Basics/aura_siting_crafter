@@ -255,22 +255,15 @@
 
     viewer.scene.globe.enableLighting = false;
 
-    // --- Esri World Imagery ---
-    async function initEsriImagery() {
-      try {
-        const provider = await Cesium.ArcGisMapServerImageryProvider.fromUrl(
-          'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
-        );
-        viewer.imageryLayers.removeAll();
-        viewer.imageryLayers.add(new Cesium.ImageryLayer(provider));
-      } catch (e) {
-        const fallback = new Cesium.UrlTemplateImageryProvider({
-          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-          maximumLevel: 19
-        });
-        viewer.imageryLayers.removeAll();
-        viewer.imageryLayers.add(new Cesium.ImageryLayer(fallback));
-      }
+    // --- Esri Clarity World Imagery ---
+    function initEsriImagery() {
+      const provider = new Cesium.UrlTemplateImageryProvider({
+        url: 'https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        maximumLevel: 19,
+        credit: new Cesium.Credit('Esri, Maxar, Earthstar Geographics')
+      });
+      viewer.imageryLayers.removeAll();
+      viewer.imageryLayers.add(new Cesium.ImageryLayer(provider));
     }
     initEsriImagery();
 

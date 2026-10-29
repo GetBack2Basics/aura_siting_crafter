@@ -742,9 +742,9 @@
         const btn = document.getElementById('bm-esri');
         if (btn) btn.classList.add('active');
         provider = new Cesium.UrlTemplateImageryProvider({
-          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+          url: 'https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
           maximumLevel: 19,
-          credit: 'Esri World Imagery'
+          credit: 'Esri Clarity World Imagery'
         });
       } else if (type === 'nsw') {
         const btn = document.getElementById('bm-nsw');

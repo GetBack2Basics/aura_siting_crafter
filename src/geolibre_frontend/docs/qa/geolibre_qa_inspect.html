@@ -1061,7 +1061,7 @@
 
     const BASEMAP_TILES = {
       'osm-terrain': L.tileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17, opacity: basemapCurrentOpacity, attribution: '&copy; OpenTopoMap' }),
-      'esri-imagery': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{x}/{y}', { maxZoom: 19, opacity: basemapCurrentOpacity, attribution: '&copy; Esri' }),
+      'esri-imagery': L.tileLayer('https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, opacity: basemapCurrentOpacity, attribution: '&copy; Esri, Maxar' }),
       'osm-standard': L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, opacity: basemapCurrentOpacity, attribution: '&copy; OpenStreetMap' }),
       'dark-canvas': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, opacity: basemapCurrentOpacity, attribution: '&copy; CARTO' }),
       'white-canvas': L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, opacity: basemapCurrentOpacity, attribution: '&copy; CARTO' })

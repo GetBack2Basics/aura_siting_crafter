@@ -166,3 +166,4 @@ Before opening an upstream GeoLibre PR, verify this checklist:
 - [ ] **RFC Issue**: Submitted upstream RFC issue on `opengeos/GeoLibre/issues` and obtained `#<issue_num>`.
 - [ ] **PR Body**: References `Closes #<issue_num>`, includes benchmark table, and links to live case study.
 - [ ] **Compute Cleanup**: Confirmed all background execution tasks and cloud runtimes are terminated.
+

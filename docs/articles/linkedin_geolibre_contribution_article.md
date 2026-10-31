@@ -28,3 +28,4 @@ Source: https://github.com/GetBack2Basics/aura_siting_crafter
 Playbook: https://github.com/GetBack2Basics/aura_siting_crafter/blob/main/docs/engineering/geolibre_antigravity_contribution_playbook.md
 
 #WebGIS #GeoLibre #OpenSource #SpatialAI #TypeScript #Performance #MapLibre
+

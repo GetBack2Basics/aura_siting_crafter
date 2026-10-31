@@ -2,9 +2,11 @@
 
 **Target Repository:** [`opengeos/GeoLibre`](https://github.com/opengeos/GeoLibre)  
 **Reference Contributing Guidelines:** [`opengeos/GeoLibre CONTRIBUTING.md`](https://github.com/opengeos/GeoLibre/blob/main/CONTRIBUTING.md)  
-**Contributing Organization:** GetBack2Basics Spatial AI Engineering / AURA Siting Crafter  
-**Target Feature:** `geolibre-layer-limiter` (Area-Priority Viewport Feature Limiter)  
-**Branch Name:** `feat/area-priority-layer-limiter`  
+**Contributing Organization / User:** [GetBack2Basics](https://github.com/GetBack2Basics)  
+**Submitted Upstream RFC Issue:** [#3292](https://github.com/opengeos/GeoLibre/issues/3292)  
+**Submitted Upstream Pull Request:** [#3293](https://github.com/opengeos/GeoLibre/pull/3293)  
+**Fork Repository:** [`GetBack2Basics/GeoLibre`](https://github.com/GetBack2Basics/GeoLibre)  
+**Feature Branch:** `feat/area-priority-layer-limiter`  
 **Conventional Commit:** `feat(layers): add area-priority viewport feature limiter for large polygon layers`  
 
 ---

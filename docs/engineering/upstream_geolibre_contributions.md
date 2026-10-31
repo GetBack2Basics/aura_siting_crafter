@@ -49,7 +49,8 @@ flowchart TD
   ```
 
 ### Proposal 2: Area-Priority Viewport Feature Limiter (`geolibre-layer-limiter`)
-- **Status**: Implemented Reference Module & Standalone Upstream Package (`packages/geolibre-layer-limiter`, `src/geolibre_frontend/js/geolibre-layer-limiter.js`)
+- **Status**: **Submitted Upstream** (PR [#3293](https://github.com/opengeos/GeoLibre/pull/3293), RFC Issue [#3292](https://github.com/opengeos/GeoLibre/issues/3292))
+- **Fork Branch**: `GetBack2Basics/GeoLibre:feat/area-priority-layer-limiter`
 - **Objective**: Prevent WebGL draw call bottlenecks when panning large cadastre layers (>50k features) by ordering by descending bounding box / polygon area and capping rendering to top $N$ features.
 - **Algorithm**: $O(M \log K)$ Top-K Min-Heap selection with planar geodesic Shoelace area calculation fallback.
 - **API Surface**:
@@ -61,6 +62,7 @@ flowchart TD
   });
   ```
 - **Implementation Plan**: [`docs/engineering/implementation_plan_geolibre_proposal2_layer_limiter.md`](file:///c:/Projects/aura_siting_crafter/docs/engineering/implementation_plan_geolibre_proposal2_layer_limiter.md)
+- **Submission Guide**: [`docs/engineering/upstream_geolibre_pr_submission_guide.md`](file:///c:/Projects/aura_siting_crafter/docs/engineering/upstream_geolibre_pr_submission_guide.md)
 
 ### Proposal 3: Dynamic Expression Continuous Color Ramps
 - **Objective**: Provide a high-level JS helper that dynamically generates MapLibre GL interpolation expressions from arbitrary numeric data columns without rebuilding GL style sheets.

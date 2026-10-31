@@ -63,6 +63,7 @@ flowchart TD
   ```
 - **Implementation Plan**: [`docs/engineering/implementation_plan_geolibre_proposal2_layer_limiter.md`](file:///c:/Projects/aura_siting_crafter/docs/engineering/implementation_plan_geolibre_proposal2_layer_limiter.md)
 - **Submission Guide**: [`docs/engineering/upstream_geolibre_pr_submission_guide.md`](file:///c:/Projects/aura_siting_crafter/docs/engineering/upstream_geolibre_pr_submission_guide.md)
+- **Contribution Playbook**: [`docs/engineering/geolibre_antigravity_contribution_playbook.md`](file:///c:/Projects/aura_siting_crafter/docs/engineering/geolibre_antigravity_contribution_playbook.md)
 
 ### Proposal 3: Dynamic Expression Continuous Color Ramps
 - **Objective**: Provide a high-level JS helper that dynamically generates MapLibre GL interpolation expressions from arbitrary numeric data columns without rebuilding GL style sheets.

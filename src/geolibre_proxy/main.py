@@ -89,6 +89,10 @@ _tests_dir = os.path.join(FRONTEND_DIR, "tests")
 if os.path.exists(_tests_dir):
     app.mount("/tests", StaticFiles(directory=_tests_dir, html=True), name="tests")
 
+_js_dir = os.path.join(FRONTEND_DIR, "js")
+if os.path.exists(_js_dir):
+    app.mount("/js", StaticFiles(directory=_js_dir), name="js")
+
 @app.get("/aura-siting-crafter.geolibre.json")
 def serve_geolibre_json():
     """Serves the project declarative GeoLibre JSON definition."""
@@ -288,12 +292,53 @@ S3_AUTHORITATIVE_TOTALS = {
 }
 
 
+def extract_feature_area(feature: dict) -> float:
+    """Extracts or approximates surface area (in hectares) for a GeoJSON feature."""
+    props = feature.get("properties") or {}
+    for key in ("area_ha", "area", "st_area", "shape_area", "AREA_HA", "Shape__Area"):
+        if key in props and props[key] is not None:
+            try:
+                val = float(props[key])
+                if val > 0:
+                    if key in ("shape_area", "Shape__Area", "st_area"):
+                        return val / 10000.0 if val > 1000 else val
+                    return val
+            except (ValueError, TypeError):
+                pass
+    geom = feature.get("geometry") or {}
+    coords = geom.get("coordinates")
+    gtype = geom.get("type")
+    if coords and gtype in ("Polygon", "MultiPolygon"):
+        try:
+            import math
+            rings = [coords[0]] if gtype == "Polygon" else [p[0] for p in coords if p]
+            total_ha = 0.0
+            for ring in rings:
+                if len(ring) >= 3:
+                    avg_lat = sum(p[1] for p in ring) / len(ring)
+                    rad = avg_lat * (math.pi / 180.0)
+                    m_per_lat = 111132.92 - 559.82 * math.cos(2 * rad)
+                    m_per_lng = 111412.84 * math.cos(rad)
+                    shoelace = sum(
+                        (ring[i][0] * m_per_lng * ring[i + 1][1] * m_per_lat) -
+                        (ring[i + 1][0] * m_per_lng * ring[i][1] * m_per_lat)
+                        for i in range(len(ring) - 1)
+                    )
+                    total_ha += abs(shoelace) / 20000.0
+            return total_ha
+        except Exception:
+            return 0.0
+    return 0.0
+
+
 @app.get("/api/data/{layer_id}")
 async def get_live_layer_data(
     layer_id: str,
     bbox: Optional[str] = Query(None, description="Bounding box minx,miny,maxx,maxy in WGS84"),
     zoom: Optional[float] = Query(None, description="Current map zoom level"),
-    limit: Optional[int] = Query(None, description="Max record count (None for all viewport features)")
+    limit: Optional[int] = Query(None, description="Max record count (None for all viewport features)"),
+    sort_by: Optional[str] = Query(None, description="Optional sort order e.g. 'area_desc' for GeoLibre Layer Limiter"),
+    max_features: Optional[int] = Query(None, description="Max feature limiter count (default: 500 when active)")
 ):
     """Smart 5-Tier Hierarchical LOD Spatial Feature Streamer:
     - Zoom < 5.5: State/Territory Boundaries (Multi-State National Scale)
@@ -376,11 +421,24 @@ async def get_live_layer_data(
                 data = resp.json()
                 raw_feats = data.get("features", [])
                 geojson_feats = [arcgis_to_geojson_feature(rf) for rf in raw_feats]
+                
+                # Area-Priority Limiter Sorting & Capping (GeoLibre Proposal 2)
+                if sort_by == "area_desc" or max_features is not None:
+                    geojson_feats.sort(key=extract_feature_area, reverse=True)
+                
+                total_in_viewport = len(geojson_feats)
+                effective_limit = max_features or (int(limit) if limit else None)
+                is_capped = bool(effective_limit and total_in_viewport > effective_limit)
+                final_feats = geojson_feats[:effective_limit] if (effective_limit and is_capped) else geojson_feats
+
                 return {
                     "type": "FeatureCollection",
-                    "features": geojson_feats,
-                    "total_count": len(geojson_feats),
-                    "viewport_count": len(geojson_feats),
+                    "features": final_feats,
+                    "total_count": total_in_viewport,
+                    "viewport_count": total_in_viewport,
+                    "rendered_count": len(final_feats),
+                    "is_capped": is_capped,
+                    "max_features": effective_limit,
                     "s3_total_records": s3_total,
                     "s3_path": s3_path,
                     "lod_tier": lod_tier,

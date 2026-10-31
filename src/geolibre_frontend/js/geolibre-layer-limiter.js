@@ -337,6 +337,10 @@
     disable() {
       if (!this._enabled) return;
       this._enabled = false;
+      if (this._timer) {
+        clearTimeout(this._timer);
+        this._timer = null;
+      }
       if (this.map) {
         this.map.off('moveend', this._boundOnMoveEnd);
         this.map.off('zoomend', this._boundOnMoveEnd);
@@ -351,12 +355,14 @@
 
     _onMoveEnd() {
       if (!this._enabled) return;
-      clearTimeout(this._timer);
+      if (this._timer) {
+        clearTimeout(this._timer);
+      }
       this._timer = setTimeout(() => this.apply(), this.options.debounceMs);
     }
 
     apply() {
-      if (!this._rawGeoJSON || !this.map) return null;
+      if (!this._enabled || !this._rawGeoJSON || !this.map) return null;
 
       const bounds = this.map.getBounds();
       const bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()];

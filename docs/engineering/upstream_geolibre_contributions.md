@@ -48,18 +48,27 @@ flowchart TD
   }));
   ```
 
-### Proposal 2: Area-Priority Viewport Feature Limiter (`geolibre-layer-limiter`)
-- **Status**: **Submitted Upstream** (PR [#3293](https://github.com/opengeos/GeoLibre/pull/3293), RFC Issue [#3292](https://github.com/opengeos/GeoLibre/issues/3292))
-- **Fork Branch**: `GetBack2Basics/GeoLibre:feat/area-priority-layer-limiter`
+### Proposal 2: Area-Priority Viewport Feature Limiter (`@geolibre/layer-limiter`)
+- **Status**: **MERGED & RELEASED** in GeoLibre `v3.6.0` (PR [#3293](https://github.com/opengeos/GeoLibre/pull/3293), Merge Commit [`673719d`](https://github.com/opengeos/GeoLibre/commit/673719d1d08f561ade3d485becd236860e76866e), RFC Issue [#3292](https://github.com/opengeos/GeoLibre/issues/3292))
+- **Merged Date**: 2026-11-01 (Merged by `@giswqs` - Qiusheng Wu)
+- **Upstream Location**: `packages/geolibre-layer-limiter` in `opengeos/GeoLibre`
 - **Objective**: Prevent WebGL draw call bottlenecks when panning large cadastre layers (>50k features) by ordering by descending bounding box / polygon area and capping rendering to top $N$ features.
-- **Algorithm**: $O(M \log K)$ Top-K Min-Heap selection with planar geodesic Shoelace area calculation fallback.
+- **Algorithm**: $O(M \log K)$ Top-K Min-Heap selection with relative planar geodesic Shoelace formula, hole-subtraction, and antimeridian world-wrapping support.
 - **API Surface**:
   ```typescript
-  layer.setRenderOptimizer({
+  import { AreaPriorityLimiter } from '@geolibre/layer-limiter';
+
+  const limiter = new AreaPriorityLimiter(map, {
+    sourceId: 'parcels-source',
     maxFeatures: 500,
     sortProperty: 'area_ha',
-    sortOrder: 'desc'
+    sortOrder: 'desc',
+    debounceMs: 200,
+    onLimitApplied: (stats) => {
+      console.log(`Rendered ${stats.renderedCount}/${stats.totalInViewport} features in ${stats.executionTimeMs}ms`);
+    }
   });
+  limiter.enable();
   ```
 - **Implementation Plan**: [`docs/engineering/implementation_plan_geolibre_proposal2_layer_limiter.md`](file:///c:/Projects/aura_siting_crafter/docs/engineering/implementation_plan_geolibre_proposal2_layer_limiter.md)
 - **Submission Guide**: [`docs/engineering/upstream_geolibre_pr_submission_guide.md`](file:///c:/Projects/aura_siting_crafter/docs/engineering/upstream_geolibre_pr_submission_guide.md)

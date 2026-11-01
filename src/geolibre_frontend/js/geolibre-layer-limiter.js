@@ -105,11 +105,14 @@
   /**
    * Fast Planar Geodesic Shoelace Approximation for Ring Coordinates
    * Converts (lng, lat) vertices to estimated square meters / hectares.
+   * Measures from the first vertex so large coordinates don't lose precision in products.
    */
   function computeRingAreaHectares(coords) {
     if (!coords || coords.length < 3) return 0.0;
     let sum = 0.0;
     const n = coords.length;
+    const originX = coords[0][0];
+    const originY = coords[0][1];
 
     let centerLat = 0.0;
     for (let i = 0; i < n; i++) {
@@ -121,15 +124,27 @@
     const mPerDegLng = 111412.84 * Math.cos(centerLat) - 93.5 * Math.cos(3 * centerLat);
 
     for (let i = 0; i < n - 1; i++) {
-      const x1 = coords[i][0] * mPerDegLng;
-      const y1 = coords[i][1] * mPerDegLat;
-      const x2 = coords[i + 1][0] * mPerDegLng;
-      const y2 = coords[i + 1][1] * mPerDegLat;
+      const x1 = (coords[i][0] - originX) * mPerDegLng;
+      const y1 = (coords[i][1] - originY) * mPerDegLat;
+      const x2 = (coords[i + 1][0] - originX) * mPerDegLng;
+      const y2 = (coords[i + 1][1] - originY) * mPerDegLat;
       sum += (x1 * y2) - (x2 * y1);
     }
 
     const areaSqMeters = Math.abs(sum) / 2.0;
     return areaSqMeters / 10000.0; // In hectares
+  }
+
+  /**
+   * Polygon area in hectares: the exterior ring minus any hole rings
+   */
+  function polygonAreaHectares(rings) {
+    if (!rings || rings.length === 0) return 0.0;
+    let ha = computeRingAreaHectares(rings[0]);
+    for (let i = 1; i < rings.length; i++) {
+      ha -= computeRingAreaHectares(rings[i]);
+    }
+    return Math.max(0.0, ha);
   }
 
   /**
@@ -142,10 +157,12 @@
       const propCandidates = [sortProperty, 'area_ha', 'area', 'st_area', 'shape_area', 'AREA_HA', 'Shape__Area'];
       for (const prop of propCandidates) {
         if (prop in feature.properties && feature.properties[prop] !== null && feature.properties[prop] !== undefined) {
-          const val = parseFloat(feature.properties[prop]);
+          const rawVal = feature.properties[prop];
+          const val = typeof rawVal === 'number' ? rawVal : parseFloat(String(rawVal));
           if (!isNaN(val) && val > 0) {
             if (prop === 'shape_area' || prop === 'Shape__Area' || prop === 'st_area') {
-              return val > 100000000 ? val / 10000.0 : (val > 1000 ? val / 10000.0 : val);
+              // These properties are assumed to store square meters
+              return val / 10000.0;
             }
             return val;
           }
@@ -157,18 +174,22 @@
     if (!geom || !geom.coordinates) return 0.0;
 
     let totalHa = 0.0;
-    if (geom.type === 'Polygon') {
-      totalHa += computeRingAreaHectares(geom.coordinates[0]);
-    } else if (geom.type === 'MultiPolygon') {
+    if (geom.type === 'Polygon' && Array.isArray(geom.coordinates)) {
+      totalHa += polygonAreaHectares(geom.coordinates);
+    } else if (geom.type === 'MultiPolygon' && Array.isArray(geom.coordinates)) {
       for (let i = 0; i < geom.coordinates.length; i++) {
-        totalHa += computeRingAreaHectares(geom.coordinates[i][0]);
+        const poly = geom.coordinates[i];
+        if (Array.isArray(poly)) {
+          totalHa += polygonAreaHectares(poly);
+        }
       }
     }
     return totalHa;
   }
 
   /**
-   * Quick Bounding Box Intersection Test between Feature and Viewport
+   * Quick Bounding Box Intersection Test between Feature and Viewport.
+   * Handles MapLibre world copies / antimeridian wrapping where viewport bounds run past ±180°.
    */
   function isFeatureInBBox(feature, bbox) {
     if (!bbox) return true;
@@ -190,7 +211,18 @@
     }
 
     expand(geom.coordinates);
-    return !(fMaxX < minX || fMinX > maxX || fMaxY < minY || fMinY > maxY);
+    if (fMaxY < minY || fMinY > maxY) return false;
+    // Map viewport longitudes can run past ±180°, so also test feature shifted by whole turns
+    for (const shift of [-360, 0, 360]) {
+      if (fMaxX >= minX + shift && fMinX <= maxX + shift) return true;
+    }
+    return false;
+  }
+
+  function normalizeMaxFeatures(value) {
+    return typeof value === 'number' && Number.isFinite(value) && value >= 1
+      ? Math.floor(value)
+      : 500;
   }
 
   /**
@@ -198,7 +230,7 @@
    */
   function optimizeFeatureCollection(geojson, options = {}) {
     const startTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-    const maxFeatures = options.maxFeatures || 500;
+    const maxFeatures = normalizeMaxFeatures(options.maxFeatures);
     const sortProperty = options.sortProperty || 'area_ha';
     const sortOrder = options.sortOrder || 'desc';
     const minAreaThreshold = options.minAreaThreshold || 0.0;

@@ -52,12 +52,19 @@ graph TD
    ```bash
    node --import tsx --test tests/<feature-name>.test.ts
    ```
-2. **Local Lint & Format Run**:
+2. **Test Typecheck Ratchet Gate (`npm run typecheck:tests`)**:
+   > [!CRITICAL]
+   > `node --import tsx --test` **strips types at runtime without validating them**. A test file with invalid TypeScript compiles and passes unit tests, but **fails CI** on the `Type check tests (ratchet)` step (`scripts/check-test-typecheck.mjs --max-errors 0`).
+   > Always run the typecheck ratchet locally before submitting:
+   ```bash
+   npm run typecheck:tests
+   ```
+3. **Local Lint & Format Run**:
    ```bash
    npx eslint packages/geolibre-<feature-name> tests/<feature-name>.test.ts
    npx oxfmt packages/geolibre-<feature-name> tests/<feature-name>.test.ts
    ```
-3. **Pre-commit File Endings**: Ensure all `.ts`, `.json`, and `.md` files end with a standard newline (`LF`) to prevent pre-commit hook rejections.
+4. **Pre-commit File Endings**: Ensure all `.ts`, `.json`, and `.md` files end with a standard newline (`LF`) to prevent pre-commit hook rejections.
 
 ### Stage 4: Automated GitHub API Dispatch
 1. **Issue Before PR Rule**: Open an RFC / Feature Proposal issue on `opengeos/GeoLibre` first per upstream `CONTRIBUTING.md`.
@@ -154,16 +161,94 @@ Structure the issue around:
 
 ---
 
+## Review Hardening: Lessons Learned from PR #3293 Acceptance
+
+PR [#3293](https://github.com/opengeos/GeoLibre/pull/3293) was officially accepted and merged by GeoLibre maintainers into `opengeos/GeoLibre:main` ([Commit `673719d`](https://github.com/opengeos/GeoLibre/commit/673719d1d08f561ade3d485becd236860e76866e), released in `v3.6.0`). The review process with maintainers and CodeRabbit surfaced five critical engineering lessons that must be applied to all future contributions upfront:
+
+```mermaid
+graph TD
+    A[Review Hardening Patterns] --> B[1. Strict Async Lifecycle & Teardown]
+    A --> C[2. Dual-Gate Typecheck Ratchet]
+    A --> D[3. Precision Spatial Geometry]
+    A --> E[4. Safe Option Normalization]
+    A --> F[5. Scoped Package Nomenclature]
+```
+
+### 1. Strict Async Lifecycle & Controller Teardown
+- **The Pitfall**: In stateful UI controllers (`enable()`, `disable()`, `destroy()`) with debounced events or `setTimeout`, calling `disable()` while a timer was ticking left the timer scheduled. When it expired, it executed `apply()` and overwrote the user's restored data with modified data.
+- **The Pattern**:
+  1. Always cancel and nullify active timers inside `disable()`:
+     ```typescript
+     if (this.timer) {
+       clearTimeout(this.timer);
+       this.timer = null;
+     }
+     ```
+  2. Always guard asynchronous worker methods at entry:
+     ```typescript
+     public apply(): OptimizeResult | null {
+       if (!this.enabled || !this.rawGeoJSON || !this.map) return null;
+       // ...
+     }
+     ```
+  3. Always include a dedicated unit test asserting that triggering an event and calling `disable()` before debounce expiry preserves the original state after the timer completes.
+
+### 2. The Dual-Gate Typecheck Ratchet
+- **The Pitfall**: Native Node test runners (`node --import tsx --test`) strip TypeScript annotations without typechecking them. Tests can pass 100% while failing CI's `Type check tests (ratchet)` step (`scripts/check-test-typecheck.mjs --max-errors 0`).
+- **The Pattern**:
+  - Never assume passing `node --test` means TypeScript is sound.
+  - Always execute `npm run typecheck:tests` locally before pushing.
+  - For generic data structures (`MinHeap<T>`), make constructor comparators optional with safe numeric fallbacks (`constructor(comparator?: (a: T, b: T) => number)`).
+  - Explicitly narrow property types when accessing GeoJSON properties (`Number(f.properties?.area_ha ?? 0)`).
+
+### 3. Precision Spatial Geometry & Viewport Wrapping
+- **Relative Coordinate Origin**: When computing planar Shoelace area approximations on geographical degrees, absolute products `(x1 * y2 - x2 * y1)` lose 64-bit floating point precision far from `(0, 0)`. Always measure relative to the first vertex:
+  ```typescript
+  const [originX, originY] = coords[0];
+  const x1 = (coords[i][0] - originX) * mPerDegLng;
+  const y1 = (coords[i][1] - originY) * mPerDegLat;
+  ```
+- **Hole Ring Subtraction**: For `Polygon` and `MultiPolygon` geometries, outer rings represent positive area, while interior rings represent holes (donut polygons). Always subtract hole areas:
+  $$\text{Area}_{\text{total}} = \text{Area}(\text{ring}_0) - \sum_{i=1}^{k} \text{Area}(\text{ring}_i)$$
+- **Antimeridian & World-Wrapping Viewports**: MapLibre camera longitudes can pan past $\pm 180^\circ$ at low zoom levels. Always test feature bounds with $\pm 360^\circ$ shifts:
+  ```typescript
+  for (const shift of [-360, 0, 360]) {
+    if (fMaxX >= minX + shift && fMinX <= maxX + shift) return true;
+  }
+  ```
+- **Deterministic Unit Conversion**: Never guess unit scales based on arbitrary magnitude thresholds (e.g. `val > 1000`). Treat CAD/GIS properties (`shape_area`, `Shape__Area`, `st_area`) consistently as square meters divided by $10,000$ to get hectares.
+
+### 4. Safe Option Normalization & Default Preservation
+- **Protecting Algorithmic Bounds**: Non-finite, negative, or zero counts (e.g. `maxFeatures: -5`) cause binary heaps to throw. Use a centralized normalizer:
+  ```typescript
+  function normalizeMaxFeatures(value: number | undefined): number {
+    return typeof value === 'number' && Number.isFinite(value) && value >= 1
+      ? Math.floor(value)
+      : 500;
+  }
+  ```
+- **Preserving Zero**: Avoid truthy defaults (`options.debounceMs || 200`) because `debounceMs: 0` is a valid immediate mode that would be unintentionally overwritten. Use nullish coalescing (`options.debounceMs ?? 200`).
+
+### 5. Scoped Package Nomenclature & Documentation Standards
+- In GeoLibre's monorepo, all internal packages must use the scoped name `@geolibre/<package-name>` in `package.json`, `README.md`, and code snippets.
+- Do not reference local missing `LICENSE` files from sub-packages; align with the root Apache-2.0 declaration.
+- Avoid publishing unmeasured or hypothetical benchmark numbers in PR descriptions; instead, link to reproducible production case studies.
+
+---
+
 ## Standard Pre-Flight Checklist
 
 Before opening an upstream GeoLibre PR, verify this checklist:
 
 - [ ] **Workspace Layout**: Placed under `packages/geolibre-<name>/` with valid `package.json` and `tsconfig.json`.
+- [ ] **Scoped Naming**: Package identified as `@geolibre/<name>` everywhere.
 - [ ] **Root Dependencies**: Ran `npm install` at root; package is registered in workspace.
 - [ ] **Strict Typing**: Ran `npx eslint packages/geolibre-<name>` with **0** errors and **0** warnings.
+- [ ] **Typecheck Ratchet**: Ran `npm run typecheck:tests` with **0** errors.
 - [ ] **Native Tests**: Created `tests/<name>.test.ts`; passes `node --import tsx --test tests/<name>.test.ts`.
+- [ ] **Lifecycle Teardown Test**: Verified that debounced/async controllers cleanly cancel timers on `disable()`.
 - [ ] **Formatting**: Passed `oxfmt` and verified trailing `LF` on all modified files.
 - [ ] **RFC Issue**: Submitted upstream RFC issue on `opengeos/GeoLibre/issues` and obtained `#<issue_num>`.
-- [ ] **PR Body**: References `Closes #<issue_num>`, includes benchmark table, and links to live case study.
+- [ ] **PR Body**: References `Closes #<issue_num>`, links to live case study, and documents exact behavior.
 - [ ] **Compute Cleanup**: Confirmed all background execution tasks and cloud runtimes are terminated.
 

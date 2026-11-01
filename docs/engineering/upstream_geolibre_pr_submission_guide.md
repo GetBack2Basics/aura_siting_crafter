@@ -3,11 +3,12 @@
 **Target Repository:** [`opengeos/GeoLibre`](https://github.com/opengeos/GeoLibre)  
 **Reference Contributing Guidelines:** [`opengeos/GeoLibre CONTRIBUTING.md`](https://github.com/opengeos/GeoLibre/blob/main/CONTRIBUTING.md)  
 **Contributing Organization / User:** [GetBack2Basics](https://github.com/GetBack2Basics)  
-**Submitted Upstream RFC Issue:** [#3292](https://github.com/opengeos/GeoLibre/issues/3292)  
-**Submitted Upstream Pull Request:** [#3293](https://github.com/opengeos/GeoLibre/pull/3293)  
-**Fork Repository:** [`GetBack2Basics/GeoLibre`](https://github.com/GetBack2Basics/GeoLibre)  
-**Feature Branch:** `feat/area-priority-layer-limiter`  
-**Conventional Commit:** `feat(layers): add area-priority viewport feature limiter for large polygon layers`  
+**Status:** **MERGED & RELEASED** in GeoLibre `v3.6.0`  
+**Upstream RFC Issue:** [#3292](https://github.com/opengeos/GeoLibre/issues/3292)  
+**Upstream Pull Request:** [#3293](https://github.com/opengeos/GeoLibre/pull/3293)  
+**Merge Commit:** [`673719d`](https://github.com/opengeos/GeoLibre/commit/673719d1d08f561ade3d485becd236860e76866e) (Merged by `@giswqs`)  
+**Package Name:** `@geolibre/layer-limiter` (`packages/geolibre-layer-limiter`)  
+**Playbook:** [`docs/engineering/geolibre_antigravity_contribution_playbook.md`](file:///c:/Projects/aura_siting_crafter/docs/engineering/geolibre_antigravity_contribution_playbook.md)  
 
 ---
 

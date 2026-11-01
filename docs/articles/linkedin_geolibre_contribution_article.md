@@ -1,31 +1,27 @@
-# LinkedIn Article: Contributing @geolibre/layer-limiter to GeoLibre
+# LinkedIn Article: Contributing to GeoLibre — Lessons Learned & Upstream Playbook
 
 **Target Audience:** Geospatial Engineers, Open Source Contributors, AI Developers  
 **Target Platform:** LinkedIn  
-**Character Count:** 1,476 characters (including spaces and URLs)  
+**Character Count:** 1,479 characters (including spaces and URLs)  
 
 ---
 
 ## Article Text
 
-Rendering 50,000+ complex cadastre polygons in WebGL without dropping below 60 FPS is a classic spatial frontend challenge. When panning across dense parcel grids, raw WebGL draw calls spike, causing severe frame drops (<15 FPS) and browser stalls.
+Our upstream contribution to GeoLibre (@geolibre/layer-limiter) was just merged into main and released in v3.6.0!
 
-To solve this for AURA Siting Crafter (https://aura.getback2basics.net), we built an Area-Priority Viewport Feature Limiter—and just contributed it upstream to GeoLibre!
+Engineered for AURA Siting Crafter (https://aura.getback2basics.net) to sustain 60 FPS across 50k+ parcels via an O(M log K) Min-Heap, this PR taught us vital lessons on contributing to large monorepos with AI coding agents.
 
-Why it matters:
-Instead of sorting entire datasets, our module uses an O(M log K) binary Min-Heap to dynamically cap active viewport rendering to the top K largest polygons (with a fast geodesic Shoelace formula fallback). Result: Draw times drop from 142ms to 3.8ms, sustaining a silky-smooth 60 FPS.
+To help other contributors, we documented our review learnings into an open Playbook:
 
-What we learned (The Playbook):
-Pair-programming with AI agents on large open-source monorepos requires strict discipline to prevent token waste:
-1. Zero-any typing from Turn 1 to pass tight ESLint warning budgets (--max-warnings 242).
-2. One-shot GitHub API dispatch via host git credentials.
-3. Pre-empting CI bot auto-format push collisions.
+1. Test Typecheck Ratchet: Node's native runner (node --test) strips types at runtime. A test can pass while failing CI's typecheck gate (npm run typecheck:tests). Always run the ratchet locally!
+2. Async Teardown: If a controller debounces events, disable() MUST cancel pending timers (clearTimeout) and apply() must guard at entry to prevent race overwrites.
+3. Spatial Precision: Measure Shoelace polygon math relative to the first vertex to prevent float cancellation, subtract hole rings, and test antimeridian wrapping (+-360 deg).
+4. Token Efficiency: Don't burn LLM context on polling or sandbox retries. Programmatically dispatch GitHub forks, RFC issues, and PRs via host credentials.
 
-Explore the contribution:
-PR: https://github.com/opengeos/GeoLibre/pull/3293
-RFC: https://github.com/opengeos/GeoLibre/issues/3292
-Source: https://github.com/GetBack2Basics/aura_siting_crafter
+Explore the contribution & playbook:
+Merged PR: https://github.com/opengeos/GeoLibre/pull/3293
 Playbook: https://github.com/GetBack2Basics/aura_siting_crafter/blob/main/docs/engineering/geolibre_antigravity_contribution_playbook.md
+Source: https://github.com/GetBack2Basics/aura_siting_crafter
 
-#WebGIS #GeoLibre #OpenSource #SpatialAI #TypeScript #Performance #MapLibre
-
+#OpenSource #GeoLibre #WebGIS #TypeScript #DevOps #SpatialAI

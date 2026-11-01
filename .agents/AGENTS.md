@@ -39,3 +39,10 @@ At the start of any refactoring session, run the Graphify analysis tool to estab
 python tools/graphify_analysis.py
 ```
 
+
+
+## Social Media & Article Publishing Standard (LinkedIn / Articles)
+1. **First-Person Perspective**: ALWAYS use "I" and "my" (never "we" or "our").
+2. **Hook**: ALWAYS start with a provocative question or bold statement, never just dry facts.
+3. **ELI10 Explanation**: ALWAYS include an intuitive ELI10 (Explain Like I'm 10) analogy/explanation before diving into technical details.
+4. **No In-Post External Links**: LinkedIn algorithms downrank posts containing external URLs. Keep the post body clean of external links and ALWAYS provide all URLs at the very end in a separate "First Comment / Links" block for the user to post in the comments.

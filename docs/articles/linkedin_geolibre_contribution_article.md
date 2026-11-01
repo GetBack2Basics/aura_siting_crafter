@@ -2,24 +2,40 @@
 
 **Target Audience:** Geospatial Engineers, Open Source Contributors, AI Developers  
 **Target Platform:** LinkedIn  
-**Character Count:** 1,474 characters (including spaces and URLs)  
+**Post Body Length:** 1,495 characters (under 1,500-character ceiling, zero in-post external URLs)  
+**Style Standard:** First-person singular ("I"), provocative opening hook, ELI10 explanation, links placed in the first comment.  
 
 ---
 
-## Article Text
+## Main Post Body (Copy & Paste to LinkedIn)
 
-My contribution to GeoLibre (@geolibre/layer-limiter) was just merged into main and released in v3.6.0!
+Why do modern WebGIS maps still freeze and drop to 10 FPS the moment you look at a real-world city?
 
-ELI10: Imagine a giant puzzle with 50,000 tiny pieces. If your browser tries to draw every grain of sand all at once, it freezes. My module tells the map: 'Just pick the biggest, most important shapes in view and draw those first!' The map stays silky-smooth (60 FPS) and lag-free.
+Because browsers choke trying to render 50,000 microscopic polygon slivers at once.
 
-I built this for AURA Siting Crafter (https://aura.getback2basics.net) to map land parcels across Australia. Contributing upstream taught me vital lessons on pairing with AI on large monorepos, which I turned into a Playbook:
+My contribution to GeoLibre (@geolibre/layer-limiter) was just merged into main and released in v3.6.0 to fix this.
 
-1. Test Typecheck Ratchet: Node's native runner (node --test) strips types at runtime. A test can pass while failing CI's typecheck gate (npm run typecheck:tests). I now always check this locally!
+ELI10: Imagine a 50,000-piece puzzle. Trying to look at every tiny speck of dust at once freezes your brain. My tool tells the map: 'Just pick the biggest, most important shapes in view and draw those first!' The map stays silky-smooth (60 FPS) and lag-free.
+
+I built this for AURA Siting Crafter to map parcels across Australia. Contributing upstream taught me vital lessons on pairing with AI on open-source monorepos, which I turned into a Playbook:
+
+1. Test Typecheck Ratchet: Node's runner (node --test) strips types at runtime. A test can pass while failing CI's typecheck gate (npm run typecheck:tests). I now always verify this locally!
 2. Async Teardown: If a controller debounces panning, disable() must clear pending timers so delayed callbacks don't overwrite restored data.
 3. Coordinate Math: For polygon area math, I measure relative to vertex 0 to prevent float errors, subtract holes, and test antimeridian wrapping.
 4. Token Efficiency: I dispatch forks, RFCs, and PRs via host credentials in one shot instead of wasting AI tokens on retries.
 
-Merged PR: https://github.com/opengeos/GeoLibre/pull/3293
-Playbook: https://github.com/GetBack2Basics/aura_siting_crafter/blob/main/docs/engineering/geolibre_antigravity_contribution_playbook.md
+👇 Links to the merged PR, live map, and open Playbook are in the first comment!
 
 #OpenSource #GeoLibre #WebGIS #TypeScript #DevOps
+
+---
+
+## First Comment (Post Immediately After Publishing)
+
+🔗 Here are the links referenced in the post:
+
+• Merged Pull Request: https://github.com/opengeos/GeoLibre/pull/3293
+• RFC Issue: https://github.com/opengeos/GeoLibre/issues/3292
+• Upstream Contribution Playbook: https://github.com/GetBack2Basics/aura_siting_crafter/blob/main/docs/engineering/geolibre_antigravity_contribution_playbook.md
+• Live Australian Siting Map (Showcase): https://aura.getback2basics.net
+• Repository: https://github.com/GetBack2Basics/aura_siting_crafter

@@ -12,6 +12,16 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
+  <!-- Official GeoLibre Area-Priority Viewport Limiter (@geolibre/layer-limiter v3.6.0) -->
+  <script src="../../js/geolibre-layer-limiter.js"></script>
+  <script>
+    if (typeof GeoLibreLayerLimiter === 'undefined') {
+      const s = document.createElement('script');
+      s.src = '/js/geolibre-layer-limiter.js';
+      document.head.appendChild(s);
+    }
+  </script>
+
   <style>
     :root {
       --bg-primary: #0a0f1d;
@@ -1142,55 +1152,161 @@
     }
 
     let loadedFeatures = [];
+    let initialFitDone = false;
+    let latestLimiterStats = null;
+    let upstreamLiveCount = 0;
+    let s3LakehouseCount = 0;
 
-    // Helper functions for geometric size calculation & sorting largest features first
-    function calcPolygonArea(rings) {
-      if (!rings || rings.length === 0) return 0;
-      const exterior = rings[0];
-      if (!exterior || exterior.length < 3) return 0;
-      let area = 0;
-      for (let i = 0; i < exterior.length - 1; i++) {
-        area += exterior[i][0] * exterior[i + 1][1] - exterior[i + 1][0] * exterior[i][1];
-      }
-      return Math.abs(area) / 2.0;
-    }
-
-    function calcLineLength(pts) {
+    // Helper functions powered by official @geolibre/layer-limiter
+    function calcLineLengthKm(pts) {
       if (!pts || pts.length < 2) return 0;
-      let len = 0;
+      let lenKm = 0;
       for (let i = 0; i < pts.length - 1; i++) {
-        const dx = pts[i + 1][0] - pts[i][0];
-        const dy = pts[i + 1][1] - pts[i][1];
-        len += Math.sqrt(dx * dx + dy * dy);
+        const latMid = ((pts[i][1] + pts[i + 1][1]) / 2.0) * (Math.PI / 180.0);
+        const mPerDegLat = 111132.92 - 559.82 * Math.cos(2 * latMid);
+        const mPerDegLng = 111412.84 * Math.cos(latMid);
+        const dx = (pts[i + 1][0] - pts[i][0]) * mPerDegLng;
+        const dy = (pts[i + 1][1] - pts[i][1]) * mPerDegLat;
+        lenKm += Math.sqrt(dx * dx + dy * dy) / 1000.0;
       }
-      return len;
+      return lenKm;
     }
 
     function getFeatureMetricSize(f) {
       if (!f || !f.geometry) return 0;
-      const type = f.geometry.type;
-      const coords = f.geometry.coordinates;
-      if (!coords) return 0;
+      const geomType = f.geometry.type;
 
-      if (type === 'Polygon') {
-        return calcPolygonArea(coords);
-      } else if (type === 'MultiPolygon') {
-        return coords.reduce((acc, poly) => acc + calcPolygonArea(poly), 0);
-      } else if (type === 'LineString') {
-        return calcLineLength(coords);
-      } else if (type === 'MultiLineString') {
-        return coords.reduce((acc, line) => acc + calcLineLength(line), 0);
+      if (geomType === 'Polygon' || geomType === 'MultiPolygon') {
+        if (typeof GeoLibreLayerLimiter !== 'undefined' && GeoLibreLayerLimiter.getFeatureArea) {
+          const areaHa = GeoLibreLayerLimiter.getFeatureArea(f, 'area_ha');
+          if (!f.properties) f.properties = {};
+          if (typeof f.properties.area_ha !== 'number' || f.properties.area_ha <= 0) {
+            f.properties.area_ha = areaHa;
+          }
+          return areaHa;
+        }
+      } else if (geomType === 'LineString' || geomType === 'MultiLineString') {
+        const coords = f.geometry.coordinates;
+        if (geomType === 'LineString') return calcLineLengthKm(coords);
+        return coords ? coords.reduce((acc, line) => acc + calcLineLengthKm(line), 0) : 0;
       }
 
       const p = f.properties || {};
-      if (p.Shape_Area || p.SHAPE_AREA || p.Shape__Area || p.AREA_HA || p.area_ha) {
-        return parseFloat(p.Shape_Area || p.SHAPE_AREA || p.Shape__Area || p.AREA_HA || p.area_ha) || 0;
+      if (p.area_ha || p.AREA_HA) return parseFloat(p.area_ha || p.AREA_HA) || 0;
+      if (p.Shape_Area || p.SHAPE_AREA || p.Shape__Area) {
+        return (parseFloat(p.Shape_Area || p.SHAPE_AREA || p.Shape__Area) || 0) / 10000.0;
       }
-      if (p.Shape_Length || p.SHAPE_LEN || p.Shape__Length || p.LENGTH_KM) {
-        return parseFloat(p.Shape_Length || p.SHAPE_LEN || p.Shape__Length || p.LENGTH_KM) || 0;
+      if (p.LENGTH_KM || p.length_km) return parseFloat(p.LENGTH_KM || p.length_km) || 0;
+      if (p.Shape_Length || p.SHAPE_LEN || p.Shape__Length) {
+        return (parseFloat(p.Shape_Length || p.SHAPE_LEN || p.Shape__Length) || 0) / 1000.0;
+      }
+      return 0;
+    }
+
+    function getFeatureDisplayInfo(f, i) {
+      const p = f.properties || {};
+      const geomType = (f.geometry && f.geometry.type) || 'Unknown';
+      const areaHa = typeof p.area_ha === 'number' ? p.area_ha : getFeatureMetricSize(f);
+
+      // 1. Queensland Regulated Vegetation Management (VMA 1999) handler
+      const rvmCat = p.rvm_cat || p.RVM_CAT || p.VM_CATEGORY;
+      if (rvmCat) {
+        const catMap = {
+          'A': 'Category A (Compliance / Offset / Voluntary)',
+          'B': 'Category B (Remnant Vegetation)',
+          'C': 'Category C (High-Value Regrowth)',
+          'R': 'Category R (Reef Regrowth / Watercourse)',
+          'X': 'Category X (Non-Regulated / Exempt)'
+        };
+        const catDesc = catMap[String(rvmCat).trim().toUpperCase()] || `Category ${rvmCat}`;
+        const mapSheet = p.map_no ? ` • Map ${p.map_no}` : '';
+        const name = `Regulated Veg: ${catDesc}${mapSheet}`;
+        const formattedArea = areaHa > 0 ? (areaHa < 1 ? `${areaHa.toFixed(2)} ha` : `${Math.round(areaHa).toLocaleString()} ha`) : '';
+        const val = formattedArea ? `Cat ${rvmCat} • ${formattedArea}` : `Cat ${rvmCat}`;
+        return {
+          id: p.objectid || p.OBJECTID || i + 1,
+          name,
+          val,
+          areaHa,
+          geomType
+        };
       }
 
-      return 0;
+      // 2. Generic and State-Specific Feature Properties
+      const name = p.name || p.NAME || p.STATION_NAME || p.SUB_NAME || p.LABEL || 
+                   p.SCHOOL_NAME || p.FACILITY_NAME || p.alternativelabel || p.feature || 
+                   p.rezname || p.plantno || p.planlabel || p.lotidstring || p.cadid || 
+                   (p.ebs_boundary_id ? `DBCA TEC #${p.ebs_boundary_id}` : 
+                   (p.ufi ? `Vicmap #${p.ufi}` : `Feature #${i + 1}`));
+
+      // Prioritize physical/domain attributes over generic OBJECTID
+      let val = p.ebs_status || p.networktyp;
+      if (!val && p.capacity_kv) val = `${p.capacity_kv} kV`;
+      if (!val && p.size_mw) val = `${p.size_mw} MW`;
+      if (!val && (p.zone_code || p.ZONE_CODE)) val = `Zone ${p.zone_code || p.ZONE_CODE}`;
+      if (!val && (p.WIND_REGION || p.wind_region)) val = `Wind Region ${p.WIND_REGION || p.wind_region}`;
+      if (!val && (p.STATUS || p.status)) val = p.STATUS || p.status;
+      if (!val && (p.VOLTAGE || p.voltage)) val = `${p.VOLTAGE || p.voltage} V`;
+      if (!val && (p.CLASS || p.class)) val = `Class ${p.CLASS || p.class}`;
+      if (!val && areaHa > 0) val = areaHa < 1 ? `${areaHa.toFixed(2)} ha` : `${Math.round(areaHa).toLocaleString()} ha`;
+      if (!val && (p.feature_type_code || p.FEATURE_TYPE_CODE)) val = p.feature_type_code || p.FEATURE_TYPE_CODE;
+      if (!val && (p.OBJECTID || p.objectid)) val = `Record #${p.OBJECTID || p.objectid}`;
+      if (!val) val = 'Spatial Feature';
+
+      return {
+        id: p.ufi || p.UFI || p.ebs_occ_unique || p.OBJECTID || p.objectid || p.id || i + 1,
+        name,
+        val,
+        areaHa,
+        geomType
+      };
+    }
+
+    // Viewport Limiter using official GeoLibre AreaPriorityLimiter algorithm
+    function applyViewportLimiter() {
+      if (!loadedFeatures || loadedFeatures.length === 0) return;
+
+      const bounds = map.getBounds();
+      const bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()];
+
+      let optimizedFeatures = [];
+      let stats = null;
+
+      if (typeof GeoLibreLayerLimiter !== 'undefined' && GeoLibreLayerLimiter.optimizeFeatureCollection) {
+        const opt = GeoLibreLayerLimiter.optimizeFeatureCollection(
+          { type: 'FeatureCollection', features: loadedFeatures },
+          {
+            maxFeatures: 100,
+            sortProperty: 'area_ha',
+            sortOrder: 'desc',
+            bbox: bbox
+          }
+        );
+        optimizedFeatures = opt.optimizedGeoJSON.features;
+        stats = opt.stats;
+      } else {
+        // Fallback: in-bounds filtering and sorting
+        const inBounds = loadedFeatures.filter(f => {
+          if (!f || !f.geometry) return false;
+          if (typeof GeoLibreLayerLimiter !== 'undefined' && GeoLibreLayerLimiter.isFeatureInBBox) {
+            return GeoLibreLayerLimiter.isFeatureInBBox(f, bbox);
+          }
+          return true;
+        });
+        inBounds.sort((a, b) => getFeatureMetricSize(b) - getFeatureMetricSize(a));
+        optimizedFeatures = inBounds.slice(0, 100);
+        stats = {
+          totalInViewport: inBounds.length,
+          renderedCount: optimizedFeatures.length,
+          isCapped: inBounds.length > 100,
+          maxFeatures: 100,
+          sortProperty: 'area_ha',
+          executionTimeMs: 0
+        };
+      }
+
+      latestLimiterStats = stats;
+      renderLiveFeatures(optimizedFeatures, stats);
     }
 
     async function loadLiveData() {
@@ -1306,12 +1422,29 @@
             const data = await resp.json();
             if (data && data.features && data.features.length > 0) {
               loadedFeatures = data.features;
-              loadedFeatures.sort((a, b) => getFeatureMetricSize(b) - getFeatureMetricSize(a));
-              viewportCount = loadedFeatures.length;
+              // Precompute metric area using GeoLibreLayerLimiter
+              loadedFeatures.forEach(f => {
+                if (f && f.geometry && (f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon')) {
+                  const ha = (typeof GeoLibreLayerLimiter !== 'undefined' && GeoLibreLayerLimiter.getFeatureArea)
+                    ? GeoLibreLayerLimiter.getFeatureArea(f, 'area_ha')
+                    : getFeatureMetricSize(f);
+                  if (!f.properties) f.properties = {};
+                  f.properties.area_ha = ha;
+                }
+              });
+
               if (data.totalFeatures && typeof data.totalFeatures === 'number') {
                 upstreamCount = data.totalFeatures;
               }
-              renderLiveFeatures(loadedFeatures, viewportCount, s3Count, upstreamCount);
+              upstreamLiveCount = upstreamCount;
+              s3LakehouseCount = s3Count;
+
+              if (!initialFitDone && loadedFeatures.length > 0) {
+                initialFitDone = true;
+                map.fitBounds(L.geoJSON(loadedFeatures).getBounds().pad(0.2));
+              }
+
+              applyViewportLimiter();
               return;
             }
           }
@@ -1357,11 +1490,37 @@
             const data = await resp.json();
             if (data && data.features && data.features.length > 0) {
               loadedFeatures = data.features;
-              // Sort features client-side to ensure largest features appear first
-              loadedFeatures.sort((a, b) => getFeatureMetricSize(b) - getFeatureMetricSize(a));
-              
-              viewportCount = loadedFeatures.length;
-              renderLiveFeatures(loadedFeatures, viewportCount, s3Count, upstreamCount);
+              // Precompute metric area using GeoLibreLayerLimiter
+              loadedFeatures.forEach(f => {
+                if (f && f.geometry && (f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon')) {
+                  const ha = (typeof GeoLibreLayerLimiter !== 'undefined' && GeoLibreLayerLimiter.getFeatureArea)
+                    ? GeoLibreLayerLimiter.getFeatureArea(f, 'area_ha')
+                    : getFeatureMetricSize(f);
+                  if (!f.properties) f.properties = {};
+                  f.properties.area_ha = ha;
+                }
+              });
+
+              upstreamLiveCount = upstreamCount;
+              s3LakehouseCount = s3Count;
+
+              if (!initialFitDone && loadedFeatures.length > 0) {
+                initialFitDone = true;
+                const hasPts = loadedFeatures.some(f => f.geometry && (f.geometry.type === 'Point' || f.geometry.type === 'MultiPoint'));
+                const hasPoly = loadedFeatures.some(f => f.geometry && (f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon' || f.geometry.type === 'LineString' || f.geometry.type === 'MultiLineString'));
+                if (hasPts && !hasPoly) {
+                  const pts = loadedFeatures.map(f => {
+                    let c = f.geometry.coordinates;
+                    if (f.geometry.type === 'MultiPoint' && Array.isArray(c[0])) c = c[0];
+                    return [c[1], c[0]];
+                  });
+                  map.fitBounds(L.latLngBounds(pts).pad(0.2));
+                } else {
+                  map.fitBounds(L.geoJSON(loadedFeatures).getBounds().pad(0.2));
+                }
+              }
+
+              applyViewportLimiter();
               return;
             }
           }
@@ -1391,7 +1550,7 @@
         `Spatial extent locked to genuine ${jurisdiction.name} bounding box with 30% background opacity.`;
     }
 
-    function renderLiveFeatures(features, viewportCount, s3Count, upstreamCount) {
+    function renderLiveFeatures(features, stats) {
       liveLayerGroup.clearLayers();
       s3LayerGroup.clearLayers();
       liveClusterGroup.clearLayers();
@@ -1406,19 +1565,18 @@
 
       features.forEach((f, i) => {
         if (!f || !f.geometry) return;
-        const geomType = f.geometry.type;
+        const info = getFeatureDisplayInfo(f, i);
+        const geomType = info.geomType;
         const p = f.properties || {};
-        const featName = p.name || p.NAME || p.STATION_NAME || p.SUB_NAME || p.LABEL || p.SCHOOL_NAME || p.FACILITY_NAME || p.alternativelabel || p.feature || p.rezname || p.plantno || p.planlabel || p.lotidstring || p.cadid || (p.ebs_boundary_id ? `DBCA TEC Boundary #${p.ebs_boundary_id}` : (p.ufi ? `Vicmap #${p.ufi}` : `Feature #${i+1}`));
-        const featVal = p.ebs_status || p.networktyp || (p.capacity_kv ? `${p.capacity_kv} kV` : '') || p.feature_type_code || p.FEATURE_TYPE_CODE || p.val || p.WIND_REGION || p.STATUS || p.status || p.VOLTAGE || p.CLASS || p.OBJECTID || p.objectid || p.zone_code || p.ZONE_CODE || p.buildingcomplextype || (p.size_mw ? `${p.size_mw} MW` : (p.area_ha ? `${Math.round(p.area_ha)} ha` : 'Spatial Feature'));
 
         if (geomType === 'LineString' || geomType === 'MultiLineString') {
           hasPolygonsOrLines = true;
           const lineLayer = L.geoJSON(f, { style: { color: "#0284c7", weight: 4.5, opacity: 0.95 } });
-          lineLayer.bindPopup(`<strong>${featName}</strong><br><span style="color:#38bdf8;">${featVal}</span><br><span style="color:#94a3b8; font-size:0.75rem;">Type: ${geomType}</span>`);
+          lineLayer.bindPopup(`<strong>${info.name}</strong><br><span style="color:#38bdf8; font-weight:600;">${info.val}</span><br><span style="color:#94a3b8; font-size:0.75rem;">${geomType} • Record #${info.id}</span>`);
           lineLayer.addTo(s3LayerGroup);
 
           const liveLine = L.geoJSON(f, { style: { color: "#fbbf24", weight: 2.5, dashArray: "6, 6", opacity: 1.0 } });
-          liveLine.bindPopup(`<strong>${featName}</strong><br><span style="color:#fbbf24;">${featVal}</span><br><span style="color:#94a3b8; font-size:0.75rem;">Type: ${geomType} (Live Upstream)</span>`);
+          liveLine.bindPopup(`<strong>${info.name}</strong><br><span style="color:#fbbf24; font-weight:600;">${info.val}</span><br><span style="color:#94a3b8; font-size:0.75rem;">${geomType} (Live Upstream)</span>`);
           liveLine.addTo(liveLayerGroup);
         } else if (geomType === 'Point' || geomType === 'MultiPoint') {
           hasPoints = true;
@@ -1428,26 +1586,26 @@
           const lng = coords[0];
           if (typeof lat === 'number' && typeof lng === 'number' && !isNaN(lat) && !isNaN(lng)) {
             const marker = L.circleMarker([lat, lng], { radius: 7, fillColor: '#0284c7', color: '#38bdf8', weight: 2, fillOpacity: 0.95 });
-            marker.bindPopup(`<strong>${featName}</strong><br><span style="color:#38bdf8;">${featVal}</span><br><span style="color:#94a3b8; font-size:0.7rem;">[${lat.toFixed(4)}, ${lng.toFixed(4)}]</span>`);
+            marker.bindPopup(`<strong>${info.name}</strong><br><span style="color:#38bdf8; font-weight:600;">${info.val}</span><br><span style="color:#94a3b8; font-size:0.7rem;">[${lat.toFixed(4)}, ${lng.toFixed(4)}] • ID #${info.id}</span>`);
             liveClusterGroup.addLayer(marker);
           }
         } else if (geomType === 'Polygon' || geomType === 'MultiPolygon') {
           hasPolygonsOrLines = true;
-          const polySub = p.ebs_contact ? 'DBCA Species & Communities' : geomType;
-          const polyLayer = L.geoJSON(f, { style: { color: "#0284c7", weight: 3, opacity: 0.9, fillColor: "#0284c7", fillOpacity: 0.15 } });
-          polyLayer.bindPopup(`<strong>${featName}</strong><br><span style="color:#38bdf8;">${featVal}</span><br><span style="color:#94a3b8; font-size:0.75rem;">${polySub}</span>`);
+          const areaDisplay = info.areaHa > 0 ? `<br><span style="color:#10b981; font-weight:600;">Geodesic Area: ${info.areaHa < 1 ? info.areaHa.toFixed(2) : Math.round(info.areaHa).toLocaleString()} ha</span>` : '';
+          const polyLayer = L.geoJSON(f, { style: { color: "#0284c7", weight: 2.5, opacity: 0.9, fillColor: "#0284c7", fillOpacity: 0.15 } });
+          polyLayer.bindPopup(`<strong>${info.name}</strong><br><span style="color:#38bdf8; font-weight:600;">${info.val}</span>${areaDisplay}<br><span style="color:#94a3b8; font-size:0.72rem;">${geomType} • Record #${info.id}</span>`);
           polyLayer.addTo(s3LayerGroup);
 
           const livePoly = L.geoJSON(f, { style: { color: "#f43f5e", weight: 2, dashArray: "4, 4", fillColor: "#f43f5e", fillOpacity: 0.25 } });
-          livePoly.bindPopup(`<strong>${featName}</strong><br><span style="color:#f43f5e;">${featVal}</span><br><span style="color:#94a3b8; font-size:0.75rem;">${polySub} (Live Upstream)</span>`);
+          livePoly.bindPopup(`<strong>${info.name}</strong><br><span style="color:#f43f5e; font-weight:600;">${info.val}</span>${areaDisplay}<br><span style="color:#94a3b8; font-size:0.72rem;">${geomType} (Live Upstream)</span>`);
           livePoly.addTo(liveLayerGroup);
         }
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td style="color: #38bdf8; font-weight: bold;">${p.ufi || p.UFI || p.ebs_occ_unique || p.OBJECTID || p.objectid || p.id || i+1}</td>
-          <td>${featName}</td>
-          <td style="color: #34d399;">${featVal}</td>
+          <td style="color: #38bdf8; font-weight: bold;">${info.id}</td>
+          <td>${info.name}</td>
+          <td style="color: #34d399; font-weight: 600;">${info.val}</td>
           <td style="color: #cbd5e1;">${geomType}</td>
         `;
         tr.onclick = () => {
@@ -1462,22 +1620,38 @@
         tbody.appendChild(tr);
       });
 
-      const s3Val = s3Count || meta.base_count;
-      const upVal = upstreamCount || meta.base_count;
-      const badgeText = `${features.length.toLocaleString()} | ${s3Val.toLocaleString()} | ${upVal.toLocaleString()}`;
-      document.getElementById('s3-count-badge').textContent = badgeText;
-      document.getElementById('s3-count-badge').title = "Viewport : S3 Project Library : Rest/WMTS data source";
-      document.getElementById('table-record-count').textContent = `${features.length.toLocaleString()} live features loaded in viewport (sorted by size)`;
-      document.getElementById('filter-result-badge').textContent = `${features.length.toLocaleString()} records available`;
+      const s3Val = s3LakehouseCount || meta.base_count;
+      const upVal = upstreamLiveCount || meta.base_count;
+      const inViewCount = stats ? stats.totalInViewport : features.length;
+      const rendCount = stats ? stats.renderedCount : features.length;
+      const execTime = stats && typeof stats.executionTimeMs === 'number' ? `${stats.executionTimeMs}ms` : '<1ms';
 
-      if (features.length > 0) {
-        if (hasPoints && liveClusterGroup.getLayers().length > 0 && !hasPolygonsOrLines) {
-          map.fitBounds(liveClusterGroup.getBounds().pad(0.2));
-        } else {
-          map.fitBounds(L.geoJSON(features).getBounds().pad(0.2));
-        }
+      const badgeText = `${rendCount.toLocaleString()} (Top-K) | ${s3Val.toLocaleString()} (Lakehouse) | ${upVal.toLocaleString()} (Live)`;
+      document.getElementById('s3-count-badge').textContent = badgeText;
+      document.getElementById('s3-count-badge').title = "Rendered Top-K in Viewport : S3 Lakehouse Records : Upstream Live Records";
+
+      if (rendCount === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8; padding:1.5rem;">No features in active map viewport. Pan or zoom map to inspect loaded features.</td></tr>`;
+        document.getElementById('table-record-count').textContent = `0 features in active viewport (Pan or zoom map to inspect)`;
+        document.getElementById('filter-result-badge').textContent = `0 visible`;
+      } else {
+        const limiterText = stats && stats.isCapped 
+          ? `Top-${rendCount} of ${inViewCount} in view (GeoLibre Min-Heap in ${execTime})`
+          : `${rendCount} in view (${execTime})`;
+        document.getElementById('table-record-count').textContent = `${rendCount} features loaded in viewport — ${limiterText}`;
+        document.getElementById('filter-result-badge').textContent = `${rendCount} of ${inViewCount} visible`;
       }
     }
+
+    // Dynamic Viewport Hook on Leaflet map movement
+    let moveEndDebounceTimer = null;
+    map.on('moveend', () => {
+      if (!loadedFeatures || loadedFeatures.length === 0) return;
+      if (moveEndDebounceTimer) clearTimeout(moveEndDebounceTimer);
+      moveEndDebounceTimer = setTimeout(() => {
+        applyViewportLimiter();
+      }, 150);
+    });
 
     loadLiveData();
 
@@ -1492,8 +1666,23 @@
       if (sql.toLowerCase().includes('where') && !sql.includes('1=1')) {
         filtered = loadedFeatures.slice(0, Math.max(1, Math.floor(loadedFeatures.length / 2)));
       }
-      renderLiveFeatures(filtered);
-      document.getElementById('filter-result-badge').textContent = `${filtered.length} matching records`;
+      
+      const bounds = map.getBounds();
+      const bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()];
+      let opt = null;
+      if (typeof GeoLibreLayerLimiter !== 'undefined' && GeoLibreLayerLimiter.optimizeFeatureCollection) {
+        opt = GeoLibreLayerLimiter.optimizeFeatureCollection(
+          { type: 'FeatureCollection', features: filtered },
+          { maxFeatures: 100, sortProperty: 'area_ha', sortOrder: 'desc', bbox }
+        );
+      } else {
+        opt = {
+          optimizedGeoJSON: { type: 'FeatureCollection', features: filtered.slice(0, 100) },
+          stats: { totalInViewport: filtered.length, renderedCount: Math.min(100, filtered.length), isCapped: filtered.length > 100, executionTimeMs: 0 }
+        };
+      }
+      renderLiveFeatures(opt.optimizedGeoJSON.features, opt.stats);
+      document.getElementById('filter-result-badge').textContent = `${opt.stats.renderedCount} matching records`;
       document.getElementById('attr-dock').style.display = 'flex';
       document.getElementById('btn-toggle-table').classList.add('active');
     }

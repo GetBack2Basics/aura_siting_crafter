@@ -220,6 +220,7 @@
   }
 
   function normalizeMaxFeatures(value) {
+    if (value === 'all' || value === Infinity || value === 'Infinity') return Infinity;
     return typeof value === 'number' && Number.isFinite(value) && value >= 1
       ? Math.floor(value)
       : 500;
@@ -350,7 +351,7 @@
     }
 
     setMaxFeatures(count) {
-      this.options.maxFeatures = parseInt(count, 10) || 500;
+      this.options.maxFeatures = (count === 'all' || count === Infinity || count === 'Infinity') ? Infinity : (parseInt(count, 10) || 500);
       if (this._enabled) {
         this.apply();
       }

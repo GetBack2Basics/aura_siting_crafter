@@ -1500,6 +1500,12 @@
         <span>✅ Data QA</span>
       </a>
 
+      <!-- Live QA Feature Inspector Link -->
+      <a class="nav-btn" href="docs/qa/geolibre_qa_inspect.html" target="_blank"
+        title="Interactive GeoLibre Feature Inspector: Area-Priority Viewport Limiter & Live Upstream Geospatial Features">
+        <span>🔍 QA Inspector</span>
+      </a>
+
       <!-- GeoLibre JSON Spec & Desktop GIS Integration -->
       <button class="nav-btn" onclick="openGeolibreModal()" title="GeoLibre Open GIS Spec & Desktop GIS Access">
         <span>⬇️ GeoLibre JSON</span>
@@ -3896,6 +3902,24 @@
       const lyr = THEMATIC_LAYERS.find(l => l.id === layerId);
       if (!lyr || !lyr.meta) return;
 
+      const mapping = {
+        'national_seismic_hazard_nsha': 'national_seismic_hazard_nsha_v2',
+        'national_cyclone_hazard_tcha': 'national_cyclone_hazard_tcha_v2',
+        'nsw_coastal_inundation_hazard': 'nsw_coastal_inundation_hazard_v2',
+        'landslide_susceptibility': 'nsw_landslide_susceptibility_v2',
+        'geoscape_cadastre': 'national_cadastre_gnaf_v2',
+        'transmission_lines_interstate': 'national_electricity_grid_v2',
+        'transmission_lines_regional': 'nsw_transmission_grid_v2',
+        'substations_terminal': 'national_electricity_grid_v2',
+        'bom_hydro_lines': 'vic_hydro_watercourses_v2',
+        'recycled_wwtw_plants': 'national_healthcare_nhsd_v2',
+        'acara_schools': 'national_schools_acara_v2',
+        'nhsd_healthcare': 'national_healthcare_nhsd_v2',
+        'bionet_biodiversity': 'nsw_bionet_bv_map_v2',
+        'rfs_bushfire_bfpl': 'nsw_bionet_bv_map_v2'
+      };
+      const qaKey = mapping[lyr.id] || (lyr.id.endsWith('_v2') ? lyr.id : lyr.id + '_v2');
+
       document.getElementById('modal-layer-title').innerHTML = `ℹ️ ${lyr.name} — Metadata Lineage`;
       const body = document.getElementById('modal-layer-body');
       body.innerHTML = `
@@ -3908,6 +3932,14 @@
           <tr><td>Coordinate System</td><td style="font-family: 'JetBrains Mono', monospace;">${lyr.meta.crs}</td></tr>
           <tr><td>Storage & Lakehouse Format</td><td>GeoParquet / Apache Iceberg Spatial Lakehouse</td></tr>
         </table>
+        <div style="margin-top: 1.1rem; padding-top: 0.8rem; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; gap: 0.6rem; flex-wrap: wrap;">
+          <a href="docs/qa/geolibre_qa_inspect.html?dataset=${qaKey}" target="_blank" class="nav-btn" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.4); text-decoration: none; padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
+            🔍 Open in GeoLibre QA Inspector ↗
+          </a>
+          <a href="data_qa.html" target="_blank" class="nav-btn" style="color: #34d399; border-color: rgba(52, 211, 153, 0.4); text-decoration: none; padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
+            🛡️ Automated QA Report ↗
+          </a>
+        </div>
       `;
 
       document.getElementById('meta-modal').classList.add('open');

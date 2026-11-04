@@ -19,7 +19,7 @@ The platform is deployed live on Google Cloud Platform:
 | :--- | :--- | :--- |
 | **National Siting Report** | [https://aura.getback2basics.net/index.html](https://aura.getback2basics.net/index.html) | Canonical suitability report, ABS meshblock rankings, power grid overlays, and real-time What-If scenario sandbox. |
 | **GeoLibre WebGIS Engine** | [https://aura.getback2basics.net/map.html](https://aura.getback2basics.net/map.html) | Fullscreen MapLibre GL viewer with national cadastral vector overlays, jurisdiction extents, and spatial filtering. |
-| **Data QA & Source Inspector** | [https://aura.getback2basics.net/data_qa.html](https://aura.getback2basics.net/data_qa.html) | Cross-page spatial data lineage audit and live inspector across 16 authoritative state & national portals. |
+| **Data QA & Source Inspector** | [https://aura.getback2basics.net/docs/qa/index.html](https://aura.getback2basics.net/docs/qa/index.html) | Cross-page spatial data lineage audit and live inspector across 16 authoritative state & national portals. |
 | **3D Digital Twin & COPC LiDAR** | [https://aura.getback2basics.net/projects/copc_3d_viewer.html](https://aura.getback2basics.net/projects/copc_3d_viewer.html) | WebGL & Potree 3D point cloud streaming for high-precision terrain and site engineering analysis. |
 | **Spatial AI API Gateway** | [https://aura.getback2basics.net/api/docs](https://aura.getback2basics.net/api/docs) | FastAPI OpenAPI documentation for Natural Language to DuckDB Spatial SQL proxy on GCP Cloud Run. |
 
@@ -101,7 +101,7 @@ The platform is deployed live on Google Cloud Platform:
 | `src/Ingestion/` | Apache Sedona spatial ETL pipelines (`spatial_ingest.py`, `data_ingest.py`) |
 | `src/Ingestion_v2/` | Incremental spatial ingest & telemetry v2 |
 | `src/Analysis/` | National Multi-Criteria Decision Analysis scoring engine (`national_suitability_analysis.py`, `datacenter_suitability.py`) |
-| `src/geolibre_frontend/` | Client-side WebGIS application (`index.html`, `map.html`, `data_qa.html`, Potree/Cesium 3D viewers) |
+| `src/geolibre_frontend/` | Client-side WebGIS application (`index.html`, `map.html`, `docs/qa/index.html`, Potree/Cesium 3D viewers) |
 | `src/geolibre_proxy/` | FastAPI Spatial AI proxy container for Cloud Run deployment |
 | `runner/` | Automated report & ETL generators (`build_suitability_report.py`, `etl_runner.html`) |
 | `notebooks/` | Interactive Wherobots exploratory notebooks (`Spatial_ETL_Pipeline.ipynb`, `Precinct_Suitability_Analysis.ipynb`) |

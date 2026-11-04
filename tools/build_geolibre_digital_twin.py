@@ -755,7 +755,7 @@ def build_digital_twin_html(manifest: Dict[str, Any], output_path: str) -> str:
             <a href="../map.html" class="hud-btn">
                 🌐 National Map
             </a>
-            <a href="../data_qa.html" target="_blank" class="hud-btn" style="border-color: rgba(16, 185, 129, 0.4); color: #34d399;">
+            <a href="../docs/qa/index.html" target="_blank" class="hud-btn" style="border-color: rgba(16, 185, 129, 0.4); color: #34d399;">
                 ✅ Data QA ↗
             </a>
         </div>

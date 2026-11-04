@@ -10,7 +10,7 @@ def main():
     sub_content = sub_content.replace('href="copc_3d_viewer.html"', 'href="../copc_3d_viewer.html"')
     sub_content = sub_content.replace('href="cesium_wireframe_tin.html"', 'href="../cesium_wireframe_tin.html"')
     sub_content = sub_content.replace('href="map.html"', 'href="../map.html"')
-    sub_content = sub_content.replace('href="data_qa.html', 'href="../data_qa.html')
+    sub_content = sub_content.replace('href="docs/qa/index.html', 'href="../docs/qa/index.html')
 
     targets = [
         os.path.join('src', 'geolibre_frontend', 'projects', 'geolibre_cesium_3d_viewer.html'),

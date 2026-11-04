@@ -26,6 +26,10 @@ In every final response after executing computational jobs, explicitly check and
 3. If an external service is unreachable or slow, display the verified live connection URL, genuine state boundary, or error state explicitly rather than displaying mock or synthetic fallback objects.
 4. All code changes MUST pass the zero-mock AST scanner (`pytest tests/lint/test_no_mock_data.py -v`).
 
+## GCP Cost Project Rule
+The gcloud/ADC quota (cost) project MUST always match this repository's GCP project (`aura-siting-crafter`).
+Before any `gcloud`/`gsutil`/`bq` command, verify `billing/quota_project` equals the `core/project` value; if not, stop and fix it (`gcloud config set billing/quota_project aura-siting-crafter`) rather than enabling APIs on another project.
+
 ## Security Rule
 Never commit API keys, session IDs, org IDs, or private credentials to this repo.
 All runtime secrets must be loaded via environment variables or `.env` (gitignored).

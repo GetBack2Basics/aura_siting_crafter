@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AURA dataset manifest: dual-store location, kind, licence and access fields",
+  "description": "Additive fields validated for every entry in config/dataset_manifest_v2.json. Values such as bytes, sha256 and snapshot_id are filled from the real stores by tools/sync_manifest_locations.py; unknown values are null, never defaulted.",
+  "type": "object",
+  "required": ["kind", "access", "locations", "licence"],
+  "properties": {
+    "kind": { "enum": ["vector", "raster", "point_cloud", "table"] },
+    "derived": { "type": "boolean" },
+    "access": { "enum": ["public", "private"] },
+    "licence": {
+      "type": "object",
+      "required": ["redistribution"],
+      "properties": {
+        "name": { "type": ["string", "null"] },
+        "url": { "type": ["string", "null"] },
+        "attribution": { "type": ["string", "null"] },
+        "redistribution": {
+          "enum": [true, false, null],
+          "description": "true = verified that public redistribution is allowed. null = not yet verified (treated as blocked by the publish gate)."
+        },
+        "verified_on": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "locations": {
+      "type": "object",
+      "required": ["gcs", "wherobots"],
+      "properties": {
+        "gcs": {
+          "type": ["object", "null"],
+          "required": ["uri", "present"],
+          "properties": {
+            "uri": { "type": "string", "pattern": "^gs://" },
+            "https_url": { "type": ["string", "null"] },
+            "format": { "type": ["string", "null"] },
+            "present": { "enum": [true, false, null] },
+            "object_count": { "type": ["integer", "null"] },
+            "bytes": { "type": ["integer", "null"] },
+            "updated": { "type": ["string", "null"] }
+          },
+          "additionalProperties": false
+        },
+        "wherobots": {
+          "type": ["object", "null"],
+          "required": ["uri", "present"],
+          "properties": {
+            "uri": { "type": "string", "pattern": "^wherobots://" },
+            "format": { "type": ["string", "null"] },
+            "present": { "enum": [true, false, null] },
+            "snapshot_id": { "type": ["string", "null"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+

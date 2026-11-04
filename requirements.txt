@@ -6,6 +6,7 @@ shapely>=2.0.0
 # Data Processing & Numerical
 pandas>=2.0.0
 numpy>=1.25.0
+scipy>=1.11.0
 requests>=2.31.0
 python-dotenv>=1.0.0
 httpx>=0.25.0
@@ -21,5 +22,9 @@ matplotlib>=3.7.0
 # Wherobots Cloud Client
 wherobots-python-dbapi>=0.28.0
 
+# Google Cloud Storage (manifest sync, publishing)
+google-cloud-storage>=2.16.0
+
 # Testing & Linting
 pytest>=7.4.0
+jsonschema>=4.0.0

@@ -51,11 +51,11 @@ def serve_webgis_root():
 @app.get("/docs/", include_in_schema=False)
 def redirect_docs_root():
     """Redirects /docs root to the automated data QA dashboard."""
-    return RedirectResponse(url="/data_qa.html")
+    return RedirectResponse(url="/docs/qa/index.html")
 
 @app.get("/{filename}.html")
 def serve_frontend_html(filename: str):
-    """Serves any frontend HTML file (e.g. map.html, index.html, data_qa.html, data_lineage_audit.html)."""
+    """Serves any frontend HTML file (e.g. map.html, index.html, data_lineage_audit.html)."""
     fp = os.path.join(FRONTEND_DIR, f"{filename}.html")
     if os.path.exists(fp) and os.path.isfile(fp):
         return FileResponse(fp, media_type="text/html")
@@ -92,6 +92,10 @@ if os.path.exists(_tests_dir):
 _js_dir = os.path.join(FRONTEND_DIR, "js")
 if os.path.exists(_js_dir):
     app.mount("/js", StaticFiles(directory=_js_dir), name="js")
+
+_config_dir = os.path.join(FRONTEND_DIR, "config")
+if os.path.exists(_config_dir):
+    app.mount("/config", StaticFiles(directory=_config_dir), name="config")
 
 @app.get("/aura-siting-crafter.geolibre.json")
 def serve_geolibre_json():

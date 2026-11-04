@@ -115,13 +115,7 @@ def test_html_internal_links_valid(html_file):
             if deployed_web_path.endswith('data_lineage_audit.html') and (BASE_DIR / 'src' / 'geolibre_frontend' / 'data_lineage_audit.html').exists():
                 found_in_deployment = True
                 break
-            if deployed_web_path.endswith('QA_Report_20260902.html') and (BASE_DIR / 'docs' / 'qa' / 'QA_Report_20260902.html').exists():
-                found_in_deployment = True
-                break
             if deployed_web_path.startswith('potree/'):
-                found_in_deployment = True
-                break
-            if deployed_web_path.endswith('QA_Report_20260906.html') and (BASE_DIR / 'docs' / 'qa' / 'QA_Report_20260906.html').exists():
                 found_in_deployment = True
                 break
 

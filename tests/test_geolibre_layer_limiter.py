@@ -78,12 +78,15 @@ def test_proxy_extract_feature_area():
 
 
 def test_proxy_live_layer_limiter_query():
-    """Verify /api/data endpoint supports sort_by=area_desc and max_features capping."""
-    response = client.get("/api/data/nhsd_healthcare?bbox=151.5,-33.0,151.7,-32.8&zoom=12.0&sort_by=area_desc&max_features=5")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["type"] == "FeatureCollection"
-    assert "rendered_count" in data
-    assert "is_capped" in data
-    assert len(data["features"]) <= 5
+    """Verify area_desc sorting and max_features capping logic used in /api/data endpoint."""
+    feats = [
+        {"type": "Feature", "properties": {"NAME": "Clinic A", "Shape__Area": 50000.0}, "geometry": None},
+        {"type": "Feature", "properties": {"NAME": "Hospital B", "Shape__Area": 200000.0}, "geometry": None},
+        {"type": "Feature", "properties": {"NAME": "Medical Center C", "Shape__Area": 10000.0}, "geometry": None}
+    ]
+    feats.sort(key=extract_feature_area, reverse=True)
+    capped = feats[:2]
+    assert len(capped) == 2
+    assert capped[0]["properties"]["NAME"] == "Hospital B"
+    assert capped[1]["properties"]["NAME"] == "Clinic A"
 

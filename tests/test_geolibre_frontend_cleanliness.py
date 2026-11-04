@@ -64,9 +64,18 @@ def test_production_viewers_exist():
         "cesium_wireframe_tin.html",
         "map.html",
         "index.html",
-        "data_qa.html",
+        os.path.join("docs", "qa", "index.html"),
+        os.path.join("docs", "qa", "geolibre_qa_inspect.html"),
         "data_lineage_audit.html",
     ]
     for v in required_viewers:
         path = os.path.join(FRONTEND_DIR, v)
         assert os.path.exists(path), f"Required production viewer '{v}' missing from {FRONTEND_DIR}"
+
+
+def test_no_duplicate_qa_files():
+    """Asserts that only canonical QA files exist in docs/qa/ and no duplicate data_qa.html or QA_Report_*.html exist."""
+    assert not os.path.exists(os.path.join(FRONTEND_DIR, "data_qa.html")), "Duplicate data_qa.html must not exist"
+    qa_dir = os.path.join(FRONTEND_DIR, "docs", "qa")
+    for fname in os.listdir(qa_dir):
+        assert not fname.startswith("QA_Report_"), f"Redundant dated QA snapshot '{fname}' must not exist in {qa_dir}"

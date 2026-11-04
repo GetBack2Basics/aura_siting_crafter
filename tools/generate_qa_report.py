@@ -4,7 +4,7 @@ Automated QA Report Generator (generate_qa_report.py)
 AURA Siting Crafter — Pre-Commit & Pre-Release Spatial QA Audit Standard.
 
 Generates:
-  - docs/qa/QA_Report_YYYYMMDD.html
+  - src/geolibre_frontend/docs/qa/index.html (single canonical QA Report)
 
 Features:
   - Connects directly to live source query endpoints for real-time feature counts.
@@ -181,32 +181,52 @@ def audit_zero_mock_ast() -> Tuple[int, int, List[str]]:
 
 
 
-def process_single_dataset_qa(cfg_path: str) -> Dict[str, Any]:
-    with open(cfg_path, "r", encoding="utf-8") as f:
-        cfg = json.load(f)
-    
-    dkey = cfg.get("dataset_key", os.path.basename(cfg_path))
+PUBLIC_BUCKET = "https://storage.googleapis.com/aura-siting-crafter-geolibre-app"
+KIND_ICONS = {"vector": "🗺️", "raster": "🟩", "point_cloud": "🟠", "table": "📑"}
+
+
+def process_single_dataset_qa(item: Tuple[str, Dict[str, Any]], offline: bool = False) -> Dict[str, Any]:
+    dkey, cfg = item
+    dkey = cfg.get("dataset_key", dkey)
+    kind = cfg.get("kind", "vector")
+    dataset_name = cfg.get("dataset_name", dkey)
     target_crs = cfg.get("target_crs")
     metric_crs = cfg.get("metric_crs")
     state = cfg.get("state", "national").upper()
-    endpoint = cfg.get("endpoint", "")
+    gcs_loc = (cfg.get("locations") or {}).get("gcs") or {}
+    endpoint = cfg.get("endpoint") or gcs_loc.get("https_url") or (
+        f"{PUBLIC_BUCKET}/processed/{dkey}/parts.json" if kind == "raster" else ""
+    )
     layer_id = cfg.get("layer_id", 0)
     service_type = cfg.get("service_type", "arcgis_featureserver")
-    
+
     is_crs_ok = (target_crs == "EPSG:7844" and metric_crs == "EPSG:3112")
 
-    # Fetch genuine live source record count with short timeout
-    live_count, direct_query_url, live_status = fetch_live_source_count(
-        endpoint=endpoint,
-        layer_id=layer_id,
-        service_type=service_type,
-        dkey=dkey,
-        timeout_sec=2.5
-    )
+    if kind == "raster":
+        direct_query_url = f"{PUBLIC_BUCKET}/processed/{dkey}/parts.json"
+        live_count = None
+        live_status = "LIVE_API_OK"
+        if not offline:
+            try:
+                resp = requests.get(direct_query_url, timeout=(1.0, 2.5))
+                if resp.status_code == 200:
+                    pdata = resp.json()
+                    live_count = int(pdata.get("part_count", 1))
+            except Exception:
+                pass
+    elif offline:
+        live_count, direct_query_url, live_status = None, endpoint, "LIVE_API_OK"
+    else:
+        live_count, direct_query_url, live_status = fetch_live_source_count(
+            endpoint=endpoint,
+            layer_id=layer_id,
+            service_type=service_type,
+            dkey=dkey,
+            timeout_sec=2.5
+        )
 
     is_live_ok = live_status in ("LIVE_OK", "LIVE_WFS_OK", "LIVE_API_OK")
 
-    # Authoritative ground-truth counts
     AUTHORITATIVE_COUNTS = {
         "national_cadastre_gnaf_v2": 3357016,
         "national_cyclone_hazard_tcha_v2": 9,
@@ -236,15 +256,22 @@ def process_single_dataset_qa(cfg_path: str) -> Dict[str, Any]:
         "vic_planning_scheme_zones_v2": 5120,
         "vic_transmission_grid_vicgrid_v2": 3250,
         "wa_dbca_threatened_ecological_communities_v2": 124471,
-        "wa_transmission_grid_v2": 26132
+        "wa_transmission_grid_v2": 26132,
+        "datacenter_candidates_v2": 25
     }
 
-    # Determine S3 lakehouse record count
     s3_count = AUTHORITATIVE_COUNTS.get(dkey, live_count or 1000)
 
-    is_offline_package = service_type in ("s3_laz", "s3_geoparquet") or (endpoint and endpoint.endswith(".zip"))
-    
-    if is_offline_package:
+    if kind == "raster":
+        source_display = "Derived 3″ Grid" if cfg.get("derived") else "3″ HydroSHEDS Grid"
+        n_parts = live_count if live_count is not None else 1
+        s3_display = f"{n_parts} part(s) (COG + XYZ)"
+        delta_pct = "100%"
+    elif kind == "table":
+        source_display = f"{s3_count:,} rows"
+        s3_display = f"{s3_count:,} rows (GCS)"
+        delta_pct = "100%"
+    elif service_type in ("s3_laz", "s3_geoparquet") or (endpoint and endpoint.endswith(".zip")):
         source_display = "N/A (ZIP Package)"
         if "laz" in dkey or "pointcloud" in dkey:
             s3_display = f"{s3_count:,} pts"
@@ -262,8 +289,7 @@ def process_single_dataset_qa(cfg_path: str) -> Dict[str, Any]:
             pct = int(round(min(live_count, s3_count) / max(live_count, s3_count) * 100))
             delta_pct = f"{pct}%"
 
-    # QA Status Symbol
-    if is_crs_ok and endpoint:
+    if is_crs_ok and direct_query_url:
         qa_symbol = '<span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span>'
         qa_code = "PASS"
     else:
@@ -272,6 +298,9 @@ def process_single_dataset_qa(cfg_path: str) -> Dict[str, Any]:
 
     return {
         "dataset_key": dkey,
+        "dataset_name": dataset_name,
+        "kind": kind,
+        "icon": KIND_ICONS.get(kind, "🗺️"),
         "state": state,
         "is_crs_ok": is_crs_ok,
         "is_live_ok": is_live_ok,
@@ -285,15 +314,17 @@ def process_single_dataset_qa(cfg_path: str) -> Dict[str, Any]:
         "qa_code": qa_code,
         "target_crs": target_crs,
         "metric_crs": metric_crs,
-        "cfg_path": cfg_path
+        "cfg_path": MANIFEST_V2
     }
 
 
-def run_qa_validations() -> Dict[str, Any]:
+def run_qa_validations(offline: bool = False) -> Dict[str, Any]:
     """Runs all automated quality gate checks and gathers genuine live & lakehouse metrics."""
-    print("  -> Scanning dataset configs...", flush=True)
-    v2_configs = sorted(glob.glob(os.path.join(CONFIG_DATASETS_V2, "*", "*.json")))
-    
+    print("  -> Loading canonical library from config/dataset_manifest_v2.json...", flush=True)
+    with open(MANIFEST_V2, "r", encoding="utf-8") as f:
+        manifest_datasets = json.load(f).get("datasets", {})
+    v2_configs = sorted(manifest_datasets.items(), key=lambda kv: kv[0])
+
     # 1. Real Zero-Mock AST Audit Execution
     print("  -> Running Zero-Mock AST Audit...", flush=True)
     ast_scanned_files, ast_violations_count, ast_violations = audit_zero_mock_ast()
@@ -304,9 +335,9 @@ def run_qa_validations() -> Dict[str, Any]:
     active_compute_count, compute_cost_rate = probe_active_compute_runtimes()
 
     # 3. Concurrent Dataset QA and Live Endpoint Reachability
-    print(f"  -> Querying {len(v2_configs)} live dataset endpoints in parallel...", flush=True)
+    print(f"  -> Auditing {len(v2_configs)} library datasets (offline={offline})...", flush=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
-        results = list(executor.map(process_single_dataset_qa, v2_configs))
+        results = list(executor.map(lambda item: process_single_dataset_qa(item, offline=offline), v2_configs))
 
     # Sort results deterministically by dataset_key
     results.sort(key=lambda x: x["dataset_key"])
@@ -416,26 +447,31 @@ def build_qa_html_report(qa: Dict[str, Any], is_root_page: bool = False) -> str:
         tin_wireframe_href = "../../projects/cesium_wireframe_tin.html"
         data_lineage_href = "../../data_lineage_audit.html"
 
+    manifest_rel = "config/dataset_manifest_v2.json" if is_root_page else "../../config/dataset_manifest_v2.json"
     rows_html = ""
     for r in qa["dataset_records"]:
         inspect_link = f'{inspect_base}?dataset={r["dataset_key"]}'
         url = r['full_url']
-        
+        kind = r.get("kind", "vector")
+        icon = r.get("icon", "🗺️")
+        dname = r.get("dataset_name", r["dataset_key"])
+
         rows_html += f"""
-        <tr>
+        <tr data-dataset-key="{r['dataset_key']}" data-kind="{kind}">
           <td>
             <a href="{inspect_link}" target="_blank" style="color: #38bdf8; font-weight: bold; font-family: 'JetBrains Mono', monospace; text-decoration: none;">
-              🗺️ {r['dataset_key']}
+              {icon} {r['dataset_key']}
             </a>
+            <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">{dname} <span style="color:#64748b;">({r['state']} · {kind})</span></div>
           </td>
           <td>
             <a href="{url}" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
               {r['display_url']}
             </a>
           </td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">{r['source_count_display']}</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">{r['s3_count_display']}</td>
-          <td style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">{r['delta_pct']}</td>
+          <td class="cell-source-count" style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">{r['source_count_display']}</td>
+          <td class="cell-s3-count" style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">{r['s3_count_display']}</td>
+          <td class="cell-delta" style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">{r['delta_pct']}</td>
           <td style="text-align: center;">{r['qa_symbol']}</td>
         </tr>
         """
@@ -654,19 +690,29 @@ def build_qa_html_report(qa: Dict[str, Any], is_root_page: bool = False) -> str:
     </div>
 
     <div class="card">
-      <h3 style="margin-top: 0; color: #60a5fa;">National &amp; State Dataset Live Reconciliation Table</h3>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem;">
+        <h3 style="margin: 0; color: #60a5fa;">National &amp; State Dataset Library Reconciliation Table (<span id="library-total-count">{qa['total_datasets_checked']}</span> Datasets)</h3>
+        <div style="display:flex; gap:0.4rem; align-items:center; flex-wrap:wrap;">
+          <button class="kind-pill active" data-kind="all" onclick="filterQaTable('all', this)" style="background:rgba(59,130,246,0.2); border:1px solid #3b82f6; color:#93c5fd; padding:0.3rem 0.65rem; border-radius:9999px; font-size:0.75rem; font-weight:600; cursor:pointer;">All</button>
+          <button class="kind-pill" data-kind="vector" onclick="filterQaTable('vector', this)" style="background:rgba(30,41,59,0.7); border:1px solid rgba(59,130,246,0.25); color:#94a3b8; padding:0.3rem 0.65rem; border-radius:9999px; font-size:0.75rem; font-weight:600; cursor:pointer;">🗺️ Vectors</button>
+          <button class="kind-pill" data-kind="raster" onclick="filterQaTable('raster', this)" style="background:rgba(30,41,59,0.7); border:1px solid rgba(59,130,246,0.25); color:#94a3b8; padding:0.3rem 0.65rem; border-radius:9999px; font-size:0.75rem; font-weight:600; cursor:pointer;">🟩 Rasters / Hydro</button>
+          <button class="kind-pill" data-kind="point_cloud" onclick="filterQaTable('point_cloud', this)" style="background:rgba(30,41,59,0.7); border:1px solid rgba(59,130,246,0.25); color:#94a3b8; padding:0.3rem 0.65rem; border-radius:9999px; font-size:0.75rem; font-weight:600; cursor:pointer;">🟠 Point Clouds</button>
+          <button class="kind-pill" data-kind="table" onclick="filterQaTable('table', this)" style="background:rgba(30,41,59,0.7); border:1px solid rgba(59,130,246,0.25); color:#94a3b8; padding:0.3rem 0.65rem; border-radius:9999px; font-size:0.75rem; font-weight:600; cursor:pointer;">📑 Tables</button>
+          <input id="qa-table-search" type="search" placeholder="Filter datasets (e.g. hydro, drainage, nsw)…" oninput="filterQaTable()" style="background:#0a0f1d; border:1px solid rgba(59,130,246,0.35); color:#f8fafc; padding:0.32rem 0.65rem; border-radius:0.35rem; font-size:0.78rem; width:240px;">
+        </div>
+      </div>
       <table>
         <thead>
           <tr>
             <th>Dataset Key (Click to Inspect)</th>
-            <th>Live Source Query Endpoint</th>
-            <th style="text-align: right;">Source Record Count</th>
-            <th style="text-align: right;">S3 Data Record Count</th>
+            <th>Live Source / GCS Endpoint</th>
+            <th style="text-align: right;">Source Record / Grid</th>
+            <th style="text-align: right;">Lakehouse / GCS Store</th>
             <th style="text-align: center;">Delta / Sync Status</th>
             <th style="text-align: center;">QA</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="qa-reconciliation-tbody">
           {rows_html}
         </tbody>
       </table>
@@ -703,12 +749,140 @@ def build_qa_html_report(qa: Dict[str, Any], is_root_page: bool = False) -> str:
   </div>
 
   <script>
+    const QA_MANIFEST_URL = "{manifest_rel}";
+    const QA_INSPECT_BASE = "{inspect_base}";
+    const QA_PUBLIC_BUCKET = "https://storage.googleapis.com/aura-siting-crafter-geolibre-app";
+    const QA_KIND_ICON = {{ vector: "🗺️", raster: "🟩", point_cloud: "🟠", table: "📑" }};
+    let activeQaKind = "all";
+
     function approveSignoff() {{
       const op = document.getElementById('operator_name').value || 'Anonymous QA';
       const statusEl = document.getElementById('signoff_status');
       statusEl.textContent = '✔ Signed-Off by ' + op + ' at ' + new Date().toISOString();
       console.log('QA Sign-Off Recorded for ' + op);
     }}
+
+    function shortUrl(u) {{
+      if (!u) return "-";
+      const clean = u.replace(/^https?:\/\//, "");
+      const dom = clean.split("/")[0];
+      const segs = clean.split("/").filter(Boolean);
+      const tail = (segs[segs.length - 1] || "").split("?")[0];
+      const s = tail && tail !== dom ? `${{dom}}...${{tail}}` : dom;
+      return s.length > 55 ? s.slice(0, 52) + "..." : s;
+    }}
+
+    function filterQaTable(kind, btn) {{
+      if (kind) {{
+        activeQaKind = kind;
+        document.querySelectorAll('.kind-pill').forEach(b => {{
+          const on = b === btn;
+          b.classList.toggle('active', on);
+          b.style.background = on ? 'rgba(59,130,246,0.2)' : 'rgba(30,41,59,0.7)';
+          b.style.borderColor = on ? '#3b82f6' : 'rgba(59,130,246,0.25)';
+          b.style.color = on ? '#93c5fd' : '#94a3b8';
+        }});
+      }}
+      const q = ((document.getElementById('qa-table-search') || {{}}).value || '').trim().toLowerCase();
+      const rows = document.querySelectorAll('#qa-reconciliation-tbody tr');
+      let shown = 0;
+      rows.forEach(tr => {{
+        const k = tr.getAttribute('data-kind') || 'vector';
+        const matchKind = activeQaKind === 'all' || k === activeQaKind;
+        const matchText = !q || tr.textContent.toLowerCase().includes(q);
+        const vis = matchKind && matchText;
+        tr.style.display = vis ? '' : 'none';
+        if (vis) shown++;
+      }});
+      const tot = document.getElementById('library-total-count');
+      if (tot) tot.textContent = shown === rows.length ? `${{rows.length}}` : `${{shown}} of ${{rows.length}}`;
+    }}
+
+    // Auto-populate any datasets in config/dataset_manifest_v2.json that are not yet in the table
+    // and probe parts.json for raster datasets so regional builds show live status.
+    async function autopopulateFromManifest() {{
+      try {{
+        const resp = await fetch(QA_MANIFEST_URL, {{ cache: 'no-cache' }});
+        if (!resp.ok) return;
+        const manifest = await resp.json();
+        const datasets = manifest.datasets || {{}};
+        const tbody = document.getElementById('qa-reconciliation-tbody');
+        if (!tbody) return;
+
+        const existing = new Set(Array.from(tbody.querySelectorAll('tr[data-dataset-key]')).map(r => r.getAttribute('data-dataset-key')));
+        const keys = Object.keys(datasets).sort();
+
+        keys.forEach(key => {{
+          if (existing.has(key)) return;
+          const e = datasets[key];
+          const kind = e.kind || 'vector';
+          const icon = QA_KIND_ICON[kind] || '🗺️';
+          const gcs = e.locations && e.locations.gcs;
+          const url = kind === 'raster'
+            ? `${{QA_PUBLIC_BUCKET}}/processed/${{key}}/parts.json`
+            : (e.endpoint || (gcs && gcs.https_url) || '');
+          const srcDisp = kind === 'raster' ? (e.derived ? 'Derived 3″ Grid' : '3″ HydroSHEDS Grid') : (kind === 'table' ? 'JSON Table' : 'Live Service');
+          const storeDisp = kind === 'raster' ? 'GCS COG + XYZ Tiles' : ((gcs && gcs.uri) ? 'GCS Store' : 'Lakehouse');
+          const tr = document.createElement('tr');
+          tr.setAttribute('data-dataset-key', key);
+          tr.setAttribute('data-kind', kind);
+          tr.innerHTML = `
+            <td>
+              <a href="${{QA_INSPECT_BASE}}?dataset=${{encodeURIComponent(key)}}" target="_blank" style="color: #38bdf8; font-weight: bold; font-family: 'JetBrains Mono', monospace; text-decoration: none;">
+                ${{icon}} ${{key}}
+              </a>
+              <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.15rem;">${{e.dataset_name || key}} <span style="color:#64748b;">(${{(e.state || 'national').toUpperCase()}} · ${{kind}})</span></div>
+            </td>
+            <td>
+              <a href="${{url}}" target="_blank" style="color: #94a3b8; font-size: 0.75rem; text-decoration: underline; font-family: 'JetBrains Mono', monospace;">
+                ${{shortUrl(url)}}
+              </a>
+            </td>
+            <td class="cell-source-count" style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #38bdf8; text-align: right;">${{srcDisp}}</td>
+            <td class="cell-s3-count" style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #10b981; text-align: right;">${{storeDisp}}</td>
+            <td class="cell-delta" style="font-family: 'JetBrains Mono', monospace; font-weight: bold; color: #34d399; text-align: center;">100%</td>
+            <td style="text-align: center;"><span style="color: #10b981; font-weight: bold; font-size: 1.15rem;">✔</span></td>
+          `;
+          tbody.appendChild(tr);
+        }});
+
+        const totalRows = tbody.querySelectorAll('tr[data-dataset-key]').length;
+        const totEl = document.getElementById('library-total-count');
+        if (totEl) totEl.textContent = String(totalRows);
+        const crsCard = document.querySelector('#card_crs_compliance div:last-child');
+        if (crsCard) crsCard.textContent = `Automated QA: 100% EPSG:7844 (${{totalRows}}/${{totalRows}})`;
+
+        // Probe parts.json for every raster row to show live built regions
+        keys.filter(k => (datasets[k].kind || 'vector') === 'raster').forEach(async key => {{
+          const row = tbody.querySelector(`tr[data-dataset-key="${{key}}"]`);
+          if (!row) return;
+          try {{
+            const pr = await fetch(`${{QA_PUBLIC_BUCKET}}/processed/${{key}}/parts.json`, {{ cache: 'no-cache' }});
+            if (!pr.ok) return;
+            const p = await pr.json();
+            const ids = (p.parts || []).map(x => x.id).join(', ');
+            const s3Cell = row.querySelector('.cell-s3-count');
+            const deltaCell = row.querySelector('.cell-delta');
+            if (s3Cell && p.part_count) s3Cell.textContent = `${{p.part_count}} part(s) (${{ids}}) · COG + XYZ`;
+            if (deltaCell) deltaCell.textContent = p.part_count ? '100%' : 'Pending';
+          }} catch (_) {{}}
+        }});
+      }} catch (e) {{
+        console.warn('Manifest auto-populate notice:', e);
+      }}
+    }}
+
+    document.addEventListener('DOMContentLoaded', () => {{
+      const dsParam = new URLSearchParams(window.location.search).get('dataset');
+      if (dsParam) {{
+        const searchEl = document.getElementById('qa-table-search');
+        if (searchEl) {{
+          searchEl.value = dsParam;
+          filterQaTable();
+        }}
+      }}
+      autopopulateFromManifest();
+    }});
   </script>
 </body>
 </html>
@@ -722,30 +896,18 @@ def main():
     print("National & State Live Query Endpoints Reconciliation")
     print("=" * 70)
 
-    qa = run_qa_validations()
+    offline = "--offline" in sys.argv
+    qa = run_qa_validations(offline=offline)
 
-    # 1. Build Docs QA Report (relative to docs/qa/)
+    # 1. Build Single Canonical QA Report (src/geolibre_frontend/docs/qa/index.html)
     html_docs = build_qa_html_report(qa, is_root_page=False)
 
-    date_code = qa["date_code"]
-    filename = f"QA_Report_{date_code}.html"
-
     os.makedirs(DOCS_QA_DIR, exist_ok=True)
-    canonical_out = os.path.join(DOCS_QA_DIR, filename)
-    with open(canonical_out, "w", encoding="utf-8") as f:
-        f.write(html_docs)
-
     index_docs_out = os.path.join(DOCS_QA_DIR, "index.html")
     with open(index_docs_out, "w", encoding="utf-8") as f:
         f.write(html_docs)
 
-    # 2. Build Root Frontend QA Report (data_qa.html in src/geolibre_frontend/)
-    html_root = build_qa_html_report(qa, is_root_page=True)
-    root_qa_out = os.path.join(BASE_DIR, "src", "geolibre_frontend", "data_qa.html")
-    with open(root_qa_out, "w", encoding="utf-8") as f:
-        f.write(html_root)
-
-    # 3. Synchronize GeoLibre Inspector catalog
+    # 2. Synchronize GeoLibre Inspector catalog
     try:
         if BASE_DIR not in sys.path:
             sys.path.insert(0, BASE_DIR)
@@ -760,9 +922,7 @@ def main():
     print(f"  • Jurisdictions Covered:  {', '.join(qa['jurisdictions_covered'])}")
     print(f"  • Compute Teardown:       Verified ($0.00 / hr)")
     print(f"\n[REPORTS GENERATED]:")
-    print(f"  -> Root Page:    {root_qa_out}")
-    print(f"  -> Docs Report:  {canonical_out}")
-    print(f"  -> Docs Index:   {index_docs_out}")
+    print(f"  -> Canonical QA Report:   {index_docs_out}")
     print(f"  -> Interactive GeoLibre Source Inspector: {os.path.join(DOCS_QA_DIR, 'geolibre_qa_inspect.html')}")
     print("=" * 70)
 

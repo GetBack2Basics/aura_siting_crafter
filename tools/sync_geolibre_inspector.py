@@ -1,12 +1,14 @@
-import glob
 import json
 import os
 import re
+import shutil
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CONFIG_DATASETS_V2 = os.path.join(BASE_DIR, 'config', 'datasets_v2')
 MANIFEST_PATH = os.path.join(BASE_DIR, 'config', 'dataset_manifest_v2.json')
+FRONTEND_MANIFEST_PATH = os.path.join(BASE_DIR, 'src', 'geolibre_frontend', 'config', 'dataset_manifest_v2.json')
 INSPECT_PATH = os.path.join(BASE_DIR, 'src', 'geolibre_frontend', 'docs', 'qa', 'geolibre_qa_inspect.html')
+PUBLIC_BUCKET = 'https://storage.googleapis.com/aura-siting-crafter-geolibre-app'
+
 
 def parse_bounds_wgs84(wkt_str):
     if not wkt_str:
@@ -23,11 +25,13 @@ def parse_bounds_wgs84(wkt_str):
         "center": [round((min_lat + max_lat) / 2.0, 5), round((min_lon + max_lon) / 2.0, 5)]
     }
 
+
 def sync_inspector():
-    # 1. Load all dataset configs from config/datasets_v2/*/*.json
-    config_files = sorted(glob.glob(os.path.join(CONFIG_DATASETS_V2, '*', '*.json')))
-    datasets = {}
-    
+    with open(MANIFEST_PATH, 'r', encoding='utf-8') as f:
+        manifest_data = json.load(f)
+    datasets = manifest_data.get('datasets', {})
+    shutil.copy2(MANIFEST_PATH, FRONTEND_MANIFEST_PATH)
+
     base_counts = {
         'national_cadastre_gnaf_v2': 3357016,
         'national_cyclone_hazard_tcha_v2': 9,
@@ -57,39 +61,33 @@ def sync_inspector():
         'vic_planning_scheme_zones_v2': 5120,
         'vic_transmission_grid_vicgrid_v2': 3250,
         'wa_dbca_threatened_ecological_communities_v2': 124471,
-        'wa_transmission_grid_v2': 26132
+        'wa_transmission_grid_v2': 26132,
+        'hydrosheds_au_acc_3s_v1': 1008000,
+        'hydrosheds_au_con_3s_v1': 1008000,
+        'aura_drainage_slope_deg_v1': 1008000,
+        'aura_drainage_hand_euclid_m_v1': 1008000,
+        'aura_drainage_streams_mask_v1': 1008000,
+        'aura_drainage_s_drainage_v1': 1008000,
+        'datacenter_candidates_v2': 25,
     }
 
-    for cfg_file in config_files:
-        with open(cfg_file, 'r', encoding='utf-8') as f:
-            cfg = json.load(f)
-        dkey = cfg.get('dataset_key')
-        if dkey:
-            datasets[dkey] = cfg
-
-    # 2. Update config/dataset_manifest_v2.json
-    manifest_data = {
-        'manifest_version': '2.0.0',
-        'total_datasets': len(datasets),
-        'updated_at': '2026-09-09 08:45:00 UTC',
-        'datasets': datasets
-    }
-    with open(MANIFEST_PATH, 'w', encoding='utf-8') as f:
-        json.dump(manifest_data, f, indent=2)
-
-    # 3. Build Catalog for geolibre_qa_inspect.html
     catalog = {}
     for k, v in datasets.items():
-        s3_p = v.get('storage', {}).get('s3_path')
+        kind = v.get('kind', 'vector')
+        gcs_loc = (v.get('locations') or {}).get('gcs') or {}
+        s3_p = (v.get('storage') or {}).get('s3_path') or gcs_loc.get('uri')
         if not s3_p:
             s3_p = f"s3://wherobots-user-storage/aura_siting/{k}.parquet"
-        
+        ep = v.get('endpoint') or gcs_loc.get('https_url') or (
+            f"{PUBLIC_BUCKET}/processed/{k}/parts.json" if kind == 'raster' else ''
+        )
         parsed = parse_bounds_wgs84(v.get('bounds_wgs84'))
-        
+
         cat_entry = {
             'name': v.get('dataset_name', k),
             'state': v.get('state', 'national'),
-            'endpoint': v.get('endpoint', ''),
+            'kind': kind,
+            'endpoint': ep,
             's3_path': s3_p,
             'service_type': v.get('service_type', 'arcgis_featureserver'),
             'type': v.get('geometry_type', 'polygon').lower(),
@@ -108,21 +106,13 @@ def sync_inspector():
     with open(INSPECT_PATH, 'r', encoding='utf-8') as f:
         html = f.read()
 
-    # Replace DATASET_CATALOG
     html = re.sub(r'const DATASET_CATALOG = \{.*?\};', f'const DATASET_CATALOG = {catalog_json};', html, flags=re.DOTALL)
-
-    # Ensure s3-path-label displays meta.s3_path
-    html = re.sub(
-        r"document\.getElementById\('s3-path-label'\)\.textContent\s*=\s*`s3://[^`]+`;",
-        "document.getElementById('s3-path-label').textContent = meta.s3_path || (`s3://wherobots-user-storage/aura_siting_v2/${datasetKey}`);",
-        html
-    )
 
     with open(INSPECT_PATH, 'w', encoding='utf-8') as f:
         f.write(html)
 
     print(f'Successfully synchronized geolibre_qa_inspect.html with {len(datasets)} datasets from manifest')
 
+
 if __name__ == '__main__':
     sync_inspector()
-

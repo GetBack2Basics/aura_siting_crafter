@@ -1,6 +1,6 @@
 {
   "manifest_version": "2.0.0",
-  "total_datasets": 29,
+  "total_datasets": 36,
   "updated_at": "2026-09-09 08:45:00 UTC",
   "datasets": {
     "national_cadastre_gnaf_v2": {
@@ -32,6 +32,24 @@
       "storage": {
         "table_name": "national_cadastre_gnaf_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/national_cadastre_gnaf_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "national_cyclone_hazard_tcha_v2": {
@@ -60,6 +78,24 @@
       "storage": {
         "table_name": "national_cyclone_hazard_tcha_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/national_cyclone_hazard_tcha_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "national_electricity_grid_v2": {
@@ -94,6 +130,24 @@
       "storage": {
         "table_name": "national_electricity_grid_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/national_electricity_grid_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "national_healthcare_nhsd_v2": {
@@ -124,6 +178,24 @@
       "storage": {
         "table_name": "national_healthcare_nhsd_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/national_healthcare_nhsd_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "national_schools_acara_v2": {
@@ -154,6 +226,24 @@
       "storage": {
         "table_name": "national_schools_acara_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/national_schools_acara_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "national_seismic_hazard_nsha_v2": {
@@ -183,6 +273,24 @@
       "storage": {
         "table_name": "national_seismic_hazard_nsha_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/national_seismic_hazard_nsha_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "nsw_bionet_bv_map_v2": {
@@ -217,6 +325,24 @@
       "storage": {
         "table_name": "nsw_biodiversity_constraints_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/nsw_biodiversity_constraints_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "nsw_coastal_inundation_hazard_v2": {
@@ -251,6 +377,24 @@
       "storage": {
         "table_name": "nsw_coastal_inundation_hazard_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/nsw_coastal_inundation_hazard_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "nsw_elvis_lidar_1m_dem_v2": {
@@ -290,6 +434,32 @@
         "table_name": "nsw_elvis_lidar_1m_dem_v2",
         "format": "havasu.iceberg",
         "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dem.parquet"
+      },
+      "kind": "point_cloud",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
+          "format": "gcs_octree_dem",
+          "present": null,
+          "object_count": null,
+          "bytes": null,
+          "updated": null
+        },
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/nsw_elvis_lidar_1m_dem_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "nsw_elvis_lidar_1m_dsm_v2": {
@@ -326,6 +496,32 @@
         "table_name": "nsw_elvis_lidar_1m_dsm_v2",
         "format": "havasu.iceberg",
         "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_1m_dsm.parquet"
+      },
+      "kind": "point_cloud",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
+          "format": "gcs_octree_dsm",
+          "present": null,
+          "object_count": null,
+          "bytes": null,
+          "updated": null
+        },
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/nsw_elvis_lidar_1m_dsm_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "nsw_elvis_lidar_contours_v2": {
@@ -361,6 +557,32 @@
         "table_name": "nsw_elvis_lidar_contours_v2",
         "format": "havasu.iceberg",
         "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/nsw_elvis_lidar_contours.parquet"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/nsw_elvis_lidar_laz_pointcloud_v2/cloud.js",
+          "format": "gcs_contours",
+          "present": null,
+          "object_count": null,
+          "bytes": null,
+          "updated": null
+        },
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/nsw_elvis_lidar_contours_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "nsw_elvis_lidar_laz_pointcloud_v2": {
@@ -401,6 +623,32 @@
         "table_name": "nsw_elvis_lidar_laz_pointcloud_v2",
         "format": "havasu.iceberg",
         "s3_path": "s3://wherobots-user-storage/aura_siting/elevation/laz/*.laz"
+      },
+      "kind": "point_cloud",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/potree/pointclouds/lake_macquarie_elvis.copc.laz",
+          "format": "gcs_copc_laz",
+          "present": null,
+          "object_count": null,
+          "bytes": null,
+          "updated": null
+        },
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/nsw_elvis_lidar_laz_pointcloud_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "nsw_landslide_susceptibility_v2": {
@@ -435,6 +683,24 @@
       "storage": {
         "table_name": "nsw_landslide_hazard_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/nsw_landslide_hazard_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "nsw_national_seismic_hazard_v2": {
@@ -464,6 +730,24 @@
       "storage": {
         "table_name": "nsw_earthquake_hazard_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/nsw_earthquake_hazard_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "nsw_transmission_grid_v2": {
@@ -503,6 +787,24 @@
       "audit": {
         "cadence": "Weekly Sync Check",
         "statutory_act": "National Electricity (NSW) Law"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/nsw_transmission_grid_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "qld_cyclone_hazard_tcha_v2": {
@@ -531,6 +833,24 @@
       "storage": {
         "table_name": "qld_cyclone_hazard_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/qld_cyclone_hazard_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "qld_landslide_susceptibility_v2": {
@@ -565,6 +885,24 @@
       "storage": {
         "table_name": "qld_landslide_hazard_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/qld_landslide_hazard_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "qld_regulated_vegetation_vma_v2": {
@@ -599,6 +937,24 @@
       "storage": {
         "table_name": "qld_biodiversity_constraints_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/qld_biodiversity_constraints_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "qld_transmission_grid_v2": {
@@ -634,6 +990,24 @@
         "table_name": "qld_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/qld_transmission_grid_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "qld_waterway_barriers_hydro_v2": {
@@ -670,6 +1044,24 @@
       "storage": {
         "table_name": "qld_water_hydrography_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/qld_water_hydrography_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "sa_transmission_grid_electranet_v2": {
@@ -705,6 +1097,24 @@
         "table_name": "sa_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/sa_transmission_grid_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "tas_transmission_grid_tasnetworks_v2": {
@@ -740,6 +1150,24 @@
         "table_name": "tas_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/tas_transmission_grid_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "vic_hydro_watercourses_v2": {
@@ -776,7 +1204,26 @@
       "storage": {
         "table_name": "vic_water_hydrography_v2",
         "format": "havasu.iceberg"
-      }
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/vic_water_hydrography_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
+      },
+      "wfs_type_name": "open-data-platform:vmlite_hy_watercourse"
     },
     "vic_landslide_slope_stability_v2": {
       "dataset_key": "vic_landslide_slope_stability_v2",
@@ -810,7 +1257,26 @@
       "storage": {
         "table_name": "vic_landslide_hazard_v2",
         "format": "havasu.iceberg"
-      }
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/vic_landslide_hazard_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
+      },
+      "wfs_type_name": "open-data-platform:shalld100_polygon"
     },
     "vic_native_veg_nvim_v2": {
       "dataset_key": "vic_native_veg_nvim_v2",
@@ -844,7 +1310,26 @@
       "storage": {
         "table_name": "vic_biodiversity_constraints_v2",
         "format": "havasu.iceberg"
-      }
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/vic_biodiversity_constraints_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
+      },
+      "wfs_type_name": "open-data-platform:sveg100"
     },
     "vic_planning_scheme_zones_v2": {
       "dataset_key": "vic_planning_scheme_zones_v2",
@@ -874,7 +1359,26 @@
       "storage": {
         "table_name": "vic_cadastre_parcels_v2",
         "format": "havasu.iceberg"
-      }
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/vic_cadastre_parcels_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
+      },
+      "wfs_type_name": "open-data-platform:plan_zone"
     },
     "vic_transmission_grid_vicgrid_v2": {
       "dataset_key": "vic_transmission_grid_vicgrid_v2",
@@ -909,7 +1413,26 @@
         "table_name": "vic_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
-      }
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/vic_transmission_grid_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
+      },
+      "wfs_type_name": "open-data-platform:rez_2026"
     },
     "wa_dbca_threatened_ecological_communities_v2": {
       "dataset_key": "wa_dbca_threatened_ecological_communities_v2",
@@ -943,6 +1466,24 @@
       "storage": {
         "table_name": "wa_biodiversity_constraints_v2",
         "format": "havasu.iceberg"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/wa_biodiversity_constraints_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
       }
     },
     "wa_transmission_grid_v2": {
@@ -978,6 +1519,319 @@
         "table_name": "wa_transmission_grid_v2",
         "format": "havasu.iceberg",
         "partition_by": "operator"
+      },
+      "kind": "vector",
+      "access": "public",
+      "licence": {
+        "name": null,
+        "url": null,
+        "attribution": null,
+        "redistribution": null,
+        "verified_on": null
+      },
+      "locations": {
+        "gcs": null,
+        "wherobots": {
+          "uri": "wherobots://fgsdb/aura_siting/wa_transmission_grid_v2",
+          "format": "havasu.iceberg",
+          "present": null,
+          "snapshot_id": null
+        }
+      }
+    },
+    "hydrosheds_au_acc_3s_v1": {
+      "dataset_key": "hydrosheds_au_acc_3s_v1",
+      "canonical_theme": "siting_water_hydrography",
+      "state": "national",
+      "source_agency": "HydroSHEDS project (WWF)",
+      "portal": "hydrosheds.org",
+      "service_type": "raster_file_download",
+      "geometry_type": "Raster",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "resolution_arcsec": 3,
+      "kind": "raster",
+      "derived": false,
+      "access": "public",
+      "licence": {
+        "name": "HydroSHEDS v1 (publication approved by repository owner 2026-11-03; licence text not independently verified)",
+        "url": "https://www.hydrosheds.org",
+        "attribution": "Lehner, B., Verdin, K., Jarvis, A. (2008): New global hydrography derived from spaceborne elevation data. Eos, Transactions, AGU, 89(10): 93-94. https://www.hydrosheds.org",
+        "redistribution": true,
+        "verified_on": null
+      },
+      "dataset_name": "HydroSHEDS v1 Australia Flow Accumulation (3 arc-second)",
+      "endpoint": "https://data.hydrosheds.org/file/hydrosheds-v1-acc/au_acc_3s.zip",
+      "band_semantics": "flow accumulation: count of upstream contributing cells",
+      "storage": {
+        "format": "cog"
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/processed/hydrosheds_au_acc_3s_v1/acc_3s.tif",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/processed/hydrosheds_au_acc_3s_v1/acc_3s.tif",
+          "format": "cog",
+          "present": null,
+          "object_count": null,
+          "bytes": null,
+          "updated": null
+        },
+        "wherobots": null
+      }
+    },
+    "hydrosheds_au_con_3s_v1": {
+      "dataset_key": "hydrosheds_au_con_3s_v1",
+      "canonical_theme": "siting_water_hydrography",
+      "state": "national",
+      "source_agency": "HydroSHEDS project (WWF)",
+      "portal": "hydrosheds.org",
+      "service_type": "raster_file_download",
+      "geometry_type": "Raster",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "resolution_arcsec": 3,
+      "kind": "raster",
+      "derived": false,
+      "access": "public",
+      "licence": {
+        "name": "HydroSHEDS v1 (publication approved by repository owner 2026-11-03; licence text not independently verified)",
+        "url": "https://www.hydrosheds.org",
+        "attribution": "Lehner, B., Verdin, K., Jarvis, A. (2008): New global hydrography derived from spaceborne elevation data. Eos, Transactions, AGU, 89(10): 93-94. https://www.hydrosheds.org",
+        "redistribution": true,
+        "verified_on": null
+      },
+      "dataset_name": "HydroSHEDS v1 Australia Hydrologically Conditioned DEM (3 arc-second)",
+      "endpoint": "https://data.hydrosheds.org/file/hydrosheds-v1-con/au_con_3s.zip",
+      "band_semantics": "hydrologically conditioned elevation",
+      "storage": {
+        "format": "cog"
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/processed/hydrosheds_au_con_3s_v1/con_3s.tif",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/processed/hydrosheds_au_con_3s_v1/con_3s.tif",
+          "format": "cog",
+          "present": null,
+          "object_count": null,
+          "bytes": null,
+          "updated": null
+        },
+        "wherobots": null
+      }
+    },
+    "aura_drainage_slope_deg_v1": {
+      "dataset_key": "aura_drainage_slope_deg_v1",
+      "canonical_theme": "siting_water_hydrography",
+      "state": "national",
+      "dataset_name": "Slope (degrees) derived from HydroSHEDS v1 conditioned DEM",
+      "source_agency": "AURA Siting Crafter (derived from HydroSHEDS project data)",
+      "portal": "aura-siting-crafter-geolibre-app",
+      "service_type": "derived_raster",
+      "geometry_type": "Raster",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "resolution_arcsec": 3,
+      "kind": "raster",
+      "derived": true,
+      "derived_from": [
+        "hydrosheds_au_con_3s_v1"
+      ],
+      "units": "degrees",
+      "access": "public",
+      "licence": {
+        "name": "Derived from HydroSHEDS v1 (publication approved by repository owner 2026-11-03; licence text not independently verified)",
+        "url": "https://www.hydrosheds.org",
+        "attribution": "Derived by AURA Siting Crafter from HydroSHEDS v1. Lehner, B., Verdin, K., Jarvis, A. (2008): New global hydrography derived from spaceborne elevation data. Eos, Transactions, AGU, 89(10): 93-94. https://www.hydrosheds.org",
+        "redistribution": true,
+        "verified_on": null
+      },
+      "storage": {
+        "format": "cog"
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/processed/aura_drainage_slope_deg_v1/slope_deg.tif",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/processed/aura_drainage_slope_deg_v1/slope_deg.tif",
+          "format": "cog",
+          "present": null,
+          "object_count": null,
+          "bytes": null,
+          "updated": null
+        },
+        "wherobots": null
+      }
+    },
+    "aura_drainage_hand_euclid_m_v1": {
+      "dataset_key": "aura_drainage_hand_euclid_m_v1",
+      "canonical_theme": "siting_water_hydrography",
+      "state": "national",
+      "dataset_name": "Height above nearest drainage, straight-line approximation (m)",
+      "source_agency": "AURA Siting Crafter (derived from HydroSHEDS project data)",
+      "portal": "aura-siting-crafter-geolibre-app",
+      "service_type": "derived_raster",
+      "geometry_type": "Raster",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "resolution_arcsec": 3,
+      "kind": "raster",
+      "derived": true,
+      "derived_from": [
+        "hydrosheds_au_acc_3s_v1",
+        "hydrosheds_au_con_3s_v1"
+      ],
+      "units": "m",
+      "access": "public",
+      "licence": {
+        "name": "Derived from HydroSHEDS v1 (publication approved by repository owner 2026-11-03; licence text not independently verified)",
+        "url": "https://www.hydrosheds.org",
+        "attribution": "Derived by AURA Siting Crafter from HydroSHEDS v1. Lehner, B., Verdin, K., Jarvis, A. (2008): New global hydrography derived from spaceborne elevation data. Eos, Transactions, AGU, 89(10): 93-94. https://www.hydrosheds.org",
+        "redistribution": true,
+        "verified_on": null
+      },
+      "storage": {
+        "format": "cog"
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/processed/aura_drainage_hand_euclid_m_v1/hand_euclid_m.tif",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/processed/aura_drainage_hand_euclid_m_v1/hand_euclid_m.tif",
+          "format": "cog",
+          "present": null,
+          "object_count": null,
+          "bytes": null,
+          "updated": null
+        },
+        "wherobots": null
+      }
+    },
+    "aura_drainage_streams_mask_v1": {
+      "dataset_key": "aura_drainage_streams_mask_v1",
+      "canonical_theme": "siting_water_hydrography",
+      "state": "national",
+      "dataset_name": "Derived stream network mask (flow accumulation threshold)",
+      "source_agency": "AURA Siting Crafter (derived from HydroSHEDS project data)",
+      "portal": "aura-siting-crafter-geolibre-app",
+      "service_type": "derived_raster",
+      "geometry_type": "Raster",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "resolution_arcsec": 3,
+      "kind": "raster",
+      "derived": true,
+      "derived_from": [
+        "hydrosheds_au_acc_3s_v1"
+      ],
+      "units": "mask",
+      "access": "public",
+      "licence": {
+        "name": "Derived from HydroSHEDS v1 (publication approved by repository owner 2026-11-03; licence text not independently verified)",
+        "url": "https://www.hydrosheds.org",
+        "attribution": "Derived by AURA Siting Crafter from HydroSHEDS v1. Lehner, B., Verdin, K., Jarvis, A. (2008): New global hydrography derived from spaceborne elevation data. Eos, Transactions, AGU, 89(10): 93-94. https://www.hydrosheds.org",
+        "redistribution": true,
+        "verified_on": null
+      },
+      "storage": {
+        "format": "cog"
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/processed/aura_drainage_streams_mask_v1/streams_mask.tif",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/processed/aura_drainage_streams_mask_v1/streams_mask.tif",
+          "format": "cog",
+          "present": null,
+          "object_count": null,
+          "bytes": null,
+          "updated": null
+        },
+        "wherobots": null
+      }
+    },
+    "aura_drainage_s_drainage_v1": {
+      "dataset_key": "aura_drainage_s_drainage_v1",
+      "canonical_theme": "siting_water_hydrography",
+      "state": "national",
+      "dataset_name": "S_drainage experimental drainage hazard score (0..1, uncalibrated)",
+      "source_agency": "AURA Siting Crafter (derived from HydroSHEDS project data)",
+      "portal": "aura-siting-crafter-geolibre-app",
+      "service_type": "derived_raster",
+      "geometry_type": "Raster",
+      "source_crs": "EPSG:4326",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "resolution_arcsec": 3,
+      "kind": "raster",
+      "derived": true,
+      "derived_from": [
+        "hydrosheds_au_acc_3s_v1",
+        "hydrosheds_au_con_3s_v1"
+      ],
+      "units": "0..1",
+      "access": "public",
+      "licence": {
+        "name": "Derived from HydroSHEDS v1 (publication approved by repository owner 2026-11-03; licence text not independently verified)",
+        "url": "https://www.hydrosheds.org",
+        "attribution": "Derived by AURA Siting Crafter from HydroSHEDS v1. Lehner, B., Verdin, K., Jarvis, A. (2008): New global hydrography derived from spaceborne elevation data. Eos, Transactions, AGU, 89(10): 93-94. https://www.hydrosheds.org",
+        "redistribution": true,
+        "verified_on": null
+      },
+      "storage": {
+        "format": "cog"
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/processed/aura_drainage_s_drainage_v1/s_drainage.tif",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/processed/aura_drainage_s_drainage_v1/s_drainage.tif",
+          "format": "cog",
+          "present": null,
+          "object_count": null,
+          "bytes": null,
+          "updated": null
+        },
+        "wherobots": null
+      }
+    },
+    "datacenter_candidates_v2": {
+      "dataset_key": "datacenter_candidates_v2",
+      "canonical_theme": "siting_commercial_yield",
+      "state": "national",
+      "dataset_name": "AURA Candidate Siting & Multi-Criteria Ranking Table",
+      "source_agency": "AURA Siting Crafter Engine",
+      "portal": "aura-siting-crafter-geolibre-app",
+      "service_type": "table_json",
+      "geometry_type": "None",
+      "source_crs": "EPSG:7844",
+      "target_crs": "EPSG:7844",
+      "metric_crs": "EPSG:3112",
+      "kind": "table",
+      "derived": true,
+      "access": "public",
+      "licence": {
+        "name": "AURA Project Internal Open Data",
+        "url": "https://github.com/GetBack2Basics/aura_siting_crafter",
+        "attribution": "AURA Siting Crafter Project",
+        "redistribution": true,
+        "verified_on": "2026-11-03"
+      },
+      "endpoint": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/exports_v2/datacenter_candidates_v2.json",
+      "storage": {
+        "format": "json_table"
+      },
+      "locations": {
+        "gcs": {
+          "uri": "gs://aura-siting-crafter-geolibre-app/exports_v2/datacenter_candidates_v2.json",
+          "https_url": "https://storage.googleapis.com/aura-siting-crafter-geolibre-app/exports_v2/datacenter_candidates_v2.json",
+          "format": "json_table",
+          "present": true,
+          "object_count": 1,
+          "bytes": 19850,
+          "updated": "2026-09-03T16:09:00Z"
+        },
+        "wherobots": null
       }
     }
   }

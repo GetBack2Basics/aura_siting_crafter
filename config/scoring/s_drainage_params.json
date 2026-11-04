@@ -1,0 +1,13 @@
+{
+  "_comment": "Initial, UNCALIBRATED parameters for the experimental S_drainage hazard term. Changing these never re-triggers raster computation of acc/con/slope/HAND; they only affect the final blend. Must be calibrated against real flood extents before influencing any ranking.",
+  "status": "experimental_uncalibrated",
+  "stream_threshold_cells": 1000,
+  "weights": { "upstream_area": 0.4, "height_above_drainage": 0.4, "slope": 0.2 },
+  "curves": {
+    "upstream_area_log10_cells": { "k": 2.0, "midpoint": 3.0, "direction": "increasing" },
+    "height_above_drainage_m": { "k": 0.5, "midpoint": 5.0, "direction": "decreasing" },
+    "slope_deg": { "k": 0.5, "midpoint": 5.0, "direction": "decreasing" }
+  },
+  "slope_scale_m_per_degree": 111120
+}
+

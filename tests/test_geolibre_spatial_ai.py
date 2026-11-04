@@ -102,7 +102,7 @@ def test_root_serves_webgis_map():
 
 
 def test_serve_html_files():
-    for page in ["map", "data_qa", "data_lineage_audit"]:
+    for page in ["map", "data_lineage_audit"]:
         response = client.get(f"/{page}.html")
         assert response.status_code == 200, f"Page {page}.html failed to load"
 
@@ -122,10 +122,12 @@ def test_serve_docs_qa_inspector():
 
 
 def test_docs_redirect_to_qa_report():
-    """Asserts that navigating to /docs or /docs/ redirects directly to /data_qa.html."""
+    """Asserts that navigating to /docs or /docs/ redirects directly to /docs/qa/index.html."""
     response = client.get("/docs", follow_redirects=False)
     assert response.status_code in [301, 302, 307, 308]
-    assert response.headers["location"] == "/data_qa.html"
+    assert response.headers["location"] == "/docs/qa/index.html"
+    qa_resp = client.get("/docs/qa/index.html")
+    assert qa_resp.status_code == 200
 
 
 def test_api_docs_swagger():

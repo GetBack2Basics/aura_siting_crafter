@@ -23,7 +23,7 @@ OUTPUT_ROOT_DIR = os.path.join(BASE_DIR, "src", "geolibre_frontend")
 
 def build_wireframe_tin_html(is_root: bool = False) -> str:
     logo_path = "assets/aura_logo.png" if is_root else "../assets/aura_logo.png"
-    qa_link = "data_qa.html?dataset=nsw_elvis_lidar_1m_dem_v2" if is_root else "../data_qa.html?dataset=nsw_elvis_lidar_1m_dem_v2"
+    qa_link = "docs/qa/index.html?dataset=nsw_elvis_lidar_1m_dem_v2" if is_root else "../docs/qa/index.html?dataset=nsw_elvis_lidar_1m_dem_v2"
 
     return f"""<!DOCTYPE html>
 <html lang="en">

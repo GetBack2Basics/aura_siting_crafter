@@ -8,10 +8,10 @@
 
 ## 1. Overview & Objective
 
-To ensure complete statutory auditability and transparency, every user-facing portal, 2D/3D WebGIS viewer, and project-specific dossier within AURA Siting Crafter must maintain direct, reciprocal navigation links to the **Automated QA & Data Reconciliation Report** (`data_qa.html`).
+To ensure complete statutory auditability and transparency, every user-facing portal, 2D/3D WebGIS viewer, and project-specific dossier within AURA Siting Crafter must maintain direct, reciprocal navigation links to the **Automated QA & Data Reconciliation Report** (`docs/qa/index.html`).
 
 Prior to this update:
-- Primary operational entry points (`map.html`, `index.html`, and `data_lineage_audit.html`) lacked direct top-level links to `data_qa.html`.
+- Primary operational entry points (`map.html`, `index.html`, and `data_lineage_audit.html`) lacked direct top-level links to `docs/qa/index.html`.
 - 3D terrain viewers (such as `cesium_wireframe_tin.html`) lacked a persistent top-navigation bar, leaving QA links tucked inside collapsed toolboxes.
 - Site-specific project suites (`digital_twin_LMCC_MacquarieCoal.html`, `index_LMCC_MacquarieCoal.html`, `report_LMCC_MacquarieCoal.html`) lacked reciprocal links to the root QA report.
 
@@ -21,16 +21,16 @@ Prior to this update:
 
 | Origin Page | Link Placement | Link Target | Verified UI Token |
 |:---|:---|:---|:---|
-| **GeoLibre WebGIS** (`src/geolibre_frontend/map.html`) | Top Navigation Actions (`.nav-actions`) | `data_qa.html` | `✅ Data QA` button |
-| **GeoLibre WebGIS** (`src/geolibre_frontend/map.html`) | Evidence Hub Modal Header (`#qa-calculations-modal`) | `data_qa.html` | `✅ Data QA Report ↗` button |
-| **GeoLibre WebGIS** (`src/geolibre_frontend/map.html`) | Zero-Mock QA & AST Tab (Tab 7) | `data_qa.html` | `✅ Automated QA Report ↗` button |
-| **National Siting Report** (`src/geolibre_frontend/index.html`) | Header Metadata Pills Row | `data_qa.html` | `Data QA Report ↗` pill |
-| **Lineage Audit** (`src/geolibre_frontend/data_lineage_audit.html`) | Header Navigation Pills (`.nav-pills`) | `data_qa.html` | `✅ Data QA Report ↗` pill |
-| **Cesium 3D Surface TIN** (`src/geolibre_frontend/cesium_wireframe_tin.html`) | Floating Top Navigation Bar | `data_qa.html?dataset=...` | `🛡️ Data QA Audit ↗` link |
-| **Cesium 3D Surface TIN** (`src/geolibre_frontend/projects/cesium_wireframe_tin.html`) | Floating Top Navigation Bar | `../data_qa.html?dataset=...` | `🛡️ Data QA Audit ↗` link |
-| **3D Digital Twin** (`src/geolibre_frontend/projects/digital_twin_LMCC_MacquarieCoal.html`) | Top-Right HUD Controls (`.hud-top-right`) | `../data_qa.html` | `✅ Data QA ↗` HUD button |
-| **Project Site WebGIS** (`src/geolibre_frontend/projects/index_LMCC_MacquarieCoal.html`) | Reports & Architecture Suite Sidebar | `../data_qa.html` | `✅ Automated QA Audit ↗` button |
-| **Statutory Site Report** (`src/geolibre_frontend/projects/report_LMCC_MacquarieCoal.html`) | Top Navigation Links (`.top-nav-links`) | `../data_qa.html` | `✅ Data QA Report ↗` link |
+| **GeoLibre WebGIS** (`src/geolibre_frontend/map.html`) | Top Navigation Actions (`.nav-actions`) | `docs/qa/index.html` | `✅ Data QA` button |
+| **GeoLibre WebGIS** (`src/geolibre_frontend/map.html`) | Evidence Hub Modal Header (`#qa-calculations-modal`) | `docs/qa/index.html` | `✅ Data QA Report ↗` button |
+| **GeoLibre WebGIS** (`src/geolibre_frontend/map.html`) | Zero-Mock QA & AST Tab (Tab 7) | `docs/qa/index.html` | `✅ Automated QA Report ↗` button |
+| **National Siting Report** (`src/geolibre_frontend/index.html`) | Header Metadata Pills Row | `docs/qa/index.html` | `Data QA Report ↗` pill |
+| **Lineage Audit** (`src/geolibre_frontend/data_lineage_audit.html`) | Header Navigation Pills (`.nav-pills`) | `docs/qa/index.html` | `✅ Data QA Report ↗` pill |
+| **Cesium 3D Surface TIN** (`src/geolibre_frontend/cesium_wireframe_tin.html`) | Floating Top Navigation Bar | `docs/qa/index.html?dataset=...` | `🛡️ Data QA Audit ↗` link |
+| **Cesium 3D Surface TIN** (`src/geolibre_frontend/projects/cesium_wireframe_tin.html`) | Floating Top Navigation Bar | `../docs/qa/index.html?dataset=...` | `🛡️ Data QA Audit ↗` link |
+| **3D Digital Twin** (`src/geolibre_frontend/projects/digital_twin_LMCC_MacquarieCoal.html`) | Top-Right HUD Controls (`.hud-top-right`) | `../docs/qa/index.html` | `✅ Data QA ↗` HUD button |
+| **Project Site WebGIS** (`src/geolibre_frontend/projects/index_LMCC_MacquarieCoal.html`) | Reports & Architecture Suite Sidebar | `../docs/qa/index.html` | `✅ Automated QA Audit ↗` button |
+| **Statutory Site Report** (`src/geolibre_frontend/projects/report_LMCC_MacquarieCoal.html`) | Top Navigation Links (`.top-nav-links`) | `../docs/qa/index.html` | `✅ Data QA Report ↗` link |
 
 ---
 
@@ -42,14 +42,14 @@ Automated pre-release auditing is verified via `pytest tests/test_release_report
 
 ## 4. Live Interactive QA Inspector Routing & Gateway Mapping
 
-Each dataset row in `data_qa.html` embeds direct statutory links to the **Interactive Source Inspector** at:
+Each dataset row in `docs/qa/index.html` embeds direct statutory links to the **Interactive Source Inspector** at:
 `docs/qa/geolibre_qa_inspect.html?dataset={dataset_key}`
 
 ### FastAPI Gateway & Cloud Run Route Resolution
 When hosted behind the Cloud Run API Gateway (`aura.getback2basics.net` / `geolibre-spatial-ai-proxy`):
 1. **OpenAPI Swagger Relocation**: FastAPI defaults `docs_url` to `/docs`, which collides with all `/docs/*` static requests. `docs_url` is relocated to `/api/docs` and `redoc_url` to `/api/redoc`.
 2. **Docs Mount**: `src/geolibre_frontend/docs` is mounted to `/docs` via `StaticFiles(directory=_docs_dir, html=True)`.
-3. **Docs Root Redirect**: Direct navigation to `/docs` or `/docs/` cleanly redirects to `/data_qa.html`.
+3. **Docs Root Redirect**: Direct navigation to `/docs` or `/docs/` cleanly redirects to `/docs/qa/index.html`.
 4. **Automated Verification**: End-to-end routing is enforced via `pytest tests/test_geolibre_spatial_ai.py -k "docs"` guaranteeing zero 404s across live inspector URLs.
 
 ---

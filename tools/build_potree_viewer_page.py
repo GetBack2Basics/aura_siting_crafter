@@ -21,7 +21,7 @@ def build_raw_potree_html(is_root: bool = True) -> str:
     prefix = "./potree" if is_root else "../potree"
     copc_viewer_link = "copc_3d_viewer.html" if is_root else "../projects/copc_3d_viewer.html"
     cesium_viewer_link = "cesium_wireframe_tin.html" if is_root else "../projects/cesium_wireframe_tin.html"
-    qa_link = "data_qa.html?dataset=nsw_elvis_lidar_laz_pointcloud_v2" if is_root else "../data_qa.html?dataset=nsw_elvis_lidar_laz_pointcloud_v2"
+    qa_link = "docs/qa/index.html?dataset=nsw_elvis_lidar_laz_pointcloud_v2" if is_root else "../docs/qa/index.html?dataset=nsw_elvis_lidar_laz_pointcloud_v2"
 
     return f"""<!DOCTYPE html>
 <html lang="en">
